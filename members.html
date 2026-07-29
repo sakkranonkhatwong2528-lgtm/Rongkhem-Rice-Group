@@ -6,62 +6,88 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>ทะเบียนสมาชิกกลุ่มข้าวสาร</title>
+<title>
+ทะเบียนสมาชิกกลุ่มข้าวสารบ้านร่องเข็ม
+</title>
+
 
 <style>
 
 body{
-font-family:Tahoma,sans-serif;
 margin:0;
-background:#f3f7f0;
+font-family:Tahoma,sans-serif;
+background:#f5f7f2;
 }
+
 
 .header{
-background:#228B22;
+
+background:#2e7d32;
 color:white;
-padding:20px;
+padding:25px;
 text-align:center;
+
 }
+
 
 .container{
-padding:15px;
+
+padding:20px;
+
 }
 
-input,button{
+
+table{
+
 width:100%;
-padding:12px;
-margin:5px 0;
-font-size:16px;
+background:white;
+border-collapse:collapse;
 border-radius:10px;
-border:1px solid #ccc;
+overflow:hidden;
+
 }
 
-button{
-background:#228B22;
+
+th{
+
+background:#66bb6a;
 color:white;
-border:none;
+padding:12px;
+
+}
+
+
+td{
+
+padding:12px;
+border-bottom:1px solid #ddd;
+text-align:center;
+
 }
 
 
 .card{
 
 background:white;
-padding:15px;
-margin-top:10px;
+padding:20px;
+margin-bottom:20px;
 border-radius:15px;
-box-shadow:0 3px 8px #ddd;
+box-shadow:0 3px 10px #ccc;
 
 }
 
 
-.menu{
+.btn{
 
-display:block;
-padding:15px;
+display:inline-block;
+padding:12px 20px;
+background:#2e7d32;
+color:white;
 text-decoration:none;
-color:#228B22;
+border-radius:10px;
 
 }
+
 
 </style>
 
@@ -73,12 +99,12 @@ color:#228B22;
 
 <div class="header">
 
-<h2>
-👥 ทะเบียนสมาชิก
-</h2>
+<h1>
+👥 ทะเบียนสมาชิกกลุ่มข้าวสาร
+</h1>
 
 <p>
-กลุ่มข้าวสารบ้านร่องเข็ม หมู่ที่ 6
+บ้านร่องเข็ม หมู่ที่ 6
 </p>
 
 </div>
@@ -88,135 +114,78 @@ color:#228B22;
 <div class="container">
 
 
-<input id="name" placeholder="ชื่อ - นามสกุล">
-
-
-<input id="house" placeholder="บ้านเลขที่">
-
-
-<button onclick="addMember()">
-
-➕ เพิ่มสมาชิก
-
-</button>
-
-
-
-<h3>
-รายชื่อสมาชิก
-</h3>
-
-
-<div id="list"></div>
-
-
-</div>
-
-
-
-
-<script>
-
-
-let members =
-JSON.parse(localStorage.getItem("members")) || [];
-
-
-
-function show(){
-
-let html="";
-
-members.forEach((m,i)=>{
-
-
-html += `
-
 <div class="card">
 
-<b>
-${i+1}. ${m.name}
-</b>
+<h2>
+ข้อมูลสมาชิก
+</h2>
 
-<br>
 
-บ้านเลขที่ ${m.house}
+<table>
+
+<tr>
+
+<th>
+ลำดับ
+</th>
+
+<th>
+ชื่อ-นามสกุล
+</th>
+
+<th>
+บ้านเลขที่
+</th>
+
+<th>
+สถานะ
+</th>
+
+<th>
+ข้าวที่นำส่ง
+</th>
+
+</tr>
+
+
+<tr>
+
+<td>
+1
+</td>
+
+<td>
+นายจักรวัตร ประพลรัตนัง
+</td>
+
+<td>
+2
+</td>
+
+<td>
+สมาชิก
+</td>
+
+<td>
+12 กก.
+</td>
+
+</tr>
+
+
+</table>
 
 
 </div>
 
-`;
-
-});
 
 
-document.getElementById("list").innerHTML=html;
+<a class="btn" href="index.html">
+⬅ กลับหน้าหลัก
+</a>
 
 
-}
-
-
-
-
-function addMember(){
-
-
-let name =
-document.getElementById("name").value;
-
-
-let house =
-document.getElementById("house").value;
-
-
-
-if(name==""){
-
-alert("กรุณาใส่ชื่อสมาชิก");
-
-return;
-
-}
-
-
-
-members.push({
-
-name:name,
-house:house
-
-});
-
-
-
-localStorage.setItem(
-
-"members",
-
-JSON.stringify(members)
-
-);
-
-
-
-document.getElementById("name").value="";
-
-document.getElementById("house").value="";
-
-
-
-show();
-
-
-}
-
-
-
-show();
-
-
-</script>
-
+</div>
 
 
 </body>
