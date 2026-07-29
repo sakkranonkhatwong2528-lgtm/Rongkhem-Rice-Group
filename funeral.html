@@ -15,9 +15,9 @@
 
 body{
 
-margin:0;
 font-family:Tahoma,sans-serif;
-background:#f5f5f5;
+margin:0;
+background:#f3f7f0;
 
 }
 
@@ -32,22 +32,20 @@ text-align:center;
 }
 
 
-.form{
+.container{
 
-background:white;
-margin:15px;
-padding:20px;
-border-radius:15px;
+padding:15px;
 
 }
 
 
-input,select{
+input,button,select{
 
 width:100%;
 padding:12px;
-margin:8px 0;
-border-radius:8px;
+margin:5px 0;
+font-size:16px;
+border-radius:10px;
 border:1px solid #ccc;
 
 }
@@ -55,28 +53,26 @@ border:1px solid #ccc;
 
 button{
 
-width:100%;
-padding:15px;
 background:#228B22;
 color:white;
 border:none;
-border-radius:10px;
-font-size:18px;
 
 }
 
 
-.box{
+.card{
 
 background:white;
-margin:15px;
 padding:15px;
+margin-top:10px;
 border-radius:15px;
+box-shadow:0 3px 8px #ddd;
 
 }
 
 
 </style>
+
 
 </head>
 
@@ -86,47 +82,31 @@ border-radius:15px;
 
 <div class="header">
 
-<h1>⚰️ แจ้งเสียชีวิต / งานศพ</h1>
+<h2>
+⚰️ แจ้งเสียชีวิต / งานศพ
+</h2>
 
 <p>
-กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
+กลุ่มข้าวสารบ้านร่องเข็ม หมู่ที่ 6
 </p>
 
 </div>
 
 
 
-<div class="form">
+<div class="container">
 
 
-<h2>
-ข้อมูลผู้เสียชีวิต
-</h2>
+<input id="name"
+placeholder="ชื่อ - นามสกุล ผู้เสียชีวิต">
 
 
-<label>
-ชื่อ-นามสกุล
-</label>
-
-<input type="text"
-placeholder="กรอกชื่อผู้เสียชีวิต">
+<input id="age"
+placeholder="อายุ (ปี)">
 
 
 
-<label>
-อายุ
-</label>
-
-<input type="number"
-placeholder="อายุ ปี">
-
-
-
-<label>
-บ้านเลขที่
-</label>
-
-<input type="text"
+<input id="house"
 placeholder="บ้านเลขที่">
 
 
@@ -135,7 +115,8 @@ placeholder="บ้านเลขที่">
 วันที่เสียชีวิต
 </label>
 
-<input type="date">
+<input id="deadDate"
+type="date">
 
 
 
@@ -143,69 +124,182 @@ placeholder="บ้านเลขที่">
 วันที่ฌาปนกิจ
 </label>
 
-<input type="date">
+<input id="burnDate"
+type="date">
 
 
 
-<label>
-วัดที่จัดงาน
-</label>
-
-<input type="text"
-placeholder="ชื่อวัด">
+<input id="temple"
+placeholder="วัดที่จัดงาน">
 
 
 
-<label>
-ข้าวสารช่วยงาน
-</label>
-
-<input type="number"
-placeholder="จำนวนถุง">
+<input id="rice"
+placeholder="ปริมาณข้าวสารช่วยงาน (ถุง)">
 
 
 
-<label>
-สถานะการนำส่ง
-</label>
-
-<select>
+<select id="status">
 
 <option>
-รอดำเนินการ
+สถานะการส่ง
 </option>
 
 <option>
-นำส่งแล้ว
+ส่งแล้ว
+</option>
+
+<option>
+รอส่ง
 </option>
 
 </select>
 
 
 
-<button>
-บันทึกข้อมูล
+<button onclick="addFuneral()">
+
+➕ บันทึกข้อมูล
+
 </button>
 
 
-</div>
 
-
-
-
-<div class="box">
-
-<h2>
+<h3>
 รายการงานศพ
-</h2>
+</h3>
 
-<p>
-ยังไม่มีข้อมูล
-</p>
+
+<div id="list"></div>
 
 
 </div>
 
+
+
+<script>
+
+
+let funerals =
+JSON.parse(localStorage.getItem("funerals")) || [];
+
+
+
+function show(){
+
+
+let html="";
+
+
+funerals.forEach((f,i)=>{
+
+
+html += `
+
+<div class="card">
+
+<b>
+${i+1}. ศพ ${f.name}
+</b>
+
+<br>
+อายุ ${f.age} ปี
+
+<br>
+บ้านเลขที่ ${f.house}
+
+<br>
+เสียชีวิต ${f.deadDate}
+
+<br>
+ฌาปนกิจ ${f.burnDate}
+
+<br>
+วัด ${f.temple}
+
+<br>
+ข้าวสารช่วยงาน ${f.rice} ถุง
+
+<br>
+สถานะ ${f.status}
+
+
+</div>
+
+`;
+
+
+});
+
+
+document.getElementById("list").innerHTML=html;
+
+
+}
+
+
+
+
+function addFuneral(){
+
+
+let data={
+
+name:
+document.getElementById("name").value,
+
+age:
+document.getElementById("age").value,
+
+house:
+document.getElementById("house").value,
+
+deadDate:
+document.getElementById("deadDate").value,
+
+burnDate:
+document.getElementById("burnDate").value,
+
+temple:
+document.getElementById("temple").value,
+
+rice:
+document.getElementById("rice").value,
+
+status:
+document.getElementById("status").value
+
+};
+
+
+
+funerals.push(data);
+
+
+localStorage.setItem(
+
+"funerals",
+
+JSON.stringify(funerals)
+
+);
+
+
+
+alert("บันทึกข้อมูลเรียบร้อย");
+
+
+show();
+
+
+}
+
+
+
+show();
+
+
+</script>
 
 
 </body>
