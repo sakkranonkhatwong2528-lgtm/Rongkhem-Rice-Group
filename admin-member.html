@@ -6,38 +6,28 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>
-จัดการทะเบียนสมาชิก
-</title>
-
+<title>จัดการสมาชิกกลุ่มข้าวสาร</title>
 
 <style>
 
 body{
-font-family:Tahoma,sans-serif;
 margin:0;
+font-family:Tahoma,sans-serif;
 background:#f5f7f2;
 }
 
-
 .header{
-
-background:#2e7d32;
+background:linear-gradient(135deg,#2e7d32,#66bb6a);
 color:white;
 padding:25px;
 text-align:center;
-
 }
-
 
 .container{
-
 padding:20px;
-
 }
 
-
-.card{
+.box{
 
 background:white;
 padding:20px;
@@ -61,24 +51,10 @@ box-sizing:border-box;
 button{
 
 padding:10px 15px;
-border:0;
+border:none;
 border-radius:8px;
 background:#2e7d32;
 color:white;
-
-}
-
-
-.edit{
-
-background:#f57c00;
-
-}
-
-
-.delete{
-
-background:#d32f2f;
 
 }
 
@@ -93,7 +69,7 @@ border-collapse:collapse;
 
 th{
 
-background:#66bb6a;
+background:#2e7d32;
 color:white;
 padding:10px;
 
@@ -103,13 +79,20 @@ padding:10px;
 td{
 
 padding:10px;
-text-align:center;
 border-bottom:1px solid #ddd;
+text-align:center;
 
 }
 
-</style>
 
+.delete{
+
+background:#d32f2f;
+
+}
+
+
+</style>
 
 </head>
 
@@ -120,11 +103,11 @@ border-bottom:1px solid #ddd;
 <div class="header">
 
 <h1>
-⚙️ จัดการทะเบียนสมาชิก
+⚙️ จัดการสมาชิกกลุ่มข้าวสาร
 </h1>
 
 <p>
-กลุ่มข้าวสารบ้านร่องเข็ม หมู่ที่ 6
+บ้านร่องเข็ม หมู่ที่ 6
 </p>
 
 </div>
@@ -134,27 +117,22 @@ border-bottom:1px solid #ddd;
 <div class="container">
 
 
-<div class="card">
-
+<div class="box">
 
 <h2>
-เพิ่มสมาชิก
+➕ เพิ่มสมาชิก
 </h2>
 
 
-<input id="name" placeholder="ชื่อ-นามสกุล">
-
+<input id="name" placeholder="ชื่อ - นามสกุล">
 
 <input id="house" placeholder="บ้านเลขที่">
-
 
 <input id="rice" placeholder="จำนวนข้าว (กก.)">
 
 
 <button onclick="addMember()">
-
-➕ เพิ่มสมาชิก
-
+บันทึก
 </button>
 
 
@@ -162,8 +140,7 @@ border-bottom:1px solid #ddd;
 
 
 
-<div class="card">
-
+<div class="box">
 
 <h2>
 รายชื่อสมาชิก
@@ -177,21 +154,11 @@ border-bottom:1px solid #ddd;
 
 <tr>
 
-<th>
-ชื่อ
-</th>
-
-<th>
-บ้าน
-</th>
-
-<th>
-ข้าว
-</th>
-
-<th>
-จัดการ
-</th>
+<th>ลำดับ</th>
+<th>ชื่อ</th>
+<th>บ้านเลขที่</th>
+<th>ข้าว</th>
+<th>ลบ</th>
 
 </tr>
 
@@ -218,36 +185,13 @@ border-bottom:1px solid #ddd;
 
 
 
+<script src="ข้อมูล.js"></script>
+
 
 <script>
 
 
-let members =
-JSON.parse(localStorage.getItem("members")) || [
-
-{
-name:"นายจักรวัตร ประพลรัตนัง",
-house:"2",
-rice:"12"
-}
-
-];
-
-
-
-function save(){
-
-localStorage.setItem(
-"members",
-JSON.stringify(members)
-);
-
-}
-
-
-
 function show(){
-
 
 let html="";
 
@@ -259,29 +203,21 @@ html += `
 
 <tr>
 
+<td>${i+1}</td>
+
 <td>${m.name}</td>
 
 <td>${m.house}</td>
 
-<td>${m.rice} กก.</td>
-
+<td>${m.rice}</td>
 
 <td>
 
-<button class="edit"
-onclick="editMember(${i})">
-แก้ไข
-</button>
-
-
-<button class="delete"
-onclick="deleteMember(${i})">
+<button class="delete" onclick="removeMember(${i})">
 ลบ
 </button>
 
-
 </td>
-
 
 </tr>
 
@@ -294,7 +230,6 @@ document.getElementById("list").innerHTML=html;
 
 
 }
-
 
 
 
@@ -317,7 +252,6 @@ document.getElementById("rice").value;
 if(name==""){
 
 alert("กรุณาใส่ชื่อสมาชิก");
-
 return;
 
 }
@@ -326,14 +260,19 @@ return;
 
 members.push({
 
+id:Date.now(),
+
 name:name,
+
 house:house,
+
 rice:rice
 
 });
 
 
-save();
+saveMembers();
+
 
 show();
 
@@ -347,34 +286,7 @@ document.getElementById("rice").value="";
 
 
 
-
-function editMember(i){
-
-
-let name =
-prompt(
-"แก้ไขชื่อสมาชิก",
-members[i].name
-);
-
-
-if(name){
-
-members[i].name=name;
-
-save();
-
-show();
-
-}
-
-
-}
-
-
-
-
-function deleteMember(i){
+function removeMember(i){
 
 
 if(confirm("ต้องการลบสมาชิกหรือไม่")){
@@ -382,7 +294,7 @@ if(confirm("ต้องการลบสมาชิกหรือไม่")
 
 members.splice(i,1);
 
-save();
+saveMembers();
 
 show();
 
