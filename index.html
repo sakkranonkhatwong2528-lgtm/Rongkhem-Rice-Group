@@ -6,10 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>
-กลุ่มข้าวสารบ้านร่องเข็ม หมู่ที่ 6
-</title>
-
+<title>กลุ่มข้าวสารบ้านร่องเข็ม หมู่ที่ 6</title>
 
 <style>
 
@@ -19,183 +16,133 @@ font-family:Tahoma,sans-serif;
 background:#f5f7f2;
 }
 
-
 .header{
-
-background:linear-gradient(
-135deg,
-#2e7d32,
-#66bb6a
-);
-
+background:linear-gradient(135deg,#2e7d32,#66bb6a);
 color:white;
-padding:40px 20px;
+padding:35px;
 text-align:center;
-
 }
-
-
-.header h1{
-
-margin:0;
-font-size:32px;
-
-}
-
-
 
 .container{
-
 padding:20px;
-
 }
 
-
-
 .card{
-
 background:white;
-padding:25px;
+padding:20px;
 margin-bottom:20px;
 border-radius:15px;
 box-shadow:0 3px 10px #ccc;
-
 }
-
 
 
 .dashboard{
-
 display:grid;
-grid-template-columns:
-repeat(auto-fit,minmax(180px,1fr));
-
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
 gap:15px;
-
 }
 
 
-
 .box{
-
 background:#e8f5e9;
 padding:20px;
 border-radius:15px;
 text-align:center;
-
 }
-
 
 
 .number{
-
 font-size:32px;
 font-weight:bold;
 color:#2e7d32;
+}
+
+
+.alert{
+
+background:#fff3cd;
+border-left:8px solid #ff9800;
+padding:20px;
+border-radius:10px;
 
 }
 
+
+.alert h2{
+color:#e65100;
+}
+
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+
+th{
+background:#2e7d32;
+color:white;
+padding:10px;
+}
+
+
+td{
+padding:10px;
+border-bottom:1px solid #ddd;
+text-align:center;
+}
 
 
 .menu{
 
 display:grid;
-grid-template-columns:
-repeat(auto-fit,minmax(150px,1fr));
-
+grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
 gap:15px;
 
 }
 
 
-
 .menu a{
 
 background:white;
-padding:25px 10px;
-border-radius:15px;
+padding:20px;
 text-align:center;
+border-radius:15px;
 text-decoration:none;
 color:#333;
-box-shadow:0 3px 10px #ccc;
+box-shadow:0 3px10px #ccc;
 
 }
-
-
-
-.menu a:hover{
-
-background:#e8f5e9;
-
-}
-
-
-
-table{
-
-width:100%;
-border-collapse:collapse;
-
-}
-
-
-
-th{
-
-background:#2e7d32;
-color:white;
-padding:10px;
-
-}
-
-
-
-td{
-
-padding:10px;
-border-bottom:1px solid #ddd;
-text-align:center;
-
-}
-
 
 
 .footer{
 
 background:#2e7d32;
 color:white;
-text-align:center;
 padding:15px;
+text-align:center;
 
 }
 
-
 </style>
 
-
 </head>
-
 
 
 <body>
 
 
-
 <div class="header">
-
 
 <h1>
 🌾 กลุ่มข้าวสารบ้านร่องเข็ม หมู่ที่ 6
 </h1>
 
-
 <p>
 ระบบบริหารจัดการกลุ่มข้าวสารชุมชน
 </p>
 
-
 </div>
-
 
 
 
@@ -203,21 +150,23 @@ padding:15px;
 
 
 
-<div class="card">
+<!-- แจ้งเตือน -->
 
+<div id="alertBox"></div>
+
+
+
+<div class="card">
 
 <h2>
 📊 สถานะกลุ่มข้าวสาร
 </h2>
 
 
-
 <div class="dashboard">
 
 
-
 <div class="box">
-
 👥 สมาชิกทั้งหมด
 
 <div class="number" id="total">
@@ -231,7 +180,6 @@ padding:15px;
 
 
 <div class="box">
-
 ✅ ส่งแล้ว
 
 <div class="number" id="send">
@@ -245,7 +193,6 @@ padding:15px;
 
 
 <div class="box">
-
 ❌ ยังไม่ส่ง
 
 <div class="number" id="notSend">
@@ -259,7 +206,6 @@ padding:15px;
 
 
 <div class="box">
-
 🌾 ข้าวรวม
 
 <div class="number" id="rice">
@@ -271,9 +217,7 @@ padding:15px;
 </div>
 
 
-
 </div>
-
 
 </div>
 
@@ -283,47 +227,30 @@ padding:15px;
 
 <div class="card">
 
-
 <h2>
-👥 สมาชิกล่าสุด
+❌ สมาชิกที่ยังไม่ส่งข้าว
 </h2>
 
 
-
 <table>
-
 
 <thead>
 
 <tr>
 
-<th>
-ชื่อ
-</th>
-
-<th>
-บ้านเลขที่
-</th>
-
-<th>
-สถานะ
-</th>
-
+<th>ชื่อ</th>
+<th>บ้านเลขที่</th>
+<th>สถานะ</th>
 
 </tr>
-
 
 </thead>
 
 
-
-<tbody id="recent">
-
-</tbody>
+<tbody id="notSendList"></tbody>
 
 
 </table>
-
 
 </div>
 
@@ -333,122 +260,94 @@ padding:15px;
 
 <div class="card">
 
+<h2>
+✅ สมาชิกที่นำส่งข้าวแล้ว
+</h2>
+
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>ชื่อ</th>
+<th>บ้านเลขที่</th>
+<th>จำนวนข้าว</th>
+<th>สถานะ</th>
+
+</tr>
+
+</thead>
+
+
+<tbody id="sendList"></tbody>
+
+
+</table>
+
+</div>
+
+
+
+
+
+<div class="card">
 
 <h2>
 📌 เมนูระบบ
 </h2>
 
 
-
 <div class="menu">
 
 
-
 <a href="admin-member.html">
-
-👥
-
-<br>
-
+👥<br>
 ทะเบียนสมาชิก
-
 </a>
-
 
 
 <a href="งานศพ.html">
-
-⚰️
-
-<br>
-
+⚰️<br>
 แจ้งเสียชีวิต / งานศพ
-
 </a>
-
 
 
 <a href="รับ.html">
-
-📦
-
-<br>
-
+📦<br>
 รับ-จ่ายข้าวสาร
-
 </a>
-
 
 
 <a href="สต็อก.html">
-
-🌾
-
-<br>
-
+🌾<br>
 คลังข้าวสาร
-
 </a>
-
 
 
 <a href="รายงาน.html">
-
-📊
-
-<br>
-
+📊<br>
 รายงานข้อมูล
-
 </a>
 
 
-
 </div>
-
-
-</div>
-
-
-
-
-
-<div class="card">
-
-
-<h2>
-เกี่ยวกับกลุ่ม
-</h2>
-
-
-<p>
-
-ระบบกลุ่มข้าวสารบ้านร่องเข็ม หมู่ที่ 6
-จัดทำขึ้นเพื่อบริหารสมาชิก
-การรับ-จ่ายข้าวสาร
-การจัดการคลัง และติดตามข้อมูลชุมชน
-
-</p>
-
 
 </div>
 
 
 
 </div>
-
 
 
 
 <div class="footer">
 
-
 บ้านร่องเข็ม หมู่ที่ 6  
 ตำบลจำป่าหวาย อำเภอเมือง จังหวัดพะเยา
 
-
 </div>
-
 
 
 
@@ -463,52 +362,44 @@ localStorage.getItem("members")
 
 
 
-// จำนวนสมาชิก
+
+// สรุป
 
 document.getElementById("total").innerHTML =
 members.length;
 
 
 
-// ส่งแล้ว
-
-let send =
+let sendList =
 members.filter(
 m=>m.status=="ส่งแล้ว"
-).length;
+);
+
+
+
+let notList =
+members.filter(
+m=>m.status=="ยังไม่ส่ง"
+);
+
 
 
 document.getElementById("send").innerHTML =
-send;
+sendList.length;
 
-
-
-
-// ยังไม่ส่ง
-
-let notSend =
-members.filter(
-m=>m.status=="ยังไม่ส่ง"
-).length;
 
 
 document.getElementById("notSend").innerHTML =
-notSend;
+notList.length;
 
 
-
-
-// รวมข้าว
 
 let rice =
 members.reduce(
-
-(sum,m)=>
-sum + Number(m.rice || 0),
-
+(sum,m)=>sum+Number(m.rice||0),
 0
-
 );
+
 
 
 document.getElementById("rice").innerHTML =
@@ -517,33 +408,123 @@ rice;
 
 
 
-// สมาชิกล่าสุด
 
-let html="";
+// แจ้งเตือน
 
-
-members.slice(-5).reverse()
-.forEach(m=>{
+let alertHTML="";
 
 
-html += `
+if(notList.length==0){
+
+
+alertHTML=`
+
+<div class="alert">
+
+<h2>
+🔔 แจ้งเตือน
+</h2>
+
+<p>
+✅ สมาชิกทุกคนส่งข้าวแล้ว
+</p>
+
+</div>
+
+`;
+
+
+}else{
+
+
+alertHTML=`
+
+<div class="alert">
+
+<h2>
+🔔 แจ้งเตือน
+</h2>
+
+<p>
+มีสมาชิกยังไม่ส่งข้าว
+<b>${notList.length}</b>
+คน
+</p>
+
+`;
+
+
+
+notList.forEach(m=>{
+
+
+alertHTML +=`
+
+<p>
+
+❌ ${m.name}
+
+<br>
+
+🏠 บ้านเลขที่ ${m.house}
+
+</p>
+
+`;
+
+
+});
+
+
+alertHTML +=`
+
+</div>
+
+`;
+
+}
+
+
+
+document.getElementById("alertBox").innerHTML =
+alertHTML;
+
+
+
+
+
+// ตารางยังไม่ส่ง
+
+let notHTML="";
+
+
+if(notList.length==0){
+
+notHTML=`
+
+<tr>
+<td colspan="3">
+✅ ส่งครบทุกคน
+</td>
+</tr>
+
+`;
+
+}else{
+
+
+notList.forEach(m=>{
+
+
+notHTML +=`
 
 <tr>
 
-<td>
-${m.name}
-</td>
+<td>${m.name}</td>
 
+<td>${m.house}</td>
 
-<td>
-${m.house}
-</td>
-
-
-<td>
-${m.status}
-</td>
-
+<td>❌ ยังไม่ส่ง</td>
 
 </tr>
 
@@ -552,13 +533,51 @@ ${m.status}
 });
 
 
-document.getElementById("recent").innerHTML =
-html;
+}
+
+
+
+document.getElementById("notSendList").innerHTML =
+notHTML;
+
+
+
+
+
+
+// ตารางส่งแล้ว
+
+let sendHTML="";
+
+
+sendList.forEach(m=>{
+
+
+sendHTML +=`
+
+<tr>
+
+<td>${m.name}</td>
+
+<td>${m.house}</td>
+
+<td>${m.rice} กก.</td>
+
+<td>✅ ส่งแล้ว</td>
+
+</tr>
+
+`;
+
+});
+
+
+document.getElementById("sendList").innerHTML =
+sendHTML;
 
 
 
 </script>
-
 
 
 </body>
