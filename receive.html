@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>รับ-จ่ายข้าวสาร</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Tahoma,sans-serif;
+background:#f5f7f2;
+}
+
+.header{
+background:#228B22;
+color:white;
+padding:20px;
+text-align:center;
+}
+
+.box{
+background:white;
+margin:15px;
+padding:20px;
+border-radius:15px;
+box-shadow:0 2px 6px #ccc;
+}
+
+input,select{
+
+width:100%;
+padding:12px;
+margin:8px 0;
+box-sizing:border-box;
+border-radius:8px;
+border:1px solid #ccc;
+
+}
+
+button{
+
+width:100%;
+padding:15px;
+background:#228B22;
+color:white;
+border:0;
+border-radius:10px;
+font-size:18px;
+
+}
+
+.item{
+
+background:#f8fff8;
+margin-top:10px;
+padding:15px;
+border-radius:10px;
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="header">
+
+<h1>📦 รับ-จ่ายข้าวสาร</h1>
+
+<p>
+กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
+</p>
+
+</div>
+
+
+
+<div class="box">
+
+<h2>บันทึกการจ่ายข้าวสาร</h2>
+
+
+<input id="name"
+placeholder="ชื่อสมาชิก">
+
+
+<input id="amount"
+placeholder="จำนวนถุง">
+
+
+<input id="date"
+type="date">
+
+
+<button onclick="saveData()">
+บันทึกข้อมูล
+</button>
+
+
+</div>
+
+
+
+<div class="box">
+
+<h2>📋 รายการย้อนหลัง</h2>
+
+<div id="list"></div>
+
+</div>
+
+
+
+<script>
+
+
+let data =
+JSON.parse(localStorage.getItem("receive")) || [];
+
+
+
+function showData(){
+
+let html="";
+
+
+data.forEach((d,i)=>{
+
+html +=`
+
+<div class="item">
+
+<b>${i+1}. ${d.name}</b>
+
+<br>
+
+📦 จำนวน ${d.amount} ถุง
+
+<br>
+
+📅 วันที่ ${d.date}
+
+</div>
+
+`;
+
+});
+
+
+document.getElementById("list").innerHTML=html;
+
+}
+
+
+
+function saveData(){
+
+
+let item={
+
+name:
+document.getElementById("name").value,
+
+amount:
+document.getElementById("amount").value,
+
+date:
+document.getElementById("date").value
+
+};
+
+
+data.push(item);
+
+
+localStorage.setItem(
+"receive",
+JSON.stringify(data)
+);
+
+
+showData();
+
+
+alert("บันทึกการจ่ายข้าวสารแล้ว");
+
+
+}
+
+
+showData();
+
+
+</script>
+
+
+</body>
+
+</html>
