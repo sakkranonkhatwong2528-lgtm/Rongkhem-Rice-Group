@@ -6,88 +6,64 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>
-ทะเบียนสมาชิกกลุ่มข้าวสาร
-</title>
+<title>ทะเบียนสมาชิกกลุ่มข้าวสาร</title>
 
 <style>
 
 body{
-margin:0;
 font-family:Tahoma,sans-serif;
-background:#f4f7f2;
+margin:0;
+background:#f3f7f0;
 }
 
 .header{
-background:linear-gradient(135deg,#228B22,#4caf50);
+background:#228B22;
 color:white;
-padding:25px;
+padding:20px;
 text-align:center;
 }
 
-.box{
-background:white;
-margin:15px;
-padding:20px;
-border-radius:15px;
-box-shadow:0 3px 10px #ddd;
+.container{
+padding:15px;
 }
 
-input{
+input,button{
 width:100%;
 padding:12px;
-margin:8px 0;
-border-radius:8px;
-border:1px solid #ccc;
+margin:5px 0;
 font-size:16px;
+border-radius:10px;
+border:1px solid #ccc;
 }
 
 button{
-
-width:100%;
-padding:15px;
 background:#228B22;
 color:white;
-border:0;
-border-radius:10px;
-font-size:18px;
-
+border:none;
 }
 
 
-.member{
+.card{
 
-background:#f8fff8;
+background:white;
 padding:15px;
 margin-top:10px;
-border-radius:10px;
-border-left:5px solid #228B22;
+border-radius:15px;
+box-shadow:0 3px 8px #ddd;
 
 }
 
 
-.delete{
+.menu{
 
-background:#d9534f;
-padding:8px;
-border-radius:8px;
-color:white;
-border:0;
-
-}
-
-
-.count{
-
-text-align:center;
-font-size:25px;
+display:block;
+padding:15px;
+text-decoration:none;
 color:#228B22;
-font-weight:bold;
 
 }
 
 </style>
-
 
 </head>
 
@@ -95,72 +71,46 @@ font-weight:bold;
 <body>
 
 
-
 <div class="header">
 
-<h1>
+<h2>
 👥 ทะเบียนสมาชิก
-</h1>
+</h2>
 
 <p>
-กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
+กลุ่มข้าวสารบ้านร่องเข็ม หมู่ที่ 6
 </p>
 
 </div>
 
 
 
-
-<div class="box">
-
-<h2>
-➕ เพิ่มสมาชิก
-</h2>
+<div class="container">
 
 
-<input id="name"
-placeholder="ชื่อ-นามสกุล">
+<input id="name" placeholder="ชื่อ - นามสกุล">
 
 
-<input id="house"
-placeholder="บ้านเลขที่">
+<input id="house" placeholder="บ้านเลขที่">
 
 
 <button onclick="addMember()">
 
-บันทึกสมาชิก
+➕ เพิ่มสมาชิก
 
 </button>
 
 
-</div>
 
-
-
-
-<div class="box">
-
-
-<h2>
-📋 รายชื่อสมาชิก
-</h2>
-
-
-<div class="count">
-
-สมาชิกทั้งหมด 
-<span id="total">0</span>
-คน
-
-</div>
-
+<h3>
+รายชื่อสมาชิก
+</h3>
 
 
 <div id="list"></div>
 
 
 </div>
-
 
 
 
@@ -173,46 +123,29 @@ JSON.parse(localStorage.getItem("members")) || [];
 
 
 
-function showMember(){
-
+function show(){
 
 let html="";
 
-
-members.forEach((m,index)=>{
+members.forEach((m,i)=>{
 
 
 html += `
 
-<div class="member">
-
+<div class="card">
 
 <b>
-${index+1}. ${m.name}
+${i+1}. ${m.name}
 </b>
-
 
 <br>
 
-🏠 บ้านเลขที่ ${m.house}
-
-
-<br><br>
-
-
-<button class="delete"
-onclick="removeMember(${index})">
-
-ลบ
-
-</button>
+บ้านเลขที่ ${m.house}
 
 
 </div>
 
 `;
-
-
 
 });
 
@@ -220,12 +153,8 @@ onclick="removeMember(${index})">
 document.getElementById("list").innerHTML=html;
 
 
-document.getElementById("total").innerHTML=
-members.length;
-
-
-
 }
+
 
 
 
@@ -251,23 +180,21 @@ return;
 
 
 
-let data={
+members.push({
 
 name:name,
-
 house:house
 
-};
-
-
-
-members.push(data);
+});
 
 
 
 localStorage.setItem(
+
 "members",
+
 JSON.stringify(members)
+
 );
 
 
@@ -278,42 +205,18 @@ document.getElementById("house").value="";
 
 
 
-showMember();
+show();
 
 
 }
 
 
 
-function removeMember(index){
-
-
-if(confirm("ต้องการลบสมาชิกนี้หรือไม่")){
-
-
-members.splice(index,1);
-
-
-localStorage.setItem(
-"members",
-JSON.stringify(members)
-);
-
-
-showMember();
-
-
-}
-
-
-}
-
-
-
-showMember();
+show();
 
 
 </script>
+
 
 
 </body>
