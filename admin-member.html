@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>ทะเบียนสมาชิกกลุ่มข้าวสารบ้านร่องเข็ม</title>
+<title>จัดการทะเบียนสมาชิกกลุ่มข้าวสาร</title>
 
 <style>
 
@@ -45,44 +45,37 @@ border:1px solid #ccc;
 }
 
 button{
-
 background:#2e7d32;
 color:white;
 border:0;
 padding:10px 15px;
 border-radius:8px;
 cursor:pointer;
-
 }
 
 .delete{
 background:#d32f2f;
 }
 
-
-table{
-
-width:100%;
-border-collapse:collapse;
-
+.edit{
+background:#f57c00;
 }
 
+table{
+width:100%;
+border-collapse:collapse;
+}
 
 th{
-
 background:#2e7d32;
 color:white;
 padding:10px;
-
 }
 
-
 td{
-
 padding:10px;
 border-bottom:1px solid #ddd;
 text-align:center;
-
 }
 
 </style>
@@ -96,11 +89,11 @@ text-align:center;
 <div class="header">
 
 <h1>
-👥 ทะเบียนสมาชิกกลุ่มข้าวสาร
+👥 จัดการทะเบียนสมาชิก
 </h1>
 
 <p>
-บ้านร่องเข็ม หมู่ที่ 6
+กลุ่มข้าวสารบ้านร่องเข็ม หมู่ที่ 6
 </p>
 
 </div>
@@ -112,9 +105,7 @@ text-align:center;
 
 <div class="card">
 
-<h2>
-➕ เพิ่มสมาชิก
-</h2>
+<h2>➕ เพิ่มสมาชิก</h2>
 
 
 <input id="name" placeholder="ชื่อ - นามสกุล">
@@ -135,9 +126,7 @@ text-align:center;
 
 <div class="card">
 
-<h2>
-รายชื่อสมาชิก
-</h2>
+<h2>รายชื่อสมาชิก</h2>
 
 
 <table>
@@ -180,8 +169,9 @@ text-align:center;
 <script>
 
 
-let members =
-JSON.parse(localStorage.getItem("members")) || [
+let members = JSON.parse(
+localStorage.getItem("members")
+) || [
 
 {
 name:"นายจักรวัตร ประพลรัตนัง",
@@ -195,11 +185,10 @@ rice:"12"
 
 function showMember(){
 
-
 let html="";
 
 
-members.forEach(function(m,i){
+members.forEach((m,i)=>{
 
 
 html += `
@@ -216,11 +205,12 @@ html += `
 
 <td>
 
-<button class="delete"
-onclick="deleteMember(${i})">
+<button class="edit" onclick="editMember(${i})">
+แก้ไข
+</button>
 
+<button class="delete" onclick="deleteMember(${i})">
 ลบ
-
 </button>
 
 </td>
@@ -234,7 +224,6 @@ onclick="deleteMember(${i})">
 
 document.getElementById("list").innerHTML=html;
 
-
 }
 
 
@@ -243,16 +232,11 @@ document.getElementById("list").innerHTML=html;
 function addMember(){
 
 
-let name =
-document.getElementById("name").value;
+let name=document.getElementById("name").value;
 
+let house=document.getElementById("house").value;
 
-let house =
-document.getElementById("house").value;
-
-
-let rice =
-document.getElementById("rice").value;
+let rice=document.getElementById("rice").value;
 
 
 
@@ -278,22 +262,42 @@ rice:rice
 
 
 
-localStorage.setItem(
-"members",
-JSON.stringify(members)
-);
+saveData();
 
 
 
 document.getElementById("name").value="";
+
 document.getElementById("house").value="";
+
 document.getElementById("rice").value="";
 
 
-showMember();
-
-
 alert("บันทึกสมาชิกเรียบร้อย");
+
+
+}
+
+
+
+
+function editMember(i){
+
+
+let name=prompt(
+"แก้ไขชื่อสมาชิก",
+members[i].name
+);
+
+
+if(name){
+
+members[i].name=name;
+
+saveData();
+
+}
+
 
 }
 
@@ -308,6 +312,19 @@ if(confirm("ต้องการลบสมาชิกหรือไม่")
 
 members.splice(i,1);
 
+saveData();
+
+
+}
+
+
+}
+
+
+
+
+function saveData(){
+
 
 localStorage.setItem(
 "members",
@@ -316,9 +333,6 @@ JSON.stringify(members)
 
 
 showMember();
-
-
-}
 
 
 }
