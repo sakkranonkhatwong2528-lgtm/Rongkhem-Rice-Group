@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>จัดการสมาชิกกลุ่มข้าวสาร</title>
+<title>ทะเบียนสมาชิกกลุ่มข้าวสารบ้านร่องเข็ม</title>
 
 <style>
 
 body{
+margin:0;
 font-family:Tahoma,sans-serif;
 background:#f5f7f2;
-margin:0;
 }
 
 .header{
@@ -44,33 +45,44 @@ border:1px solid #ccc;
 }
 
 button{
+
 background:#2e7d32;
 color:white;
 border:0;
 padding:10px 15px;
 border-radius:8px;
 cursor:pointer;
+
 }
 
 .delete{
 background:#d32f2f;
 }
 
+
 table{
+
 width:100%;
 border-collapse:collapse;
+
 }
 
+
 th{
+
 background:#2e7d32;
 color:white;
 padding:10px;
+
 }
 
+
 td{
+
 padding:10px;
 border-bottom:1px solid #ddd;
 text-align:center;
+
 }
 
 </style>
@@ -83,13 +95,16 @@ text-align:center;
 
 <div class="header">
 
-<h1>👥 จัดการทะเบียนสมาชิก</h1>
+<h1>
+👥 ทะเบียนสมาชิกกลุ่มข้าวสาร
+</h1>
 
 <p>
-กลุ่มข้าวสารบ้านร่องเข็ม หมู่ที่ 6
+บ้านร่องเข็ม หมู่ที่ 6
 </p>
 
 </div>
+
 
 
 <div class="container">
@@ -97,7 +112,10 @@ text-align:center;
 
 <div class="card">
 
-<h2>➕ เพิ่มสมาชิก</h2>
+<h2>
+➕ เพิ่มสมาชิก
+</h2>
+
 
 <input id="name" placeholder="ชื่อ - นามสกุล">
 
@@ -117,7 +135,9 @@ text-align:center;
 
 <div class="card">
 
-<h2>รายชื่อสมาชิก</h2>
+<h2>
+รายชื่อสมาชิก
+</h2>
 
 
 <table>
@@ -125,17 +145,21 @@ text-align:center;
 <thead>
 
 <tr>
+
 <th>ลำดับ</th>
 <th>ชื่อ</th>
 <th>บ้านเลขที่</th>
 <th>ข้าว</th>
-<th>ลบ</th>
+<th>จัดการ</th>
+
 </tr>
 
 </thead>
 
 
-<tbody id="list"></tbody>
+<tbody id="list">
+
+</tbody>
 
 
 </table>
@@ -156,9 +180,8 @@ text-align:center;
 <script>
 
 
-let members = JSON.parse(
-localStorage.getItem("members")
-) || [
+let members =
+JSON.parse(localStorage.getItem("members")) || [
 
 {
 name:"นายจักรวัตร ประพลรัตนัง",
@@ -172,10 +195,11 @@ rice:"12"
 
 function showMember(){
 
+
 let html="";
 
 
-members.forEach((m,i)=>{
+members.forEach(function(m,i){
 
 
 html += `
@@ -215,14 +239,17 @@ document.getElementById("list").innerHTML=html;
 
 
 
+
 function addMember(){
 
 
 let name =
 document.getElementById("name").value;
 
+
 let house =
 document.getElementById("house").value;
+
 
 let rice =
 document.getElementById("rice").value;
@@ -242,10 +269,13 @@ return;
 members.push({
 
 name:name,
+
 house:house,
+
 rice:rice
 
 });
+
 
 
 localStorage.setItem(
@@ -263,17 +293,17 @@ document.getElementById("rice").value="";
 showMember();
 
 
-alert("เพิ่มสมาชิกเรียบร้อย");
-
+alert("บันทึกสมาชิกเรียบร้อย");
 
 }
+
 
 
 
 function deleteMember(i){
 
 
-if(confirm("ต้องการลบหรือไม่")){
+if(confirm("ต้องการลบสมาชิกหรือไม่")){
 
 
 members.splice(i,1);
@@ -290,6 +320,7 @@ showMember();
 
 }
 
+
 }
 
 
@@ -301,4 +332,5 @@ showMember();
 
 
 </body>
+
 </html>
