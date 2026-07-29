@@ -77,7 +77,6 @@ border-collapse:collapse;
 
 }
 
-
 th{
 
 background:#2e7d32;
@@ -86,7 +85,6 @@ padding:10px;
 
 }
 
-
 td{
 
 padding:10px;
@@ -94,7 +92,6 @@ border-bottom:1px solid #ddd;
 text-align:center;
 
 }
-
 
 </style>
 
@@ -119,7 +116,6 @@ text-align:center;
 
 
 <div class="container">
-
 
 
 <div class="card">
@@ -151,7 +147,6 @@ text-align:center;
 </select>
 
 
-
 <button onclick="addMember()">
 บันทึกสมาชิก
 </button>
@@ -179,17 +174,11 @@ text-align:center;
 <tr>
 
 <th>ลำดับ</th>
-
 <th>ชื่อ</th>
-
 <th>บ้านเลขที่</th>
-
 <th>ข้าว</th>
-
 <th>สถานะ</th>
-
 <th>จัดการ</th>
-
 
 </tr>
 
@@ -207,15 +196,12 @@ text-align:center;
 </div>
 
 
-
 <a href="index.html">
 ⬅ กลับหน้าหลัก
 </a>
 
 
-
 </div>
-
 
 
 
@@ -227,25 +213,32 @@ localStorage.getItem("members")
 ) || [];
 
 
-// เพิ่มสถานะให้ข้อมูลเก่า
+// เติมสถานะให้ข้อมูลเก่า
 
 members = members.map(m=>{
 
-if(!m.status){
+return {
 
-m.status="ยังไม่ส่ง";
+name:m.name || "",
+house:m.house || "",
+rice:m.rice || "",
+status:m.status || "ยังไม่ส่ง"
 
-}
-
-return m;
+};
 
 });
 
 
+// บันทึกข้อมูลใหม่ทันที
+
+localStorage.setItem(
+"members",
+JSON.stringify(members)
+);
+
 
 
 function showMember(){
-
 
 let html="";
 
@@ -259,15 +252,11 @@ html += `
 
 <td>${i+1}</td>
 
-
 <td>${m.name}</td>
-
 
 <td>${m.house}</td>
 
-
 <td>${m.rice} กก.</td>
-
 
 
 <td>
@@ -282,32 +271,22 @@ ${m.status}
 </td>
 
 
-
 <td>
-
 
 <button class="edit"
 onclick="editMember(${i})">
-
 แก้ไข
-
 </button>
-
 
 
 <button class="delete"
 onclick="deleteMember(${i})">
-
 ลบ
-
 </button>
-
 
 </td>
 
-
 </tr>
-
 
 `;
 
@@ -321,20 +300,18 @@ document.getElementById("list").innerHTML=html;
 
 
 
-
 function showSummary(){
 
-
-let send = members.filter(
+let send =
+members.filter(
 m=>m.status=="ส่งแล้ว"
 ).length;
 
 
-
-let notSend = members.filter(
+let notSend =
+members.filter(
 m=>m.status=="ยังไม่ส่ง"
 ).length;
-
 
 
 document.getElementById("summary").innerHTML=
@@ -347,23 +324,19 @@ document.getElementById("summary").innerHTML=
 📊 สรุปการส่งข้าวสาร
 </h3>
 
-
 <p>
 ✅ ส่งแล้ว : ${send} คน
 </p>
 
-
 <p>
 ❌ ยังไม่ส่ง : ${notSend} คน
 </p>
-
 
 </div>
 
 `;
 
 }
-
 
 
 
@@ -397,19 +370,14 @@ return;
 }
 
 
-
 members.push({
 
 name:name,
-
 house:house,
-
 rice:rice,
-
 status:status
 
 });
-
 
 
 saveData();
@@ -417,22 +385,15 @@ saveData();
 
 
 document.getElementById("name").value="";
-
 document.getElementById("house").value="";
-
 document.getElementById("rice").value="";
-
-
-alert("บันทึกสมาชิกเรียบร้อย");
 
 
 }
 
 
 
-
 function changeStatus(i){
-
 
 if(members[i].status=="ส่งแล้ว"){
 
@@ -447,21 +408,17 @@ members[i].status="ส่งแล้ว";
 
 saveData();
 
-
 }
-
 
 
 
 
 function editMember(i){
 
-
 let name = prompt(
 "แก้ไขชื่อสมาชิก",
 members[i].name
 );
-
 
 
 if(name){
@@ -472,7 +429,6 @@ saveData();
 
 }
 
-
 }
 
 
@@ -480,18 +436,15 @@ saveData();
 
 function deleteMember(i){
 
-
 if(confirm("ต้องการลบสมาชิกหรือไม่")){
 
 
 members.splice(i,1);
 
-
 saveData();
 
 
 }
-
 
 }
 
@@ -500,35 +453,26 @@ saveData();
 
 function saveData(){
 
-
 localStorage.setItem(
-
 "members",
-
 JSON.stringify(members)
-
 );
-
 
 
 showMember();
 
 showSummary();
-
 
 }
 
 
 
-
 showMember();
 
 showSummary();
 
 
-
 </script>
-
 
 
 </body>
