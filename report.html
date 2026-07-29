@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>
+รายงานกลุ่มข้าวสาร
+</title>
+
+
+<style>
+
+body{
+
+margin:0;
+font-family:Tahoma,sans-serif;
+background:#f4f7f2;
+
+}
+
+
+.header{
+
+background:#0066cc;
+color:white;
+padding:20px;
+text-align:center;
+
+}
+
+
+.box{
+
+background:white;
+margin:15px;
+padding:20px;
+border-radius:15px;
+box-shadow:0 2px 6px #ccc;
+
+}
+
+
+.number{
+
+font-size:30px;
+color:#228B22;
+text-align:center;
+
+}
+
+
+.item{
+
+background:#f8fff8;
+padding:12px;
+margin-top:10px;
+border-radius:10px;
+
+}
+
+
+button{
+
+width:100%;
+padding:15px;
+background:#228B22;
+color:white;
+border:0;
+border-radius:10px;
+font-size:18px;
+
+}
+
+</style>
+
+
+</head>
+
+
+<body>
+
+
+<div class="header">
+
+<h1>📊 รายงาน</h1>
+
+<p>
+กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
+</p>
+
+</div>
+
+
+
+
+<div class="box">
+
+<h2>
+👥 สมาชิก
+</h2>
+
+<div class="number" id="memberCount">
+0
+</div>
+
+คน
+
+</div>
+
+
+
+
+<div class="box">
+
+<h2>
+📦 การจ่ายข้าวสาร
+</h2>
+
+<div class="number" id="receiveCount">
+0
+</div>
+
+รายการ
+
+</div>
+
+
+
+
+<div class="box">
+
+<h2>
+🌾 ข้าวสารคงเหลือ
+</h2>
+
+<div class="number" id="stockCount">
+0
+</div>
+
+ถุง
+
+</div>
+
+
+
+
+<div class="box">
+
+<h2>
+⚰️ งานศพ
+</h2>
+
+<div class="number">
+0
+</div>
+
+ราย
+
+</div>
+
+
+
+<button onclick="window.print()">
+
+🖨 พิมพ์รายงาน
+
+</button>
+
+
+
+
+<script>
+
+
+let members =
+JSON.parse(localStorage.getItem("members")) || [];
+
+
+let receive =
+JSON.parse(localStorage.getItem("receive")) || [];
+
+
+let stock =
+JSON.parse(localStorage.getItem("stock")) || [];
+
+
+
+document.getElementById("memberCount")
+.innerHTML = members.length;
+
+
+
+document.getElementById("receiveCount")
+.innerHTML = receive.length;
+
+
+
+let total=0;
+
+
+stock.forEach(s=>{
+
+
+if(s.type=="in"){
+
+total += Number(s.amount);
+
+}
+
+else{
+
+total -= Number(s.amount);
+
+}
+
+
+});
+
+
+
+document.getElementById("stockCount")
+.innerHTML = total;
+
+
+
+</script>
+
+
+
+</body>
+
+</html>
