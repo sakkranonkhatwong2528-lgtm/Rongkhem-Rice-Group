@@ -6,10 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>
-ทะเบียนสมาชิกกลุ่มข้าวสารบ้านร่องเข็ม
-</title>
-
+<title>ทะเบียนสมาชิกกลุ่มข้าวสารบ้านร่องเข็ม</title>
 
 <style>
 
@@ -19,94 +16,71 @@ font-family:Tahoma,sans-serif;
 background:#f5f7f2;
 }
 
-
 .header{
-
-background:linear-gradient(
-135deg,
-#2e7d32,
-#66bb6a
-);
-
+background:linear-gradient(135deg,#2e7d32,#66bb6a);
 color:white;
 padding:30px;
 text-align:center;
-
 }
-
 
 .container{
-
 padding:20px;
-
 }
-
 
 .card{
-
 background:white;
 padding:20px;
+margin-bottom:20px;
 border-radius:15px;
 box-shadow:0 3px 10px #ccc;
-
 }
 
-
-table{
-
-width:100%;
-border-collapse:collapse;
-
-}
-
-
-th{
-
-background:#2e7d32;
-color:white;
-padding:12px;
-
-}
-
-
-td{
-
-padding:12px;
-border-bottom:1px solid #ddd;
-text-align:center;
-
-}
-
-
-.search{
-
+input{
 width:100%;
 padding:12px;
-margin-bottom:15px;
+margin:8px 0;
+box-sizing:border-box;
 border-radius:8px;
 border:1px solid #ccc;
-
 }
 
-
-.btn{
-
-display:inline-block;
-margin-top:20px;
-padding:12px 20px;
+button{
+padding:10px 15px;
+border:none;
+border-radius:8px;
 background:#2e7d32;
 color:white;
-text-decoration:none;
-border-radius:10px;
-
+cursor:pointer;
 }
 
+.delete{
+background:#d32f2f;
+}
+
+.edit{
+background:#f57c00;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th{
+background:#2e7d32;
+color:white;
+padding:10px;
+}
+
+td{
+padding:10px;
+border-bottom:1px solid #ddd;
+text-align:center;
+}
 
 </style>
 
-
 </head>
-
 
 
 <body>
@@ -131,36 +105,45 @@ border-radius:10px;
 
 <div class="card">
 
+<h2>
+➕ เพิ่มสมาชิก
+</h2>
 
-<input class="search"
-id="search"
-placeholder="🔍 ค้นหาชื่อสมาชิก"
-onkeyup="searchMember()">
 
+<input id="name" placeholder="ชื่อ - นามสกุล">
+
+<input id="house" placeholder="บ้านเลขที่">
+
+<input id="rice" placeholder="จำนวนข้าวที่นำส่ง (กก.)">
+
+
+<button onclick="addMember()">
+บันทึกสมาชิก
+</button>
+
+
+</div>
+
+
+
+<div class="card">
+
+<h2>
+รายชื่อสมาชิก
+</h2>
 
 
 <table>
-
 
 <thead>
 
 <tr>
 
-<th>
-ลำดับ
-</th>
-
-<th>
-ชื่อ-นามสกุล
-</th>
-
-<th>
-บ้านเลขที่
-</th>
-
-<th>
-จำนวนข้าว
-</th>
+<th>ลำดับ</th>
+<th>ชื่อสมาชิก</th>
+<th>บ้านเลขที่</th>
+<th>ข้าว</th>
+<th>จัดการ</th>
 
 </tr>
 
@@ -168,29 +151,6 @@ onkeyup="searchMember()">
 
 
 <tbody id="memberList">
-
-
-<tr>
-
-<td>
-1
-</td>
-
-<td>
-นายจักรวัตร ประพลรัตนัง
-</td>
-
-<td>
-2
-</td>
-
-<td>
-12 กก.
-</td>
-
-
-</tr>
-
 
 </tbody>
 
@@ -201,7 +161,7 @@ onkeyup="searchMember()">
 </div>
 
 
-<a class="btn" href="index.html">
+<a href="index.html">
 ⬅ กลับหน้าหลัก
 </a>
 
@@ -210,42 +170,163 @@ onkeyup="searchMember()">
 
 
 
-
 <script>
 
 
-function searchMember(){
+let members = JSON.parse(localStorage.getItem("members")) || [
 
-let input =
-document.getElementById("search").value.toLowerCase();
-
-
-let rows =
-document.querySelectorAll("#memberList tr");
-
-
-rows.forEach(row=>{
-
-
-if(row.innerText.toLowerCase().includes(input)){
-
-row.style.display="";
-
-}else{
-
-row.style.display="none";
-
+{
+name:"นายจักรวัตร ประพลรัตนัง",
+house:"2",
+rice:"12"
 }
 
+];
+
+
+
+function showMember(){
+
+
+let html="";
+
+
+members.forEach((m,i)=>{
+
+
+html += `
+
+<tr>
+
+<td>${i+1}</td>
+
+<td>${m.name}</td>
+
+<td>${m.house}</td>
+
+<td>${m.rice} กก.</td>
+
+
+<td>
+
+<button class="edit" onclick="editMember(${i})">
+แก้ไข
+</button>
+
+
+<button class="delete" onclick="deleteMember(${i})">
+ลบ
+</button>
+
+
+</td>
+
+
+</tr>
+
+`;
 
 });
 
 
+document.getElementById("memberList").innerHTML=html;
+
+
 }
 
 
-</script>
 
+function addMember(){
+
+
+let name=document.getElementById("name").value;
+let house=document.getElementById("house").value;
+let rice=document.getElementById("rice").value;
+
+
+if(name==""){
+
+alert("กรุณาใส่ชื่อสมาชิก");
+return;
+
+}
+
+
+members.push({
+
+name:name,
+house:house,
+rice:rice
+
+});
+
+
+save();
+
+
+document.getElementById("name").value="";
+document.getElementById("house").value="";
+document.getElementById("rice").value="";
+
+
+}
+
+
+
+function editMember(i){
+
+
+let name=prompt(
+"แก้ไขชื่อสมาชิก",
+members[i].name
+);
+
+
+if(name){
+
+members[i].name=name;
+
+save();
+
+}
+
+
+}
+
+
+
+function deleteMember(i){
+
+
+if(confirm("ต้องการลบสมาชิกหรือไม่")){
+
+members.splice(i,1);
+
+save();
+
+}
+
+
+}
+
+
+
+function save(){
+
+localStorage.setItem(
+"members",
+JSON.stringify(members)
+);
+
+showMember();
+
+}
+
+
+showMember();
+
+
+</script>
 
 
 </body>
