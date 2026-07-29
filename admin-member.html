@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="th">
-
 <head>
 
 <meta charset="UTF-8">
@@ -17,9 +16,9 @@ margin:0;
 }
 
 .header{
-background:#2e7d32;
+background:linear-gradient(135deg,#2e7d32,#66bb6a);
 color:white;
-padding:25px;
+padding:30px;
 text-align:center;
 }
 
@@ -57,10 +56,6 @@ cursor:pointer;
 background:#d32f2f;
 }
 
-.edit{
-background:#f57c00;
-}
-
 table{
 width:100%;
 border-collapse:collapse;
@@ -88,9 +83,7 @@ text-align:center;
 
 <div class="header">
 
-<h1>
-👥 จัดการทะเบียนสมาชิก
-</h1>
+<h1>👥 จัดการทะเบียนสมาชิก</h1>
 
 <p>
 กลุ่มข้าวสารบ้านร่องเข็ม หมู่ที่ 6
@@ -105,7 +98,6 @@ text-align:center;
 <div class="card">
 
 <h2>➕ เพิ่มสมาชิก</h2>
-
 
 <input id="name" placeholder="ชื่อ - นามสกุล">
 
@@ -133,21 +125,17 @@ text-align:center;
 <thead>
 
 <tr>
-
 <th>ลำดับ</th>
 <th>ชื่อ</th>
 <th>บ้านเลขที่</th>
 <th>ข้าว</th>
-<th>จัดการ</th>
-
+<th>ลบ</th>
 </tr>
 
 </thead>
 
 
-<tbody id="list">
-
-</tbody>
+<tbody id="list"></tbody>
 
 
 </table>
@@ -165,18 +153,29 @@ text-align:center;
 
 
 
-<script src="ข้อมูล.js"></script>
-
-
 <script>
 
 
-function show(){
+let members = JSON.parse(
+localStorage.getItem("members")
+) || [
+
+{
+name:"นายจักรวัตร ประพลรัตนัง",
+house:"2",
+rice:"12"
+}
+
+];
+
+
+
+function showMember(){
 
 let html="";
 
 
-getMembers().forEach((m,i)=>{
+members.forEach((m,i)=>{
 
 
 html += `
@@ -193,18 +192,12 @@ html += `
 
 <td>
 
-
-<button class="edit"
-onclick="editMember(${m.id})">
-แก้ไข
-</button>
-
-
 <button class="delete"
-onclick="removeMember(${m.id})">
-ลบ
-</button>
+onclick="deleteMember(${i})">
 
+ลบ
+
+</button>
 
 </td>
 
@@ -228,10 +221,8 @@ function addMember(){
 let name =
 document.getElementById("name").value;
 
-
 let house =
 document.getElementById("house").value;
-
 
 let rice =
 document.getElementById("rice").value;
@@ -248,10 +239,18 @@ return;
 
 
 
-addData(
-name,
-house,
-rice
+members.push({
+
+name:name,
+house:house,
+rice:rice
+
+});
+
+
+localStorage.setItem(
+"members",
+JSON.stringify(members)
 );
 
 
@@ -261,64 +260,45 @@ document.getElementById("house").value="";
 document.getElementById("rice").value="";
 
 
-show();
+showMember();
+
+
+alert("เพิ่มสมาชิกเรียบร้อย");
 
 
 }
 
 
 
-function removeMember(id){
-
-if(confirm("ต้องการลบสมาชิกหรือไม่")){
-
-deleteData(id);
-
-show();
-
-}
-
-}
+function deleteMember(i){
 
 
+if(confirm("ต้องการลบหรือไม่")){
 
-function editMember(id){
+
+members.splice(i,1);
 
 
-let m =
-getMembers().find(
-x=>x.id==id
+localStorage.setItem(
+"members",
+JSON.stringify(members)
 );
 
 
-let name =
-prompt("แก้ไขชื่อ",m.name);
+showMember();
 
-
-if(name){
-
-editData(
-id,
-name,
-m.house,
-m.rice
-);
-
-show();
 
 }
-
 
 }
 
 
 
-show();
+showMember();
 
 
 </script>
 
 
 </body>
-
 </html>
