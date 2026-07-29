@@ -1,4 +1,162 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>
+กลุ่มข้าวสารบ้านร่องเข็ม หมู่ที่ 6
+</title>
+
+
+<style>
+
+body{
+margin:0;
+font-family:Tahoma,sans-serif;
+background:#f5f7f2;
+}
+
+
+.header{
+
+background:linear-gradient(135deg,#2e7d32,#81c784);
+color:white;
+padding:30px;
+text-align:center;
+
+}
+
+
+.container{
+
+padding:20px;
+
+}
+
+
+
+.card{
+
+background:white;
+padding:20px;
+margin-bottom:20px;
+border-radius:15px;
+box-shadow:0 3px 10px #ccc;
+
+}
+
+
+
+.dashboard{
+
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:15px;
+
+}
+
+
+
+.box{
+
+background:#e8f5e9;
+padding:20px;
+text-align:center;
+border-radius:15px;
+
+}
+
+
+
+.number{
+
+font-size:35px;
+font-weight:bold;
+color:#2e7d32;
+
+}
+
+
+
+.warning{
+
+background:#fff3cd;
+padding:15px;
+border-radius:10px;
+
+}
+
+
+
+.success{
+
+background:#e8f5e9;
+padding:15px;
+border-radius:10px;
+
+}
+
+
+
+.menu{
+
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+gap:15px;
+
+}
+
+
+.menu a{
+
+background:white;
+padding:20px;
+border-radius:15px;
+text-align:center;
+text-decoration:none;
+color:#333;
+box-shadow:0 3px 10px #ccc;
+
+}
+
+
+</style>
+
+
+</head>
+
+
+<body>
+
+
+
+<div class="header">
+
+
+<h1>
+🌾 กลุ่มข้าวสารบ้านร่องเข็ม หมู่ที่ 6
+</h1>
+
+
+<p>
+ระบบบริหารจัดการกลุ่มข้าวสารชุมชน
+</p>
+
+
+</div>
+
+
+
+
+<div class="container">
+
+
+
 <div class="card">
+
 
 <h2>
 📊 สถานะกลุ่มข้าวสาร
@@ -13,7 +171,7 @@
 
 🏠 ครัวเรือนทั้งหมด
 
-<div class="number" id="member">
+<div class="number" id="total">
 
 0
 
@@ -22,7 +180,6 @@
 ครัวเรือน
 
 </div>
-
 
 
 
@@ -44,12 +201,11 @@
 
 
 
-
 <div class="box">
 
 ❌ ครัวเรือนยังไม่ส่ง
 
-<div class="number" id="not">
+<div class="number" id="notSend">
 
 0
 
@@ -58,7 +214,6 @@
 ครัวเรือน
 
 </div>
-
 
 
 
@@ -78,8 +233,303 @@
 </div>
 
 
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="card">
+
+
+<h2>
+🔔 แจ้งเตือน
+</h2>
+
+
+<div id="alert">
 
 </div>
 
 
 </div>
+
+
+
+
+
+
+<div class="card">
+
+
+<h2>
+📌 เมนูระบบ
+</h2>
+
+
+<div class="menu">
+
+
+<a href="admin-member.html">
+
+👥
+<br>
+ทะเบียนครัวเรือน
+
+</a>
+
+
+
+<a href="งานศพ.html">
+
+⚰️
+<br>
+แจ้งงานศพ
+
+</a>
+
+
+
+
+<a href="รับ.html">
+
+📦
+<br>
+รับ-จ่ายข้าว
+
+</a>
+
+
+
+
+<a href="สต็อก.html">
+
+🌾
+<br>
+คลังข้าว
+
+</a>
+
+
+
+
+<a href="รายงาน.html">
+
+📊
+<br>
+รายงาน
+
+</a>
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+<div class="card">
+
+
+<h3>
+เกี่ยวกับกลุ่ม
+</h3>
+
+
+<p>
+
+ระบบกลุ่มข้าวสารบ้านร่องเข็ม หมู่ที่ 6  
+จัดทำเพื่อบริหารข้อมูลครัวเรือน 
+การส่งข้าวสาร และการจัดการคลังข้าว
+
+</p>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<script>
+
+
+let members = JSON.parse(
+
+localStorage.getItem("members")
+
+)||[];
+
+
+
+
+let rice = JSON.parse(
+
+localStorage.getItem("riceData")
+
+)||[];
+
+
+
+
+// จำนวนครัวเรือน
+
+
+let total = members.length;
+
+
+let send = members.filter(
+
+m=>m.status=="ส่งแล้ว"
+
+).length;
+
+
+
+let notSend = members.filter(
+
+m=>m.status=="ยังไม่ส่ง"
+
+).length;
+
+
+
+document.getElementById("total").innerHTML=total;
+
+
+document.getElementById("send").innerHTML=send;
+
+
+document.getElementById("notSend").innerHTML=notSend;
+
+
+
+
+
+// คลังข้าว
+
+
+let stock=0;
+
+
+rice.forEach(r=>{
+
+
+if(r.type=="รับเข้า"){
+
+stock += Number(r.amount);
+
+}else{
+
+stock -= Number(r.amount);
+
+}
+
+
+});
+
+
+document.getElementById("stock").innerHTML=stock;
+
+
+
+
+
+// แจ้งเตือน
+
+
+let alert="";
+
+
+
+let list = members.filter(
+
+m=>m.status=="ยังไม่ส่ง"
+
+);
+
+
+
+if(list.length==0){
+
+
+alert=`
+
+<div class="success">
+
+✅ ทุกครัวเรือนส่งข้าวครบแล้ว
+
+</div>
+
+`;
+
+
+}else{
+
+
+alert=`
+
+<div class="warning">
+
+❌ มีครัวเรือนยังไม่ส่ง ${list.length} ครัวเรือน
+
+<br><br>
+
+`;
+
+
+list.forEach(m=>{
+
+
+alert += `
+
+🏠 ${m.name}
+
+<br>
+
+📌 สถานะ : ยังไม่ส่ง
+
+<br>
+
+📦 ค้างส่ง : ${m.pending || 0} งาน
+
+<br><br>
+
+`;
+
+});
+
+
+alert+=`
+
+</div>
+
+`;
+
+}
+
+
+
+document.getElementById("alert").innerHTML=alert;
+
+
+
+</script>
+
+
+
+</body>
+
+</html>
