@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ทะเบียนสมาชิกกลุ่มข้าวสาร</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Tahoma,sans-serif;
+background:#f4f7f2;
+}
+
+.header{
+background:#228B22;
+color:white;
+padding:20px;
+text-align:center;
+}
+
+.box{
+background:white;
+margin:15px;
+padding:20px;
+border-radius:15px;
+}
+
+input{
+width:100%;
+padding:12px;
+margin:8px 0;
+box-sizing:border-box;
+border-radius:8px;
+border:1px solid #ccc;
+}
+
+button{
+width:100%;
+padding:15px;
+background:#228B22;
+color:white;
+border:0;
+border-radius:10px;
+font-size:18px;
+}
+
+.member{
+background:#f8fff8;
+padding:15px;
+margin-top:10px;
+border-radius:10px;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="header">
+
+<h1>👥 ทะเบียนสมาชิก</h1>
+
+<p>กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</p>
+
+</div>
+
+
+
+<div class="box">
+
+<h2>➕ เพิ่มสมาชิก</h2>
+
+
+<input id="name" placeholder="ชื่อ-นามสกุล">
+
+
+<input id="house" placeholder="บ้านเลขที่">
+
+
+<button onclick="addMember()">
+บันทึกข้อมูล
+</button>
+
+
+</div>
+
+
+
+
+<div class="box">
+
+<h2>📋 รายชื่อสมาชิก</h2>
+
+<div id="list"></div>
+
+</div>
+
+
+
+
+<script>
+
+
+let members = JSON.parse(localStorage.getItem("members")) || [];
+
+
+function showMember(){
+
+let html="";
+
+
+members.forEach((m,index)=>{
+
+html += `
+
+<div class="member">
+
+<b>${index+1}. ${m.name}</b>
+
+<br>
+
+🏠 บ้านเลขที่ ${m.house}
+
+</div>
+
+`;
+
+});
+
+
+document.getElementById("list").innerHTML = html;
+
+}
+
+
+
+function addMember(){
+
+
+let data={
+
+name:
+document.getElementById("name").value,
+
+house:
+document.getElementById("house").value
+
+};
+
+
+members.push(data);
+
+
+localStorage.setItem(
+"members",
+JSON.stringify(members)
+);
+
+
+showMember();
+
+
+document.getElementById("name").value="";
+document.getElementById("house").value="";
+
+
+alert("บันทึกสมาชิกแล้ว");
+
+
+}
+
+
+showMember();
+
+
+</script>
+
+
+</body>
+
+</html>
