@@ -2,6 +2,7 @@
 <html lang="th">
 
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -9,13 +10,15 @@
 กลุ่มข้าวสารบ้านร่องเข็ม หมู่ที่ 6
 </title>
 
+
 <style>
 
 body{
+
 margin:0;
 font-family:Tahoma,sans-serif;
 background:#f5f7f2;
-color:#333;
+
 }
 
 
@@ -42,78 +45,83 @@ font-size:32px;
 }
 
 
-.header p{
+.container{
 
-font-size:18px;
+padding:20px;
 
 }
 
+
+.card{
+
+background:white;
+padding:25px;
+margin-bottom:20px;
+border-radius:15px;
+box-shadow:0 3px 10px #ccc;
+
+}
+
+
+.dashboard{
+
+display:grid;
+grid-template-columns:
+repeat(auto-fit,minmax(180px,1fr));
+
+gap:15px;
+
+}
+
+
+.box{
+
+background:#e8f5e9;
+padding:20px;
+border-radius:15px;
+text-align:center;
+
+}
+
+
+.number{
+
+font-size:32px;
+font-weight:bold;
+color:#2e7d32;
+
+}
 
 
 .menu{
 
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+grid-template-columns:
+repeat(auto-fit,minmax(160px,1fr));
+
 gap:15px;
-padding:25px;
 
 }
-
 
 
 .menu a{
 
 background:white;
-text-decoration:none;
-color:#333;
-
 padding:25px 10px;
 text-align:center;
-
+text-decoration:none;
+color:#333;
 border-radius:15px;
-
-box-shadow:0 3px 10px rgba(0,0,0,.15);
-
-font-size:18px;
-
-transition:.3s;
+box-shadow:0 3px 10px #ccc;
 
 }
-
 
 
 .menu a:hover{
 
-transform:translateY(-5px);
-
 background:#e8f5e9;
 
 }
-
-
-
-.menu span{
-
-display:block;
-margin-top:10px;
-
-}
-
-
-
-.info{
-
-margin:20px;
-background:white;
-
-padding:25px;
-
-border-radius:15px;
-
-box-shadow:0 3px 10px rgba(0,0,0,.1);
-
-}
-
 
 
 .footer{
@@ -126,8 +134,8 @@ padding:15px;
 }
 
 
-
 </style>
+
 
 </head>
 
@@ -135,30 +143,121 @@ padding:15px;
 <body>
 
 
+
 <div class="header">
+
 
 <h1>
 🌾 กลุ่มข้าวสารบ้านร่องเข็ม หมู่ที่ 6
 </h1>
 
+
 <p>
 ระบบบริหารจัดการกลุ่มข้าวสารชุมชน
 </p>
+
 
 </div>
 
 
 
+<div class="container">
+
+
+
+<div class="card">
+
+
+<h2>
+📊 สถานะกลุ่มข้าวสาร
+</h2>
+
+
+
+<div class="dashboard">
+
+
+<div class="box">
+
+👥 สมาชิกทั้งหมด
+
+<div class="number" id="totalMember">
+0
+</div>
+
+คน
+
+</div>
+
+
+
+<div class="box">
+
+✅ ส่งข้าวแล้ว
+
+<div class="number" id="sendMember">
+0
+</div>
+
+คน
+
+</div>
+
+
+
+<div class="box">
+
+❌ ยังไม่ส่ง
+
+<div class="number" id="notSendMember">
+0
+</div>
+
+คน
+
+</div>
+
+
+
+<div class="box">
+
+🌾 ข้าวรวม
+
+<div class="number" id="totalRice">
+0
+</div>
+
+กก.
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+
+<div class="card">
+
+
+<h2>
+📌 เมนูระบบ
+</h2>
+
+
 <div class="menu">
 
 
-<a href="สมาชิก.html">
+<a href="admin-member.html">
 
 👥
 
-<span>
+<br>
+
 ทะเบียนสมาชิก
-</span>
 
 </a>
 
@@ -168,9 +267,9 @@ padding:15px;
 
 ⚰️
 
-<span>
+<br>
+
 แจ้งเสียชีวิต / งานศพ
-</span>
 
 </a>
 
@@ -180,9 +279,9 @@ padding:15px;
 
 📦
 
-<span>
+<br>
+
 รับ-จ่ายข้าวสาร
-</span>
 
 </a>
 
@@ -192,9 +291,9 @@ padding:15px;
 
 🌾
 
-<span>
+<br>
+
 คลังข้าวสาร
-</span>
 
 </a>
 
@@ -204,9 +303,9 @@ padding:15px;
 
 📊
 
-<span>
+<br>
+
 รายงานข้อมูล
-</span>
 
 </a>
 
@@ -214,28 +313,30 @@ padding:15px;
 </div>
 
 
+</div>
 
-<div class="info">
+
+
+<div class="card">
+
 
 <h2>
 เกี่ยวกับกลุ่ม
 </h2>
 
+
 <p>
+
 ระบบกลุ่มข้าวสารบ้านร่องเข็ม หมู่ที่ 6
-จัดทำขึ้นเพื่อบริหารสมาชิก การรับ-จ่ายข้าวสาร
-การจัดการคลัง และติดตามข้อมูลของชุมชน
+จัดทำขึ้นเพื่อบริหารสมาชิก
+การรับ-จ่ายข้าวสาร
+การจัดการคลัง และติดตามข้อมูลชุมชน
+
 </p>
 
 
-<h3>
-วิสัยทัศน์
-</h3>
+</div>
 
-<p>
-"ช่วยเหลือเกื้อกูล สร้างความมั่นคงด้านอาหาร
-พัฒนาชุมชนด้วยระบบดิจิทัล"
-</p>
 
 
 </div>
@@ -248,6 +349,71 @@ padding:15px;
 ตำบลจำป่าหวาย อำเภอเมือง จังหวัดพะเยา
 
 </div>
+
+
+
+
+<script>
+
+
+let members = JSON.parse(
+
+localStorage.getItem("members")
+
+) || [];
+
+
+
+let total =
+members.length;
+
+
+
+let send =
+members.filter(
+m=>m.status=="ส่งแล้ว"
+).length;
+
+
+
+let notSend =
+members.filter(
+m=>m.status=="ยังไม่ส่ง"
+).length;
+
+
+
+let rice =
+members.reduce(
+
+(sum,m)=>
+sum + Number(m.rice || 0),
+
+0
+
+);
+
+
+
+document.getElementById("totalMember").innerHTML =
+total;
+
+
+document.getElementById("sendMember").innerHTML =
+send;
+
+
+document.getElementById("notSendMember").innerHTML =
+notSend;
+
+
+document.getElementById("totalRice").innerHTML =
+rice;
+
+
+
+</script>
+
 
 
 </body>
