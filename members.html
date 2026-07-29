@@ -22,9 +22,14 @@ background:#f5f7f2;
 
 .header{
 
-background:#2e7d32;
+background:linear-gradient(
+135deg,
+#2e7d32,
+#66bb6a
+);
+
 color:white;
-padding:25px;
+padding:30px;
 text-align:center;
 
 }
@@ -37,20 +42,27 @@ padding:20px;
 }
 
 
+.card{
+
+background:white;
+padding:20px;
+border-radius:15px;
+box-shadow:0 3px 10px #ccc;
+
+}
+
+
 table{
 
 width:100%;
-background:white;
 border-collapse:collapse;
-border-radius:10px;
-overflow:hidden;
 
 }
 
 
 th{
 
-background:#66bb6a;
+background:#2e7d32;
 color:white;
 padding:12px;
 
@@ -66,13 +78,13 @@ text-align:center;
 }
 
 
-.card{
+.search{
 
-background:white;
-padding:20px;
-margin-bottom:20px;
-border-radius:15px;
-box-shadow:0 3px 10px #ccc;
+width:100%;
+padding:12px;
+margin-bottom:15px;
+border-radius:8px;
+border:1px solid #ccc;
 
 }
 
@@ -80,6 +92,7 @@ box-shadow:0 3px 10px #ccc;
 .btn{
 
 display:inline-block;
+margin-top:20px;
 padding:12px 20px;
 background:#2e7d32;
 color:white;
@@ -91,7 +104,9 @@ border-radius:10px;
 
 </style>
 
+
 </head>
+
 
 
 <body>
@@ -116,12 +131,18 @@ border-radius:10px;
 
 <div class="card">
 
-<h2>
-ข้อมูลสมาชิก
-</h2>
+
+<input class="search"
+id="search"
+placeholder="🔍 ค้นหาชื่อสมาชิก"
+onkeyup="searchMember()">
+
 
 
 <table>
+
+
+<thead>
 
 <tr>
 
@@ -138,14 +159,15 @@ border-radius:10px;
 </th>
 
 <th>
-สถานะ
-</th>
-
-<th>
-ข้าวที่นำส่ง
+จำนวนข้าว
 </th>
 
 </tr>
+
+</thead>
+
+
+<tbody id="memberList">
 
 
 <tr>
@@ -163,14 +185,14 @@ border-radius:10px;
 </td>
 
 <td>
-สมาชิก
-</td>
-
-<td>
 12 กก.
 </td>
 
+
 </tr>
+
+
+</tbody>
 
 
 </table>
@@ -179,13 +201,51 @@ border-radius:10px;
 </div>
 
 
-
 <a class="btn" href="index.html">
 ⬅ กลับหน้าหลัก
 </a>
 
 
 </div>
+
+
+
+
+<script>
+
+
+function searchMember(){
+
+let input =
+document.getElementById("search").value.toLowerCase();
+
+
+let rows =
+document.querySelectorAll("#memberList tr");
+
+
+rows.forEach(row=>{
+
+
+if(row.innerText.toLowerCase().includes(input)){
+
+row.style.display="";
+
+}else{
+
+row.style.display="none";
+
+}
+
+
+});
+
+
+}
+
+
+</script>
+
 
 
 </body>
