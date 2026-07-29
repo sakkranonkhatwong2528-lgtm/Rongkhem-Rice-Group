@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>
+🔔 แจ้งเตือนกลุ่มข้าวสาร
+</title>
+
+
+<style>
+
+body{
+
+margin:0;
+font-family:Tahoma,sans-serif;
+background:#f5f7f2;
+
+}
+
+
+.header{
+
+background:linear-gradient(135deg,#ff9800,#f57c00);
+color:white;
+padding:30px;
+text-align:center;
+
+}
+
+
+.container{
+
+padding:20px;
+
+}
+
+
+.card{
+
+background:white;
+padding:20px;
+margin-bottom:20px;
+border-radius:15px;
+box-shadow:0 3px 10px #ccc;
+
+}
+
+
+.warning{
+
+background:#fff3cd;
+border-left:8px solid #ff9800;
+padding:15px;
+border-radius:10px;
+
+}
+
+
+.danger{
+
+background:#ffebee;
+border-left:8px solid #d32f2f;
+padding:15px;
+border-radius:10px;
+
+}
+
+
+.success{
+
+background:#e8f5e9;
+border-left:8px solid #2e7d32;
+padding:15px;
+border-radius:10px;
+
+}
+
+
+button{
+
+background:#2e7d32;
+color:white;
+border:0;
+padding:10px 15px;
+border-radius:8px;
+
+}
+
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="header">
+
+<h1>
+🔔 ศูนย์แจ้งเตือน
+</h1>
+
+<p>
+กลุ่มข้าวสารบ้านร่องเข็ม หมู่ที่ 6
+</p>
+
+</div>
+
+
+
+
+<div class="container">
+
+
+<div id="alert">
+
+</div>
+
+
+
+<br>
+
+
+<a href="index.html">
+
+⬅ กลับหน้าหลัก
+
+</a>
+
+
+</div>
+
+
+
+
+
+<script>
+
+
+let members =
+JSON.parse(
+localStorage.getItem("members")
+)||[];
+
+
+let funerals =
+JSON.parse(
+localStorage.getItem("funerals")
+)||[];
+
+
+let riceData =
+JSON.parse(
+localStorage.getItem("riceData")
+)||[];
+
+
+
+
+let html="";
+
+
+
+
+// =================
+// สมาชิกยังไม่ส่ง
+// =================
+
+
+let notSend =
+members.filter(
+m=>m.status=="ยังไม่ส่ง"
+);
+
+
+
+html +=`
+
+<div class="card">
+
+<h2>
+👥 แจ้งเตือนสมาชิก
+</h2>
+
+`;
+
+
+
+if(notSend.length==0){
+
+
+html +=`
+
+<div class="success">
+
+✅ สมาชิกส่งข้าวครบทุกคน
+
+</div>
+
+`;
+
+
+}else{
+
+
+html +=`
+
+<div class="warning">
+
+❌ ยังไม่ส่ง ${notSend.length} คน
+
+<br><br>
+
+`;
+
+
+notSend.forEach(m=>{
+
+
+html +=`
+
+<p>
+
+❌ ${m.name}
+
+<br>
+
+🏠 บ้านเลขที่ ${m.house}
+
+</p>
+
+`;
+
+});
+
+
+html+=`
+
+</div>
+
+`;
+
+}
+
+
+html+=`
+
+</div>
+
+`;
+
+
+
+
+
+
+
+// =================
+// งานศพ
+// =================
+
+
+html+=`
+
+<div class="card">
+
+<h2>
+⚰️ แจ้งงานศพ
+</h2>
+
+`;
+
+
+
+if(funerals.length==0){
+
+
+html+=`
+
+<div class="success">
+
+ไม่มีรายการแจ้งเสียชีวิต
+
+</div>
+
+`;
+
+}else{
+
+
+let f =
+funerals[funerals.length-1];
+
+
+html+=`
+
+<div class="danger">
+
+⚰️ ${f.name}
+
+<br>
+
+🏠 บ้านเลขที่ ${f.house}
+
+<br>
+
+📅 วันที่เสียชีวิต ${f.death}
+
+<br>
+
+สถานะ : ${f.status}
+
+</div>
+
+`;
+
+}
+
+
+
+html+=`
+
+</div>
+
+`;
+
+
+
+
+
+
+// =================
+// คลังข้าว
+// =================
+
+
+let stock=0;
+
+
+riceData.forEach(r=>{
+
+
+if(r.type=="รับเข้า"){
+
+stock+=Number(r.amount);
+
+}else{
+
+stock-=Number(r.amount);
+
+}
+
+});
+
+
+
+
+
+html+=`
+
+<div class="card">
+
+<h2>
+🌾 แจ้งเตือนคลังข้าว
+</h2>
+
+`;
+
+
+
+if(stock<=10){
+
+
+html+=`
+
+<div class="danger">
+
+⚠️ ข้าวคงเหลือน้อย
+
+<br>
+
+🌾 เหลือ ${stock} กก.
+
+<br>
+
+ควรเตรียมข้าวเพิ่ม
+
+</div>
+
+`;
+
+}else{
+
+
+html+=`
+
+<div class="success">
+
+✅ คลังข้าวปกติ
+
+<br>
+
+🌾 คงเหลือ ${stock} กก.
+
+</div>
+
+`;
+
+}
+
+
+
+html+=`
+
+</div>
+
+`;
+
+
+
+
+
+document.getElementById("alert").innerHTML=html;
+
+
+
+</script>
+
+
+</body>
+
+</html>
