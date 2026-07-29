@@ -6,7 +6,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>กลุ่มข้าวสารบ้านร่องเข็ม หมู่ที่ 6</title>
+<title>
+กลุ่มข้าวสารบ้านร่องเข็ม หมู่ที่ 6
+</title>
 
 <style>
 
@@ -16,91 +18,61 @@ font-family:Tahoma,sans-serif;
 background:#f5f7f2;
 }
 
+
 .header{
-background:linear-gradient(135deg,#2e7d32,#66bb6a);
+
+background:linear-gradient(135deg,#2e7d32,#81c784);
 color:white;
-padding:35px;
+padding:30px;
 text-align:center;
+
 }
+
 
 .container{
 padding:20px;
 }
 
-.card{
-background:white;
-padding:20px;
-margin-bottom:20px;
-border-radius:15px;
-box-shadow:0 3px 10px #ccc;
-}
 
 
 .dashboard{
+
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
 gap:15px;
+
 }
+
+
+
+.card{
+
+background:white;
+padding:20px;
+border-radius:15px;
+box-shadow:0 3px 10px #ccc;
+margin-bottom:20px;
+
+}
+
 
 
 .box{
+
 background:#e8f5e9;
 padding:20px;
 border-radius:15px;
 text-align:center;
+
 }
+
 
 
 .number{
-font-size:32px;
+
+font-size:35px;
 font-weight:bold;
 color:#2e7d32;
-}
-
-
-.alert{
-
-background:#fff3cd;
-border-left:8px solid #ff9800;
-padding:20px;
-border-radius:15px;
-
-}
-
-
-.success{
-
-background:#e8f5e9;
-border-left:8px solid #2e7d32;
-padding:20px;
-border-radius:15px;
-
-}
-
-
-
-table{
-
-width:100%;
-border-collapse:collapse;
-
-}
-
-
-th{
-
-background:#2e7d32;
-color:white;
-padding:10px;
-
-}
-
-
-td{
-
-padding:10px;
-border-bottom:1px solid #ddd;
-text-align:center;
 
 }
 
@@ -109,7 +81,7 @@ text-align:center;
 .menu{
 
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
 gap:15px;
 
 }
@@ -121,25 +93,44 @@ gap:15px;
 background:white;
 padding:20px;
 text-align:center;
-border-radius:15px;
 text-decoration:none;
 color:#333;
+border-radius:15px;
 box-shadow:0 3px 10px #ccc;
 
 }
 
 
 
-.footer{
+.menu a:hover{
 
-background:#2e7d32;
-color:white;
-padding:15px;
-text-align:center;
+background:#e8f5e9;
 
 }
 
+
+
+.warning{
+
+background:#fff3cd;
+padding:15px;
+border-radius:10px;
+
+}
+
+
+
+.danger{
+
+background:#ffebee;
+padding:15px;
+border-radius:10px;
+
+}
+
+
 </style>
+
 
 </head>
 
@@ -147,17 +138,22 @@ text-align:center;
 <body>
 
 
+
 <div class="header">
+
 
 <h1>
 🌾 กลุ่มข้าวสารบ้านร่องเข็ม หมู่ที่ 6
 </h1>
 
+
 <p>
 ระบบบริหารจัดการกลุ่มข้าวสารชุมชน
 </p>
 
+
 </div>
+
 
 
 
@@ -165,16 +161,8 @@ text-align:center;
 
 
 
-<!-- แจ้งเตือน -->
-
-<div id="alertBox"></div>
-
-
-
-
-<!-- Dashboard -->
-
 <div class="card">
+
 
 <h2>
 📊 สถานะกลุ่มข้าวสาร
@@ -184,31 +172,39 @@ text-align:center;
 <div class="dashboard">
 
 
+
 <div class="box">
 
 👥 สมาชิกทั้งหมด
 
-<div class="number" id="total">
+<div class="number" id="member">
+
 0
+
 </div>
 
 คน
 
 </div>
+
 
 
 
 <div class="box">
 
-✅ ส่งแล้ว
+✅ ส่งข้าวแล้ว
 
 <div class="number" id="send">
+
 0
+
 </div>
 
 คน
 
 </div>
+
+
 
 
 
@@ -216,8 +212,10 @@ text-align:center;
 
 ❌ ยังไม่ส่ง
 
-<div class="number" id="notSend">
+<div class="number" id="not">
+
 0
+
 </div>
 
 คน
@@ -226,12 +224,16 @@ text-align:center;
 
 
 
+
+
 <div class="box">
 
-🌾 ข้าวรวม
+🌾 ข้าวคงเหลือ
 
-<div class="number" id="rice">
+<div class="number" id="stock">
+
 0
+
 </div>
 
 กก.
@@ -239,45 +241,29 @@ text-align:center;
 </div>
 
 
+
+
 </div>
 
+
 </div>
 
 
 
 
 
-<!-- สมาชิกส่งแล้ว -->
 
 <div class="card">
 
+
 <h2>
-✅ สมาชิกที่นำส่งข้าวแล้ว
+🔔 แจ้งเตือน
 </h2>
 
 
-<table>
+<div id="alert">
 
-<thead>
-
-<tr>
-
-<th>ชื่อ</th>
-<th>บ้านเลขที่</th>
-<th>จำนวนข้าว</th>
-<th>สถานะ</th>
-
-</tr>
-
-</thead>
-
-
-<tbody id="sendList">
-
-</tbody>
-
-
-</table>
+</div>
 
 
 </div>
@@ -286,83 +272,10 @@ text-align:center;
 
 
 
-<!-- สมาชิกยังไม่ส่ง -->
-
-<div class="card">
-
-<h2>
-❌ สมาชิกที่ยังไม่ส่งข้าว
-</h2>
-
-
-<table>
-
-<thead>
-
-<tr>
-
-<th>ชื่อ</th>
-<th>บ้านเลขที่</th>
-<th>สถานะ</th>
-
-</tr>
-
-</thead>
-
-
-<tbody id="notSendList">
-
-</tbody>
-
-
-</table>
-
-
-</div>
-
-
-
-
-
-<!-- ล่าสุด -->
-
-<div class="card">
-
-<h2>
-👥 สมาชิกล่าสุด
-</h2>
-
-
-<table>
-
-<thead>
-
-<tr>
-
-<th>ชื่อ</th>
-<th>บ้านเลขที่</th>
-<th>สถานะ</th>
-
-</tr>
-
-</thead>
-
-
-<tbody id="recent">
-
-</tbody>
-
-
-</table>
-
-
-</div>
-
-
-
 
 
 <div class="card">
+
 
 <h2>
 📌 เมนูระบบ
@@ -373,68 +286,134 @@ text-align:center;
 
 
 <a href="admin-member.html">
-👥<br>
+
+👥
+
+<br>
+
 ทะเบียนสมาชิก
+
 </a>
+
 
 
 <a href="งานศพ.html">
-⚰️<br>
+
+⚰️
+
+<br>
+
 แจ้งเสียชีวิต / งานศพ
+
 </a>
+
+
 
 
 <a href="รับ.html">
-📦<br>
+
+📦
+
+<br>
+
 รับ-จ่ายข้าวสาร
+
 </a>
 
 
-<a href="สต็อก.html">
-🌾<br>
+
+
+<a href="คลังข้าว.html">
+
+🌾
+
+<br>
+
 คลังข้าวสาร
+
 </a>
+
+
 
 
 <a href="รายงาน.html">
-📊<br>
+
+📊
+
+<br>
+
 รายงานข้อมูล
+
 </a>
 
 
+
+<a href="แจ้งเตือน.html">
+
+🔔
+
+<br>
+
+แจ้งเตือน
+
+</a>
+
+
+
+
+<a href="พิมพ์รายงาน.html">
+
+🖨️
+
+<br>
+
+พิมพ์รายงาน
+
+</a>
+
+
+
 </div>
 
 
 </div>
+
 
 
 
 <div class="card">
 
-<h2>
+
+<h3>
 เกี่ยวกับกลุ่ม
-</h2>
+</h3>
+
 
 <p>
-ระบบกลุ่มข้าวสารบ้านร่องเข็ม หมู่ที่ 6
-จัดทำขึ้นเพื่อบริหารสมาชิก การรับ-จ่ายข้าวสาร
+
+ระบบกลุ่มข้าวสารบ้านร่องเข็ม หมู่ที่ 6 
+จัดทำขึ้นเพื่อบริหารสมาชิก การรับ-จ่ายข้าวสาร 
 การจัดการคลัง และติดตามข้อมูลชุมชน
+
 </p>
 
-</div>
 
-
-
-</div>
-
-
-
-<div class="footer">
+<p>
 
 บ้านร่องเข็ม หมู่ที่ 6  
-ตำบลจำป่าหวาย อำเภอเมือง จังหวัดพะเยา
+ตำบลจำป่าหวาย  
+อำเภอเมือง จังหวัดพะเยา
+
+</p>
+
 
 </div>
+
+
+
+
+</div>
+
 
 
 
@@ -444,74 +423,77 @@ text-align:center;
 
 
 let members =
-JSON.parse(
-localStorage.getItem("members")
-) || [];
+JSON.parse(localStorage.getItem("members"))
+||[];
+
+
+let rice =
+JSON.parse(localStorage.getItem("riceData"))
+||[];
+
+
+let funerals =
+JSON.parse(localStorage.getItem("funerals"))
+||[];
 
 
 
-// เพิ่มสถานะให้ข้อมูลเก่า
 
-members = members.map(m=>{
+// สมาชิก
 
-if(!m.status){
 
-m.status="ยังไม่ส่ง";
+let send =
+members.filter(
+m=>m.status=="ส่งแล้ว"
+).length;
+
+
+
+let not =
+members.filter(
+m=>m.status=="ยังไม่ส่ง"
+).length;
+
+
+
+document.getElementById("member").innerHTML=
+members.length;
+
+
+document.getElementById("send").innerHTML=
+send;
+
+
+document.getElementById("not").innerHTML=
+not;
+
+
+
+
+
+// คลัง
+
+
+let stock=0;
+
+
+rice.forEach(r=>{
+
+if(r.type=="รับเข้า"){
+
+stock+=Number(r.amount);
+
+}else{
+
+stock-=Number(r.amount);
 
 }
-
-return m;
 
 });
 
 
-
-localStorage.setItem(
-"members",
-JSON.stringify(members)
-);
-
-
-
-
-// สรุป
-
-let sendList =
-members.filter(
-m=>m.status=="ส่งแล้ว"
-);
-
-
-let notList =
-members.filter(
-m=>m.status=="ยังไม่ส่ง"
-);
-
-
-
-document.getElementById("total").innerHTML =
-members.length;
-
-
-document.getElementById("send").innerHTML =
-sendList.length;
-
-
-document.getElementById("notSend").innerHTML =
-notList.length;
-
-
-
-let rice =
-members.reduce(
-(sum,m)=>sum+Number(m.rice||0),
-0
-);
-
-
-document.getElementById("rice").innerHTML =
-rice;
-
+document.getElementById("stock").innerHTML=
+stock;
 
 
 
@@ -519,68 +501,64 @@ rice;
 
 // แจ้งเตือน
 
-let alertHTML="";
+
+let alert="";
 
 
-if(notList.length==0){
 
+if(not>0){
 
-alertHTML=`
+alert+=`
 
-<div class="success">
+<div class="warning">
 
-<h2>
-🔔 แจ้งเตือนการส่งข้าว
-</h2>
-
-<p>
-✅ สมาชิกส่งข้าวครบทุกคน
-</p>
+❌ มีสมาชิกยังไม่ส่งข้าว ${not} คน
 
 </div>
+
+<br>
 
 `;
 
 }else{
 
+alert+=`
 
-alertHTML=`
+<div class="warning">
 
-<div class="alert">
+✅ สมาชิกส่งข้าวครบแล้ว
 
-<h2>
-🔔 แจ้งเตือนการส่งข้าว
-</h2>
-
-<p>
-❌ ยังไม่ส่ง ${notList.length} คน
-</p>
-
-`;
-
-
-
-notList.forEach(m=>{
-
-
-alertHTML +=`
-
-<p>
-
-❌ ${m.name}
+</div>
 
 <br>
 
-🏠 บ้านเลขที่ ${m.house}
-
-</p>
-
 `;
 
-});
+}
 
 
-alertHTML +=`
+
+
+if(funerals.length>0){
+
+
+let f=
+funerals[funerals.length-1];
+
+
+alert+=`
+
+<div class="danger">
+
+⚰️ งานศพล่าสุด
+
+<br>
+
+${f.name}
+
+<br>
+
+บ้านเลขที่ ${f.house}
 
 </div>
 
@@ -589,90 +567,9 @@ alertHTML +=`
 }
 
 
-document.getElementById("alertBox").innerHTML =
-alertHTML;
 
-
-
-
-
-// ตารางส่งแล้ว
-
-document.getElementById("sendList").innerHTML =
-
-sendList.map(m=>`
-
-<tr>
-
-<td>${m.name}</td>
-
-<td>${m.house}</td>
-
-<td>${m.rice} กก.</td>
-
-<td>✅ ส่งแล้ว</td>
-
-</tr>
-
-`).join("");
-
-
-
-
-
-
-// ตารางยังไม่ส่ง
-
-document.getElementById("notSendList").innerHTML =
-
-notList.length ?
-
-notList.map(m=>`
-
-<tr>
-
-<td>${m.name}</td>
-
-<td>${m.house}</td>
-
-<td>❌ ยังไม่ส่ง</td>
-
-</tr>
-
-`).join("")
-
-:
-
-`
-<tr>
-<td colspan="3">
-✅ ส่งครบทุกคน
-</td>
-</tr>
-`;
-
-
-
-
-
-
-// สมาชิกล่าสุด
-
-document.getElementById("recent").innerHTML =
-
-members.slice(-5).reverse().map(m=>`
-
-<tr>
-
-<td>${m.name}</td>
-
-<td>${m.house}</td>
-
-<td>${m.status}</td>
-
-</tr>
-
-`).join("");
+document.getElementById("alert").innerHTML=
+alert;
 
 
 
