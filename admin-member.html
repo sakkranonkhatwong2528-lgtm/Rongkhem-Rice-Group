@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>
+จัดการสมาชิกกลุ่มข้าวสาร
+</title>
+
+
+<style>
+
+body{
+font-family:Tahoma,sans-serif;
+margin:0;
+background:#f5f7f2;
+}
+
+
+.header{
+
+background:#2e7d32;
+color:white;
+padding:25px;
+text-align:center;
+
+}
+
+
+.container{
+
+padding:20px;
+
+}
+
+
+.card{
+
+background:white;
+padding:20px;
+margin-bottom:20px;
+border-radius:15px;
+box-shadow:0 3px 10px #ccc;
+
+}
+
+
+input,select{
+
+width:100%;
+padding:12px;
+margin:8px 0;
+border-radius:8px;
+border:1px solid #ccc;
+
+}
+
+
+button{
+
+padding:12px 20px;
+border:none;
+border-radius:8px;
+background:#2e7d32;
+color:white;
+cursor:pointer;
+
+}
+
+
+table{
+
+width:100%;
+border-collapse:collapse;
+background:white;
+
+}
+
+
+th{
+
+background:#66bb6a;
+color:white;
+padding:10px;
+
+}
+
+
+td{
+
+padding:10px;
+border-bottom:1px solid #ddd;
+text-align:center;
+
+}
+
+
+.edit{
+
+background:#ff9800;
+
+}
+
+
+.delete{
+
+background:#d32f2f;
+
+}
+
+
+a{
+
+text-decoration:none;
+color:#2e7d32;
+
+}
+
+
+</style>
+
+
+</head>
+
+
+<body>
+
+
+<div class="header">
+
+<h1>
+⚙️ จัดการสมาชิกกลุ่มข้าวสาร
+</h1>
+
+<p>
+บ้านร่องเข็ม หมู่ที่ 6
+</p>
+
+</div>
+
+
+
+<div class="container">
+
+
+
+<div class="card">
+
+<h2>
+เพิ่มสมาชิก
+</h2>
+
+
+<input id="name" placeholder="ชื่อ-นามสกุล">
+
+
+<input id="house" placeholder="บ้านเลขที่">
+
+
+<input id="rice" placeholder="จำนวนข้าวที่นำส่ง (กก.)">
+
+
+<button onclick="addMember()">
+➕ เพิ่มสมาชิก
+</button>
+
+
+</div>
+
+
+
+
+<div class="card">
+
+
+<h2>
+รายชื่อสมาชิก
+</h2>
+
+
+<table>
+
+
+<thead>
+
+<tr>
+
+<th>
+ชื่อ
+</th>
+
+<th>
+บ้านเลขที่
+</th>
+
+<th>
+ข้าว
+</th>
+
+<th>
+จัดการ
+</th>
+
+</tr>
+
+</thead>
+
+
+<tbody id="list">
+
+</tbody>
+
+
+</table>
+
+
+</div>
+
+
+
+<a href="index.html">
+⬅ กลับหน้าหลัก
+</a>
+
+
+</div>
+
+
+
+<script>
+
+
+let members =
+JSON.parse(localStorage.getItem("members")) || [];
+
+
+function show(){
+
+let html="";
+
+
+members.forEach((m,i)=>{
+
+
+html+=`
+
+<tr>
+
+<td>${m.name}</td>
+
+<td>${m.house}</td>
+
+<td>${m.rice} กก.</td>
+
+
+<td>
+
+<button class="edit"
+onclick="editMember(${i})">
+แก้ไข
+</button>
+
+
+<button class="delete"
+onclick="deleteMember(${i})">
+ลบ
+</button>
+
+
+</td>
+
+
+</tr>
+
+`;
+
+});
+
+
+document.getElementById("list").innerHTML=html;
+
+
+}
+
+
+
+function addMember(){
+
+
+let name=document.getElementById("name").value;
+
+let house=document.getElementById("house").value;
+
+let rice=document.getElementById("rice").value;
+
+
+
+if(name==""){
+
+alert("กรุณาใส่ชื่อสมาชิก");
+
+return;
+
+}
+
+
+
+members.push({
+
+name:name,
+house:house,
+rice:rice
+
+});
+
+
+
+save();
+
+
+document.getElementById("name").value="";
+document.getElementById("house").value="";
+document.getElementById("rice").value="";
+
+
+}
+
+
+
+function editMember(i){
+
+
+let m=members[i];
+
+
+let name=prompt(
+"แก้ไขชื่อ",
+m.name
+);
+
+
+if(name){
+
+members[i].name=name;
+
+save();
+
+}
+
+
+}
+
+
+
+function deleteMember(i){
+
+
+if(confirm("ต้องการลบสมาชิกนี้หรือไม่")){
+
+members.splice(i,1);
+
+save();
+
+}
+
+
+}
+
+
+
+function save(){
+
+localStorage.setItem(
+"members",
+JSON.stringify(members)
+);
+
+show();
+
+}
+
+
+
+show();
+
+
+</script>
+
+
+</body>
+
+</html>
