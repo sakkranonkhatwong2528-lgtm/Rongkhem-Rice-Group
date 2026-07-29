@@ -6,73 +6,59 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>
-แจ้งเสียชีวิต / งานศพ
-</title>
-
+<title>ระบบงานศพ กลุ่มข้าวสาร</title>
 
 <style>
 
 body{
-
 font-family:Tahoma,sans-serif;
 margin:0;
 background:#f3f7f0;
-
 }
 
-
 .header{
-
 background:#555;
 color:white;
 padding:20px;
 text-align:center;
-
 }
-
 
 .container{
-
 padding:15px;
-
 }
 
-
-input,button,select{
-
+input,button{
 width:100%;
 padding:12px;
 margin:5px 0;
-font-size:16px;
 border-radius:10px;
-border:1px solid #ccc;
-
+font-size:16px;
 }
 
+input{
+border:1px solid #ccc;
+}
 
 button{
-
 background:#228B22;
 color:white;
 border:none;
-
 }
 
-
 .card{
-
 background:white;
 padding:15px;
 margin-top:10px;
 border-radius:15px;
 box-shadow:0 3px 8px #ddd;
-
 }
 
+.status{
+font-weight:bold;
+color:#228B22;
+}
 
 </style>
-
 
 </head>
 
@@ -98,7 +84,7 @@ box-shadow:0 3px 8px #ddd;
 
 
 <input id="name"
-placeholder="ชื่อ - นามสกุล ผู้เสียชีวิต">
+placeholder="ชื่อผู้เสียชีวิต">
 
 
 <input id="age"
@@ -115,7 +101,7 @@ placeholder="บ้านเลขที่">
 วันที่เสียชีวิต
 </label>
 
-<input id="deadDate"
+<input id="dead"
 type="date">
 
 
@@ -124,7 +110,7 @@ type="date">
 วันที่ฌาปนกิจ
 </label>
 
-<input id="burnDate"
+<input id="burn"
 type="date">
 
 
@@ -134,32 +120,9 @@ placeholder="วัดที่จัดงาน">
 
 
 
-<input id="rice"
-placeholder="ปริมาณข้าวสารช่วยงาน (ถุง)">
+<button onclick="saveFuneral()">
 
-
-
-<select id="status">
-
-<option>
-สถานะการส่ง
-</option>
-
-<option>
-ส่งแล้ว
-</option>
-
-<option>
-รอส่ง
-</option>
-
-</select>
-
-
-
-<button onclick="addFuneral()">
-
-➕ บันทึกข้อมูล
+➕ บันทึกงานศพ
 
 </button>
 
@@ -173,6 +136,7 @@ placeholder="ปริมาณข้าวสารช่วยงาน (ถ�
 <div id="list"></div>
 
 
+
 </div>
 
 
@@ -180,8 +144,8 @@ placeholder="ปริมาณข้าวสารช่วยงาน (ถ�
 <script>
 
 
-let funerals =
-JSON.parse(localStorage.getItem("funerals")) || [];
+let funeral =
+JSON.parse(localStorage.getItem("funeral")) || [];
 
 
 
@@ -191,7 +155,7 @@ function show(){
 let html="";
 
 
-funerals.forEach((f,i)=>{
+funeral.forEach((f,i)=>{
 
 
 html += `
@@ -199,35 +163,42 @@ html += `
 <div class="card">
 
 <b>
-${i+1}. ศพ ${f.name}
+⚰️ ศพ ${f.name}
 </b>
 
 <br>
+
 อายุ ${f.age} ปี
 
 <br>
+
 บ้านเลขที่ ${f.house}
 
 <br>
-เสียชีวิต ${f.deadDate}
 
-<br>
-ฌาปนกิจ ${f.burnDate}
-
-<br>
 วัด ${f.temple}
 
 <br>
-ข้าวสารช่วยงาน ${f.rice} ถุง
+
+วันที่เสียชีวิต ${f.dead}
 
 <br>
-สถานะ ${f.status}
+
+วันที่ฌาปนกิจ ${f.burn}
+
+<br><br>
+
+
+<span class="status">
+
+🌾 รอจัดส่งข้าวสารช่วยงาน
+
+</span>
 
 
 </div>
 
 `;
-
 
 });
 
@@ -239,8 +210,7 @@ document.getElementById("list").innerHTML=html;
 
 
 
-
-function addFuneral(){
+function saveFuneral(){
 
 
 let data={
@@ -254,43 +224,34 @@ document.getElementById("age").value,
 house:
 document.getElementById("house").value,
 
-deadDate:
-document.getElementById("deadDate").value,
+dead:
+document.getElementById("dead").value,
 
-burnDate:
-document.getElementById("burnDate").value,
+burn:
+document.getElementById("burn").value,
 
 temple:
-document.getElementById("temple").value,
-
-rice:
-document.getElementById("rice").value,
-
-status:
-document.getElementById("status").value
+document.getElementById("temple").value
 
 };
 
 
-
-funerals.push(data);
+funeral.push(data);
 
 
 localStorage.setItem(
 
-"funerals",
+"funeral",
 
-JSON.stringify(funerals)
+JSON.stringify(funeral)
 
 );
 
 
-
-alert("บันทึกข้อมูลเรียบร้อย");
+alert("บันทึกงานศพแล้ว");
 
 
 show();
-
 
 }
 
