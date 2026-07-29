@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>รายงานกลุ่มข้าวสาร</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Tahoma,sans-serif;
+background:#f5f7f2;
+}
+
+
+.header{
+
+background:linear-gradient(135deg,#1565c0,#42a5f5);
+color:white;
+padding:30px;
+text-align:center;
+
+}
+
+
+.container{
+
+padding:20px;
+
+}
+
+
+.card{
+
+background:white;
+padding:20px;
+margin-bottom:20px;
+border-radius:15px;
+box-shadow:0 3px 10px #ccc;
+
+}
+
+
+
+.dashboard{
+
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:15px;
+
+}
+
+
+.box{
+
+background:#e3f2fd;
+padding:20px;
+border-radius:15px;
+text-align:center;
+
+}
+
+
+.number{
+
+font-size:32px;
+font-weight:bold;
+color:#1565c0;
+
+}
+
+
+
+table{
+
+width:100%;
+border-collapse:collapse;
+
+}
+
+
+th{
+
+background:#1565c0;
+color:white;
+padding:10px;
+
+}
+
+
+td{
+
+padding:10px;
+border-bottom:1px solid #ddd;
+text-align:center;
+
+}
+
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="header">
+
+<h1>
+📊 รายงานข้อมูลกลุ่มข้าวสาร
+</h1>
+
+<p>
+บ้านร่องเข็ม หมู่ที่ 6
+</p>
+
+</div>
+
+
+
+<div class="container">
+
+
+
+<div class="card">
+
+<h2>
+สรุปข้อมูล
+</h2>
+
+
+<div class="dashboard">
+
+
+<div class="box">
+
+👥 สมาชิก
+
+<div class="number" id="member">
+0
+</div>
+
+คน
+
+</div>
+
+
+
+<div class="box">
+
+✅ ส่งแล้ว
+
+<div class="number" id="send">
+0
+</div>
+
+คน
+
+</div>
+
+
+
+<div class="box">
+
+❌ ยังไม่ส่ง
+
+<div class="number" id="not">
+0
+</div>
+
+คน
+
+</div>
+
+
+
+<div class="box">
+
+🌾 ข้าวคงเหลือ
+
+<div class="number" id="stock">
+0
+</div>
+
+กก.
+
+</div>
+
+
+
+</div>
+
+</div>
+
+
+
+
+
+<div class="card">
+
+<h2>
+👥 รายชื่อสมาชิก
+</h2>
+
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>ชื่อ</th>
+
+<th>บ้านเลขที่</th>
+
+<th>สถานะ</th>
+
+</tr>
+
+</thead>
+
+
+<tbody id="memberList">
+
+</tbody>
+
+
+</table>
+
+
+</div>
+
+
+
+
+
+<div class="card">
+
+<h2>
+⚰️ รายงานงานศพ
+</h2>
+
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>ชื่อ</th>
+
+<th>บ้านเลขที่</th>
+
+<th>วันที่เสียชีวิต</th>
+
+<th>สถานะ</th>
+
+</tr>
+
+</thead>
+
+
+<tbody id="funeralList">
+
+</tbody>
+
+
+</table>
+
+
+</div>
+
+
+
+<a href="index.html">
+
+⬅ กลับหน้าหลัก
+
+</a>
+
+
+
+</div>
+
+
+
+
+
+<script>
+
+
+// สมาชิก
+
+let members =
+JSON.parse(
+localStorage.getItem("members")
+)||[];
+
+
+
+// งานศพ
+
+let funerals =
+JSON.parse(
+localStorage.getItem("funerals")
+)||[];
+
+
+
+// ข้าว
+
+let riceData =
+JSON.parse(
+localStorage.getItem("riceData")
+)||[];
+
+
+
+
+// สรุปสมาชิก
+
+
+let send =
+members.filter(
+m=>m.status=="ส่งแล้ว"
+).length;
+
+
+
+let not =
+members.filter(
+m=>m.status=="ยังไม่ส่ง"
+).length;
+
+
+
+document.getElementById("member").innerHTML=
+members.length;
+
+
+document.getElementById("send").innerHTML=
+send;
+
+
+document.getElementById("not").innerHTML=
+not;
+
+
+
+
+
+// คลังข้าว
+
+
+let stock=0;
+
+
+riceData.forEach(r=>{
+
+
+if(r.type=="รับเข้า"){
+
+stock+=Number(r.amount);
+
+}else{
+
+stock-=Number(r.amount);
+
+}
+
+
+});
+
+
+
+document.getElementById("stock").innerHTML=
+stock;
+
+
+
+
+
+
+// รายชื่อสมาชิก
+
+
+document.getElementById("memberList").innerHTML=
+
+members.map(m=>`
+
+<tr>
+
+<td>${m.name}</td>
+
+<td>${m.house}</td>
+
+<td>${m.status}</td>
+
+</tr>
+
+`).join("");
+
+
+
+
+
+
+
+// งานศพ
+
+
+document.getElementById("funeralList").innerHTML=
+
+funerals.length?
+
+
+funerals.map(f=>`
+
+<tr>
+
+<td>${f.name}</td>
+
+<td>${f.house}</td>
+
+<td>${f.death}</td>
+
+<td>${f.status}</td>
+
+</tr>
+
+`).join("")
+
+
+:
+
+`
+<tr>
+<td colspan="4">
+ไม่มีข้อมูล
+</td>
+</tr>
+`;
+
+
+
+</script>
+
+
+
+</body>
+
+</html>
