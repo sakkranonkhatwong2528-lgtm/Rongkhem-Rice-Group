@@ -6,381 +6,652 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>
-รายงานกลุ่มข้าวสารบ้านร่องเข็ม
-</title>
+<title>พิมพ์รายงานงานศพ</title>
 
 <style>
 
-body{
-font-family:Tahoma,sans-serif;
-background:#f5f7f2;
-margin:0;
+*{
+    box-sizing:border-box;
 }
 
+body{
+    margin:0;
+    font-family:Tahoma,sans-serif;
+    background:#f3f7f0;
+    color:#222;
+}
 
 .header{
-
-background:#1565c0;
-color:white;
-padding:30px;
-text-align:center;
-
+    background:linear-gradient(135deg,#176b2c,#4caf50);
+    color:white;
+    padding:25px 15px;
+    text-align:center;
 }
-
 
 .container{
-
-padding:20px;
-
+    max-width:1000px;
+    margin:auto;
+    padding:15px;
 }
 
-
-.card{
-
-background:white;
-padding:20px;
-margin-bottom:20px;
-border-radius:15px;
-box-shadow:0 3px 10px #ccc;
-
+.box{
+    background:white;
+    padding:18px;
+    margin-bottom:15px;
+    border-radius:15px;
+    box-shadow:0 3px 10px rgba(0,0,0,.08);
 }
 
+select,
+button{
+    width:100%;
+    padding:13px;
+    margin:6px 0;
+    border-radius:10px;
+    font-size:16px;
+}
+
+select{
+    border:1px solid #ccc;
+}
 
 button{
-
-background:#1565c0;
-color:white;
-padding:12px 20px;
-border:0;
-border-radius:8px;
-cursor:pointer;
-
+    border:0;
+    background:#228B22;
+    color:white;
 }
 
+.summary{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+}
+
+.summary-card{
+    background:#f8fff8;
+    padding:15px;
+    text-align:center;
+    border-radius:12px;
+}
+
+.number{
+    font-size:28px;
+    font-weight:bold;
+    color:#228B22;
+}
+
+.red{
+    color:#c62828;
+}
+
+.yellow{
+    color:#b88600;
+}
 
 table{
-
-width:100%;
-border-collapse:collapse;
-
+    width:100%;
+    border-collapse:collapse;
+    margin-top:15px;
 }
 
+th,
+td{
+    border:1px solid #ccc;
+    padding:9px;
+    text-align:left;
+}
 
 th{
-
-background:#1565c0;
-color:white;
-padding:10px;
-
+    background:#e8f5e8;
 }
 
-
-td{
-
-padding:10px;
-border-bottom:1px solid #ddd;
-text-align:center;
-
+.sent{
+    color:#1b7a1b;
+    font-weight:bold;
 }
 
+.pending{
+    color:#c62828;
+    font-weight:bold;
+}
+
+.back{
+    display:block;
+    text-align:center;
+    padding:15px;
+    color:#228B22;
+    text-decoration:none;
+}
+
+@media(max-width:700px){
+
+    .summary{
+        grid-template-columns:1fr 1fr;
+    }
+
+    table{
+        font-size:13px;
+        min-width:700px;
+    }
+
+    .table-wrap{
+        overflow-x:auto;
+    }
+
+}
 
 @media print{
 
-button,a{
+    body{
+        background:white;
+    }
 
-display:none;
+    .header{
+        background:white;
+        color:#000;
+        border-bottom:2px solid #000;
+    }
+
+    .no-print{
+        display:none !important;
+    }
+
+    .box{
+        box-shadow:none;
+    }
 
 }
-
-}
-
 
 </style>
 
-
 </head>
-
 
 <body>
 
 
 <div class="header">
 
-<h1>
-📊 รายงานกลุ่มข้าวสาร
-</h1>
+<h1>📄 รายงานการช่วยงานศพ</h1>
 
-<p>
-บ้านร่องเข็ม หมู่ที่ 6
-</p>
+<p>กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</p>
 
 </div>
-
 
 
 <div class="container">
 
 
+<div class="box no-print">
+
+<h2>เลือกงานศพ</h2>
+
+<select id="funeralSelect" onchange="showReport()">
+
+<option value="">
+-- เลือกงานศพ --
+</option>
+
+</select>
+
 <button onclick="window.print()">
 
-🖨️ พิมพ์รายงาน / PDF
+🖨️ พิมพ์รายงาน
 
 </button>
 
+</div>
 
 
-<div class="card">
+<div id="reportArea">
 
+<div class="box">
+
+<div id="funeralInfo">
+
+กรุณาเลือกงานศพ
+
+</div>
+
+</div>
+
+
+<div class="box">
+
+<div class="summary">
+
+
+<div class="summary-card">
+
+👥 สมาชิกทั้งหมด
+
+<div class="number" id="memberTotal">
+0
+</div>
+
+ครัวเรือน
+
+</div>
+
+
+<div class="summary-card">
+
+✅ ส่งแล้ว
+
+<div class="number" id="sentTotal">
+0
+</div>
+
+ครัวเรือน
+
+</div>
+
+
+<div class="summary-card">
+
+⚠️ ยังไม่ส่ง
+
+<div class="number yellow" id="pendingTotal">
+0
+</div>
+
+ครัวเรือน
+
+</div>
+
+
+<div class="summary-card">
+
+🌾 ข้าวสารที่ใช้
+
+<div class="number" id="riceTotal">
+0
+</div>
+
+ถุง
+
+</div>
+
+
+</div>
+
+</div>
+
+
+<div class="box">
 
 <h2>
-👥 รายงานสมาชิก
+📋 รายชื่อสมาชิก
 </h2>
 
+<div class="table-wrap">
 
 <table>
-
 
 <thead>
 
 <tr>
 
-<th>
-ชื่อ
-</th>
+<th>ลำดับ</th>
 
-<th>
-บ้านเลขที่
-</th>
+<th>ชื่อ-นามสกุล</th>
 
-<th>
-จำนวนข้าว
-</th>
+<th>บ้านเลขที่</th>
 
-<th>
-สถานะ
-</th>
+<th>สถานะ</th>
+
+<th>จำนวน</th>
 
 </tr>
 
 </thead>
 
-
-<tbody id="member">
-
-</tbody>
-
-
-</table>
-
-
-</div>
-
-
-
-
-
-<div class="card">
-
-
-<h2>
-🌾 สรุปคลังข้าวสาร
-</h2>
-
-
-<p id="stock">
-
-</p>
-
-
-</div>
-
-
-
-
-
-<div class="card">
-
-
-<h2>
-⚰️ รายงานงานศพ
-</h2>
-
-
-<table>
-
-<thead>
-
-<tr>
-
-<th>
-ชื่อ
-</th>
-
-<th>
-บ้านเลขที่
-</th>
-
-<th>
-วันที่เสียชีวิต
-</th>
-
-</tr>
-
-</thead>
-
-
-<tbody id="funeral">
+<tbody id="memberTable">
 
 </tbody>
 
-
 </table>
 
+</div>
+
+</div>
 
 </div>
 
 
+<a
+    class="back no-print"
+    href="index.html"
+>
 
-
-<a href="index.html">
-
-⬅ กลับหน้าหลัก
+← กลับหน้าหลัก
 
 </a>
 
 
-
 </div>
-
-
-
 
 
 <script>
 
+/* =====================================================
+   โหลดข้อมูล
+===================================================== */
 
-let members =
-JSON.parse(
-localStorage.getItem("members")
-)||[];
-
-
-
-let funerals =
-JSON.parse(
-localStorage.getItem("funerals")
-)||[];
+const members =
+    JSON.parse(
+        localStorage.getItem("members")
+    ) || [];
 
 
-
-let riceData =
-JSON.parse(
-localStorage.getItem("riceData")
-)||[];
-
+const funerals =
+    JSON.parse(
+        localStorage.getItem("funerals")
+    ) || [];
 
 
-
-// สมาชิก
-
-
-document.getElementById("member").innerHTML =
-
-members.map(m=>`
-
-<tr>
-
-<td>${m.name}</td>
-
-<td>${m.house}</td>
-
-<td>${m.rice} กก.</td>
-
-<td>${m.status}</td>
-
-</tr>
-
-`).join("");
+const funeralSends =
+    JSON.parse(
+        localStorage.getItem("funeralSends")
+    ) || [];
 
 
+/* =====================================================
+   โหลดรายการงานศพในตัวเลือก
+===================================================== */
+
+const select =
+    document.getElementById(
+        "funeralSelect"
+    );
 
 
+funerals.forEach(funeral => {
 
+    const option =
+        document.createElement("option");
 
-// คลัง
+    option.value =
+        funeral.id;
 
+    option.textContent =
+        "⚰️ " +
+        funeral.name +
+        " | บ้านเลขที่ " +
+        (funeral.house || "-");
 
-let stock=0;
-
-
-riceData.forEach(r=>{
-
-
-if(r.type=="รับเข้า"){
-
-stock += Number(r.amount);
-
-}else{
-
-stock -= Number(r.amount);
-
-}
-
+    select.appendChild(option);
 
 });
 
 
+/* =====================================================
+   แสดงรายงาน
+===================================================== */
 
-document.getElementById("stock").innerHTML=
+function showReport(){
 
-`
-🌾 ข้าวคงเหลือปัจจุบัน : 
-<b>${stock}</b> กิโลกรัม
-`;
-
-
-
+    const id =
+        select.value;
 
 
+    if(!id){
 
-// งานศพ
+        document.getElementById(
+            "funeralInfo"
+        ).innerHTML =
+            "กรุณาเลือกงานศพ";
 
+        document.getElementById(
+            "memberTable"
+        ).innerHTML = "";
 
-document.getElementById("funeral").innerHTML=
+        return;
 
-funerals.length?
-
-
-funerals.map(f=>`
-
-<tr>
-
-<td>${f.name}</td>
-
-<td>${f.house}</td>
-
-<td>${f.death}</td>
-
-</tr>
-
-`).join("")
+    }
 
 
-:
-
-`
-<tr>
-<td colspan="3">
-ไม่มีข้อมูล
-</td>
-</tr>
-`;
+    const funeral =
+        funerals.find(
+            f =>
+            String(f.id) ===
+            String(id)
+        );
 
 
+    if(!funeral){
+
+        return;
+
+    }
+
+
+    /* ข้อมูลงานศพ */
+
+    document.getElementById(
+        "funeralInfo"
+    ).innerHTML = `
+
+        <h2>
+            ⚰️ งานศพ
+            ${escapeHTML(funeral.name)}
+        </h2>
+
+        <p>
+            👤 อายุ:
+            ${escapeHTML(funeral.age || "-")}
+            ปี
+        </p>
+
+        <p>
+            🏠 บ้านเลขที่:
+            ${escapeHTML(funeral.house || "-")}
+        </p>
+
+        <p>
+            📅 วันที่เสียชีวิต:
+            ${formatDate(funeral.deadDate)}
+        </p>
+
+        <p>
+            🔥 วันที่ฌาปนกิจ:
+            ${formatDate(funeral.burnDate)}
+        </p>
+
+        <p>
+            🛕 วัด:
+            ${escapeHTML(funeral.temple || "-")}
+        </p>
+
+        <p>
+            📌 สถานะ:
+            ${
+                funeral.closed
+                ? "✅ ปิดงานแล้ว"
+                : "🟡 อยู่ระหว่างดำเนินการ"
+            }
+        </p>
+
+    `;
+
+
+    /* สร้างตารางสมาชิก */
+
+    let sent = 0;
+
+    let pending = 0;
+
+    let rice = 0;
+
+    let html = "";
+
+
+    members.forEach((member,index)=>{
+
+        const send =
+            funeralSends.find(
+                item =>
+                String(item.funeralId) ===
+                String(funeral.id)
+                &&
+                String(item.memberId) ===
+                String(member.id)
+            );
+
+
+        if(send){
+
+            sent++;
+
+            rice +=
+                Number(send.amount || 1);
+
+
+            html += `
+
+            <tr>
+
+                <td>
+                    ${index + 1}
+                </td>
+
+                <td>
+                    ${escapeHTML(member.name)}
+                </td>
+
+                <td>
+                    ${escapeHTML(member.house)}
+                </td>
+
+                <td class="sent">
+                    ✅ ส่งแล้ว
+                </td>
+
+                <td>
+                    ${Number(send.amount || 1)}
+                    ถุง
+                </td>
+
+            </tr>
+
+            `;
+
+        }else{
+
+            pending++;
+
+
+            html += `
+
+            <tr>
+
+                <td>
+                    ${index + 1}
+                </td>
+
+                <td>
+                    ${escapeHTML(member.name)}
+                </td>
+
+                <td>
+                    ${escapeHTML(member.house)}
+                </td>
+
+                <td class="pending">
+                    ❌ ยังไม่ส่ง
+                </td>
+
+                <td>
+                    -
+                </td>
+
+            </tr>
+
+            `;
+
+        }
+
+    });
+
+
+    document.getElementById(
+        "memberTable"
+    ).innerHTML =
+        html;
+
+
+    document.getElementById(
+        "memberTotal"
+    ).innerText =
+        members.length;
+
+
+    document.getElementById(
+        "sentTotal"
+    ).innerText =
+        sent;
+
+
+    document.getElementById(
+        "pendingTotal"
+    ).innerText =
+        pending;
+
+
+    document.getElementById(
+        "riceTotal"
+    ).innerText =
+        rice;
+
+}
+
+
+/* =====================================================
+   วันที่
+===================================================== */
+
+function formatDate(value){
+
+    if(!value){
+        return "-";
+    }
+
+
+    const part =
+        String(value).split("-");
+
+
+    if(part.length !== 3){
+        return value;
+    }
+
+
+    return (
+        part[2] +
+        "/" +
+        part[1] +
+        "/" +
+        part[0]
+    );
+
+}
+
+
+/* =====================================================
+   ป้องกัน HTML
+===================================================== */
+
+function escapeHTML(value){
+
+    return String(value || "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
 
 </script>
-
 
 </body>
 
