@@ -5,10 +5,8 @@
 
 <meta charset="UTF-8">
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
 <title>
 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
@@ -233,7 +231,9 @@ body{
 
     pointer-events:none;
 
-    will-change:transform,opacity;
+    will-change:
+        transform,
+        opacity;
 
     animation:
         particleMove
@@ -244,65 +244,37 @@ body{
 
 
 .p1{
-
     left:10%;
     bottom:-10px;
-
-    animation-duration:
-        7s;
-
+    animation-duration:7s;
 }
 
 .p2{
-
     left:25%;
     bottom:-10px;
-
-    animation-duration:
-        9s;
-
-    animation-delay:
-        2s;
-
+    animation-duration:9s;
+    animation-delay:2s;
 }
 
 .p3{
-
     left:45%;
     bottom:-10px;
-
-    animation-duration:
-        8s;
-
-    animation-delay:
-        4s;
-
+    animation-duration:8s;
+    animation-delay:4s;
 }
 
 .p4{
-
     left:65%;
     bottom:-10px;
-
-    animation-duration:
-        10s;
-
-    animation-delay:
-        1s;
-
+    animation-duration:10s;
+    animation-delay:1s;
 }
 
 .p5{
-
     left:82%;
     bottom:-10px;
-
-    animation-duration:
-        8.5s;
-
-    animation-delay:
-        3s;
-
+    animation-duration:8.5s;
+    animation-delay:3s;
 }
 
 
@@ -320,15 +292,11 @@ body{
     }
 
     15%{
-
         opacity:1;
-
     }
 
     85%{
-
         opacity:1;
-
     }
 
     to{
@@ -359,8 +327,7 @@ body{
 
     margin:auto;
 
-    padding:
-        20px;
+    padding:20px;
 
 }
 
@@ -393,6 +360,7 @@ body{
     display:flex;
 
     justify-content:center;
+
     align-items:center;
 
     font-size:62px;
@@ -420,8 +388,7 @@ body{
     backdrop-filter:
         blur(15px);
 
-    will-change:
-        transform;
+    will-change:transform;
 
     animation:
         logoAnimation
@@ -533,19 +500,16 @@ body{
 
     font-weight:500;
 
-    color:
-        #d8f7df;
+    color:#d8f7df;
 
 }
 
 
 .hero p{
 
-    margin-top:
-        13px;
+    margin-top:13px;
 
-    color:
-        #aee7bc;
+    color:#aee7bc;
 
 }
 
@@ -605,24 +569,20 @@ body{
 @keyframes lineMove{
 
     from{
-
         transform:
             translateX(-80px);
-
     }
 
     to{
-
         transform:
             translateX(200px);
-
     }
 
 }
 
 
 /* =====================================================
-   Dashboard
+   DASHBOARD
 ===================================================== */
 
 .dashboard{
@@ -747,6 +707,7 @@ body{
         );
 
     right:-100px;
+
     top:-100px;
 
     transition:
@@ -830,8 +791,7 @@ body{
 
     margin-bottom:10px;
 
-    will-change:
-        transform;
+    will-change:transform;
 
     animation:
         iconFloat
@@ -863,11 +823,9 @@ body{
 
 .card-title{
 
-    color:
-        #b9e9c7;
+    color:#b9e9c7;
 
-    font-size:
-        14px;
+    font-size:14px;
 
 }
 
@@ -876,31 +834,26 @@ body{
 
     margin-top:5px;
 
-    font-size:
-        38px;
+    font-size:38px;
 
-    font-weight:
-        900;
+    font-weight:900;
 
-    color:
-        white;
+    color:white;
 
 }
 
 
 .card-unit{
 
-    color:
-        #9ed6ad;
+    color:#9ed6ad;
 
-    font-size:
-        13px;
+    font-size:13px;
 
 }
 
 
 /* =====================================================
-   ตัวเลข
+   ตัวเลขกระพริบ
 ===================================================== */
 
 .number-pulse{
@@ -917,18 +870,371 @@ body{
 @keyframes numberPulse{
 
     0%,100%{
+        transform:scale(1);
+    }
+
+    50%{
+        transform:scale(1.07);
+    }
+
+}
+
+
+/* =====================================================
+   การ์ดงานศพล่าสุด
+===================================================== */
+
+.latest-funeral-card{
+
+    grid-column:
+        span 2;
+
+    min-height:
+        230px;
+
+    padding:
+        25px;
+
+    position:relative;
+
+    overflow:hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,215,70,.20),
+            rgba(255,255,255,.08)
+        );
+
+    border:
+        1px solid
+        rgba(255,230,120,.35);
+
+    box-shadow:
+        0 20px 60px
+        rgba(0,0,0,.25),
+
+        0 0 40px
+        rgba(255,210,70,.08);
+
+    animation:
+        funeralCardEnter
+        1s
+        cubic-bezier(.2,.8,.2,1)
+        forwards;
+
+}
+
+
+.latest-funeral-glow{
+
+    position:absolute;
+
+    width:280px;
+
+    height:280px;
+
+    right:-120px;
+
+    top:-130px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,230,120,.25),
+            transparent 70%
+        );
+
+    animation:
+        funeralGlow
+        4s
+        ease-in-out
+        infinite;
+
+    pointer-events:none;
+
+}
+
+
+@keyframes funeralGlow{
+
+    0%,100%{
+
+        transform:scale(1);
+
+        opacity:.55;
+
+    }
+
+    50%{
+
+        transform:scale(1.35);
+
+        opacity:.90;
+
+    }
+
+}
+
+
+@keyframes funeralCardEnter{
+
+    from{
+
+        opacity:0;
 
         transform:
+            translateY(25px)
+            scale(.97);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:
+            translateY(0)
             scale(1);
+
+    }
+
+}
+
+
+.latest-funeral-top{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    position:relative;
+
+    z-index:2;
+
+}
+
+
+.latest-funeral-icon{
+
+    width:58px;
+
+    height:58px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    border-radius:18px;
+
+    font-size:32px;
+
+    background:
+        rgba(255,255,255,.12);
+
+    border:
+        1px solid
+        rgba(255,255,255,.20);
+
+    box-shadow:
+        0 8px 25px
+        rgba(0,0,0,.20);
+
+    animation:
+        funeralIcon
+        2.5s
+        ease-in-out
+        infinite;
+
+}
+
+
+@keyframes funeralIcon{
+
+    0%,100%{
+
+        transform:
+            translateY(0)
+            rotate(0deg);
 
     }
 
     50%{
 
         transform:
-            scale(1.07);
+            translateY(-6px)
+            rotate(2deg);
 
     }
+
+}
+
+
+.latest-funeral-label{
+
+    font-size:20px;
+
+    font-weight:900;
+
+    color:#fff4b0;
+
+}
+
+
+.latest-funeral-sub{
+
+    margin-top:3px;
+
+    font-size:12px;
+
+    color:#b9e9c7;
+
+}
+
+
+.latest-funeral-name{
+
+    position:relative;
+
+    z-index:2;
+
+    margin-top:20px;
+
+    font-size:
+        clamp(
+            22px,
+            3vw,
+            32px
+        );
+
+    font-weight:900;
+
+    color:#ffffff;
+
+    text-shadow:
+        0 0 20px
+        rgba(255,255,255,.18);
+
+    animation:
+        funeralName
+        2.5s
+        ease-in-out
+        infinite
+        alternate;
+
+}
+
+
+@keyframes funeralName{
+
+    from{
+
+        transform:
+            translateX(0);
+
+    }
+
+    to{
+
+        transform:
+            translateX(4px);
+
+    }
+
+}
+
+
+.latest-funeral-info{
+
+    position:relative;
+
+    z-index:2;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
+    gap:12px;
+
+    margin-top:20px;
+
+}
+
+
+.funeral-info-item{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:
+        12px
+        14px;
+
+    border-radius:16px;
+
+    background:
+        rgba(255,255,255,.07);
+
+    border:
+        1px solid
+        rgba(255,255,255,.10);
+
+}
+
+
+.info-icon{
+
+    font-size:22px;
+
+}
+
+
+.funeral-info-item small{
+
+    display:block;
+
+    color:#aee7bc;
+
+    font-size:11px;
+
+}
+
+
+.funeral-info-item strong{
+
+    display:block;
+
+    margin-top:3px;
+
+    color:#ffffff;
+
+    font-size:15px;
+
+}
+
+
+.latest-funeral-card:hover{
+
+    transform:
+        translateY(-8px)
+        scale(1.02);
+
+    box-shadow:
+        0 30px 80px
+        rgba(0,0,0,.35),
+
+        0 0 45px
+        rgba(255,215,70,.15);
 
 }
 
@@ -993,7 +1299,7 @@ body{
 
 
 /* =====================================================
-   ชื่อส่วน
+   หัวข้อ
 ===================================================== */
 
 .section-title{
@@ -1003,8 +1309,7 @@ body{
         0
         16px;
 
-    font-size:
-        25px;
+    font-size:25px;
 
     animation:
         fadeIn
@@ -1177,6 +1482,7 @@ body{
         );
 
     top:-90px;
+
     right:-90px;
 
     transition:
@@ -1244,8 +1550,7 @@ body{
 
 .menu-icon{
 
-    font-size:
-        47px;
+    font-size:47px;
 
     filter:
         drop-shadow(
@@ -1253,8 +1558,7 @@ body{
             rgba(0,0,0,.30)
         );
 
-    will-change:
-        transform;
+    will-change:transform;
 
     animation:
         menuIcon
@@ -1298,17 +1602,15 @@ body{
         40px
         15px;
 
-    color:
-        #9fd7ac;
+    color:#9fd7ac;
 
-    font-size:
-        14px;
+    font-size:14px;
 
 }
 
 
 /* =====================================================
-   มือถือ
+   Responsive
 ===================================================== */
 
 @media(max-width:1000px){
@@ -1324,6 +1626,13 @@ body{
 
         grid-template-columns:
             repeat(2,1fr);
+
+    }
+
+    .latest-funeral-card{
+
+        grid-column:
+            span 2;
 
     }
 
@@ -1351,6 +1660,7 @@ body{
     .logo{
 
         width:85px;
+
         height:85px;
 
         font-size:48px;
@@ -1411,6 +1721,30 @@ body{
 
     }
 
+    .latest-funeral-card{
+
+        grid-column:
+            span 2;
+
+        min-height:220px;
+
+        padding:20px;
+
+    }
+
+    .latest-funeral-info{
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+    .latest-funeral-name{
+
+        font-size:23px;
+
+    }
+
 }
 
 </style>
@@ -1422,7 +1756,7 @@ body{
 
 
 <!-- =====================================================
-   พื้นหลัง
+   พื้นหลัง Animation
 ===================================================== -->
 
 <div class="bg-orb orb1"></div>
@@ -1473,6 +1807,8 @@ body{
 <section class="dashboard">
 
 
+    <!-- สมาชิก -->
+
     <div class="card">
 
         <div class="card-icon">
@@ -1496,6 +1832,8 @@ body{
 
     </div>
 
+
+    <!-- งานศพ -->
 
     <div class="card">
 
@@ -1521,6 +1859,97 @@ body{
     </div>
 
 
+    <!-- งานศพล่าสุด -->
+
+    <div class="card latest-funeral-card">
+
+        <div class="latest-funeral-glow"></div>
+
+        <div class="latest-funeral-top">
+
+            <div class="latest-funeral-icon">
+                🕊️
+            </div>
+
+            <div>
+
+                <div class="latest-funeral-label">
+                    งานศพล่าสุด
+                </div>
+
+                <div class="latest-funeral-sub">
+                    รายการล่าสุดของกลุ่ม
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="latestFuneralName"
+            class="latest-funeral-name"
+        >
+            กำลังโหลด...
+        </div>
+
+
+        <div class="latest-funeral-info">
+
+
+            <div class="funeral-info-item">
+
+                <span class="info-icon">
+                    📅
+                </span>
+
+                <div>
+
+                    <small>
+                        วันที่
+                    </small>
+
+                    <strong
+                        id="latestFuneralDate"
+                    >
+                        -
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="funeral-info-item">
+
+                <span class="info-icon">
+                    🏠
+                </span>
+
+                <div>
+
+                    <small>
+                        บ้านเลขที่
+                    </small>
+
+                    <strong
+                        id="latestFuneralHouse"
+                    >
+                        -
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- ข้าวสารรับ -->
+
     <div class="card">
 
         <div class="card-icon">
@@ -1544,6 +1973,8 @@ body{
 
     </div>
 
+
+    <!-- คงเหลือ -->
 
     <div class="card">
 
@@ -1569,6 +2000,8 @@ body{
     </div>
 
 
+    <!-- ค้างส่ง -->
+
     <div class="card">
 
         <div class="card-icon">
@@ -1592,6 +2025,8 @@ body{
 
     </div>
 
+
+    <!-- ค้าง 2 ครั้ง -->
 
     <div class="card">
 
@@ -1617,6 +2052,8 @@ body{
     </div>
 
 
+    <!-- ช่วยงานศพ -->
+
     <div class="card">
 
         <div class="card-icon">
@@ -1640,6 +2077,8 @@ body{
 
     </div>
 
+
+    <!-- ปกติ -->
 
     <div class="card">
 
@@ -1676,7 +2115,7 @@ body{
 
 
 <!-- =====================================================
-   เมนู
+   เมนูระบบ
 ===================================================== -->
 
 <h2 class="section-title">
@@ -1794,6 +2233,10 @@ body{
 </section>
 
 
+<!-- =====================================================
+   FOOTER
+===================================================== -->
+
 <footer class="footer">
 
     🌾 กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
@@ -1849,32 +2292,32 @@ const memberTotal =
 const pendingMembers =
     members.filter(
         member =>
-        Number(
-            member.pending || 0
-        ) > 0
+            Number(
+                member.pending || 0
+            ) > 0
     );
 
 
 const dangerMembers =
     members.filter(
         member =>
-        Number(
-            member.pending || 0
-        ) >= 2
+            Number(
+                member.pending || 0
+            ) >= 2
     );
 
 
 const normalMembers =
     members.filter(
         member =>
-        Number(
-            member.pending || 0
-        ) === 0
+            Number(
+                member.pending || 0
+            ) === 0
     );
 
 
 /* =====================================================
-   ตัวเลขนับ Animation
+   ตัวเลข Animation
 ===================================================== */
 
 function animateNumber(
@@ -1891,9 +2334,7 @@ function animateNumber(
         performance.now();
 
 
-    function update(
-        current
-    ){
+    function update(current){
 
         const progress =
             Math.min(
@@ -1919,7 +2360,9 @@ function animateNumber(
 
 
         element.innerText =
-            value.toLocaleString("th-TH");
+            value.toLocaleString(
+                "th-TH"
+            );
 
 
         if(
@@ -1930,10 +2373,13 @@ function animateNumber(
                 update
             );
 
-        }else{
+        }
+        else{
 
             element.innerText =
-                target.toLocaleString("th-TH");
+                target.toLocaleString(
+                    "th-TH"
+                );
 
         }
 
@@ -1963,7 +2409,9 @@ document.getElementById(
     "memberHeader"
 ).innerText =
     "สมาชิกทั้งหมด " +
-    memberTotal.toLocaleString("th-TH") +
+    memberTotal.toLocaleString(
+        "th-TH"
+    ) +
     " ครัวเรือน";
 
 
@@ -2073,7 +2521,7 @@ rice.forEach(
 
 
 /* =====================================================
-   ข้าวสารคงเหลือ
+   คงเหลือ
 ===================================================== */
 
 let riceBalance =
@@ -2092,7 +2540,7 @@ if(
 
 
 /* =====================================================
-   แสดงตัวเลข
+   แสดงตัวเลขข้าวสาร
 ===================================================== */
 
 animateNumber(
@@ -2183,6 +2631,230 @@ else if(
     `;
 
 }
+
+
+/* =====================================================
+   งานศพล่าสุด
+===================================================== */
+
+function getFuneralDate(item){
+
+    const value =
+        item.date ||
+        item.deathDate ||
+        item.funeralDate ||
+        item.cremationDate ||
+        item.createdAt ||
+        item.created ||
+        item.timestamp ||
+        "";
+
+
+    /* กรณีเป็นตัวเลข timestamp */
+
+    if(
+        typeof value === "number"
+    ){
+
+        const numberDate =
+            new Date(value);
+
+        if(
+            !isNaN(
+                numberDate.getTime()
+            )
+        ){
+
+            return numberDate;
+
+        }
+
+    }
+
+
+    /* กรณีเป็นวันที่มาตรฐาน */
+
+    const date =
+        new Date(value);
+
+
+    if(
+        !isNaN(
+            date.getTime()
+        )
+    ){
+
+        return date;
+
+    }
+
+
+    return new Date(0);
+
+}
+
+
+function getFuneralName(item){
+
+    return (
+
+        item.name ||
+
+        item.fullName ||
+
+        item.memberName ||
+
+        item.deceasedName ||
+
+        item.personName ||
+
+        item.deathName ||
+
+        item.person ||
+
+        "ไม่ระบุชื่อ"
+
+    );
+
+}
+
+
+function getFuneralHouse(item){
+
+    return (
+
+        item.house ||
+
+        item.houseNo ||
+
+        item.houseNumber ||
+
+        item.house_number ||
+
+        item.address ||
+
+        item.houseAddress ||
+
+        item.home ||
+
+        "ไม่ระบุ"
+
+    );
+
+}
+
+
+function showLatestFuneral(){
+
+    const nameElement =
+        document.getElementById(
+            "latestFuneralName"
+        );
+
+
+    const dateElement =
+        document.getElementById(
+            "latestFuneralDate"
+        );
+
+
+    const houseElement =
+        document.getElementById(
+            "latestFuneralHouse"
+        );
+
+
+    if(
+        !funerals ||
+        funerals.length === 0
+    ){
+
+        nameElement.innerText =
+            "ยังไม่มีข้อมูลงานศพ";
+
+        dateElement.innerText =
+            "-";
+
+        houseElement.innerText =
+            "-";
+
+        return;
+
+    }
+
+
+    /* เรียงจากล่าสุด */
+
+    const sortedFunerals =
+        [...funerals].sort(
+            (a,b) =>
+                getFuneralDate(b) -
+                getFuneralDate(a)
+        );
+
+
+    const latest =
+        sortedFunerals[0];
+
+
+    /* ชื่อ */
+
+    const latestName =
+        getFuneralName(
+            latest
+        );
+
+
+    nameElement.innerText =
+        "⚰️ " +
+        latestName;
+
+
+    /* บ้านเลขที่ */
+
+    houseElement.innerText =
+        getFuneralHouse(
+            latest
+        );
+
+
+    /* วันที่ */
+
+    const latestDate =
+        getFuneralDate(
+            latest
+        );
+
+
+    if(
+        latestDate.getTime() > 0
+    ){
+
+        dateElement.innerText =
+            latestDate.toLocaleDateString(
+                "th-TH",
+                {
+                    day:"numeric",
+                    month:"long",
+                    year:"numeric"
+                }
+            );
+
+    }
+    else{
+
+        dateElement.innerText =
+            "ไม่ระบุวันที่";
+
+    }
+
+}
+
+
+/* เรียกแสดงงานศพล่าสุด */
+
+showLatestFuneral();
+
 
 </script>
 
