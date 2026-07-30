@@ -2,14 +2,12 @@
 <html lang="th">
 
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>ทะเบียนสมาชิกกลุ่มข้าวสาร</title>
 
 <style>
-
 *{
     box-sizing:border-box;
 }
@@ -60,7 +58,6 @@ button{
     font-size:16px;
     color:white;
     background:#228B22;
-    cursor:pointer;
 }
 
 button.edit{
@@ -125,7 +122,6 @@ button.cancel{
     border:2px solid #1976d2;
     background:#f0f7ff;
 }
-
 </style>
 
 </head>
@@ -149,24 +145,20 @@ button.cancel{
 <div class="summary">
 
 <div class="summary-card">
-
 👥 สมาชิกทั้งหมด
 
 <div class="number" id="totalMember">185</div>
 
 ครัวเรือน
-
 </div>
 
 
 <div class="summary-card">
-
 ⚠️ ค้างส่ง
 
 <div class="number" id="pendingMember">0</div>
 
 ครัวเรือน
-
 </div>
 
 </div>
@@ -178,13 +170,11 @@ button.cancel{
 
 <h2 id="formTitle">➕ เพิ่มสมาชิก</h2>
 
-
 <input
     id="name"
     type="text"
     placeholder="ชื่อ-นามสกุล"
 >
-
 
 <input
     id="house"
@@ -192,14 +182,12 @@ button.cancel{
     placeholder="บ้านเลขที่"
 >
 
-
 <button
     id="saveButton"
     onclick="saveMember()"
 >
 💾 บันทึกสมาชิก
 </button>
-
 
 <button
     id="cancelButton"
@@ -216,7 +204,6 @@ button.cancel{
 
 <h2>🔎 ค้นหาสมาชิก</h2>
 
-
 <input
     id="search"
     type="text"
@@ -224,22 +211,19 @@ button.cancel{
     oninput="showMembers()"
 >
 
-
 <div id="memberList"></div>
 
 </div>
 
 
-<a
-    href="ดัชนี.html"
-    style="
-        display:block;
-        text-align:center;
-        padding:15px;
-        color:#228B22;
-        text-decoration:none;
-    "
->
+<a href="ดัชนี.html"
+style="
+display:block;
+text-align:center;
+padding:15px;
+color:#228B22;
+text-decoration:none;
+">
 ← กลับหน้าหลัก
 </a>
 
@@ -249,12 +233,12 @@ button.cancel{
 
 <script>
 
-/* =========================
-   โหลดข้อมูล
-========================= */
-
 let members = [];
 
+let editId = null;
+
+
+/* โหลดข้อมูล */
 try{
 
     members =
@@ -269,15 +253,15 @@ try{
 }
 
 
-/* =========================
-   จัดรูปแบบข้อมูลเดิม
-========================= */
-
+/* จัดข้อมูลสมาชิก */
 members = members.map((m,index)=>({
 
     id:
-        m.id ??
-        `member-${Date.now()}-${index}`,
+        m.id ||
+        "member-" +
+        Date.now() +
+        "-" +
+        index,
 
     name:
         m.name || "",
@@ -297,14 +281,8 @@ members = members.map((m,index)=>({
 }));
 
 
-/* ID ที่กำลังแก้ */
+saveAll();
 
-let editId = null;
-
-
-/* =========================
-   บันทึกทั้งหมด
-========================= */
 
 function saveAll(){
 
@@ -338,7 +316,6 @@ function saveMember(){
         alert("กรุณากรอกชื่อ-นามสกุล");
 
         return;
-
     }
 
 
@@ -347,46 +324,40 @@ function saveMember(){
         alert("กรุณากรอกบ้านเลขที่");
 
         return;
-
     }
 
 
-    /* =====================
-       โหมดแก้ไข
-    ===================== */
+    /* ===== แก้ไข ===== */
 
     if(editId !== null){
 
         const member =
             members.find(
                 m =>
-                    String(m.id) ===
-                    String(editId)
+                String(m.id) ===
+                String(editId)
             );
 
 
         if(!member){
 
-            alert("ไม่พบข้อมูลสมาชิก");
+            alert("ไม่พบสมาชิก");
 
             cancelEdit();
 
             return;
-
         }
 
 
-        /* ตรวจว่าบ้านเลขที่ใหม่
-           ซ้ำกับคนอื่นหรือไม่ */
-
+        /* ป้องกันบ้านเลขที่ซ้ำ */
         const duplicate =
             members.some(
                 m =>
-                    String(m.house) ===
-                    String(house)
-                    &&
-                    String(m.id) !==
-                    String(editId)
+                String(m.house) ===
+                String(house)
+                &&
+                String(m.id) !==
+                String(editId)
             );
 
 
@@ -397,20 +368,17 @@ function saveMember(){
             );
 
             return;
-
         }
 
 
-        /* แก้เฉพาะชื่อกับบ้าน
-           ค้างส่งจะไม่หาย */
+        /* แก้เฉพาะชื่อและบ้าน
+           ค้างส่งยังคงเดิม */
 
         member.name = name;
-
         member.house = house;
 
 
         saveAll();
-
 
         alert(
             "แก้ไขข้อมูลสมาชิกเรียบร้อยแล้ว"
@@ -422,19 +390,16 @@ function saveMember(){
         showMembers();
 
         return;
-
     }
 
 
-    /* =====================
-       เพิ่มสมาชิกใหม่
-    ===================== */
+    /* ===== เพิ่มสมาชิก ===== */
 
     const duplicate =
         members.some(
             m =>
-                String(m.house) ===
-                String(house)
+            String(m.house) ===
+            String(house)
         );
 
 
@@ -445,16 +410,18 @@ function saveMember(){
         );
 
         return;
-
     }
 
 
     members.push({
 
         id:
-            `member-${Date.now()}-${Math.random()
+            "member-" +
+            Date.now() +
+            "-" +
+            Math.random()
                 .toString(36)
-                .slice(2,8)}`,
+                .slice(2,8),
 
         name:name,
 
@@ -470,7 +437,6 @@ function saveMember(){
 
 
     saveAll();
-
 
     clearForm();
 
@@ -493,8 +459,8 @@ function editMember(id){
     const member =
         members.find(
             m =>
-                String(m.id) ===
-                String(id)
+            String(m.id) ===
+            String(id)
         );
 
 
@@ -503,7 +469,6 @@ function editMember(id){
         alert("ไม่พบข้อมูลสมาชิก");
 
         return;
-
     }
 
 
@@ -534,11 +499,8 @@ function editMember(id){
 
 
     window.scrollTo({
-
         top:0,
-
         behavior:"smooth"
-
     });
 
 }
@@ -595,15 +557,14 @@ function deleteMember(id){
     const member =
         members.find(
             m =>
-                String(m.id) ===
-                String(id)
+            String(m.id) ===
+            String(id)
         );
 
 
     if(!member){
 
         return;
-
     }
 
 
@@ -620,15 +581,14 @@ function deleteMember(id){
     if(!ok){
 
         return;
-
     }
 
 
     members =
         members.filter(
             m =>
-                String(m.id) !==
-                String(id)
+            String(m.id) !==
+            String(id)
         );
 
 
@@ -650,36 +610,28 @@ function deleteMember(id){
 
 function showMembers(){
 
-    const searchInput =
-        document.getElementById("search");
-
-
-    const keyword =
-        searchInput
-            ? searchInput.value
-                .trim()
-                .toLowerCase()
-            : "";
+    const search =
+        document.getElementById("search")
+        .value
+        .trim()
+        .toLowerCase();
 
 
     const filtered =
-        members.filter(m => {
+        members.filter(m=>{
 
             const name =
                 String(m.name || "")
-                    .toLowerCase();
+                .toLowerCase();
 
             const house =
                 String(m.house || "")
-                    .toLowerCase();
+                .toLowerCase();
 
 
             return (
-
-                name.includes(keyword)
-                ||
-                house.includes(keyword)
-
+                name.includes(search) ||
+                house.includes(search)
             );
 
         });
@@ -697,7 +649,6 @@ function showMembers(){
         let statusText =
             "🟢 ปกติ";
 
-
         let statusClass =
             "ok";
 
@@ -709,7 +660,6 @@ function showMembers(){
 
             statusClass =
                 "warning";
-
         }
 
 
@@ -720,66 +670,62 @@ function showMembers(){
 
             statusClass =
                 "danger";
-
         }
 
 
         html += `
 
-            <div class="member-card">
+        <div class="member-card">
 
-                <strong>
-                    ${escapeHTML(m.name)}
-                </strong>
+            <strong>
+                ${escapeHTML(m.name)}
+            </strong>
 
+            <br>
+
+            🏠 บ้านเลขที่:
+            ${escapeHTML(m.house)}
+
+            <br>
+
+            📦 ค้างส่ง:
+            ${pending} ครั้ง
+
+            <br>
+
+            ${
+                m.pendingFor
+                ?
+                `
+                ⚰️ งานศพที่ค้าง:
+                ${escapeHTML(m.pendingFor)}
                 <br>
+                `
+                :
+                ""
+            }
 
-                🏠 บ้านเลขที่:
-                ${escapeHTML(m.house)}
+            <span class="${statusClass}">
+                ${statusText}
+            </span>
 
-                <br>
+            <br>
 
-                📦 ค้างส่ง:
-                ${pending} ครั้ง
+            <button
+                class="edit"
+                onclick="editMember('${escapeAttribute(m.id)}')"
+            >
+                ✏️ แก้ไข
+            </button>
 
-                <br>
+            <button
+                class="delete"
+                onclick="deleteMember('${escapeAttribute(m.id)}')"
+            >
+                🗑 ลบสมาชิก
+            </button>
 
-                ${
-                    m.pendingFor
-                    ?
-                    `
-                    ⚰️ งานศพที่ค้าง:
-                    ${escapeHTML(m.pendingFor)}
-                    <br>
-                    `
-                    :
-                    ""
-                }
-
-                <span class="${statusClass}">
-                    ${statusText}
-                </span>
-
-
-                <br>
-
-
-                <button
-                    class="edit"
-                    onclick="editMember('${escapeAttribute(m.id)}')"
-                >
-                    ✏️ แก้ไข
-                </button>
-
-
-                <button
-                    class="delete"
-                    onclick="deleteMember('${escapeAttribute(m.id)}')"
-                >
-                    🗑 ลบสมาชิก
-                </button>
-
-            </div>
+        </div>
 
         `;
 
@@ -789,9 +735,9 @@ function showMembers(){
     if(filtered.length === 0){
 
         html = `
-            <div class="member-card">
-                ไม่พบสมาชิก
-            </div>
+        <div class="member-card">
+            ไม่พบสมาชิก
+        </div>
         `;
 
     }
@@ -803,24 +749,22 @@ function showMembers(){
 
     document.getElementById("totalMember")
         .innerText =
-            members.length > 0
-            ? members.length
-            : 185;
+        members.length > 0
+        ? members.length
+        : 185;
 
 
     document.getElementById("pendingMember")
         .innerText =
-            members.filter(
-                m =>
-                    Number(m.pending || 0) > 0
-            ).length;
+        members.filter(
+            m =>
+            Number(m.pending || 0) > 0
+        ).length;
 
 }
 
 
-/* =========================
-   ป้องกัน HTML
-========================= */
+/* ป้องกัน HTML */
 
 function escapeHTML(value){
 
@@ -843,11 +787,7 @@ function escapeAttribute(value){
 }
 
 
-/* =========================
-   เริ่มระบบ
-========================= */
-
-saveAll();
+/* เริ่มระบบ */
 
 showMembers();
 
