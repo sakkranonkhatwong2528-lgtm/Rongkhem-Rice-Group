@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>งานศพ - กลุ่มข้าวสาร หมู่ 6</title>
+<title>แจ้งเสียชีวิต / งานศพ</title>
 
 <style>
 
@@ -42,36 +42,37 @@ body{
     box-shadow:0 3px 10px rgba(0,0,0,.08);
 }
 
-input,
-button{
+input{
     width:100%;
     padding:13px;
     margin:6px 0;
+    border:1px solid #ccc;
     border-radius:10px;
     font-size:16px;
 }
 
-input{
-    border:1px solid #ccc;
-}
-
 button{
+    width:100%;
+    padding:13px;
+    margin-top:8px;
     border:0;
-    background:#228B22;
+    border-radius:10px;
     color:white;
+    background:#228B22;
+    font-size:16px;
 }
 
 button.red{
     background:#c62828;
 }
 
-button.gray{
-    background:#666;
+button.blue{
+    background:#1976d2;
 }
 
 .summary{
     display:grid;
-    grid-template-columns:repeat(3,1fr);
+    grid-template-columns:1fr 1fr 1fr;
     gap:10px;
 }
 
@@ -83,7 +84,7 @@ button.gray{
 }
 
 .number{
-    font-size:27px;
+    font-size:26px;
     font-weight:bold;
     color:#228B22;
 }
@@ -101,7 +102,7 @@ button.gray{
 }
 
 .member-card{
-    background:#fff;
+    background:white;
     padding:14px;
     margin-top:10px;
     border-radius:12px;
@@ -109,57 +110,42 @@ button.gray{
 }
 
 .sent{
-    border-left-color:#228B22;
     background:#f1fff1;
+    border-left-color:#228B22;
 }
 
 .not-sent{
-    border-left-color:#c62828;
     background:#fff5f5;
+    border-left-color:#c62828;
 }
 
-.status-ok{
-    color:#1b7a1b;
-    font-weight:bold;
-}
-
-.status-warning{
-    color:#b88600;
-    font-weight:bold;
-}
-
-.status-danger{
-    color:#c62828;
-    font-weight:bold;
-}
-
-.notice{
-    padding:15px;
-    border-radius:12px;
-    margin-top:10px;
-}
-
-.notice-green{
+.success{
     background:#e8f7e8;
     color:#1b7a1b;
+    padding:14px;
+    border-radius:12px;
 }
 
-.notice-yellow{
+.warning{
     background:#fff3cd;
     color:#856404;
+    padding:14px;
+    border-radius:12px;
 }
 
-.notice-red{
+.danger{
     background:#ffe5e5;
     color:#c62828;
+    padding:14px;
+    border-radius:12px;
 }
 
 .back{
     display:block;
     text-align:center;
     padding:15px;
-    color:#228B22;
     text-decoration:none;
+    color:#228B22;
 }
 
 @media(max-width:600px){
@@ -169,8 +155,8 @@ button.gray{
     }
 
     .summary-card{
-        padding:10px 5px;
         font-size:13px;
+        padding:10px 5px;
     }
 
     .number{
@@ -185,11 +171,14 @@ button.gray{
 
 <body>
 
+
 <div class="header">
 
-    <h1>⚰️ แจ้งเสียชีวิต / งานศพ</h1>
+<h1>⚰️ แจ้งเสียชีวิต / งานศพ</h1>
 
-    <p>กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</p>
+<p>
+กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
+</p>
 
 </div>
 
@@ -197,98 +186,115 @@ button.gray{
 <div class="container">
 
 
-<!-- สร้างงานศพ -->
+<!-- =============================
+     เพิ่มงานศพ
+============================= -->
 
 <div class="box">
 
-    <h2>➕ แจ้งงานศพ</h2>
+<h2>➕ แจ้งงานศพ</h2>
 
-    <input
-        id="name"
-        type="text"
-        placeholder="ชื่อ-นามสกุลผู้เสียชีวิต"
-    >
+<input
+    id="name"
+    placeholder="ชื่อ-นามสกุลผู้เสียชีวิต"
+>
 
-    <input
-        id="age"
-        type="number"
-        placeholder="อายุ (ปี)"
-    >
+<input
+    id="age"
+    type="number"
+    placeholder="อายุ (ปี)"
+>
 
-    <input
-        id="house"
-        type="text"
-        placeholder="บ้านเลขที่"
-    >
+<input
+    id="house"
+    placeholder="บ้านเลขที่"
+>
 
-    <label>วันที่เสียชีวิต</label>
+<label>วันที่เสียชีวิต</label>
 
-    <input
-        id="deadDate"
-        type="date"
-    >
+<input
+    id="deadDate"
+    type="date"
+>
 
-    <label>วันที่ฌาปนกิจ</label>
+<label>วันที่ฌาปนกิจ</label>
 
-    <input
-        id="burnDate"
-        type="date"
-    >
+<input
+    id="burnDate"
+    type="date"
+>
 
-    <input
-        id="temple"
-        type="text"
-        placeholder="วัดที่จัดงาน"
-    >
+<input
+    id="temple"
+    placeholder="วัดที่จัดงาน"
+>
 
-    <button onclick="addFuneral()">
-        💾 บันทึกงานศพ
-    </button>
+<button onclick="addFuneral()">
+
+💾 บันทึกงานศพ
+
+</button>
 
 </div>
 
 
-<!-- รายการงานศพ -->
+<!-- =============================
+     รายการงานศพ
+============================= -->
 
 <div class="box">
 
-    <h2>⚰️ รายการงานศพ</h2>
+<h2>⚰️ รายการงานศพ</h2>
 
-    <div id="funeralList"></div>
+<div id="funeralList"></div>
 
 </div>
 
 
-<!-- รายชื่อสมาชิก -->
+<!-- =============================
+     สมาชิกช่วยงาน
+============================= -->
 
 <div class="box">
 
-    <h2>🌾 สมาชิกที่นำข้าวสารช่วยงาน</h2>
+<h2>🌾 การส่งข้าวสารช่วยงานศพ</h2>
 
-    <div id="selectedFuneralText">
-        กรุณาเลือกงานศพก่อน
-    </div>
+<div id="selectedFuneral"></div>
 
-    <div id="summary"></div>
+<div id="summary"></div>
 
-    <div id="memberList">
-        กรุณาเลือกงานศพก่อน
-    </div>
+<div id="memberList">
+
+กรุณาเลือกงานศพ
+
+</div>
 
 </div>
 
 
-<!-- แจ้งเตือน -->
+<!-- =============================
+     แจ้งเตือน
+============================= -->
 
 <div class="box">
 
-    <h2>🔔 แจ้งเตือนสมาชิก</h2>
+<h2>🔔 สมาชิกที่ยังไม่ส่ง</h2>
 
-    <div id="alertBox">
-        ยังไม่มีข้อมูล
-    </div>
+<div id="pendingList">
+
+กรุณาเลือกงานศพ
 
 </div>
+
+</div>
+
+
+<a
+    class="back"
+    href="index.html"
+>
+← กลับหน้าหลัก
+</a>
 
 
 </div>
@@ -296,38 +302,64 @@ button.gray{
 
 <script>
 
-/* --------------------------------
+/* =====================================================
    โหลดข้อมูล
--------------------------------- */
+===================================================== */
 
 let members =
-    JSON.parse(localStorage.getItem("members")) || [];
+    JSON.parse(
+        localStorage.getItem("members")
+    ) || [];
+
 
 let funerals =
-    JSON.parse(localStorage.getItem("funerals")) || [];
+    JSON.parse(
+        localStorage.getItem("funerals")
+    ) || [];
+
 
 let funeralSends =
-    JSON.parse(localStorage.getItem("funeralSends")) || [];
+    JSON.parse(
+        localStorage.getItem("funeralSends")
+    ) || [];
+
 
 let selectedFuneralId =
     localStorage.getItem("selectedFuneralId") || "";
 
 
-/* --------------------------------
-   เตรียมข้อมูลสมาชิก
--------------------------------- */
+/* =====================================================
+   เตรียมสมาชิก
+===================================================== */
 
-members = members.map(m => ({
+members = members.map((m,index)=>({
 
-    ...m,
+    id:
+        m.id ||
+        "member-" +
+        Date.now() +
+        "-" +
+        index,
 
-    pending: Number(m.pending || 0),
+    name:
+        m.name || "",
 
-    pendingFor: m.pendingFor || "",
+    house:
+        m.house || "",
 
-    status: m.status || "ปกติ"
+    pending:
+        Number(m.pending || 0),
+
+    pendingFor:
+        m.pendingFor || "",
+
+    status:
+        m.status || "ปกติ"
 
 }));
+
+
+saveMembers();
 
 
 function saveMembers(){
@@ -340,34 +372,51 @@ function saveMembers(){
 }
 
 
-/* --------------------------------
-   เพิ่มงานศพ
--------------------------------- */
+/* =====================================================
+   บันทึกงานศพ
+===================================================== */
 
 function addFuneral(){
 
     const name =
-        document.getElementById("name").value.trim();
+        document.getElementById("name")
+        .value
+        .trim();
+
 
     const age =
-        document.getElementById("age").value.trim();
+        document.getElementById("age")
+        .value
+        .trim();
+
 
     const house =
-        document.getElementById("house").value.trim();
+        document.getElementById("house")
+        .value
+        .trim();
+
 
     const deadDate =
-        document.getElementById("deadDate").value;
+        document.getElementById("deadDate")
+        .value;
+
 
     const burnDate =
-        document.getElementById("burnDate").value;
+        document.getElementById("burnDate")
+        .value;
+
 
     const temple =
-        document.getElementById("temple").value.trim();
+        document.getElementById("temple")
+        .value
+        .trim();
 
 
     if(!name){
 
-        alert("กรุณากรอกชื่อผู้เสียชีวิต");
+        alert(
+            "กรุณากรอกชื่อผู้เสียชีวิต"
+        );
 
         return;
 
@@ -393,7 +442,8 @@ function addFuneral(){
         closed:false,
 
         createdAt:
-            new Date().toLocaleDateString("th-TH")
+            new Date()
+            .toLocaleDateString("th-TH")
 
     };
 
@@ -407,15 +457,9 @@ function addFuneral(){
     );
 
 
-    document.getElementById("name").value = "";
-    document.getElementById("age").value = "";
-    document.getElementById("house").value = "";
-    document.getElementById("deadDate").value = "";
-    document.getElementById("burnDate").value = "";
-    document.getElementById("temple").value = "";
+    selectedFuneralId =
+        String(funeral.id);
 
-
-    selectedFuneralId = String(funeral.id);
 
     localStorage.setItem(
         "selectedFuneralId",
@@ -423,18 +467,49 @@ function addFuneral(){
     );
 
 
+    clearFuneralForm();
+
+
     showFunerals();
+
+    showSelectedFuneral();
 
     showMembers();
 
-    alert("บันทึกงานศพเรียบร้อยแล้ว");
+    showPending();
+
+
+    alert(
+        "บันทึกงานศพเรียบร้อยแล้ว"
+    );
 
 }
 
 
-/* --------------------------------
+/* =====================================================
+   ล้างแบบฟอร์ม
+===================================================== */
+
+function clearFuneralForm(){
+
+    document.getElementById("name").value = "";
+
+    document.getElementById("age").value = "";
+
+    document.getElementById("house").value = "";
+
+    document.getElementById("deadDate").value = "";
+
+    document.getElementById("burnDate").value = "";
+
+    document.getElementById("temple").value = "";
+
+}
+
+
+/* =====================================================
    แสดงงานศพ
--------------------------------- */
+===================================================== */
 
 function showFunerals(){
 
@@ -444,83 +519,104 @@ function showFunerals(){
     if(funerals.length === 0){
 
         html = `
-            <div class="notice notice-yellow">
-                ยังไม่มีข้อมูลการแจ้งงานศพ
+            <div class="warning">
+                ยังไม่มีงานศพในระบบ
             </div>
         `;
 
     }else{
 
-        funerals.forEach(f => {
-
-            const isSelected =
-                String(f.id) ===
-                String(selectedFuneralId);
-
+        funerals.forEach(f=>{
 
             html += `
 
-                <div class="funeral-card">
+            <div class="funeral-card">
 
+                <strong>
+                    ⚰️ ${escapeHTML(f.name)}
+                </strong>
+
+                <br>
+
+                👤 อายุ:
+                ${escapeHTML(f.age || "-")} ปี
+
+                <br>
+
+                🏠 บ้านเลขที่:
+                ${escapeHTML(f.house || "-")}
+
+                <br>
+
+                📅 เสียชีวิต:
+                ${formatDate(f.deadDate)}
+
+                <br>
+
+                🔥 ฌาปนกิจ:
+                ${formatDate(f.burnDate)}
+
+                <br>
+
+                🛕 วัด:
+                ${escapeHTML(f.temple || "-")}
+
+                <br><br>
+
+                ${
+                    f.closed
+                    ?
+                    `
                     <strong>
-                        ⚰️ ${f.name}
+                        ✅ ปิดงานแล้ว
                     </strong>
-
-                    <br>
-
-                    อายุ:
-                    ${f.age || "-"} ปี
-
-                    <br>
-
-                    🏠 บ้านเลขที่:
-                    ${f.house || "-"}
-
-                    <br>
-
-                    📅 วันที่เสียชีวิต:
-                    ${formatDate(f.deadDate)}
-
-                    <br>
-
-                    🔥 วันที่ฌาปนกิจ:
-                    ${formatDate(f.burnDate)}
-
-                    <br>
-
-                    🛕 วัด:
-                    ${f.temple || "-"}
-
-                    <br><br>
-
+                    `
+                    :
+                    `
                     <strong>
-                        ${f.closed
-                            ? "✅ ปิดงานแล้ว"
-                            : "🟡 อยู่ระหว่างดำเนินการ"}
+                        🟡 อยู่ระหว่างดำเนินการ
                     </strong>
+                    `
+                }
 
+
+                <button
+                    class="blue"
+                    onclick="
+                        selectFuneral(
+                            '${f.id}'
+                        )
+                    "
+                >
+
+                    🌾 จัดการส่งข้าวสาร
+
+                </button>
+
+
+                ${
+                    !f.closed
+                    ?
+                    `
                     <button
-                        onclick="selectFuneral(${f.id})">
+                        class="red"
+                        onclick="
+                            closeFuneral(
+                                '${f.id}'
+                            )
+                        "
+                    >
 
-                        🌾 จัดการการส่งข้าวสาร
+                        🔒 ปิดงานศพ
+                        และบันทึกผู้ค้างส่ง
 
                     </button>
+                    `
+                    :
+                    ""
+                }
 
-                    ${
-                        !f.closed
-                        ? `
-                        <button
-                            class="red"
-                            onclick="closeFuneral(${f.id})">
-
-                            🔒 ปิดงานศพและบันทึกผู้ค้างส่ง
-
-                        </button>
-                        `
-                        : ""
-                    }
-
-                </div>
+            </div>
 
             `;
 
@@ -529,52 +625,101 @@ function showFunerals(){
     }
 
 
-    document.getElementById("funeralList").innerHTML =
+    document.getElementById("funeralList")
+        .innerHTML =
         html;
 
 }
 
 
-/* --------------------------------
+/* =====================================================
    เลือกงานศพ
--------------------------------- */
+===================================================== */
 
 function selectFuneral(id){
 
-    selectedFuneralId = String(id);
+    selectedFuneralId =
+        String(id);
+
 
     localStorage.setItem(
         "selectedFuneralId",
         selectedFuneralId
     );
 
+
+    showSelectedFuneral();
+
     showMembers();
+
+    showPending();
 
 }
 
 
-/* --------------------------------
+/* =====================================================
+   แสดงงานศพที่เลือก
+===================================================== */
+
+function showSelectedFuneral(){
+
+    const funeral =
+        funerals.find(
+            f =>
+            String(f.id) ===
+            String(selectedFuneralId)
+        );
+
+
+    if(!funeral){
+
+        document.getElementById(
+            "selectedFuneral"
+        ).innerHTML =
+            "กรุณาเลือกงานศพ";
+
+        return;
+
+    }
+
+
+    document.getElementById(
+        "selectedFuneral"
+    ).innerHTML = `
+
+        <div class="success">
+
+            ⚰️ งานศพ:
+            <strong>
+                ${escapeHTML(
+                    funeral.name
+                )}
+            </strong>
+
+            <br>
+
+            🌾 สมาชิก 1 ครัวเรือน
+            = ข้าวสาร 1 ถุง
+
+        </div>
+
+    `;
+
+}
+
+
+/* =====================================================
    แสดงสมาชิก
--------------------------------- */
+===================================================== */
 
 function showMembers(){
 
     if(!selectedFuneralId){
 
         document.getElementById(
-            "selectedFuneralText"
-        ).innerHTML =
-            "กรุณาเลือกงานศพก่อน";
-
-        document.getElementById(
             "memberList"
         ).innerHTML =
-            "";
-
-        document.getElementById(
-            "summary"
-        ).innerHTML =
-            "";
+            "กรุณาเลือกงานศพ";
 
         return;
 
@@ -584,8 +729,8 @@ function showMembers(){
     const funeral =
         funerals.find(
             f =>
-                String(f.id) ===
-                String(selectedFuneralId)
+            String(f.id) ===
+            String(selectedFuneralId)
         );
 
 
@@ -596,40 +741,19 @@ function showMembers(){
     }
 
 
-    document.getElementById(
-        "selectedFuneralText"
-    ).innerHTML = `
-
-        <div class="notice notice-green">
-
-            ⚰️ งานศพ:
-            <strong>
-                ${funeral.name}
-            </strong>
-
-            <br>
-
-            🌾 กติกา:
-            สมาชิก 1 ครัวเรือน = ข้าวสาร 1 ถุง
-
-        </div>
-
-    `;
-
-
     let sentCount = 0;
 
-
     let notSentCount = 0;
-
 
     let html = "";
 
 
     members.forEach((m,index)=>{
 
+
         const alreadySent =
-            funeralSends.some(s =>
+            funeralSends.some(
+                s =>
                 String(s.funeralId) ===
                 String(funeral.id)
                 &&
@@ -645,24 +769,23 @@ function showMembers(){
 
             html += `
 
-                <div class="member-card sent">
+            <div class="member-card sent">
 
-                    <strong>
-                        ${index + 1}. ${m.name}
-                    </strong>
+                <strong>
+                    ${index + 1}.
+                    ${escapeHTML(m.name)}
+                </strong>
 
-                    <br>
+                <br>
 
-                    🏠 บ้านเลขที่:
-                    ${m.house}
+                🏠 บ้านเลขที่:
+                ${escapeHTML(m.house)}
 
-                    <br>
+                <br>
 
-                    <span class="status-ok">
-                        ✅ ส่งแล้ว 1 ถุง
-                    </span>
+                ✅ ส่งแล้ว 1 ถุง
 
-                </div>
+            </div>
 
             `;
 
@@ -673,35 +796,36 @@ function showMembers(){
 
             html += `
 
-                <div class="member-card not-sent">
+            <div class="member-card not-sent">
 
-                    <strong>
-                        ${index + 1}. ${m.name}
-                    </strong>
+                <strong>
+                    ${index + 1}.
+                    ${escapeHTML(m.name)}
+                </strong>
 
-                    <br>
+                <br>
 
-                    🏠 บ้านเลขที่:
-                    ${m.house}
+                🏠 บ้านเลขที่:
+                ${escapeHTML(m.house)}
 
-                    <br>
+                <br>
 
-                    <span class="status-warning">
-                        ⏳ ยังไม่ส่ง
-                    </span>
+                ⏳ ยังไม่ส่ง
 
-                    <button
-                        onclick="sendRice(
-                            ${funeral.id},
-                            '${escapeJS(m.name)}',
-                            '${escapeJS(m.house)}'
-                        )">
+                <button
+                    onclick="
+                        sendRice(
+                            '${funeral.id}',
+                            '${escapeAttribute(m.id)}'
+                        )
+                    "
+                >
 
-                        🌾 ส่งข้าวสาร 1 ถุง
+                    🌾 ส่งข้าวสาร 1 ถุง
 
-                    </button>
+                </button>
 
-                </div>
+            </div>
 
             `;
 
@@ -710,16 +834,13 @@ function showMembers(){
     });
 
 
-    document.getElementById(
-        "memberList"
-    ).innerHTML =
-        html ||
-        "<p>ยังไม่มีสมาชิกในทะเบียน</p>";
+    document.getElementById("memberList")
+        .innerHTML =
+        html;
 
 
-    document.getElementById(
-        "summary"
-    ).innerHTML = `
+    document.getElementById("summary")
+        .innerHTML = `
 
         <div class="summary">
 
@@ -735,6 +856,7 @@ function showMembers(){
 
             </div>
 
+
             <div class="summary-card">
 
                 ✅ ส่งแล้ว
@@ -747,11 +869,14 @@ function showMembers(){
 
             </div>
 
+
             <div class="summary-card">
 
                 ⚠️ ยังไม่ส่ง
 
-                <div class="number warning-number">
+                <div
+                    class="number warning-number"
+                >
                     ${notSentCount}
                 </div>
 
@@ -763,35 +888,61 @@ function showMembers(){
 
     `;
 
-
-    showAlert();
-
 }
 
 
-/* --------------------------------
-   บันทึกการส่งข้าวสาร
--------------------------------- */
+/* =====================================================
+   ส่งข้าวสาร
+===================================================== */
 
 function sendRice(
     funeralId,
-    name,
-    house
+    memberId
 ){
 
+    const funeral =
+        funerals.find(
+            f =>
+            String(f.id) ===
+            String(funeralId)
+        );
+
+
+    const member =
+        members.find(
+            m =>
+            String(m.id) ===
+            String(memberId)
+        );
+
+
+    if(!funeral || !member){
+
+        alert(
+            "ไม่พบข้อมูล"
+        );
+
+        return;
+
+    }
+
+
     const exists =
-        funeralSends.some(s =>
+        funeralSends.some(
+            s =>
             String(s.funeralId) ===
             String(funeralId)
             &&
-            String(s.memberHouse) ===
-            String(house)
+            String(s.memberId) ===
+            String(memberId)
         );
 
 
     if(exists){
 
-        alert("บ้านนี้ส่งข้าวสารงานนี้แล้ว");
+        alert(
+            "สมาชิกบ้านนี้ส่งข้าวสารแล้ว"
+        );
 
         return;
 
@@ -802,15 +953,22 @@ function sendRice(
 
         id:Date.now(),
 
-        funeralId:String(funeralId),
+        funeralId:
+            String(funeralId),
 
-        memberName:name,
+        memberId:
+            String(memberId),
 
-        memberHouse:house,
+        memberName:
+            member.name,
+
+        memberHouse:
+            member.house,
 
         amount:1,
 
-        date:new Date()
+        date:
+            new Date()
             .toLocaleDateString("th-TH")
 
     });
@@ -824,26 +982,38 @@ function sendRice(
 
     showMembers();
 
+    showPending();
+
+    showFunerals();
+
+
+    alert(
+        member.name +
+        "\nส่งข้าวสาร 1 ถุงเรียบร้อยแล้ว"
+    );
+
 }
 
 
-/* --------------------------------
+/* =====================================================
    ปิดงานศพ
--------------------------------- */
+===================================================== */
 
 function closeFuneral(id){
 
     const funeral =
         funerals.find(
             f =>
-                String(f.id) ===
-                String(id)
+            String(f.id) ===
+            String(id)
         );
 
 
     if(!funeral){
 
-        alert("ไม่พบข้อมูลการงานศพ");
+        alert(
+            "ไม่พบงานศพ"
+        );
 
         return;
 
@@ -852,67 +1022,77 @@ function closeFuneral(id){
 
     if(funeral.closed){
 
-        alert("งานศพนี้ปิดไปแล้ว");
+        alert(
+            "งานศพนี้ปิดแล้ว"
+        );
 
         return;
 
     }
 
 
-    const confirmed =
-        confirm(
-            "ยืนยันปิดงานศพและบันทึกสมาชิกที่ยังไม่ส่งข้าวสาร?"
+    const notSent =
+        members.filter(
+            member =>
+            !funeralSends.some(
+                send =>
+                String(send.funeralId) ===
+                String(funeral.id)
+                &&
+                String(send.memberId) ===
+                String(member.id)
+            )
         );
 
 
-    if(!confirmed){
+    const confirmClose =
+        confirm(
+            "ปิดงานศพนี้หรือไม่?\n\n" +
+            "ผู้เสียชีวิต: " +
+            funeral.name +
+            "\n" +
+            "ส่งแล้ว: " +
+            (
+                members.length -
+                notSent.length
+            ) +
+            " ครัวเรือน\n" +
+            "ยังไม่ส่ง: " +
+            notSent.length +
+            " ครัวเรือน"
+        );
+
+
+    if(!confirmClose){
 
         return;
 
     }
 
 
-    let notSentMembers = [];
+    /* ============================================
+       เพิ่มค้างส่งเฉพาะคนที่ยังไม่ส่ง
+    ============================================ */
+
+    notSent.forEach(member=>{
+
+        member.pending =
+            Number(member.pending || 0)
+            + 1;
 
 
-    members.forEach(m => {
-
-        const alreadySent =
-            funeralSends.some(s =>
-                String(s.funeralId) ===
-                String(funeral.id)
-                &&
-                String(s.memberHouse) ===
-                String(m.house)
-            );
-
-
-        if(!alreadySent){
-
-            notSentMembers.push(m);
-
-        }
-
-    });
-
-
-    notSentMembers.forEach(m => {
-
-        m.pending =
-            Number(m.pending || 0) + 1;
-
-        m.pendingFor =
+        member.pendingFor =
             funeral.name;
 
 
-        if(m.pending >= 2){
+        if(member.pending >= 2){
 
-            m.status =
+            member.status =
                 "เสนอพิจารณาตัดสมาชิก";
 
         }else{
 
-            m.status =
+            member.status =
                 "แจ้งเตือน 1 ครั้ง";
 
         }
@@ -920,7 +1100,13 @@ function closeFuneral(id){
     });
 
 
+    /* ปิดงาน */
+
     funeral.closed = true;
+
+    funeral.closedDate =
+        new Date()
+        .toLocaleDateString("th-TH");
 
 
     saveMembers();
@@ -934,26 +1120,35 @@ function closeFuneral(id){
 
     showFunerals();
 
+    showSelectedFuneral();
+
     showMembers();
 
-    showAlert();
+    showPending();
 
 
     alert(
-        `ปิดงานศพเรียบร้อย\n` +
-        `พบสมาชิกค้างส่ง ${notSentMembers.length} ครัวเรือน`
+        "ปิดงานศพเรียบร้อยแล้ว\n\n" +
+        "บันทึกผู้ค้างส่ง " +
+        notSent.length +
+        " ครัวเรือน"
     );
 
 }
 
 
-/* --------------------------------
-   แจ้งเตือน
--------------------------------- */
+/* =====================================================
+   แสดงผู้ค้างส่ง
+===================================================== */
 
-function showAlert(){
+function showPending(){
 
     if(!selectedFuneralId){
+
+        document.getElementById(
+            "pendingList"
+        ).innerHTML =
+            "กรุณาเลือกงานศพ";
 
         return;
 
@@ -963,8 +1158,8 @@ function showAlert(){
     const funeral =
         funerals.find(
             f =>
-                String(f.id) ===
-                String(selectedFuneralId)
+            String(f.id) ===
+            String(selectedFuneralId)
         );
 
 
@@ -975,25 +1170,27 @@ function showAlert(){
     }
 
 
-    const pendingMembers =
-        members.filter(m =>
-            !funeralSends.some(s =>
-                String(s.funeralId) ===
+    const pending =
+        members.filter(
+            member =>
+            !funeralSends.some(
+                send =>
+                String(send.funeralId) ===
                 String(funeral.id)
                 &&
-                String(s.memberHouse) ===
-                String(m.house)
+                String(send.memberId) ===
+                String(member.id)
             )
         );
 
 
-    if(pendingMembers.length === 0){
+    if(pending.length === 0){
 
         document.getElementById(
-            "alertBox"
+            "pendingList"
         ).innerHTML = `
 
-            <div class="notice notice-green">
+            <div class="success">
 
                 ✅ ทุกครัวเรือนส่งข้าวสารครบแล้ว
 
@@ -1008,67 +1205,56 @@ function showAlert(){
 
     let html = `
 
-        <div class="notice notice-yellow">
+        <div class="warning">
 
-            ⚠️ งานนี้ยังมี
+            ⚠️ งานศพนี้มี
             <strong>
-                ${pendingMembers.length}
+                ${pending.length}
             </strong>
-            ครัวเรือนที่ยังไม่ส่ง
+            ครัวเรือนยังไม่ส่ง
 
         </div>
 
     `;
 
 
-    pendingMembers.forEach(m => {
+    pending.forEach((member,index)=>{
 
-        const pending =
-            Number(m.pending || 0);
-
-
-        let status =
-            "🟢 ปกติ";
-
-        if(pending === 1){
-
-            status =
-                "🟡 แจ้งเตือน 1 ครั้ง";
-
-        }
-
-        if(pending >= 2){
-
-            status =
-                "🔴 เสนอพิจารณาตัดสมาชิก";
-
-        }
+        const count =
+            Number(
+                member.pending || 0
+            );
 
 
         html += `
 
-            <div class="member-card not-sent">
+        <div class="
+            member-card
+            not-sent
+        ">
 
-                🏠 <strong>
-                    ${m.name}
-                </strong>
+            <strong>
 
-                <br>
+                ${index + 1}.
+                ${escapeHTML(
+                    member.name
+                )}
 
-                บ้านเลขที่:
-                ${m.house}
+            </strong>
 
-                <br>
+            <br>
 
-                📦 ค้างส่ง:
-                ${pending} งาน
+            🏠 บ้านเลขที่:
+            ${escapeHTML(
+                member.house
+            )}
 
-                <br>
+            <br>
 
-                📌 สถานะ:
-                ${status}
+            📦 ค้างส่งเดิม:
+            ${count} ครั้ง
 
-            </div>
+        </div>
 
         `;
 
@@ -1076,16 +1262,16 @@ function showAlert(){
 
 
     document.getElementById(
-        "alertBox"
+        "pendingList"
     ).innerHTML =
         html;
 
 }
 
 
-/* --------------------------------
-   ฟังก์ชันช่วย
--------------------------------- */
+/* =====================================================
+   วันที่
+===================================================== */
 
 function formatDate(value){
 
@@ -1096,40 +1282,89 @@ function formatDate(value){
     }
 
 
-    const parts =
+    const part =
         String(value).split("-");
 
 
-    if(parts.length !== 3){
+    if(part.length !== 3){
 
         return value;
 
     }
 
 
-    return `
-        ${parts[2]}/${parts[1]}/${parts[0]}
-    `;
+    return (
+        part[2] +
+        "/" +
+        part[1] +
+        "/" +
+        part[0]
+    );
 
 }
 
 
-function escapeJS(value){
+/* =====================================================
+   ป้องกัน HTML
+===================================================== */
 
-    return String(value || "")
-        .replace(/\\/g,"\\\\")
-        .replace(/'/g,"\\'")
-        .replace(/\n/g," ");
+function escapeHTML(value){
+
+    return String(
+        value || ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
 
 }
 
 
-/* --------------------------------
+function escapeAttribute(value){
+
+    return String(
+        value || ""
+    )
+    .replace(
+        /\\/g,
+        "\\\\"
+    )
+    .replace(
+        /'/g,
+        "\\'"
+    );
+
+}
+
+
+/* =====================================================
    เริ่มระบบ
--------------------------------- */
+===================================================== */
 
 showFunerals();
+
+showSelectedFuneral();
+
 showMembers();
+
+showPending();
 
 </script>
 
