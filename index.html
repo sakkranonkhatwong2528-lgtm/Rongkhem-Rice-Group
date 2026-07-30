@@ -5,8 +5,10 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
 <title>
 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
@@ -53,7 +55,7 @@ body{
 
 
 /* =====================================================
-   พื้นหลังวงแสง
+   วงแสงพื้นหลัง
 ===================================================== */
 
 .bg-orb{
@@ -489,7 +491,7 @@ body{
 
 
 /* =====================================================
-   การ์ดแสดงความเสียใจ — ขึ้นบนสุด
+   การ์ดแสดงความเสียใจ
 ===================================================== */
 
 .condolence-card{
@@ -499,37 +501,36 @@ body{
     overflow:hidden;
 
     margin:
-        0
-        0
-        24px;
+        0 0 25px;
 
-    padding:30px;
+    padding:
+        38px 45px;
 
     display:flex;
 
     align-items:center;
 
-    gap:28px;
+    gap:35px;
 
-    border-radius:30px;
+    border-radius:32px;
 
     background:
         linear-gradient(
             135deg,
-            rgba(255,255,255,.14),
+            rgba(255,255,255,.15),
             rgba(255,255,255,.045)
         );
 
     border:
         1px solid
-        rgba(255,255,255,.20);
+        rgba(255,255,255,.22);
 
     backdrop-filter:
         blur(18px);
 
     box-shadow:
-        0 20px 60px
-        rgba(0,0,0,.24);
+        0 25px 70px
+        rgba(0,0,0,.25);
 
     animation:
         condolenceEnter
@@ -544,18 +545,18 @@ body{
 
     position:absolute;
 
-    width:300px;
-    height:300px;
+    width:350px;
+    height:350px;
 
-    right:-130px;
-    top:-150px;
+    right:-160px;
+    top:-180px;
 
     border-radius:50%;
 
     background:
         radial-gradient(
             circle,
-            rgba(180,255,210,.15),
+            rgba(255,230,150,.13),
             transparent 70%
         );
 
@@ -575,14 +576,15 @@ body{
 
     position:relative;
 
-    width:150px;
-    height:150px;
+    width:170px;
+    height:170px;
 
     flex-shrink:0;
 
     display:flex;
 
     align-items:center;
+
     justify-content:center;
 
     border-radius:50%;
@@ -596,10 +598,10 @@ body{
 
     border:
         2px solid
-        rgba(255,255,255,.18);
+        rgba(255,255,255,.20);
 
     box-shadow:
-        0 0 35px
+        0 0 40px
         rgba(180,255,200,.12);
 
     animation:
@@ -609,30 +611,33 @@ body{
         infinite;
 }
 
-.wreath-icon{
+.wreath-flower{
 
     position:relative;
 
     z-index:2;
 
-    font-size:55px;
+    font-size:65px;
+
+    filter:
+        drop-shadow(
+            0 8px 15px
+            rgba(0,0,0,.25)
+        );
 }
 
-.wreath-ring{
+.wreath-leaves{
 
     position:absolute;
 
-    inset:8px;
+    top:22px;
 
-    display:flex;
+    left:0;
+    right:0;
 
-    align-items:flex-start;
-    justify-content:space-between;
+    text-align:center;
 
-    padding:
-        6px 12px;
-
-    font-size:24px;
+    font-size:26px;
 
     opacity:.8;
 }
@@ -646,9 +651,14 @@ body{
 
     50%{
         transform:
-            translateY(-7px);
+            translateY(-8px);
     }
 }
+
+
+/* =====================================================
+   ข้อความไว้อาลัย
+===================================================== */
 
 .condolence-content{
 
@@ -657,51 +667,103 @@ body{
     z-index:2;
 
     flex:1;
+
+    text-align:left;
 }
 
 .condolence-title{
-
-    font-size:26px;
-
-    font-weight:900;
-
-    color:#fff4b0;
-}
-
-.condolence-name{
-
-    margin-top:10px;
 
     font-size:28px;
 
     font-weight:900;
 
+    color:#fff3ba;
+
+    letter-spacing:.3px;
+}
+
+.condolence-name{
+
+    margin-top:12px;
+
+    font-size:
+        clamp(
+            28px,
+            4vw,
+            40px
+        );
+
+    font-weight:900;
+
     color:#fff;
+
+    line-height:1.3;
+
+    text-shadow:
+        0 0 25px
+        rgba(255,255,255,.15);
+}
+
+.condolence-divider{
+
+    width:90px;
+
+    height:3px;
+
+    margin:
+        18px
+        0;
+
+    border-radius:10px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #fff3ba,
+            transparent
+        );
+}
+
+.condolence-group{
+
+    font-size:16px;
+
+    line-height:1.9;
+
+    color:#d9f2df;
+
+    font-style:italic;
 }
 
 .condolence-message{
 
-    margin-top:15px;
+    margin-top:16px;
 
-    line-height:1.9;
+    font-size:16px;
 
-    color:#d8f7df;
+    line-height:2;
 
-    font-size:15px;
+    color:#e5f5e8;
 }
 
-.condolence-footer{
+.condolence-final{
 
-    margin-top:18px;
+    margin-top:22px;
 
-    color:#b9e9c7;
+    font-size:19px;
+
+    font-weight:900;
+
+    color:#fff3ba;
+}
+
+.condolence-village{
+
+    margin-top:7px;
 
     font-size:14px;
-}
 
-.condolence-footer strong{
-
-    color:#fff;
+    color:#a9d8b5;
 }
 
 @keyframes condolenceEnter{
@@ -742,7 +804,7 @@ body{
 
 
 /* =====================================================
-   สรุป 3 การ์ดหลัก
+   3 การ์ดสรุปหลัก
 ===================================================== */
 
 .main-summary{
@@ -1270,12 +1332,16 @@ body{
 @keyframes funeralGlow{
 
     0%,100%{
+
         transform:scale(1);
+
         opacity:.55;
     }
 
     50%{
+
         transform:scale(1.35);
+
         opacity:.9;
     }
 }
@@ -1448,6 +1514,11 @@ body{
         );
 }
 
+
+/* =====================================================
+   ประวัติงานศพ
+===================================================== */
+
 .funeral-history{
 
     display:none;
@@ -1588,6 +1659,7 @@ body{
 @keyframes historyEnter{
 
     from{
+
         opacity:0;
 
         transform:
@@ -1595,6 +1667,7 @@ body{
     }
 
     to{
+
         opacity:1;
 
         transform:
@@ -1744,12 +1817,14 @@ body{
 @keyframes followupAlertPulse{
 
     0%,100%{
+
         box-shadow:
             0 0 15px
             rgba(255,50,50,.08);
     }
 
     50%{
+
         box-shadow:
             0 0 35px
             rgba(255,50,50,.20);
@@ -1758,7 +1833,7 @@ body{
 
 
 /* =====================================================
-   รายการสมาชิก
+   รายการสมาชิกติดตาม
 ===================================================== */
 
 .followup-item{
@@ -1847,12 +1922,10 @@ body{
 }
 
 .followup-status.warning{
-
     color:#ffd54f;
 }
 
 .followup-status.danger{
-
     color:#ff6b6b;
 }
 
@@ -2078,7 +2151,6 @@ body{
 
     .dashboard,
     .menu{
-
         gap:10px;
     }
 
@@ -2159,33 +2231,58 @@ body{
     .condolence-card{
 
         padding:
-            22px 18px;
+            28px 20px;
 
         flex-direction:column;
+
+        gap:22px;
 
         text-align:center;
     }
 
     .condolence-wreath{
 
-        width:115px;
-        height:115px;
+        width:125px;
+        height:125px;
     }
 
-    .wreath-icon{
-        font-size:42px;
+    .wreath-flower{
+        font-size:48px;
     }
 
-    .wreath-ring{
-        font-size:19px;
+    .wreath-leaves{
+        font-size:20px;
+        top:16px;
+    }
+
+    .condolence-content{
+        text-align:center;
     }
 
     .condolence-title{
-        font-size:21px;
+        font-size:22px;
     }
 
     .condolence-name{
-        font-size:23px;
+        font-size:27px;
+    }
+
+    .condolence-divider{
+        margin:
+            15px
+            auto;
+    }
+
+    .condolence-group,
+    .condolence-message{
+
+        font-size:14px;
+
+        line-height:1.9;
+    }
+
+    .condolence-final{
+        font-size:17px;
     }
 }
 
@@ -2196,10 +2293,6 @@ body{
 
 <body>
 
-
-<!-- =====================================================
-   พื้นหลัง
-===================================================== -->
 
 <div class="bg-orb orb1"></div>
 <div class="bg-orb orb2"></div>
@@ -2243,20 +2336,19 @@ body{
 
 
 <!-- =====================================================
-   🕊️ การ์ดแสดงความเสียใจ — บนสุด
+   🕊️ การ์ดแสดงความเสียใจ — อยู่บนสุด
 ===================================================== -->
 
 <section class="condolence-card">
 
-
     <div class="condolence-wreath">
 
-        <div class="wreath-icon">
+        <div class="wreath-flower">
             🪷
         </div>
 
-        <div class="wreath-ring">
-            🌿 🌿 🌿
+        <div class="wreath-leaves">
+            🌿 🌿
         </div>
 
     </div>
@@ -2277,7 +2369,10 @@ body{
         </div>
 
 
-        <div class="condolence-message">
+        <div class="condolence-divider"></div>
+
+
+        <div class="condolence-group">
 
             คณะกรรมการหมู่บ้าน
             ทีมผู้นำชุมชน
@@ -2285,13 +2380,19 @@ body{
             กลุ่มผู้สูงอายุ
             และชาวบ้านบ้านร่องเข็ม หมู่ที่ 6
 
-            <br><br>
+        </div>
+
+
+        <div class="condolence-message">
 
             ขอร่วมไว้อาลัยต่อการจากไปของผู้วายชนม์
             และขอเป็นกำลังใจแก่ครอบครัว
             และญาติพี่น้องทุกท่าน
 
-            <br><br>
+        </div>
+
+
+        <div class="condolence-message">
 
             ขอให้ผ่านพ้นช่วงเวลาแห่งความสูญเสีย
             ไปด้วยความเข้มแข็ง
@@ -2300,15 +2401,16 @@ body{
         </div>
 
 
-        <div class="condolence-footer">
+        <div class="condolence-final">
 
             ด้วยความอาลัยยิ่ง
 
-            <br>
+        </div>
 
-            <strong>
-                บ้านร่องเข็ม หมู่ที่ 6
-            </strong>
+
+        <div class="condolence-village">
+
+            บ้านร่องเข็ม หมู่ที่ 6
 
         </div>
 
@@ -2318,7 +2420,7 @@ body{
 
 
 <!-- =====================================================
-   3 การ์ดสรุป
+   3 การ์ดหลัก
 ===================================================== -->
 
 <section class="main-summary">
@@ -2682,7 +2784,7 @@ body{
 
 
 <!-- =====================================================
-   เมนู
+   เมนูระบบ
 ===================================================== -->
 
 <h2 class="section-title">
@@ -3025,7 +3127,9 @@ function parseFuneralDate(value){
     if(
         typeof value === "number"
     ){
+
         return value;
+
     }
 
 
@@ -3051,8 +3155,12 @@ function parseFuneralDate(value){
             Number(match[3]);
 
 
-        if(year > 2400){
+        if(
+            year > 2400
+        ){
+
             year -= 543;
+
         }
 
 
@@ -3061,6 +3169,7 @@ function parseFuneralDate(value){
             month - 1,
             day
         ).getTime();
+
     }
 
 
@@ -3082,8 +3191,12 @@ function parseFuneralDate(value){
             Number(match[3]);
 
 
-        if(year > 2400){
+        if(
+            year > 2400
+        ){
+
             year -= 543;
+
         }
 
 
@@ -3092,6 +3205,7 @@ function parseFuneralDate(value){
             month - 1,
             day
         ).getTime();
+
     }
 
 
@@ -3113,8 +3227,12 @@ function parseFuneralDate(value){
             Number(match[3]);
 
 
-        if(year > 2400){
+        if(
+            year > 2400
+        ){
+
             year -= 543;
+
         }
 
 
@@ -3123,6 +3241,7 @@ function parseFuneralDate(value){
             month - 1,
             day
         ).getTime();
+
     }
 
 
@@ -3135,7 +3254,9 @@ function parseFuneralDate(value){
             date.getTime()
         )
     ){
+
         return date.getTime();
+
     }
 
 
@@ -3153,8 +3274,12 @@ function formatThaiDate(value){
         parseFuneralDate(value);
 
 
-    if(!timestamp){
+    if(
+        !timestamp
+    ){
+
         return "-";
+
     }
 
 
@@ -3172,7 +3297,7 @@ function formatThaiDate(value){
 
 
 /* =====================================================
-   เรียงงานศพ
+   เรียงงานศพล่าสุด
 ===================================================== */
 
 function getSortedFunerals(){
@@ -3199,6 +3324,7 @@ function getSortedFunerals(){
 
 
             return dateB - dateA;
+
         }
     );
 }
@@ -3215,15 +3341,18 @@ function showLatestFuneral(){
             "latestFuneralName"
         );
 
+
     const dateElement =
         document.getElementById(
             "latestFuneralDate"
         );
 
+
     const houseElement =
         document.getElementById(
             "latestFuneralHouse"
         );
+
 
     const cremateElement =
         document.getElementById(
@@ -3231,7 +3360,9 @@ function showLatestFuneral(){
         );
 
 
-    if(funerals.length === 0){
+    if(
+        funerals.length === 0
+    ){
 
         nameElement.innerText =
             "ยังไม่มีข้อมูลงานศพ";
@@ -3251,6 +3382,7 @@ function showLatestFuneral(){
 
     const sorted =
         getSortedFunerals();
+
 
     const latest =
         sorted[0];
@@ -3287,7 +3419,7 @@ function showLatestFuneral(){
 
 
 /* =====================================================
-   ชื่อในข้อความแสดงความเสียใจ
+   ชื่อผู้เสียชีวิตในข้อความไว้อาลัย
 ===================================================== */
 
 function showCondolence(){
@@ -3302,12 +3434,15 @@ function showCondolence(){
         !element ||
         funerals.length === 0
     ){
+
         return;
+
     }
 
 
     const sorted =
         getSortedFunerals();
+
 
     const latest =
         sorted[0];
@@ -3359,7 +3494,9 @@ function showFuneralHistory(){
         );
 
 
-    if(funerals.length === 0){
+    if(
+        funerals.length === 0
+    ){
 
         box.innerHTML = `
 
@@ -3501,6 +3638,7 @@ function showFuneralHistory(){
                         </div>
 
                     `;
+
                 }
             )
             .join("")
@@ -3632,7 +3770,7 @@ const followupMembers = [
 
 
 /* =====================================================
-   แสดงรายการ
+   แสดงสมาชิกติดตาม
 ===================================================== */
 
 function showFollowupMembers(){
@@ -3644,7 +3782,9 @@ function showFollowupMembers(){
 
 
     if(!box){
+
         return;
+
     }
 
 
@@ -3741,6 +3881,7 @@ function showFollowupMembers(){
                     </div>
 
                 `;
+
             }
         )
         .join("");
@@ -3803,7 +3944,9 @@ function printFollowupReport(){
                         </td>
 
                     </tr>
+
                 `;
+
             }
         )
         .join("");
@@ -3823,6 +3966,7 @@ function printFollowupReport(){
         );
 
         return;
+
     }
 
 
@@ -3884,6 +4028,7 @@ function printFollowupReport(){
                 }
 
                 th{
+
                     background:#eee;
                 }
 
@@ -3910,11 +4055,13 @@ function printFollowupReport(){
             </h2>
 
             <p>
+
                 จำนวนสมาชิกที่ต้องติดตาม:
                 <strong>
                     ${followupMembers.length}
                 </strong>
                 ราย
+
             </p>
 
 
