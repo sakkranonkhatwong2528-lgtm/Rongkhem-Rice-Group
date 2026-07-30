@@ -48,14 +48,14 @@ body{
 }
 
 .container{
-    max-width:900px;
+    max-width:950px;
     margin:auto;
     padding:15px;
 }
 
 .dashboard{
     display:grid;
-    grid-template-columns:1fr 1fr;
+    grid-template-columns:repeat(2,1fr);
     gap:12px;
     margin-top:15px;
 }
@@ -84,7 +84,15 @@ body{
 }
 
 .warning-number{
+    color:#b88600;
+}
+
+.danger-number{
     color:#c62828;
+}
+
+.blue-number{
+    color:#1976d2;
 }
 
 .notice{
@@ -93,6 +101,11 @@ body{
     border-radius:14px;
     background:#e8f7e8;
     color:#1b7a1b;
+}
+
+.notice-warning{
+    background:#fff3cd;
+    color:#856404;
 }
 
 .notice-danger{
@@ -106,7 +119,7 @@ body{
 
 .menu{
     display:grid;
-    grid-template-columns:1fr 1fr;
+    grid-template-columns:repeat(2,1fr);
     gap:12px;
 }
 
@@ -139,7 +152,10 @@ body{
 
 @media(max-width:600px){
 
-    .dashboard,
+    .dashboard{
+        grid-template-columns:1fr 1fr;
+    }
+
     .menu{
         grid-template-columns:1fr 1fr;
     }
@@ -150,6 +166,14 @@ body{
 
     .header h2{
         font-size:18px;
+    }
+
+    .card{
+        padding:14px 8px;
+    }
+
+    .number{
+        font-size:24px;
     }
 
 }
@@ -188,6 +212,8 @@ body{
 <section class="dashboard">
 
 
+    <!-- สมาชิก -->
+
     <div class="card">
 
         <div class="icon">
@@ -212,6 +238,8 @@ body{
     </div>
 
 
+    <!-- งานศพ -->
+
     <div class="card">
 
         <div class="icon">
@@ -223,7 +251,7 @@ body{
         </h3>
 
         <div
-            class="number"
+            class="number blue-number"
             id="funeralCount"
         >
             0
@@ -235,6 +263,8 @@ body{
 
     </div>
 
+
+    <!-- คลัง -->
 
     <div class="card">
 
@@ -260,6 +290,8 @@ body{
     </div>
 
 
+    <!-- ค้างส่ง -->
+
     <div class="card">
 
         <div class="icon">
@@ -273,6 +305,58 @@ body{
         <div
             class="number warning-number"
             id="pendingCount"
+        >
+            0
+        </div>
+
+        <small>
+            ครัวเรือน
+        </small>
+
+    </div>
+
+
+    <!-- ค้าง 2 ครั้ง -->
+
+    <div class="card">
+
+        <div class="icon">
+            🚨
+        </div>
+
+        <h3>
+            ค้างส่ง 2 ครั้งขึ้นไป
+        </h3>
+
+        <div
+            class="number danger-number"
+            id="dangerCount"
+        >
+            0
+        </div>
+
+        <small>
+            ครัวเรือน
+        </small>
+
+    </div>
+
+
+    <!-- ปกติ -->
+
+    <div class="card">
+
+        <div class="icon">
+            ✅
+        </div>
+
+        <h3>
+            สมาชิกปกติ
+        </h3>
+
+        <div
+            class="number"
+            id="normalCount"
         >
             0
         </div>
@@ -395,7 +479,7 @@ body{
 <script>
 
 /* =====================================================
-   โหลดข้อมูลสมาชิก
+   โหลดข้อมูล
 ===================================================== */
 
 const members =
@@ -404,29 +488,17 @@ const members =
     ) || [];
 
 
-/* =====================================================
-   โหลดงานศพ
-===================================================== */
-
 const funerals =
     JSON.parse(
         localStorage.getItem("funerals")
     ) || [];
 
 
-/* =====================================================
-   โหลดรับ-จ่าย
-===================================================== */
-
 const rice =
     JSON.parse(
         localStorage.getItem("rice")
     ) || [];
 
-
-/* =====================================================
-   โหลดการส่งข้าวสารช่วยงานศพ
-===================================================== */
 
 const funeralSends =
     JSON.parse(
@@ -444,32 +516,65 @@ const memberTotal =
     : 185;
 
 
-document.getElementById(
-    "memberCount"
-).innerText =
+const pendingMembers =
+    members.filter(
+        m =>
+        Number(m.pending || 0) > 0
+    );
+
+
+const dangerMembers =
+    members.filter(
+        m =>
+        Number(m.pending || 0) >= 2
+    );
+
+
+const normalMembers =
+    members.filter(
+        m =>
+        Number(m.pending || 0) === 0
+    );
+
+
+document.getElementById("memberCount")
+    .innerText =
     memberTotal;
 
 
-document.getElementById(
-    "memberHeader"
-).innerText =
+document.getElementById("memberHeader")
+    .innerText =
     "สมาชิกทั้งหมด " +
     memberTotal +
     " ครัวเรือน";
+
+
+document.getElementById("pendingCount")
+    .innerText =
+    pendingMembers.length;
+
+
+document.getElementById("dangerCount")
+    .innerText =
+    dangerMembers.length;
+
+
+document.getElementById("normalCount")
+    .innerText =
+    normalMembers.length;
 
 
 /* =====================================================
    งานศพ
 ===================================================== */
 
-document.getElementById(
-    "funeralCount"
-).innerText =
+document.getElementById("funeralCount")
+    .innerText =
     funerals.length;
 
 
 /* =====================================================
-   คำนวณข้าวสาร
+   คลังข้าวสาร
 ===================================================== */
 
 let riceIn = 0;
@@ -477,7 +582,7 @@ let riceIn = 0;
 let riceOut = 0;
 
 
-/* รับเข้าคลัง */
+/* รับเข้า */
 
 rice.forEach(item => {
 
@@ -517,51 +622,26 @@ let riceBalance =
 
 
 if(riceBalance < 0){
-
     riceBalance = 0;
-
 }
 
 
-document.getElementById(
-    "riceCount"
-).innerText =
+document.getElementById("riceCount")
+    .innerText =
     riceBalance;
 
 
 /* =====================================================
-   สมาชิกค้างส่ง
+   ข้อความแจ้งเตือน
 ===================================================== */
 
-const pendingMembers =
-    members.filter(
-        member =>
-        Number(member.pending || 0) > 0
-    );
-
-
-document.getElementById(
-    "pendingCount"
-).innerText =
-    pendingMembers.length;
-
-
-/* =====================================================
-   สมาชิกค้าง 2 ครั้ง
-===================================================== */
-
-const dangerMembers =
-    members.filter(
-        member =>
-        Number(member.pending || 0) >= 2
-    );
+const notice =
+    document.getElementById("notice");
 
 
 if(dangerMembers.length > 0){
 
-    document.getElementById(
-        "notice"
-    ).innerHTML = `
+    notice.innerHTML = `
 
         <div class="notice notice-danger">
 
@@ -573,7 +653,8 @@ if(dangerMembers.length > 0){
 
             <br>
 
-            ไม่ส่งข้าวสารช่วยงานศพครบ 2 ครั้ง
+            ไม่ส่งข้าวสารช่วยงานศพ
+            ครบ 2 ครั้งขึ้นไป
 
             <br>
 
@@ -583,15 +664,33 @@ if(dangerMembers.length > 0){
 
     `;
 
+}else if(pendingMembers.length > 0){
+
+    notice.innerHTML = `
+
+        <div class="notice notice-warning">
+
+            ⚠️ มี
+            <strong>
+                ${pendingMembers.length}
+            </strong>
+            ครัวเรือน
+
+            <br>
+
+            ที่มีประวัติค้างส่งข้าวสารช่วยงานศพ
+
+        </div>
+
+    `;
+
 }else{
 
-    document.getElementById(
-        "notice"
-    ).innerHTML = `
+    notice.innerHTML = `
 
         <div class="notice">
 
-            ✅ ระบบกลุ่มข้าวสารพร้อมใช้งาน
+            ✅ สมาชิกปฏิบัติตามกติกาครบถ้วน
 
         </div>
 
