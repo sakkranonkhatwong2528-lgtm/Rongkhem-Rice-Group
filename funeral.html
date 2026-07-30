@@ -46,10 +46,16 @@ body{
 
 .container{
 
-    max-width:900px;
+    max-width:1000px;
 
     margin:auto;
+
 }
+
+
+/* =====================================================
+   HEADER
+===================================================== */
 
 .header{
 
@@ -74,6 +80,7 @@ body{
     box-shadow:
         0 20px 50px
         rgba(0,0,0,.25);
+
 }
 
 .header-icon{
@@ -81,6 +88,7 @@ body{
     font-size:60px;
 
     margin-bottom:10px;
+
 }
 
 .header h1{
@@ -89,20 +97,26 @@ body{
 
     font-size:
         clamp(
-            26px,
+            27px,
             5vw,
             42px
         );
+
 }
 
 .header p{
 
     margin:
-        10px 0
-        0;
+        10px 0 0;
 
     color:#c8edd2;
+
 }
+
+
+/* =====================================================
+   CARD
+===================================================== */
 
 .card{
 
@@ -125,6 +139,7 @@ body{
     box-shadow:
         0 20px 50px
         rgba(0,0,0,.22);
+
 }
 
 .card h2{
@@ -132,7 +147,13 @@ body{
     margin-top:0;
 
     color:#fff0ad;
+
 }
+
+
+/* =====================================================
+   FORM
+===================================================== */
 
 .form-grid{
 
@@ -142,6 +163,7 @@ body{
         1fr 1fr;
 
     gap:15px;
+
 }
 
 .field{
@@ -149,21 +171,26 @@ body{
     display:flex;
 
     flex-direction:column;
+
 }
 
 .field.full{
 
     grid-column:
         1 / -1;
+
 }
 
 label{
 
-    margin-bottom:6px;
+    margin-bottom:7px;
 
     color:#d5efdc;
 
     font-size:14px;
+
+    font-weight:600;
+
 }
 
 input,
@@ -187,29 +214,37 @@ select{
     outline:none;
 
     font-size:16px;
+
 }
 
 input::placeholder{
 
     color:
         rgba(255,255,255,.55);
+
 }
 
 input:focus,
 select:focus{
 
-    border-color:
-        rgba(255,235,150,.8);
+    border-color:#fff0a8;
 
     box-shadow:
         0 0 15px
-        rgba(255,220,100,.10);
+        rgba(255,230,120,.15);
+
 }
 
 select option{
 
     color:#222;
+
 }
+
+
+/* =====================================================
+   BUTTON
+===================================================== */
 
 .buttons{
 
@@ -221,6 +256,7 @@ select option{
     gap:12px;
 
     margin-top:20px;
+
 }
 
 button{
@@ -233,11 +269,10 @@ button{
 
     border-radius:13px;
 
-    cursor:pointer;
-
     font-size:16px;
 
-    font-weight:800;
+    font-weight:900;
+
 }
 
 .save-btn{
@@ -250,6 +285,7 @@ button{
             #1f9d4c,
             #126b31
         );
+
 }
 
 .cancel-btn{
@@ -259,121 +295,193 @@ button{
     background:#666;
 
     display:none;
+
 }
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
 
 .search{
 
     width:100%;
 
     margin-bottom:15px;
+
 }
 
-.funeral-item{
 
-    padding:20px;
+/* =====================================================
+   TABLE
+===================================================== */
 
-    margin-top:15px;
+.table-wrap{
 
-    border-radius:20px;
+    width:100%;
+
+    overflow-x:auto;
+
+}
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    min-width:850px;
+
+}
+
+th{
+
+    padding:13px;
+
+    text-align:left;
 
     background:
-        rgba(255,255,255,.07);
+        rgba(255,255,255,.10);
 
-    border:
+    color:#fff0ad;
+
+    border-bottom:
         1px solid
-        rgba(255,255,255,.12);
+        rgba(255,255,255,.16);
 
-    border-left:
-        5px solid
-        #eac95f;
 }
 
-.funeral-name{
+td{
 
-    font-size:22px;
+    padding:13px;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.10);
+
+    color:#dff4e4;
+
+    vertical-align:middle;
+
+}
+
+tr:hover td{
+
+    background:
+        rgba(255,255,255,.04);
+
+}
+
+
+/* =====================================================
+   NAME
+===================================================== */
+
+.deceased-name{
 
     font-weight:900;
 
     color:#fff;
+
 }
 
-.funeral-age{
+.deceased-age{
 
-    display:inline-block;
+    display:block;
 
-    margin-left:8px;
+    margin-top:4px;
 
-    font-size:15px;
+    color:#f0ccd8;
 
-    color:#f2d7dd;
+    font-size:13px;
 
     font-weight:700;
+
 }
 
-.info{
 
-    margin-top:8px;
-
-    line-height:1.9;
-
-    color:#d4edd9;
-}
+/* =====================================================
+   STATUS
+===================================================== */
 
 .status{
 
     display:inline-block;
 
-    margin-top:10px;
-
     padding:
-        6px 12px;
+        6px 10px;
 
-    border-radius:20px;
+    border-radius:18px;
 
-    font-size:13px;
+    font-size:12px;
 
     font-weight:800;
+
 }
 
 .status.pending{
 
-    color:#442f00;
+    color:#483800;
 
     background:#ffd95a;
+
 }
 
 .status.done{
 
     color:#fff;
 
-    background:#2ca45a;
+    background:#269b54;
+
 }
+
+
+/* =====================================================
+   ACTIONS
+===================================================== */
 
 .action-buttons{
 
-    display:grid;
+    display:flex;
 
-    grid-template-columns:
-        1fr 1fr;
+    gap:7px;
 
-    gap:10px;
-
-    margin-top:15px;
 }
 
 .edit-btn{
 
+    width:auto;
+
+    padding:
+        8px 12px;
+
     color:#fff;
 
     background:#1976d2;
+
+    font-size:13px;
+
 }
 
 .delete-btn{
 
+    width:auto;
+
+    padding:
+        8px 12px;
+
     color:#fff;
 
     background:#c62828;
+
+    font-size:13px;
+
 }
+
+
+/* =====================================================
+   EMPTY
+===================================================== */
 
 .empty{
 
@@ -382,7 +490,13 @@ button{
     text-align:center;
 
     color:#b8d6bf;
+
 }
+
+
+/* =====================================================
+   BACK
+===================================================== */
 
 .back{
 
@@ -395,34 +509,40 @@ button{
     text-decoration:none;
 
     padding:15px;
+
 }
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
 
 @media(max-width:650px){
 
     body{
+
         padding:10px;
+
     }
 
     .form-grid{
 
         grid-template-columns:
             1fr;
+
     }
 
     .field.full{
+
         grid-column:auto;
+
     }
 
-    .buttons,
-    .action-buttons{
+    .buttons{
 
         grid-template-columns:
             1fr;
-    }
 
-    .funeral-name{
-
-        font-size:20px;
     }
 
 }
@@ -553,8 +673,7 @@ button{
 
             <input
                 id="death"
-                type="text"
-                placeholder="วว/ดด/ปปปป"
+                type="date"
             >
 
         </div>
@@ -570,8 +689,7 @@ button{
 
             <input
                 id="cremate"
-                type="text"
-                placeholder="วว/ดด/ปปปป"
+                type="date"
             >
 
         </div>
@@ -591,8 +709,8 @@ button{
                     ยังไม่ดำเนินการ
                 </option>
 
-                <option value="ดำเนินการแล้ว">
-                    ดำเนินการแล้ว
+                <option value="นำข้าวสารช่วยเหลือแล้ว">
+                    นำข้าวสารช่วยเหลือแล้ว
                 </option>
 
             </select>
@@ -605,9 +723,11 @@ button{
 
     <div class="buttons">
 
+
         <button
+            id="saveButton"
             class="save-btn"
-            onclick="saveFuneral()"
+            type="button"
         >
             💾 บันทึกข้อมูล
         </button>
@@ -616,10 +736,11 @@ button{
         <button
             id="cancelButton"
             class="cancel-btn"
-            onclick="cancelEdit()"
+            type="button"
         >
             ยกเลิกแก้ไข
         </button>
+
 
     </div>
 
@@ -627,7 +748,7 @@ button{
 
 
 <!-- =====================================================
-     รายการ
+     LIST
 ===================================================== -->
 
 <div class="card">
@@ -638,24 +759,74 @@ button{
 
 
     <input
-        class="search"
         id="search"
+        class="search"
         type="text"
         placeholder="🔎 ค้นหาชื่อ บ้านเลขที่ หรือผู้แจ้ง"
-        oninput="showList()"
     >
 
 
-    <div id="list"></div>
+    <div class="table-wrap">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        ลำดับ
+                    </th>
+
+                    <th>
+                        ผู้เสียชีวิต
+                    </th>
+
+                    <th>
+                        บ้านเลขที่
+                    </th>
+
+                    <th>
+                        ผู้แจ้ง
+                    </th>
+
+                    <th>
+                        วันที่เสียชีวิต
+                    </th>
+
+                    <th>
+                        วันที่ฌาปนกิจ
+                    </th>
+
+                    <th>
+                        สถานะ
+                    </th>
+
+                    <th>
+                        จัดการ
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="funeralList">
+
+            </tbody>
+
+        </table>
+
+    </div>
 
 </div>
 
 
 <a
-    class="back"
     href="index.html"
+    class="back"
 >
-    ← กลับหน้าหลัก
+    ⬅ กลับหน้าหลัก
 </a>
 
 
@@ -665,101 +836,732 @@ button{
 <script>
 
 /* =====================================================
-   โหลดข้อมูล
+   DATA
 ===================================================== */
 
 let funerals =
-    JSON.parse(
-        localStorage.getItem(
-            "funerals"
-        )
-    ) || [];
+    loadFunerals();
 
 
-let editId = null;
+let editingId =
+    null;
 
 
 /* =====================================================
-   ทำข้อมูลเดิมให้มีฟิลด์ครบ
+   LOAD
 ===================================================== */
 
-funerals =
-    funerals.map(
-        (item,index) => ({
+function loadFunerals(){
 
-            ...item,
+    try{
 
-            id:
-                item.id ||
-                "funeral-" +
-                Date.now() +
-                "-" +
-                index,
-
-            name:
-                item.name ||
-                "",
-
-            age:
-                Number(
-                    item.age ||
-                    item.years ||
-                    item.ageYears ||
-                    0
-                ),
-
-            house:
-                item.house ||
-                "",
-
-            reporter:
-                item.reporter ||
-                "",
-
-            death:
-                item.death ||
-                "",
-
-            cremate:
-                item.cremate ||
-                "",
-
-            status:
-                item.status ||
-                "ยังไม่ดำเนินการ"
-
-        })
-    );
+        const data =
+            JSON.parse(
+                localStorage.getItem(
+                    "funerals"
+                )
+            );
 
 
-saveData();
+        if(
+            Array.isArray(data)
+        ){
+
+            return data.map(
+                (
+                    item,
+                    index
+                ) => normalizeFuneral(
+                    item,
+                    index
+                )
+            );
+
+        }
+
+    }
+    catch(error){
+
+        console.error(
+            error
+        );
+
+    }
+
+
+    return [];
+
+}
 
 
 /* =====================================================
-   บันทึก LocalStorage
+   NORMALIZE
 ===================================================== */
 
-function saveData(){
+function normalizeFuneral(
+    item,
+    index
+){
+
+    return {
+
+        id:
+
+            String(
+                item.id ??
+                item.funeralId ??
+                (
+                    "funeral-" +
+                    Date.now() +
+                    "-" +
+                    index
+                )
+            ),
+
+        name:
+
+            String(
+                item.name ??
+                ""
+            ).trim(),
+
+        age:
+
+            item.age ??
+            "",
+
+        house:
+
+            String(
+                item.house ??
+                ""
+            ).trim(),
+
+        reporter:
+
+            String(
+                item.reporter ??
+                item.informer ??
+                item.contact ??
+                ""
+            ).trim(),
+
+        death:
+
+            normalizeDate(
+                item.death
+            ),
+
+        cremate:
+
+            normalizeDate(
+                item.cremate
+            ),
+
+        status:
+
+            item.status ??
+            "ยังไม่ดำเนินการ",
+
+        timestamp:
+
+            Number(
+                item.timestamp ??
+                item.createdAt ??
+                Date.now()
+            )
+
+    };
+
+}
+
+
+/* =====================================================
+   DATE
+===================================================== */
+
+function normalizeDate(
+    value
+){
+
+    if(!value){
+
+        return "";
+
+    }
+
+
+    const text =
+        String(
+            value
+        );
+
+
+    if(
+        /^\d{4}-\d{2}-\d{2}$/
+        .test(text)
+    ){
+
+        return text;
+
+    }
+
+
+    return text;
+
+}
+
+
+/* =====================================================
+   SAVE
+===================================================== */
+
+function saveAll(){
 
     localStorage.setItem(
+
         "funerals",
+
         JSON.stringify(
             funerals
         )
+
     );
 
 }
 
 
 /* =====================================================
-   บันทึกข้อมูล
+   DATE DISPLAY THAI
+===================================================== */
+
+function displayDate(
+    value
+){
+
+    if(!value){
+
+        return "-";
+
+    }
+
+
+    if(
+        /^\d{4}-\d{2}-\d{2}$/
+        .test(value)
+    ){
+
+        const parts =
+            value.split("-");
+
+
+        const year =
+            Number(
+                parts[0]
+            );
+
+
+        const month =
+            Number(
+                parts[1]
+            );
+
+
+        const day =
+            Number(
+                parts[2]
+            );
+
+
+        return (
+            day
+            .toString()
+            .padStart(
+                2,
+                "0"
+            )
+            +
+
+            "/" +
+
+            month
+            .toString()
+            .padStart(
+                2,
+                "0"
+            )
+
+            +
+
+            "/" +
+
+            year
+        );
+
+    }
+
+
+    return value;
+
+}
+
+
+/* =====================================================
+   DATE SORT
+===================================================== */
+
+function dateValue(
+    value
+){
+
+    if(!value){
+
+        return 0;
+
+    }
+
+
+    if(
+        /^\d{4}-\d{2}-\d{2}$/
+        .test(value)
+    ){
+
+        return new Date(
+            value
+        ).getTime();
+
+    }
+
+
+    const parts =
+        value
+        .replaceAll(
+            "-",
+            "/"
+        )
+        .split("/");
+
+
+    if(
+        parts.length === 3
+    ){
+
+        let year =
+            Number(
+                parts[2]
+            );
+
+
+        if(
+            year > 2400
+        ){
+
+            year -= 543;
+
+        }
+
+
+        return new Date(
+            year,
+            Number(
+                parts[1]
+            ) - 1,
+            Number(
+                parts[0]
+            )
+        ).getTime();
+
+    }
+
+
+    return 0;
+
+}
+
+
+/* =====================================================
+   ESCAPE
+===================================================== */
+
+function escapeHTML(
+    value
+){
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+    div.textContent =
+        String(
+            value ??
+            ""
+        );
+
+    return div.innerHTML;
+
+}
+
+
+/* =====================================================
+   RENDER
+===================================================== */
+
+function render(){
+
+    const tbody =
+        document.getElementById(
+            "funeralList"
+        );
+
+
+    const keyword =
+        document
+        .getElementById(
+            "search"
+        )
+        .value
+        .trim()
+        .toLowerCase();
+
+
+    const filtered =
+
+        funerals
+        .slice()
+        .sort(
+            (
+                a,
+                b
+            ) =>
+
+                dateValue(
+                    b.death
+                )
+                -
+                dateValue(
+                    a.death
+                )
+        )
+        .filter(
+            item => {
+
+                const text = (
+
+                    item.name +
+                    " " +
+                    item.house +
+                    " " +
+                    item.reporter
+
+                )
+                .toLowerCase();
+
+
+                return text.includes(
+                    keyword
+                );
+
+            }
+        );
+
+
+    if(
+        filtered.length === 0
+    ){
+
+        tbody.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="8"
+                    style="text-align:center;padding:30px"
+                >
+
+                    📭 ยังไม่มีรายการแจ้งเสียชีวิต
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    tbody.innerHTML =
+
+        filtered
+        .map(
+            (
+                item,
+                index
+            ) => `
+
+                <tr>
+
+                    <td>
+                        ${index + 1}
+                    </td>
+
+
+                    <td>
+
+                        <div
+                            class="deceased-name"
+                        >
+
+                            ${escapeHTML(
+                                item.name
+                            )}
+
+                        </div>
+
+
+                        ${
+                            item.age
+
+                            ?
+
+                            `
+                                <span
+                                    class="deceased-age"
+                                >
+
+                                    🎂 อายุ
+                                    ${escapeHTML(
+                                        item.age
+                                    )}
+                                    ปี
+
+                                </span>
+
+                            `
+
+                            :
+
+                            ""
+
+                        }
+
+                    </td>
+
+
+                    <td>
+                        ${escapeHTML(
+                            item.house ||
+                            "-"
+                        )}
+                    </td>
+
+
+                    <td>
+
+                        ${
+                            escapeHTML(
+                                item.reporter ||
+                                "-"
+                            )
+                        }
+
+                    </td>
+
+
+                    <td>
+
+                        ${escapeHTML(
+                            displayDate(
+                                item.death
+                            )
+                        )}
+
+                    </td>
+
+
+                    <td>
+
+                        ${escapeHTML(
+                            displayDate(
+                                item.cremate
+                            )
+                        )}
+
+                    </td>
+
+
+                    <td>
+
+                        <span
+                            class="
+                                status
+                                ${
+                                    item.status ===
+                                    "นำข้าวสารช่วยเหลือแล้ว"
+
+                                    ?
+
+                                    "done"
+
+                                    :
+
+                                    "pending"
+                                }
+                            "
+                        >
+
+                            ${escapeHTML(
+                                item.status
+                            )}
+
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        <div
+                            class="action-buttons"
+                        >
+
+                            <button
+                                class="edit-btn"
+                                type="button"
+                                onclick="
+                                    editFuneral(
+                                        '${item.id}'
+                                    )
+                                "
+                            >
+
+                                ✏️ แก้ไข
+
+                            </button>
+
+
+                            <button
+                                class="delete-btn"
+                                type="button"
+                                onclick="
+                                    deleteFuneral(
+                                        '${item.id}'
+                                    )
+                                "
+                            >
+
+                                🗑️ ลบ
+
+                            </button>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            `
+        )
+        .join("");
+
+}
+
+
+/* =====================================================
+   CLEAR
+===================================================== */
+
+function clearForm(){
+
+    document
+    .getElementById(
+        "name"
+    )
+    .value =
+        "";
+
+
+    document
+    .getElementById(
+        "age"
+    )
+    .value =
+        "";
+
+
+    document
+    .getElementById(
+        "house"
+    )
+    .value =
+        "";
+
+
+    document
+    .getElementById(
+        "reporter"
+    )
+    .value =
+        "";
+
+
+    document
+    .getElementById(
+        "death"
+    )
+    .value =
+        "";
+
+
+    document
+    .getElementById(
+        "cremate"
+    )
+    .value =
+        "";
+
+
+    document
+    .getElementById(
+        "status"
+    )
+    .value =
+        "ยังไม่ดำเนินการ";
+
+
+    editingId =
+        null;
+
+
+    document
+    .getElementById(
+        "formTitle"
+    )
+    .innerText =
+        "➕ เพิ่มข้อมูลผู้เสียชีวิต";
+
+
+    document
+    .getElementById(
+        "cancelButton"
+    )
+    .style.display =
+        "none";
+
+}
+
+
+/* =====================================================
+   SAVE
 ===================================================== */
 
 function saveFuneral(){
 
-
     const name =
-        document.getElementById(
+        document
+        .getElementById(
             "name"
         )
         .value
@@ -768,7 +1570,8 @@ function saveFuneral(){
 
     const age =
         Number(
-            document.getElementById(
+            document
+            .getElementById(
                 "age"
             )
             .value
@@ -776,7 +1579,8 @@ function saveFuneral(){
 
 
     const house =
-        document.getElementById(
+        document
+        .getElementById(
             "house"
         )
         .value
@@ -784,7 +1588,8 @@ function saveFuneral(){
 
 
     const reporter =
-        document.getElementById(
+        document
+        .getElementById(
             "reporter"
         )
         .value
@@ -792,30 +1597,31 @@ function saveFuneral(){
 
 
     const death =
-        document.getElementById(
+        document
+        .getElementById(
             "death"
         )
-        .value
-        .trim();
+        .value;
 
 
     const cremate =
-        document.getElementById(
+        document
+        .getElementById(
             "cremate"
         )
-        .value
-        .trim();
+        .value;
 
 
     const status =
-        document.getElementById(
+        document
+        .getElementById(
             "status"
         )
         .value;
 
 
     /* =========================
-       ตรวจสอบ
+       CHECK
     ========================= */
 
     if(!name){
@@ -825,6 +1631,7 @@ function saveFuneral(){
         );
 
         return;
+
     }
 
 
@@ -839,6 +1646,7 @@ function saveFuneral(){
         );
 
         return;
+
     }
 
 
@@ -849,6 +1657,7 @@ function saveFuneral(){
         );
 
         return;
+
     }
 
 
@@ -859,6 +1668,7 @@ function saveFuneral(){
         );
 
         return;
+
     }
 
 
@@ -869,60 +1679,70 @@ function saveFuneral(){
         );
 
         return;
+
     }
 
 
-    /* =================================================
-       แก้ไข
-    ================================================= */
+    /* =========================
+       EDIT
+    ========================= */
 
     if(
-        editId !== null
+        editingId !== null
     ){
 
         const item =
             funerals.find(
-                r =>
-                    String(r.id) ===
-                    String(editId)
+                row =>
+                    String(
+                        row.id
+                    ) ===
+                    String(
+                        editingId
+                    )
             );
 
 
         if(!item){
 
             alert(
-                "ไม่พบรายการ"
+                "ไม่พบข้อมูลที่ต้องการแก้ไข"
             );
 
-            cancelEdit();
-
             return;
+
         }
 
 
         item.name =
             name;
 
+
         item.age =
             age;
+
 
         item.house =
             house;
 
+
         item.reporter =
             reporter;
+
 
         item.death =
             death;
 
+
         item.cremate =
             cremate;
+
 
         item.status =
             status;
 
 
-        saveData();
+        saveAll();
 
 
         alert(
@@ -930,17 +1750,18 @@ function saveFuneral(){
         );
 
 
-        cancelEdit();
+        clearForm();
 
-        showList();
+        render();
 
         return;
+
     }
 
 
-    /* =================================================
-       เพิ่มใหม่
-    ================================================= */
+    /* =========================
+       NEW
+    ========================= */
 
     funerals.push({
 
@@ -949,11 +1770,11 @@ function saveFuneral(){
             Date.now() +
             "-" +
             Math.random()
-                .toString(36)
-                .substring(
-                    2,
-                    8
-                ),
+            .toString(36)
+            .slice(
+                2,
+                8
+            ),
 
         name:
             name,
@@ -974,17 +1795,20 @@ function saveFuneral(){
             cremate,
 
         status:
-            status
+            status,
+
+        timestamp:
+            Date.now()
 
     });
 
 
-    saveData();
+    saveAll();
 
 
     clearForm();
 
-    showList();
+    render();
 
 
     alert(
@@ -995,77 +1819,90 @@ function saveFuneral(){
 
 
 /* =====================================================
-   แก้ไขข้อมูล
+   EDIT
 ===================================================== */
 
-function editFuneral(id){
-
+function editFuneral(
+    id
+){
 
     const item =
         funerals.find(
-            r =>
-                String(r.id) ===
-                String(id)
+            row =>
+                String(
+                    row.id
+                ) ===
+                String(
+                    id
+                )
         );
 
 
     if(!item){
 
         alert(
-            "ไม่พบรายการ"
+            "ไม่พบข้อมูล"
         );
 
         return;
+
     }
 
 
-    editId =
+    editingId =
         id;
 
 
-    document.getElementById(
+    document
+    .getElementById(
         "name"
     )
     .value =
         item.name || "";
 
 
-    document.getElementById(
+    document
+    .getElementById(
         "age"
     )
     .value =
         item.age || "";
 
 
-    document.getElementById(
+    document
+    .getElementById(
         "house"
     )
     .value =
         item.house || "";
 
 
-    document.getElementById(
+    document
+    .getElementById(
         "reporter"
     )
     .value =
         item.reporter || "";
 
 
-    document.getElementById(
+    document
+    .getElementById(
         "death"
     )
     .value =
         item.death || "";
 
 
-    document.getElementById(
+    document
+    .getElementById(
         "cremate"
     )
     .value =
         item.cremate || "";
 
 
-    document.getElementById(
+    document
+    .getElementById(
         "status"
     )
     .value =
@@ -1073,14 +1910,16 @@ function editFuneral(id){
         "ยังไม่ดำเนินการ";
 
 
-    document.getElementById(
+    document
+    .getElementById(
         "formTitle"
     )
     .innerText =
         "✏️ แก้ไขข้อมูลผู้เสียชีวิต";
 
 
-    document.getElementById(
+    document
+    .getElementById(
         "cancelButton"
     )
     .style.display =
@@ -1099,108 +1938,36 @@ function editFuneral(id){
 
 
 /* =====================================================
-   ยกเลิกแก้ไข
+   DELETE
 ===================================================== */
 
-function cancelEdit(){
-
-    editId =
-        null;
-
-
-    clearForm();
-
-
-    document.getElementById(
-        "formTitle"
-    )
-    .innerText =
-        "➕ เพิ่มข้อมูลผู้เสียชีวิต";
-
-
-    document.getElementById(
-        "cancelButton"
-    )
-    .style.display =
-        "none";
-
-}
-
-
-/* =====================================================
-   ล้างฟอร์ม
-===================================================== */
-
-function clearForm(){
-
-    document.getElementById(
-        "name"
-    ).value =
-        "";
-
-
-    document.getElementById(
-        "age"
-    ).value =
-        "";
-
-
-    document.getElementById(
-        "house"
-    ).value =
-        "";
-
-
-    document.getElementById(
-        "reporter"
-    ).value =
-        "";
-
-
-    document.getElementById(
-        "death"
-    ).value =
-        "";
-
-
-    document.getElementById(
-        "cremate"
-    ).value =
-        "";
-
-
-    document.getElementById(
-        "status"
-    ).value =
-        "ยังไม่ดำเนินการ";
-
-}
-
-
-/* =====================================================
-   ลบข้อมูล
-===================================================== */
-
-function deleteFuneral(id){
+function deleteFuneral(
+    id
+){
 
     const item =
         funerals.find(
-            r =>
-                String(r.id) ===
-                String(id)
+            row =>
+                String(
+                    row.id
+                ) ===
+                String(
+                    id
+                )
         );
 
 
     if(!item){
 
         return;
+
     }
 
 
-    const confirmed =
+    const confirmDelete =
         confirm(
 
-            "ต้องการลบข้อมูลนี้หรือไม่?\n\n" +
+            "ต้องการลบงานศพนี้หรือไม่?\n\n" +
 
             item.name +
 
@@ -1212,321 +1979,76 @@ function deleteFuneral(id){
 
             "\nบ้านเลขที่ " +
 
-            item.house +
-
-            "\nผู้แจ้ง " +
-
-            item.reporter
+            item.house
 
         );
 
 
-    if(!confirmed){
+    if(!confirmDelete){
 
         return;
+
     }
 
 
     funerals =
         funerals.filter(
-            r =>
-                String(r.id) !==
-                String(id)
+            row =>
+                String(
+                    row.id
+                ) !==
+                String(
+                    id
+                )
         );
 
 
-    saveData();
+    saveAll();
 
-    showList();
-
-
-    alert(
-        "ลบข้อมูลเรียบร้อยแล้ว"
-    );
+    render();
 
 }
 
 
 /* =====================================================
-   แสดงรายการ
+   EVENT
 ===================================================== */
 
-function showList(){
-
-    const keyword =
-        document.getElementById(
-            "search"
-        )
-        .value
-        .trim()
-        .toLowerCase();
-
-
-    const filtered =
-        funerals.filter(
-            item => {
-
-                const name =
-                    String(
-                        item.name ||
-                        ""
-                    )
-                    .toLowerCase();
+document
+.getElementById(
+    "saveButton"
+)
+.addEventListener(
+    "click",
+    saveFuneral
+);
 
 
-                const house =
-                    String(
-                        item.house ||
-                        ""
-                    )
-                    .toLowerCase();
+document
+.getElementById(
+    "cancelButton"
+)
+.addEventListener(
+    "click",
+    clearForm
+);
 
 
-                const reporter =
-                    String(
-                        item.reporter ||
-                        ""
-                    )
-                    .toLowerCase();
-
-
-                return (
-
-                    name.includes(
-                        keyword
-                    )
-
-                    ||
-
-                    house.includes(
-                        keyword
-                    )
-
-                    ||
-
-                    reporter.includes(
-                        keyword
-                    )
-
-                );
-
-            }
-        );
-
-
-    let html = "";
-
-
-    filtered.forEach(
-        (item,index) => {
-
-            const statusClass =
-                item.status ===
-                "ดำเนินการแล้ว"
-                    ? "done"
-                    : "pending";
-
-
-            html += `
-
-                <div
-                    class="funeral-item"
-                >
-
-                    <div
-                        class="funeral-name"
-                    >
-
-                        ${index + 1}.
-                        ${escapeHTML(
-                            item.name
-                        )}
-
-                        <span
-                            class="funeral-age"
-                        >
-                            อายุ
-                            ${Number(
-                                item.age || 0
-                            )}
-                            ปี
-                        </span>
-
-                    </div>
-
-
-                    <div
-                        class="info"
-                    >
-
-                        🏠 บ้านเลขที่:
-                        ${escapeHTML(
-                            item.house
-                        )}
-
-                        <br>
-
-                        👨‍👩‍👧 ผู้แจ้งการเสียชีวิต:
-                        ${escapeHTML(
-                            item.reporter || "-"
-                        )}
-
-                        <br>
-
-                        📅 วันที่เสียชีวิต:
-                        ${escapeHTML(
-                            item.death
-                        )}
-
-                        <br>
-
-                        🔥 วันที่ฌาปนกิจ:
-                        ${escapeHTML(
-                            item.cremate ||
-                            "-"
-                        )}
-
-                        <br>
-
-                        📌 สถานะ:
-
-                        <span
-                            class="
-                                status
-                                ${statusClass}
-                            "
-                        >
-
-                            ${escapeHTML(
-                                item.status
-                            )}
-
-                        </span>
-
-                    </div>
-
-
-                    <div
-                        class="action-buttons"
-                    >
-
-                        <button
-                            class="edit-btn"
-                            onclick="
-                                editFuneral(
-                                    '${escapeAttribute(
-                                        item.id
-                                    )}'
-                                )
-                            "
-                        >
-                            ✏️ แก้ไข
-                        </button>
-
-
-                        <button
-                            class="delete-btn"
-                            onclick="
-                                deleteFuneral(
-                                    '${escapeAttribute(
-                                        item.id
-                                    )}'
-                                )
-                            "
-                        >
-                            🗑️ ลบ
-                        </button>
-
-                    </div>
-
-                </div>
-
-            `;
-
-        }
-    );
-
-
-    if(
-        filtered.length === 0
-    ){
-
-        html = `
-
-            <div class="empty">
-
-                📭 ยังไม่มีข้อมูลการแจ้งเสียชีวิต
-
-            </div>
-
-        `;
-    }
-
-
-    document.getElementById(
-        "list"
-    )
-    .innerHTML =
-        html;
-
-}
+document
+.getElementById(
+    "search"
+)
+.addEventListener(
+    "input",
+    render
+);
 
 
 /* =====================================================
-   ป้องกัน HTML
+   INIT
 ===================================================== */
 
-function escapeHTML(value){
-
-    return String(
-        value || ""
-    )
-    .replace(
-        /&/g,
-        "&amp;"
-    )
-    .replace(
-        /</g,
-        "&lt;"
-    )
-    .replace(
-        />/g,
-        "&gt;"
-    )
-    .replace(
-        /"/g,
-        "&quot;"
-    )
-    .replace(
-        /'/g,
-        "&#039;"
-    );
-
-}
-
-
-function escapeAttribute(value){
-
-    return String(
-        value || ""
-    )
-    .replace(
-        /\\/g,
-        "\\\\"
-    )
-    .replace(
-        /'/g,
-        "\\'"
-    );
-
-}
-
-
-/* =====================================================
-   เริ่มระบบ
-===================================================== */
-
-showList();
+render();
 
 </script>
 
