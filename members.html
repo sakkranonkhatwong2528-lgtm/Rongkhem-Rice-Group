@@ -1,27 +1,663 @@
-<div class="member-card">
+<!DOCTYPE html>
+<html lang="th">
 
-    <strong>
-        ${m.name}
-    </strong>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <br>
+<title>ทะเบียนสมาชิกกลุ่มข้าวสาร</title>
 
-    🏠 บ้านเลขที่:
-    ${m.house}
+<style>
 
-    <br>
+*{
+    box-sizing:border-box;
+}
 
-    📦 ค้างส่ง:
-    ${Number(m.pending || 0)} ครั้ง
+body{
+    margin:0;
+    font-family:Tahoma,sans-serif;
+    background:#f3f7f0;
+    color:#333;
+}
 
-    <br>
+.header{
+    background:linear-gradient(135deg,#176b2c,#4caf50);
+    color:white;
+    padding:22px 15px;
+    text-align:center;
+}
 
-    ${
-        Number(m.pending || 0) === 0
-        ? `<span class="ok">🟢 ปกติ</span>`
-        : Number(m.pending || 0) === 1
-        ? `<span class="warning">🟡 แจ้งเตือน 1 ครั้ง</span>`
-        : `<span class="danger">🔴 เสนอพิจารณาตัดสมาชิก</span>`
-    }
+.container{
+    max-width:850px;
+    margin:auto;
+    padding:15px;
+}
+
+.box{
+    background:white;
+    padding:18px;
+    margin-bottom:15px;
+    border-radius:16px;
+    box-shadow:0 3px 10px rgba(0,0,0,.08);
+}
+
+input{
+    width:100%;
+    padding:13px;
+    margin:6px 0;
+    border:1px solid #ccc;
+    border-radius:10px;
+    font-size:16px;
+}
+
+button{
+    width:100%;
+    padding:13px;
+    margin-top:8px;
+    border:0;
+    border-radius:10px;
+    font-size:16px;
+    color:white;
+    background:#228B22;
+}
+
+button.edit{
+    background:#1976d2;
+}
+
+button.delete{
+    background:#c62828;
+}
+
+button.cancel{
+    background:#777;
+}
+
+.summary{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.summary-card{
+    background:#f8fff8;
+    padding:15px;
+    border-radius:12px;
+    text-align:center;
+}
+
+.number{
+    font-size:28px;
+    font-weight:bold;
+    color:#228B22;
+}
+
+.member-card{
+    background:#fafafa;
+    margin-top:10px;
+    padding:15px;
+    border-radius:12px;
+    border-left:5px solid #228B22;
+}
+
+.ok{
+    color:#1b7a1b;
+    font-weight:bold;
+}
+
+.warning{
+    color:#b88600;
+    font-weight:bold;
+}
+
+.danger{
+    color:#c62828;
+    font-weight:bold;
+}
+
+.hidden{
+    display:none;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+<h1>👥 ทะเบียนสมาชิก</h1>
+
+<p>กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</p>
 
 </div>
+
+
+<div class="container">
+
+
+<div class="box">
+
+<div class="summary">
+
+<div class="summary-card">
+👥 สมาชิกทั้งหมด
+<div class="number" id="totalMember">185</div>
+ครัวเรือน
+</div>
+
+<div class="summary-card">
+⚠️ ค้างส่ง
+<div class="number" id="pendingMember">0</div>
+ครัวเรือน
+</div>
+
+</div>
+
+</div>
+
+
+<div class="box">
+
+<h2 id="formTitle">➕ เพิ่มสมาชิก</h2>
+
+<input
+    id="name"
+    type="text"
+    placeholder="ชื่อ-นามสกุล"
+>
+
+<input
+    id="house"
+    type="text"
+    placeholder="บ้านเลขที่"
+>
+
+<button id="saveButton" onclick="saveMember()">
+💾 บันทึกสมาชิก
+</button>
+
+<button
+    id="cancelButton"
+    class="cancel hidden"
+    onclick="cancelEdit()"
+>
+ยกเลิกแก้ไข
+</button>
+
+</div>
+
+
+<div class="box">
+
+<h2>🔎 ค้นหาสมาชิก</h2>
+
+<input
+    id="search"
+    type="text"
+    placeholder="ค้นหาชื่อหรือบ้านเลขที่"
+    oninput="showMembers()"
+>
+
+<div id="memberList"></div>
+
+</div>
+
+
+<a
+    href="ดัชนี.html"
+    style="
+        display:block;
+        text-align:center;
+        padding:15px;
+        color:#228B22;
+        text-decoration:none;
+    "
+>
+← กลับหน้าหลัก
+</a>
+
+
+</div>
+
+
+<script>
+
+let members =
+    JSON.parse(localStorage.getItem("members")) || [];
+
+let editId = null;
+
+
+/* เตรียมข้อมูล */
+
+members = members.map((m,index)=>({
+
+    ...m,
+
+    id: m.id || Date.now() + index,
+
+    pending: Number(m.pending || 0),
+
+    pendingFor: m.pendingFor || "",
+
+    status: m.status || "ปกติ"
+
+}));
+
+
+saveAll();
+
+
+function saveAll(){
+
+    localStorage.setItem(
+        "members",
+        JSON.stringify(members)
+    );
+
+}
+
+
+/* บันทึกสมาชิกใหม่ หรือแก้ไข */
+
+function saveMember(){
+
+    const name =
+        document.getElementById("name")
+        .value.trim();
+
+    const house =
+        document.getElementById("house")
+        .value.trim();
+
+
+    if(!name){
+
+        alert("กรุณากรอกชื่อ-นามสกุล");
+        return;
+
+    }
+
+
+    if(!house){
+
+        alert("กรุณากรอกบ้านเลขที่");
+        return;
+
+    }
+
+
+    /* โหมดแก้ไข */
+
+    if(editId !== null){
+
+        const member =
+            members.find(
+                m => String(m.id) === String(editId)
+            );
+
+
+        if(member){
+
+            member.name = name;
+            member.house = house;
+
+            saveAll();
+
+            alert("แก้ไขข้อมูลสมาชิกเรียบร้อยแล้ว");
+
+        }
+
+        cancelEdit();
+
+        showMembers();
+
+        return;
+    }
+
+
+    /* ป้องกันบ้านเลขที่ซ้ำ */
+
+    const duplicate =
+        members.some(
+            m => String(m.house) === String(house)
+        );
+
+
+    if(duplicate){
+
+        alert("บ้านเลขที่นี้มีสมาชิกอยู่แล้ว");
+
+        return;
+
+    }
+
+
+    members.push({
+
+        id: Date.now(),
+
+        name:name,
+
+        house:house,
+
+        pending:0,
+
+        pendingFor:"",
+
+        status:"ปกติ"
+
+    });
+
+
+    saveAll();
+
+
+    clearForm();
+
+    showMembers();
+
+
+    alert("เพิ่มสมาชิกเรียบร้อยแล้ว");
+
+}
+
+
+/* เริ่มแก้ไข */
+
+function editMember(id){
+
+    const member =
+        members.find(
+            m => String(m.id) === String(id)
+        );
+
+
+    if(!member){
+
+        alert("ไม่พบข้อมูลสมาชิก");
+
+        return;
+
+    }
+
+
+    editId = id;
+
+
+    document.getElementById("name").value =
+        member.name || "";
+
+    document.getElementById("house").value =
+        member.house || "";
+
+
+    document.getElementById("formTitle").innerText =
+        "✏️ แก้ไขข้อมูลสมาชิก";
+
+
+    document.getElementById("saveButton").innerText =
+        "💾 บันทึกการแก้ไข";
+
+
+    document.getElementById("cancelButton")
+        .classList.remove("hidden");
+
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+/* ยกเลิก */
+
+function cancelEdit(){
+
+    editId = null;
+
+    clearForm();
+
+    document.getElementById("formTitle").innerText =
+        "➕ เพิ่มสมาชิก";
+
+    document.getElementById("saveButton").innerText =
+        "💾 บันทึกสมาชิก";
+
+    document.getElementById("cancelButton")
+        .classList.add("hidden");
+
+}
+
+
+/* ล้างฟอร์ม */
+
+function clearForm(){
+
+    document.getElementById("name").value = "";
+
+    document.getElementById("house").value = "";
+
+}
+
+
+/* ลบสมาชิก */
+
+function deleteMember(id){
+
+    const member =
+        members.find(
+            m => String(m.id) === String(id)
+        );
+
+
+    if(!member){
+
+        return;
+
+    }
+
+
+    const ok =
+        confirm(
+            "ต้องการลบสมาชิก " +
+            member.name +
+            " หรือไม่?"
+        );
+
+
+    if(!ok){
+
+        return;
+
+    }
+
+
+    members =
+        members.filter(
+            m => String(m.id) !== String(id)
+        );
+
+
+    saveAll();
+
+    showMembers();
+
+}
+
+
+/* แสดงสมาชิก */
+
+function showMembers(){
+
+    const keyword =
+        document.getElementById("search")
+        .value
+        .trim()
+        .toLowerCase();
+
+
+    const filtered =
+        members.filter(m=>{
+
+            const name =
+                String(m.name || "")
+                .toLowerCase();
+
+            const house =
+                String(m.house || "")
+                .toLowerCase();
+
+            return (
+                name.includes(keyword) ||
+                house.includes(keyword)
+            );
+
+        });
+
+
+    let html = "";
+
+
+    filtered.forEach((m,index)=>{
+
+        const pending =
+            Number(m.pending || 0);
+
+
+        let statusText =
+            "🟢 ปกติ";
+
+        let statusClass =
+            "ok";
+
+
+        if(pending === 1){
+
+            statusText =
+                "🟡 แจ้งเตือน 1 ครั้ง";
+
+            statusClass =
+                "warning";
+
+        }
+
+
+        if(pending >= 2){
+
+            statusText =
+                "🔴 เสนอพิจารณาตัดสมาชิก";
+
+            statusClass =
+                "danger";
+
+        }
+
+
+        html += `
+
+            <div class="member-card">
+
+                <strong>
+                    ${index + 1}. ${escapeHTML(m.name)}
+                </strong>
+
+                <br>
+
+                🏠 บ้านเลขที่:
+                ${escapeHTML(m.house)}
+
+                <br>
+
+                📦 ค้างส่ง:
+                ${pending} ครั้ง
+
+                <br>
+
+                ${m.pendingFor
+                    ? "⚰️ งานศพที่ค้าง: "
+                    + escapeHTML(m.pendingFor)
+                    + "<br>"
+                    : ""
+                }
+
+                <span class="${statusClass}">
+                    ${statusText}
+                </span>
+
+                <br>
+
+                <button
+                    class="edit"
+                    onclick="editMember('${m.id}')"
+                >
+                    ✏️ แก้ไข
+                </button>
+
+                <button
+                    class="delete"
+                    onclick="deleteMember('${m.id}')"
+                >
+                    🗑 ลบสมาชิก
+                </button>
+
+            </div>
+
+        `;
+
+    });
+
+
+    if(filtered.length === 0){
+
+        html =
+            "<p>ไม่พบสมาชิก</p>";
+
+    }
+
+
+    document.getElementById("memberList")
+        .innerHTML = html;
+
+
+    document.getElementById("totalMember")
+        .innerText =
+        members.length > 0
+        ? members.length
+        : 185;
+
+
+    document.getElementById("pendingMember")
+        .innerText =
+        members.filter(
+            m => Number(m.pending || 0) > 0
+        ).length;
+
+}
+
+
+/* ป้องกัน HTML แปลกปลอม */
+
+function escapeHTML(value){
+
+    return String(value || "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+showMembers();
+
+</script>
+
+</body>
+
+</html>
