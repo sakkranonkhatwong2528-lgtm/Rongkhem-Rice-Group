@@ -168,12 +168,12 @@ button.cancel{
     gap:5px;
 }
 
-@media(max-width:600px){
-
-    .summary{
-        grid-template-columns:1fr 1fr;
-    }
-
+.pending-info{
+    background:#fff8e1;
+    padding:10px;
+    margin-top:8px;
+    border-radius:10px;
+    color:#795548;
 }
 
 </style>
@@ -295,7 +295,6 @@ button.cancel{
 
 <h2>🔎 ค้นหาสมาชิก</h2>
 
-
 <input
     id="search"
     type="text"
@@ -303,9 +302,7 @@ button.cancel{
     oninput="showMembers()"
 >
 
-
 <div id="memberList"></div>
-
 
 </div>
 
@@ -355,7 +352,7 @@ try{
 
 
 /* =====================================================
-   เตรียมข้อมูลเดิม
+   เตรียมข้อมูล
 ===================================================== */
 
 members = members.map((m,index)=>({
@@ -391,7 +388,7 @@ saveData();
 
 
 /* =====================================================
-   บันทึกข้อมูลทั้งหมด
+   บันทึกข้อมูล
 ===================================================== */
 
 function saveData(){
@@ -405,7 +402,7 @@ function saveData(){
 
 
 /* =====================================================
-   เพิ่มสมาชิก / แก้ไขสมาชิก
+   เพิ่ม / แก้ไขสมาชิก
 ===================================================== */
 
 function saveMember(){
@@ -445,9 +442,7 @@ function saveMember(){
     }
 
 
-    /* =================================================
-       แก้ไขสมาชิก
-    ================================================= */
+    /* ===== แก้ไข ===== */
 
     if(editId !== null){
 
@@ -461,9 +456,7 @@ function saveMember(){
 
         if(!member){
 
-            alert(
-                "ไม่พบข้อมูลสมาชิก"
-            );
+            alert("ไม่พบข้อมูลสมาชิก");
 
             cancelEdit();
 
@@ -471,8 +464,6 @@ function saveMember(){
 
         }
 
-
-        /* ตรวจบ้านเลขที่ซ้ำ */
 
         const duplicate =
             members.some(
@@ -497,7 +488,7 @@ function saveMember(){
 
 
         /* แก้เฉพาะชื่อและบ้าน
-           ค้างส่งเดิมยังคงอยู่ */
+           ค้างส่งยังคงเดิม */
 
         member.name =
             name;
@@ -523,9 +514,7 @@ function saveMember(){
     }
 
 
-    /* =================================================
-       เพิ่มสมาชิกใหม่
-    ================================================= */
+    /* ===== เพิ่มสมาชิก ===== */
 
     const duplicate =
         members.some(
@@ -556,29 +545,22 @@ function saveMember(){
             .toString(36)
             .substring(2,8),
 
-        name:
-            name,
+        name:name,
 
-        house:
-            house,
+        house:house,
 
-        pending:
-            0,
+        pending:0,
 
-        pendingFor:
-            "",
+        pendingFor:"",
 
-        status:
-            "ปกติ"
+        status:"ปกติ"
 
     });
 
 
     saveData();
 
-
     clearForm();
-
 
     showMembers();
 
@@ -615,8 +597,7 @@ function editMember(id){
     }
 
 
-    editId =
-        id;
+    editId = id;
 
 
     document
@@ -674,7 +655,6 @@ function cancelEdit(){
 
     editId = null;
 
-
     clearForm();
 
 
@@ -705,7 +685,7 @@ function cancelEdit(){
 
 
 /* =====================================================
-   ล้างช่อง
+   ล้างฟอร์ม
 ===================================================== */
 
 function clearForm(){
@@ -723,7 +703,7 @@ function clearForm(){
 
 
 /* =====================================================
-   บันทึก "ค้างส่ง"
+   บันทึกค้างส่ง + ชื่องานศพ
 ===================================================== */
 
 function addPending(id){
@@ -747,16 +727,17 @@ function addPending(id){
     }
 
 
-    const confirmed =
-        confirm(
-            "ยืนยันบันทึกค้างส่ง?\n\n" +
-            member.name +
-            "\nบ้านเลขที่ " +
-            member.house
+    const funeralName =
+        prompt(
+            "กรุณาระบุชื่อผู้เสียชีวิต / งานศพ"
         );
 
 
-    if(!confirmed){
+    if(
+        funeralName === null
+        ||
+        funeralName.trim() === ""
+    ){
 
         return;
 
@@ -766,6 +747,10 @@ function addPending(id){
     member.pending =
         Number(member.pending || 0)
         + 1;
+
+
+    member.pendingFor =
+        funeralName.trim();
 
 
     if(member.pending >= 2){
@@ -788,8 +773,17 @@ function addPending(id){
 
 
     alert(
-        "บันทึกค้างส่งแล้ว\n\n" +
-        "ค้างส่งทั้งหมด " +
+        "บันทึกค้างส่งเรียบร้อยแล้ว\n\n" +
+        "สมาชิก: " +
+        member.name +
+        "\n" +
+        "บ้านเลขที่: " +
+        member.house +
+        "\n" +
+        "งานศพ: " +
+        member.pendingFor +
+        "\n" +
+        "ค้างส่งทั้งหมด: " +
         member.pending +
         " ครั้ง"
     );
@@ -844,7 +838,6 @@ function deleteMember(id){
 
     saveData();
 
-
     showMembers();
 
 
@@ -867,10 +860,12 @@ function showMembers(){
 
     const keyword =
         searchInput
-        ? searchInput.value
+        ?
+        searchInput.value
             .trim()
             .toLowerCase()
-        : "";
+        :
+        "";
 
 
     const filtered =
@@ -976,22 +971,28 @@ function showMembers(){
             </strong>
             ครั้ง
 
-            <br>
 
             ${
                 m.pendingFor
                 ?
                 `
-                ⚰️ งานศพที่ค้าง:
-                ${escapeHTML(
-                    m.pendingFor
-                )}
+                <div class="pending-info">
 
-                <br>
+                    ⚰️ ค้างส่งงานศพ:
+                    <strong>
+                        ${escapeHTML(
+                            m.pendingFor
+                        )}
+                    </strong>
+
+                </div>
                 `
                 :
                 ""
             }
+
+
+            <br>
 
             <span
                 class="${statusClass}"
@@ -1016,7 +1017,7 @@ function showMembers(){
                     "
                 >
 
-                    📦 บันทึกค้างส่ง
+                    📦 บันทึกค้างส่งศพ
 
                 </button>
 
@@ -1083,8 +1084,6 @@ function showMembers(){
         html;
 
 
-    /* จำนวนสมาชิก */
-
     document
     .getElementById("totalMember")
     .innerText =
@@ -1093,16 +1092,12 @@ function showMembers(){
         : 185;
 
 
-    /* จำนวนครัวเรือนค้างส่ง */
-
     document
     .getElementById("pendingMember")
     .innerText =
         members.filter(
             m =>
-            Number(
-                m.pending || 0
-            ) > 0
+            Number(m.pending || 0) > 0
         ).length;
 
 }
@@ -1159,7 +1154,7 @@ function escapeAttribute(value){
 
 
 /* =====================================================
-   เริ่มระบบ
+   เริ่มต้น
 ===================================================== */
 
 showMembers();
