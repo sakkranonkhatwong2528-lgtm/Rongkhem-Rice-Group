@@ -16,10 +16,6 @@
 
 <style>
 
-/* =====================================================
-   พื้นฐาน
-===================================================== */
-
 *{
     box-sizing:border-box;
 }
@@ -37,7 +33,7 @@ body{
         "Noto Sans Thai",
         sans-serif;
 
-    color:#ffffff;
+    color:#fff;
 
     min-height:100vh;
 
@@ -146,6 +142,7 @@ body{
 
 }
 
+
 @keyframes orbMove1{
 
     0%,100%{
@@ -196,7 +193,7 @@ body{
 
 
 /* =====================================================
-   จุดแสงลอย
+   จุดแสง
 ===================================================== */
 
 .particle{
@@ -206,18 +203,14 @@ body{
     width:5px;
     height:5px;
 
+    border-radius:50%;
+
     background:
         rgba(255,255,255,.75);
-
-    border-radius:50%;
 
     z-index:0;
 
     pointer-events:none;
-
-    will-change:
-        transform,
-        opacity;
 
     animation:
         particleMove
@@ -296,7 +289,7 @@ body{
 
 
 /* =====================================================
-   หน้าเว็บ
+   หน้า
 ===================================================== */
 
 .page{
@@ -332,6 +325,7 @@ body{
 .logo{
 
     width:110px;
+
     height:110px;
 
     margin:
@@ -341,6 +335,7 @@ body{
     display:flex;
 
     justify-content:center;
+
     align-items:center;
 
     font-size:62px;
@@ -368,8 +363,6 @@ body{
     backdrop-filter:
         blur(15px);
 
-    will-change:transform;
-
     animation:
         logoAnimation
         2.5s
@@ -386,13 +379,6 @@ body{
             translateY(0)
             rotate(0deg);
 
-        box-shadow:
-            0 0 25px
-            rgba(100,255,150,.20),
-
-            0 25px 60px
-            rgba(0,0,0,.30);
-
     }
 
     50%{
@@ -400,13 +386,6 @@ body{
         transform:
             translateY(-12px)
             rotate(3deg);
-
-        box-shadow:
-            0 0 50px
-            rgba(100,255,150,.45),
-
-            0 30px 70px
-            rgba(0,0,0,.35);
 
     }
 
@@ -425,8 +404,6 @@ body{
 
     font-weight:900;
 
-    letter-spacing:.5px;
-
     text-shadow:
         0 5px 25px
         rgba(0,0,0,.40);
@@ -443,19 +420,15 @@ body{
 @keyframes titleGlow{
 
     from{
-
         text-shadow:
             0 5px 20px
             rgba(0,0,0,.30);
-
     }
 
     to{
-
         text-shadow:
             0 0 30px
             rgba(180,255,200,.35);
-
     }
 
 }
@@ -487,11 +460,6 @@ body{
     color:#aee7bc;
 
 }
-
-
-/* =====================================================
-   เส้นวิ่ง
-===================================================== */
 
 .hero-line{
 
@@ -527,7 +495,7 @@ body{
         linear-gradient(
             90deg,
             transparent,
-            #ffffff,
+            #fff,
             transparent
         );
 
@@ -657,9 +625,6 @@ body{
     right:-100px;
     top:-100px;
 
-    transition:
-        transform .6s ease;
-
 }
 
 .card::after{
@@ -714,17 +679,6 @@ body{
         translateY(-10px)
         scale(1.025);
 
-    box-shadow:
-        0 30px 80px
-        rgba(0,0,0,.30);
-
-}
-
-.card:hover::before{
-
-    transform:
-        scale(1.4);
-
 }
 
 .card-icon{
@@ -732,8 +686,6 @@ body{
     font-size:42px;
 
     margin-bottom:10px;
-
-    will-change:transform;
 
     animation:
         iconFloat
@@ -773,7 +725,7 @@ body{
 
     font-weight:900;
 
-    color:white;
+    color:#fff;
 
 }
 
@@ -809,7 +761,7 @@ body{
 
 
 /* =====================================================
-   การ์ดงานศพล่าสุด
+   งานศพล่าสุด
 ===================================================== */
 
 .latest-funeral-card{
@@ -819,13 +771,6 @@ body{
 
     min-height:
         285px;
-
-    padding:
-        25px;
-
-    position:relative;
-
-    overflow:hidden;
 
     background:
         linear-gradient(
@@ -837,13 +782,6 @@ body{
     border:
         1px solid
         rgba(255,230,120,.35);
-
-    box-shadow:
-        0 20px 60px
-        rgba(0,0,0,.25),
-
-        0 0 40px
-        rgba(255,210,70,.08);
 
 }
 
@@ -872,8 +810,6 @@ body{
         ease-in-out
         infinite;
 
-    pointer-events:none;
-
 }
 
 @keyframes funeralGlow{
@@ -885,7 +821,7 @@ body{
 
     50%{
         transform:scale(1.35);
-        opacity:.90;
+        opacity:.9;
     }
 
 }
@@ -911,8 +847,8 @@ body{
 
     display:flex;
 
-    justify-content:center;
     align-items:center;
+    justify-content:center;
 
     border-radius:18px;
 
@@ -920,14 +856,6 @@ body{
 
     background:
         rgba(255,255,255,.12);
-
-    border:
-        1px solid
-        rgba(255,255,255,.20);
-
-    box-shadow:
-        0 8px 25px
-        rgba(0,0,0,.20);
 
     animation:
         funeralIcon
@@ -941,14 +869,12 @@ body{
 
     0%,100%{
         transform:
-            translateY(0)
-            rotate(0deg);
+            translateY(0);
     }
 
     50%{
         transform:
-            translateY(-6px)
-            rotate(2deg);
+            translateY(-6px);
     }
 
 }
@@ -990,12 +916,6 @@ body{
 
     font-weight:900;
 
-    color:#ffffff;
-
-    text-shadow:
-        0 0 20px
-        rgba(255,255,255,.18);
-
 }
 
 .latest-funeral-info{
@@ -1031,10 +951,6 @@ body{
     background:
         rgba(255,255,255,.07);
 
-    border:
-        1px solid
-        rgba(255,255,255,.10);
-
 }
 
 .info-icon{
@@ -1059,16 +975,11 @@ body{
 
     margin-top:3px;
 
-    color:#ffffff;
+    color:#fff;
 
     font-size:15px;
 
 }
-
-
-/* =====================================================
-   ปุ่มดูย้อนหลัง
-===================================================== */
 
 .history-button{
 
@@ -1081,9 +992,7 @@ body{
 
     border-radius:15px;
 
-    color:#ffffff;
-
-    font-size:14px;
+    color:#fff;
 
     font-weight:800;
 
@@ -1096,35 +1005,16 @@ body{
             #b87500
         );
 
-    box-shadow:
-        0 8px 25px
-        rgba(0,0,0,.25);
-
-    transition:
-        transform .25s ease;
-
 }
-
-.history-button:hover{
-
-    transform:
-        translateY(-3px);
-
-}
-
-
-/* =====================================================
-   ประวัติงานศพ
-===================================================== */
 
 .funeral-history{
 
     display:none;
 
-    margin-top:18px;
-
     grid-column:
         1 / -1;
+
+    margin-top:18px;
 
 }
 
@@ -1139,10 +1029,6 @@ body{
     display:flex;
 
     justify-content:space-between;
-
-    align-items:center;
-
-    gap:10px;
 
     margin-bottom:12px;
 
@@ -1168,8 +1054,6 @@ body{
     background:
         rgba(255,255,255,.10);
 
-    font-size:13px;
-
     color:#b9e9c7;
 
 }
@@ -1183,15 +1067,7 @@ body{
     border-radius:20px;
 
     background:
-        linear-gradient(
-            135deg,
-            rgba(255,255,255,.12),
-            rgba(255,255,255,.05)
-        );
-
-    border:
-        1px solid
-        rgba(255,255,255,.15);
+        rgba(255,255,255,.08);
 
     animation:
         historyEnter
@@ -1202,14 +1078,6 @@ body{
 }
 
 .history-name{
-
-    display:flex;
-
-    align-items:center;
-
-    flex-wrap:wrap;
-
-    gap:5px;
 
     font-size:20px;
 
@@ -1261,10 +1129,6 @@ body{
     background:
         rgba(255,255,255,.06);
 
-    border:
-        1px solid
-        rgba(255,255,255,.08);
-
 }
 
 .history-info-box small{
@@ -1282,25 +1146,6 @@ body{
     display:block;
 
     margin-top:4px;
-
-    color:#ffffff;
-
-    font-size:14px;
-
-}
-
-.history-empty{
-
-    padding:25px;
-
-    text-align:center;
-
-    border-radius:18px;
-
-    background:
-        rgba(255,255,255,.07);
-
-    color:#b9e9c7;
 
 }
 
@@ -1334,8 +1179,7 @@ body{
 .alert{
 
     margin:
-        18px
-        0;
+        18px 0;
 
     padding:20px;
 
@@ -1352,10 +1196,6 @@ body{
         1px solid
         rgba(255,120,120,.30);
 
-    box-shadow:
-        0 0 30px
-        rgba(255,50,50,.12);
-
     animation:
         alertPulse
         2.5s
@@ -1367,63 +1207,15 @@ body{
 @keyframes alertPulse{
 
     0%,100%{
-
         box-shadow:
             0 0 20px
             rgba(255,50,50,.08);
-
     }
 
     50%{
-
         box-shadow:
             0 0 45px
             rgba(255,50,50,.22);
-
-    }
-
-}
-
-
-/* =====================================================
-   ชื่อส่วน
-===================================================== */
-
-.section-title{
-
-    margin:
-        35px
-        0
-        16px;
-
-    font-size:25px;
-
-    animation:
-        fadeIn
-        1s
-        ease
-        both;
-
-}
-
-@keyframes fadeIn{
-
-    from{
-
-        opacity:0;
-
-        transform:
-            translateY(15px);
-
-    }
-
-    to{
-
-        opacity:1;
-
-        transform:
-            translateY(0);
-
     }
 
 }
@@ -1432,6 +1224,15 @@ body{
 /* =====================================================
    เมนู
 ===================================================== */
+
+.section-title{
+
+    margin:
+        35px 0 16px;
+
+    font-size:25px;
+
+}
 
 .menu{
 
@@ -1462,7 +1263,7 @@ body{
 
     gap:10px;
 
-    color:white;
+    color:#fff;
 
     text-decoration:none;
 
@@ -1478,13 +1279,6 @@ body{
     border:
         1px solid
         rgba(255,255,255,.17);
-
-    backdrop-filter:
-        blur(14px);
-
-    box-shadow:
-        0 18px 45px
-        rgba(0,0,0,.18);
 
     opacity:0;
 
@@ -1523,97 +1317,17 @@ body{
 
 }
 
-.menu a::before{
-
-    content:"";
-
-    position:absolute;
-
-    width:180px;
-    height:180px;
-
-    border-radius:50%;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(255,255,255,.18),
-            transparent 70%
-        );
-
-    top:-90px;
-
-    right:-90px;
-
-    transition:
-        transform .6s ease;
-
-}
-
-.menu a::after{
-
-    content:"";
-
-    position:absolute;
-
-    width:40px;
-
-    height:180%;
-
-    top:-40%;
-
-    left:-80px;
-
-    background:
-        rgba(255,255,255,.12);
-
-    transform:
-        rotate(25deg);
-
-    transition:
-        left .7s ease;
-
-}
-
 .menu a:hover{
 
     transform:
         translateY(-12px)
         scale(1.04);
 
-    background:
-        rgba(255,255,255,.18);
-
-    box-shadow:
-        0 30px 75px
-        rgba(0,0,0,.32);
-
-}
-
-.menu a:hover::before{
-
-    transform:
-        scale(1.5);
-
-}
-
-.menu a:hover::after{
-
-    left:130%;
-
 }
 
 .menu-icon{
 
     font-size:47px;
-
-    filter:
-        drop-shadow(
-            0 7px 12px
-            rgba(0,0,0,.30)
-        );
-
-    will-change:transform;
 
     animation:
         menuIcon
@@ -1626,19 +1340,13 @@ body{
 @keyframes menuIcon{
 
     0%,100%{
-
         transform:
-            translateY(0)
-            rotate(0deg);
-
+            translateY(0);
     }
 
     50%{
-
         transform:
-            translateY(-6px)
-            rotate(2deg);
-
+            translateY(-6px);
     }
 
 }
@@ -1653,8 +1361,7 @@ body{
     text-align:center;
 
     padding:
-        40px
-        15px;
+        40px 15px;
 
     color:#9fd7ac;
 
@@ -1669,13 +1376,7 @@ body{
 
 @media(max-width:1000px){
 
-    .dashboard{
-
-        grid-template-columns:
-            repeat(2,1fr);
-
-    }
-
+    .dashboard,
     .menu{
 
         grid-template-columns:
@@ -1700,50 +1401,58 @@ body{
 
     .hero{
         padding:
-            25px
-            5px
-            25px;
+            25px 5px 25px;
     }
 
     .logo{
+
         width:85px;
         height:85px;
+
         font-size:48px;
-        border-radius:25px;
+
     }
 
-    .dashboard{
+    .dashboard,
+    .menu{
+
         gap:10px;
+
     }
 
     .card{
+
         min-height:145px;
+
         padding:
-            15px
-            10px;
-        border-radius:20px;
+            15px 10px;
+
     }
 
     .card-icon{
+
         font-size:32px;
+
     }
 
     .card-number{
-        font-size:27px;
-    }
 
-    .menu{
-        gap:10px;
+        font-size:27px;
+
     }
 
     .menu a{
+
         min-height:125px;
-        border-radius:20px;
+
         font-size:14px;
+
     }
 
     .menu-icon{
+
         font-size:36px;
+
     }
 
     .latest-funeral-card{
@@ -1753,11 +1462,10 @@ body{
 
         min-height:300px;
 
-        padding:20px;
-
     }
 
-    .latest-funeral-info{
+    .latest-funeral-info,
+    .history-info{
 
         grid-template-columns:
             1fr;
@@ -1770,21 +1478,6 @@ body{
 
     }
 
-    .history-info{
-
-        grid-template-columns:
-            1fr;
-
-    }
-
-    .history-header{
-
-        align-items:flex-start;
-
-        flex-direction:column;
-
-    }
-
 }
 
 </style>
@@ -1794,10 +1487,6 @@ body{
 
 <body>
 
-
-<!-- =====================================================
-   พื้นหลัง
-===================================================== -->
 
 <div class="bg-orb orb1"></div>
 <div class="bg-orb orb2"></div>
@@ -1812,10 +1501,6 @@ body{
 
 <div class="page">
 
-
-<!-- =====================================================
-   HERO
-===================================================== -->
 
 <header class="hero">
 
@@ -1840,364 +1525,368 @@ body{
 </header>
 
 
-<!-- =====================================================
-   DASHBOARD
-===================================================== -->
-
 <section class="dashboard">
 
 
-    <!-- สมาชิกทั้งหมด -->
+<!-- =====================================================
+   สมาชิก
+===================================================== -->
 
-    <div class="card">
+<div class="card">
 
-        <div class="card-icon">
-            👥
-        </div>
-
-        <div class="card-title">
-            สมาชิกทั้งหมด
-        </div>
-
-        <div
-            class="card-number number-pulse"
-            id="memberCount"
-        >
-            0
-        </div>
-
-        <div class="card-unit">
-            ครัวเรือน
-        </div>
-
+    <div class="card-icon">
+        👥
     </div>
 
-
-    <!-- งานศพ -->
-
-    <div class="card">
-
-        <div class="card-icon">
-            ⚰️
-        </div>
-
-        <div class="card-title">
-            งานศพ
-        </div>
-
-        <div
-            class="card-number"
-            id="funeralCount"
-        >
-            0
-        </div>
-
-        <div class="card-unit">
-            งาน
-        </div>
-
+    <div class="card-title">
+        สมาชิกทั้งหมด
     </div>
 
+    <div
+        class="card-number number-pulse"
+        id="memberCount"
+    >
+        0
+    </div>
 
-    <!-- งานศพล่าสุด -->
+    <div class="card-unit">
+        ครัวเรือน
+    </div>
 
-    <div class="card latest-funeral-card">
-
-        <div class="latest-funeral-glow"></div>
+</div>
 
 
-        <div class="latest-funeral-top">
+<!-- =====================================================
+   งานศพ
+===================================================== -->
 
-            <div class="latest-funeral-icon">
-                🕊️
+<div class="card">
+
+    <div class="card-icon">
+        ⚰️
+    </div>
+
+    <div class="card-title">
+        งานศพ
+    </div>
+
+    <div
+        class="card-number"
+        id="funeralCount"
+    >
+        0
+    </div>
+
+    <div class="card-unit">
+        งาน
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+   งานศพล่าสุด
+===================================================== -->
+
+<div class="card latest-funeral-card">
+
+    <div class="latest-funeral-glow"></div>
+
+    <div class="latest-funeral-top">
+
+        <div class="latest-funeral-icon">
+            🕊️
+        </div>
+
+        <div>
+
+            <div class="latest-funeral-label">
+                งานศพล่าสุด
             </div>
+
+            <div class="latest-funeral-sub">
+                รายการล่าสุดของกลุ่ม
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div
+        id="latestFuneralName"
+        class="latest-funeral-name"
+    >
+        กำลังโหลด...
+    </div>
+
+
+    <div class="latest-funeral-info">
+
+
+        <div class="funeral-info-item">
+
+            <span class="info-icon">
+                📅
+            </span>
 
             <div>
 
-                <div class="latest-funeral-label">
-                    งานศพล่าสุด
-                </div>
+                <small>
+                    วันที่เสียชีวิต
+                </small>
 
-                <div class="latest-funeral-sub">
-                    รายการล่าสุดของกลุ่ม
-                </div>
+                <strong
+                    id="latestFuneralDate"
+                >
+                    -
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="funeral-info-item">
+
+            <span class="info-icon">
+                🏠
+            </span>
+
+            <div>
+
+                <small>
+                    บ้านเลขที่
+                </small>
+
+                <strong
+                    id="latestFuneralHouse"
+                >
+                    -
+                </strong>
 
             </div>
 
         </div>
 
 
-        <div
-            id="latestFuneralName"
-            class="latest-funeral-name"
-        >
-            กำลังโหลด...
-        </div>
+        <div class="funeral-info-item">
 
+            <span class="info-icon">
+                🔥
+            </span>
 
-        <div class="latest-funeral-info">
+            <div>
 
+                <small>
+                    วันที่ฌาปนกิจ
+                </small>
 
-            <div class="funeral-info-item">
-
-                <span class="info-icon">
-                    📅
-                </span>
-
-                <div>
-
-                    <small>
-                        วันที่เสียชีวิต
-                    </small>
-
-                    <strong
-                        id="latestFuneralDate"
-                    >
-                        -
-                    </strong>
-
-                </div>
+                <strong
+                    id="latestFuneralCremate"
+                >
+                    -
+                </strong>
 
             </div>
 
-
-            <div class="funeral-info-item">
-
-                <span class="info-icon">
-                    🏠
-                </span>
-
-                <div>
-
-                    <small>
-                        บ้านเลขที่
-                    </small>
-
-                    <strong
-                        id="latestFuneralHouse"
-                    >
-                        -
-                    </strong>
-
-                </div>
-
-            </div>
-
-
-            <div class="funeral-info-item">
-
-                <span class="info-icon">
-                    🔥
-                </span>
-
-                <div>
-
-                    <small>
-                        วันที่ฌาปนกิจ
-                    </small>
-
-                    <strong
-                        id="latestFuneralCremate"
-                    >
-                        -
-                    </strong>
-
-                </div>
-
-            </div>
-
-
         </div>
 
-
-        <button
-            class="history-button"
-            type="button"
-            onclick="toggleFuneralHistory()"
-        >
-            📜 ดูงานศพย้อนหลัง
-        </button>
 
     </div>
 
 
-    <!-- ข้าวสารรับเข้า -->
+    <button
+        class="history-button"
+        onclick="toggleFuneralHistory()"
+    >
 
-    <div class="card">
+        📜 ดูงานศพย้อนหลัง
 
-        <div class="card-icon">
-            📥
-        </div>
+    </button>
 
-        <div class="card-title">
-            ข้าวสารรับเข้าทั้งหมด
-        </div>
+</div>
 
-        <div
-            class="card-number"
-            id="riceInTotal"
-        >
-            0
-        </div>
 
-        <div class="card-unit">
-            ถุง
-        </div>
+<!-- =====================================================
+   ข้าวสารรับเข้า
+===================================================== -->
 
+<div class="card">
+
+    <div class="card-icon">
+        📥
     </div>
 
-
-    <!-- ข้าวสารคงเหลือ -->
-
-    <div class="card">
-
-        <div class="card-icon">
-            🌾
-        </div>
-
-        <div class="card-title">
-            ข้าวสารคงเหลือ
-        </div>
-
-        <div
-            class="card-number number-pulse"
-            id="riceBalance"
-        >
-            0
-        </div>
-
-        <div class="card-unit">
-            ถุง
-        </div>
-
+    <div class="card-title">
+        ข้าวสารรับเข้าทั้งหมด
     </div>
-
-
-    <!-- สมาชิกค้างส่ง -->
-
-    <div class="card">
-
-        <div class="card-icon">
-            ⚠️
-        </div>
-
-        <div class="card-title">
-            สมาชิกค้างส่ง
-        </div>
-
-        <div
-            class="card-number"
-            id="pendingCount"
-        >
-            0
-        </div>
-
-        <div class="card-unit">
-            ครัวเรือน
-        </div>
-
-    </div>
-
-
-    <!-- ค้าง 2 ครั้งขึ้นไป -->
-
-    <div class="card">
-
-        <div class="card-icon">
-            🚨
-        </div>
-
-        <div class="card-title">
-            ค้างส่ง 2 ครั้งขึ้นไป
-        </div>
-
-        <div
-            class="card-number"
-            id="dangerCount"
-        >
-            0
-        </div>
-
-        <div class="card-unit">
-            ครัวเรือน
-        </div>
-
-    </div>
-
-
-    <!-- ข้าวสารช่วยงานศพ -->
-
-    <div class="card">
-
-        <div class="card-icon">
-            🌾
-        </div>
-
-        <div class="card-title">
-            ข้าวสารช่วยงานศพ
-        </div>
-
-        <div
-            class="card-number number-pulse"
-            id="funeralRice"
-        >
-            182
-        </div>
-
-        <div class="card-unit">
-            ถุง
-        </div>
-
-    </div>
-
-
-    <!-- สมาชิกปกติ -->
-
-    <div class="card">
-
-        <div class="card-icon">
-            ✅
-        </div>
-
-        <div class="card-title">
-            สมาชิกปกติ
-        </div>
-
-        <div
-            class="card-number"
-            id="normalCount"
-        >
-            0
-        </div>
-
-        <div class="card-unit">
-            ครัวเรือน
-        </div>
-
-    </div>
-
-
-    <!-- ประวัติงานศพ -->
 
     <div
-        id="funeralHistory"
-        class="funeral-history"
-    ></div>
+        class="card-number"
+        id="riceInTotal"
+    >
+        0
+    </div>
+
+    <div class="card-unit">
+        ถุง
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+   ข้าวสารคงเหลือ
+===================================================== -->
+
+<div class="card">
+
+    <div class="card-icon">
+        🌾
+    </div>
+
+    <div class="card-title">
+        ข้าวสารคงเหลือ
+    </div>
+
+    <div
+        class="card-number number-pulse"
+        id="riceBalance"
+    >
+        0
+    </div>
+
+    <div class="card-unit">
+        ถุง
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+   ค้างส่ง
+===================================================== -->
+
+<div class="card">
+
+    <div class="card-icon">
+        ⚠️
+    </div>
+
+    <div class="card-title">
+        สมาชิกค้างส่ง
+    </div>
+
+    <div
+        class="card-number"
+        id="pendingCount"
+    >
+        0
+    </div>
+
+    <div class="card-unit">
+        ครัวเรือน
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+   ค้าง 2 ครั้ง
+===================================================== -->
+
+<div class="card">
+
+    <div class="card-icon">
+        🚨
+    </div>
+
+    <div class="card-title">
+        ค้างส่ง 2 ครั้งขึ้นไป
+    </div>
+
+    <div
+        class="card-number"
+        id="dangerCount"
+    >
+        0
+    </div>
+
+    <div class="card-unit">
+        ครัวเรือน
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+   ข้าวสารช่วยงานศพ
+===================================================== -->
+
+<div class="card">
+
+    <div class="card-icon">
+        🌾
+    </div>
+
+    <div class="card-title">
+        ข้าวสารช่วยงานศพ
+    </div>
+
+    <div
+        class="card-number number-pulse"
+        id="funeralRice"
+    >
+        182
+    </div>
+
+    <div class="card-unit">
+        ถุง
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+   สมาชิกปกติ
+===================================================== -->
+
+<div class="card">
+
+    <div class="card-icon">
+        ✅
+    </div>
+
+    <div class="card-title">
+        สมาชิกปกติ
+    </div>
+
+    <div
+        class="card-number"
+        id="normalCount"
+    >
+        0
+    </div>
+
+    <div class="card-unit">
+        ครัวเรือน
+    </div>
+
+</div>
+
+
+<div
+    id="funeralHistory"
+    class="funeral-history"
+></div>
 
 
 </section>
 
 
-<!-- =====================================================
-   แจ้งเตือน
-===================================================== -->
-
 <div id="notice"></div>
 
-
-<!-- =====================================================
-   เมนู
-===================================================== -->
 
 <h2 class="section-title">
     เมนูระบบ
@@ -2207,108 +1896,108 @@ body{
 <section class="menu">
 
 
-    <a href="members.html">
+<a href="members.html">
 
-        <div class="menu-icon">
-            👥
-        </div>
+    <div class="menu-icon">
+        👥
+    </div>
 
-        <span>
-            ทะเบียนสมาชิก
-        </span>
+    <span>
+        ทะเบียนสมาชิก
+    </span>
 
-    </a>
-
-
-    <a href="งานศพ.html">
-
-        <div class="menu-icon">
-            ⚰️
-        </div>
-
-        <span>
-            แจ้งเสียชีวิต / งานศพ
-        </span>
-
-    </a>
+</a>
 
 
-    <a href="รับ.html">
+<a href="งานศพ.html">
 
-        <div class="menu-icon">
-            📥
-        </div>
+    <div class="menu-icon">
+        ⚰️
+    </div>
 
-        <span>
-            รับข้าวสารเข้ากลุ่ม
-        </span>
+    <span>
+        แจ้งเสียชีวิต / งานศพ
+    </span>
 
-    </a>
-
-
-    <a href="สต็อก.html">
-
-        <div class="menu-icon">
-            🌾
-        </div>
-
-        <span>
-            คลังข้าวสาร
-        </span>
-
-    </a>
+</a>
 
 
-    <a href="แจ้งเตือน.html">
+<a href="รับ.html">
 
-        <div class="menu-icon">
-            🔔
-        </div>
+    <div class="menu-icon">
+        📥
+    </div>
 
-        <span>
-            แจ้งเตือนสมาชิก
-        </span>
+    <span>
+        รับข้าวสารเข้ากลุ่ม
+    </span>
 
-    </a>
-
-
-    <a href="รายงาน.html">
-
-        <div class="menu-icon">
-            📊
-        </div>
-
-        <span>
-            รายงานข้อมูล
-        </span>
-
-    </a>
+</a>
 
 
-    <a href="พิมพ์รายงาน.html">
+<a href="สต็อก.html">
 
-        <div class="menu-icon">
-            📄
-        </div>
+    <div class="menu-icon">
+        🌾
+    </div>
 
-        <span>
-            พิมพ์รายงานงานศพ
-        </span>
+    <span>
+        คลังข้าวสาร
+    </span>
 
-    </a>
+</a>
 
 
-    <a href="สำรองข้อมูล.html">
+<a href="แจ้งเตือน.html">
 
-        <div class="menu-icon">
-            💾
-        </div>
+    <div class="menu-icon">
+        🔔
+    </div>
 
-        <span>
-            สำรองข้อมูล
-        </span>
+    <span>
+        แจ้งเตือนสมาชิก
+    </span>
 
-    </a>
+</a>
+
+
+<a href="รายงาน.html">
+
+    <div class="menu-icon">
+        📊
+    </div>
+
+    <span>
+        รายงานข้อมูล
+    </span>
+
+</a>
+
+
+<a href="พิมพ์รายงาน.html">
+
+    <div class="menu-icon">
+        📄
+    </div>
+
+    <span>
+        พิมพ์รายงานงานศพ
+    </span>
+
+</a>
+
+
+<a href="สำรองข้อมูล.html">
+
+    <div class="menu-icon">
+        💾
+    </div>
+
+    <span>
+        สำรองข้อมูล
+    </span>
+
+</a>
 
 
 </section>
@@ -2365,10 +2054,8 @@ function animateNumber(
     target =
         Number(target) || 0;
 
-
     const start =
         performance.now();
-
 
     function update(current){
 
@@ -2380,7 +2067,6 @@ function animateNumber(
                 1
             );
 
-
         const eased =
             1 -
             Math.pow(
@@ -2388,18 +2074,15 @@ function animateNumber(
                 3
             );
 
-
         const value =
             Math.floor(
                 target * eased
             );
 
-
         element.innerText =
             value.toLocaleString(
                 "th-TH"
             );
-
 
         if(
             progress < 1
@@ -2409,8 +2092,7 @@ function animateNumber(
                 update
             );
 
-        }
-        else{
+        }else{
 
             element.innerText =
                 target.toLocaleString(
@@ -2421,10 +2103,7 @@ function animateNumber(
 
     }
 
-
-    requestAnimationFrame(
-        update
-    );
+    requestAnimationFrame(update);
 
 }
 
@@ -2465,9 +2144,7 @@ const normalMembers =
 
 
 animateNumber(
-    document.getElementById(
-        "memberCount"
-    ),
+    document.getElementById("memberCount"),
     memberTotal
 );
 
@@ -2483,25 +2160,19 @@ document.getElementById(
 
 
 animateNumber(
-    document.getElementById(
-        "pendingCount"
-    ),
+    document.getElementById("pendingCount"),
     pendingMembers.length
 );
 
 
 animateNumber(
-    document.getElementById(
-        "dangerCount"
-    ),
+    document.getElementById("dangerCount"),
     dangerMembers.length
 );
 
 
 animateNumber(
-    document.getElementById(
-        "normalCount"
-    ),
+    document.getElementById("normalCount"),
     normalMembers.length
 );
 
@@ -2511,9 +2182,7 @@ animateNumber(
 ===================================================== */
 
 animateNumber(
-    document.getElementById(
-        "funeralCount"
-    ),
+    document.getElementById("funeralCount"),
     funerals.length
 );
 
@@ -2544,7 +2213,7 @@ rice.forEach(
 
 
 /* =====================================================
-   ข้าวสารจ่ายทั่วไป
+   ข้าวสารจ่าย
 ===================================================== */
 
 let otherRice = 0;
@@ -2587,28 +2256,24 @@ if(
 
 
 animateNumber(
-    document.getElementById(
-        "riceInTotal"
-    ),
+    document.getElementById("riceInTotal"),
     riceIn
 );
 
 
 animateNumber(
-    document.getElementById(
-        "riceBalance"
-    ),
+    document.getElementById("riceBalance"),
     riceBalance
 );
 
 
 /* =====================================================
-   ข้าวสารช่วยงานศพ
-   คงที่ 182 ถุง
-   ไม่แก้รับ.html
+   ⭐ ข้าวสารช่วยงานศพ
+   กำหนดไว้ 182 ถุง
+   ไม่แตะรับ.html
 ===================================================== */
 
-const funeralRice =
+const FUNERAL_RICE =
     182;
 
 
@@ -2616,7 +2281,7 @@ animateNumber(
     document.getElementById(
         "funeralRice"
     ),
-    funeralRice
+    FUNERAL_RICE
 );
 
 
@@ -2687,17 +2352,14 @@ else if(
 
 
 /* =====================================================
-   แปลงวันที่
+   วันที่งานศพ
 ===================================================== */
 
 function parseFuneralDate(value){
 
     if(!value){
-
         return 0;
-
     }
-
 
     if(
         typeof value === "number"
@@ -2711,8 +2373,6 @@ function parseFuneralDate(value){
     const text =
         String(value).trim();
 
-
-    /* YYYY-MM-DD */
 
     let match =
         text.match(
@@ -2750,8 +2410,6 @@ function parseFuneralDate(value){
     }
 
 
-    /* DD/MM/YYYY */
-
     match =
         text.match(
             /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/
@@ -2787,8 +2445,6 @@ function parseFuneralDate(value){
 
     }
 
-
-    /* DD-MM-YYYY */
 
     match =
         text.match(
@@ -2827,9 +2483,7 @@ function parseFuneralDate(value){
 
 
     const date =
-        new Date(
-            text
-        );
+        new Date(text);
 
 
     if(
@@ -2849,15 +2503,13 @@ function parseFuneralDate(value){
 
 
 /* =====================================================
-   แสดงวันที่ไทย
+   วันที่ไทย
 ===================================================== */
 
 function formatThaiDate(value){
 
     const timestamp =
-        parseFuneralDate(
-            value
-        );
+        parseFuneralDate(value);
 
 
     if(
@@ -2884,7 +2536,7 @@ function formatThaiDate(value){
 
 
 /* =====================================================
-   เรียงงานศพ
+   เรียงงานศพล่าสุด
 ===================================================== */
 
 function getSortedFunerals(){
@@ -2929,18 +2581,15 @@ function showLatestFuneral(){
             "latestFuneralName"
         );
 
-
     const dateElement =
         document.getElementById(
             "latestFuneralDate"
         );
 
-
     const houseElement =
         document.getElementById(
             "latestFuneralHouse"
         );
-
 
     const cremateElement =
         document.getElementById(
@@ -3030,8 +2679,7 @@ function toggleFuneralHistory(){
             "show"
         );
 
-        box.innerHTML =
-            "";
+        box.innerHTML = "";
 
         return;
 
@@ -3044,7 +2692,7 @@ function toggleFuneralHistory(){
 
 
 /* =====================================================
-   แสดงย้อนหลัง
+   แสดงประวัติงานศพ
 ===================================================== */
 
 function showFuneralHistory(){
@@ -3061,15 +2709,17 @@ function showFuneralHistory(){
 
         box.innerHTML = `
 
-            <div class="history-header">
-
-                <div class="history-title">
-                    📜 ประวัติงานศพย้อนหลัง
-                </div>
-
+            <div class="history-title">
+                📜 ประวัติงานศพย้อนหลัง
             </div>
 
-            <div class="history-empty">
+            <div
+                style="
+                    margin-top:15px;
+                    padding:20px;
+                    text-align:center;
+                "
+            >
 
                 ยังไม่มีประวัติงานศพ
 
@@ -3077,9 +2727,7 @@ function showFuneralHistory(){
 
         `;
 
-        box.classList.add(
-            "show"
-        );
+        box.classList.add("show");
 
         return;
 
@@ -3099,15 +2747,10 @@ function showFuneralHistory(){
             </div>
 
             <div class="history-count">
-
-                ทั้งหมด
-                ${sorted.length}
-                งาน
-
+                ทั้งหมด ${sorted.length} งาน
             </div>
 
         </div>
-
 
         ${
             sorted
@@ -3227,9 +2870,7 @@ function showFuneralHistory(){
     `;
 
 
-    box.classList.add(
-        "show"
-    );
+    box.classList.add("show");
 
 
     setTimeout(
@@ -3254,6 +2895,7 @@ function showFuneralHistory(){
 showLatestFuneral();
 
 </script>
+
 
 </body>
 
