@@ -29,7 +29,7 @@ body{
 }
 
 .container{
-    max-width:800px;
+    max-width:850px;
     margin:auto;
     padding:15px;
 }
@@ -45,7 +45,7 @@ body{
 input{
     width:100%;
     padding:13px;
-    margin:7px 0;
+    margin:6px 0;
     border:1px solid #ccc;
     border-radius:10px;
     font-size:16px;
@@ -53,22 +53,42 @@ input{
 
 button{
     width:100%;
-    padding:14px;
+    padding:13px;
     margin-top:8px;
     border:0;
     border-radius:10px;
-    background:#228B22;
+    font-size:16px;
     color:white;
-    font-size:17px;
+    background:#228B22;
+}
+
+button.edit{
+    background:#1976d2;
+}
+
+button.delete{
+    background:#c62828;
+}
+
+button.cancel{
+    background:#777;
 }
 
 .summary{
-    text-align:center;
-    background:#f4fff4;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
 }
 
-.total{
-    font-size:34px;
+.summary-card{
+    background:#f8fff8;
+    padding:16px;
+    border-radius:12px;
+    text-align:center;
+}
+
+.number{
+    font-size:30px;
     font-weight:bold;
     color:#228B22;
 }
@@ -81,8 +101,9 @@ button{
     border-left:5px solid #228B22;
 }
 
-.delete{
-    background:#c62828;
+.item.editing{
+    border-left-color:#1976d2;
+    background:#f0f7ff;
 }
 
 .back{
@@ -93,17 +114,24 @@ button{
     text-decoration:none;
 }
 
+.hidden{
+    display:none;
+}
+
 </style>
 
 </head>
 
 <body>
 
+
 <div class="header">
 
-    <h1>📥 รับข้าวสารเข้ากลุ่ม</h1>
+<h1>📥 รับข้าวสารเข้ากลุ่ม</h1>
 
-    <p>กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</p>
+<p>
+กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
+</p>
 
 </div>
 
@@ -111,63 +139,136 @@ button{
 <div class="container">
 
 
-<div class="box summary">
+<!-- =========================
+     สรุป
+========================= -->
 
-    <h2>🌾 ข้าวสารคงเหลือ</h2>
+<div class="box">
 
-    <div
-        class="total"
-        id="balance"
-    >
-        0
-    </div>
+<div class="summary">
 
-    ถุง
+<div class="summary-card">
+
+📥 รับเข้าทั้งหมด
+
+<div
+    class="number"
+    id="totalRice"
+>
+0
+</div>
+
+ถุง
 
 </div>
 
 
-<div class="box">
+<div class="summary-card">
 
-    <h2>➕ บันทึกการรับข้าวสาร</h2>
+📋 รายการทั้งหมด
 
-    <input
-        id="name"
-        type="text"
-        placeholder="ชื่อ-นามสกุล ผู้ส่งข้าวสาร"
-    >
+<div
+    class="number"
+    id="totalItems"
+>
+0
+</div>
 
-    <input
-        id="house"
-        type="text"
-        placeholder="บ้านเลขที่"
-    >
+รายการ
 
-    <input
-        id="amount"
-        type="number"
-        min="1"
-        placeholder="จำนวนข้าวสาร (ถุง)"
-    >
+</div>
 
-    <input
-        id="note"
-        type="text"
-        placeholder="หมายเหตุ เช่น สมาชิกนำมาสมทบ"
-    >
-
-    <button onclick="saveRice()">
-        💾 บันทึกข้าวสารเข้ากลุ่ม
-    </button>
+</div>
 
 </div>
 
 
+<!-- =========================
+     เพิ่ม / แก้ไข
+========================= -->
+
+<div
+    class="box"
+    id="formBox"
+>
+
+<h2 id="formTitle">
+➕ บันทึกข้าวสารที่ได้รับ
+</h2>
+
+
+<input
+    id="name"
+    type="text"
+    placeholder="ชื่อ-นามสกุล ผู้ส่งข้าวสาร"
+>
+
+
+<input
+    id="house"
+    type="text"
+    placeholder="บ้านเลขที่"
+>
+
+
+<input
+    id="amount"
+    type="number"
+    min="1"
+    placeholder="จำนวนข้าวสาร (ถุง)"
+>
+
+
+<input
+    id="note"
+    type="text"
+    placeholder="หมายเหตุ"
+>
+
+
+<button
+    id="saveButton"
+    onclick="saveRice()"
+>
+
+💾 บันทึกข้าวสารเข้ากลุ่ม
+
+</button>
+
+
+<button
+    id="cancelButton"
+    class="cancel hidden"
+    onclick="cancelEdit()"
+>
+
+ยกเลิกแก้ไข
+
+</button>
+
+</div>
+
+
+<!-- =========================
+     รายการ
+========================= -->
+
 <div class="box">
 
-    <h2>📋 ประวัติการรับข้าวสาร</h2>
+<h2>
+📋 ประวัติการรับข้าวสาร
+</h2>
 
-    <div id="list"></div>
+
+<input
+    id="search"
+    type="text"
+    placeholder="ค้นหาชื่อหรือบ้านเลขที่"
+    oninput="showList()"
+>
+
+
+<div id="list"></div>
 
 </div>
 
@@ -176,7 +277,7 @@ button{
     class="back"
     href="index.html"
 >
-    ← กลับหน้าหลัก
+← กลับหน้าหลัก
 </a>
 
 
@@ -185,114 +286,73 @@ button{
 
 <script>
 
-let rice = [];
+/* =====================================================
+   โหลดข้อมูล
+===================================================== */
 
-try{
-
-    rice =
-        JSON.parse(
-            localStorage.getItem("rice")
-        ) || [];
-
-}catch(error){
-
-    rice = [];
-
-}
+let rice =
+    JSON.parse(
+        localStorage.getItem("rice")
+    ) || [];
 
 
-/* แสดงยอด */
-
-function showData(){
-
-    let total = 0;
-
-    let html = "";
+let editId = null;
 
 
-    rice.forEach((item,index)=>{
+/* =====================================================
+   ให้ข้อมูลเดิมมี ID
+===================================================== */
 
-        if(item.type === "รับ"){
+rice = rice.map((item,index)=>({
 
-            total +=
-                Number(item.amount || 0);
+    ...item,
 
-        }
+    id:
+        item.id ||
+        "rice-" +
+        Date.now() +
+        "-" +
+        index,
 
+    type:
+        item.type || "รับ",
 
-        if(item.type === "จ่าย"){
+    amount:
+        Number(item.amount || 0),
 
-            total -=
-                Number(item.amount || 0);
+    name:
+        item.name || "",
 
-        }
+    house:
+        item.house || "",
 
+    note:
+        item.note || "",
 
-    });
+    date:
+        item.date ||
+        new Date()
+            .toLocaleDateString("th-TH")
 
-
-    if(total < 0){
-        total = 0;
-    }
-
-
-    document.getElementById("balance")
-        .innerText = total;
-
-
-    const received =
-        rice.filter(
-            item =>
-            item.type === "รับ"
-        );
-
-
-    received.forEach((item,index)=>{
-
-        html += `
-
-        <div class="item">
-
-            <strong>
-                ${index + 1}. ${escapeHTML(item.name)}
-            </strong>
-
-            <br>
-
-            🏠 บ้านเลขที่:
-            ${escapeHTML(item.house)}
-
-            <br>
-
-            📦 รับเข้า:
-            ${Number(item.amount)} ถุง
-
-            <br>
-
-            📅 วันที่:
-            ${escapeHTML(item.date)}
-
-            <br>
-
-            📝 หมายเหตุ:
-            ${escapeHTML(item.note || "-")}
-
-        </div>
-
-        `;
-
-    });
+}));
 
 
-    document.getElementById("list")
-        .innerHTML =
-        html ||
-        "<p>ยังไม่มีรายการรับข้าวสาร</p>";
+saveData();
+
+
+function saveData(){
+
+    localStorage.setItem(
+        "rice",
+        JSON.stringify(rice)
+    );
 
 }
 
 
-/* บันทึก */
+/* =====================================================
+   เพิ่ม / แก้ไข
+===================================================== */
 
 function saveRice(){
 
@@ -351,9 +411,76 @@ function saveRice(){
     }
 
 
+    /* =========================
+       แก้ไขรายการ
+    ========================= */
+
+    if(editId !== null){
+
+        const item =
+            rice.find(
+                r =>
+                String(r.id) ===
+                String(editId)
+            );
+
+
+        if(!item){
+
+            alert(
+                "ไม่พบรายการ"
+            );
+
+            cancelEdit();
+
+            return;
+
+        }
+
+
+        item.name =
+            name;
+
+        item.house =
+            house;
+
+        item.amount =
+            amount;
+
+        item.note =
+            note;
+
+
+        saveData();
+
+
+        alert(
+            "แก้ไขรายการเรียบร้อยแล้ว"
+        );
+
+
+        cancelEdit();
+
+        showList();
+
+        return;
+
+    }
+
+
+    /* =========================
+       เพิ่มรายการใหม่
+    ========================= */
+
     rice.push({
 
-        id:Date.now(),
+        id:
+            "rice-" +
+            Date.now() +
+            "-" +
+            Math.random()
+            .toString(36)
+            .substring(2,8),
 
         type:"รับ",
 
@@ -372,11 +499,139 @@ function saveRice(){
     });
 
 
-    localStorage.setItem(
-        "rice",
-        JSON.stringify(rice)
+    saveData();
+
+
+    clearForm();
+
+    showList();
+
+
+    alert(
+        "บันทึกข้าวสารเข้ากลุ่มเรียบร้อยแล้ว"
     );
 
+}
+
+
+/* =====================================================
+   แก้ไข
+===================================================== */
+
+function editRice(id){
+
+    const item =
+        rice.find(
+            r =>
+            String(r.id) ===
+            String(id)
+        );
+
+
+    if(!item){
+
+        alert(
+            "ไม่พบรายการ"
+        );
+
+        return;
+
+    }
+
+
+    editId = id;
+
+
+    document.getElementById("name")
+        .value =
+        item.name || "";
+
+
+    document.getElementById("house")
+        .value =
+        item.house || "";
+
+
+    document.getElementById("amount")
+        .value =
+        item.amount || "";
+
+
+    document.getElementById("note")
+        .value =
+        item.note || "";
+
+
+    document.getElementById("formTitle")
+        .innerText =
+        "✏️ แก้ไขรายการรับข้าวสาร";
+
+
+    document.getElementById("saveButton")
+        .innerText =
+        "💾 บันทึกการแก้ไข";
+
+
+    document.getElementById("cancelButton")
+        .classList
+        .remove("hidden");
+
+
+    document.getElementById("formBox")
+        .style.border =
+        "2px solid #1976d2";
+
+
+    window.scrollTo({
+
+        top:0,
+
+        behavior:"smooth"
+
+    });
+
+}
+
+
+/* =====================================================
+   ยกเลิกแก้ไข
+===================================================== */
+
+function cancelEdit(){
+
+    editId = null;
+
+
+    clearForm();
+
+
+    document.getElementById("formTitle")
+        .innerText =
+        "➕ บันทึกข้าวสารที่ได้รับ";
+
+
+    document.getElementById("saveButton")
+        .innerText =
+        "💾 บันทึกข้าวสารเข้ากลุ่ม";
+
+
+    document.getElementById("cancelButton")
+        .classList
+        .add("hidden");
+
+
+    document.getElementById("formBox")
+        .style.border =
+        "none";
+
+}
+
+
+/* =====================================================
+   ล้างฟอร์ม
+===================================================== */
+
+function clearForm(){
 
     document.getElementById("name")
         .value = "";
@@ -390,18 +645,240 @@ function saveRice(){
     document.getElementById("note")
         .value = "";
 
+}
 
-    showData();
+
+/* =====================================================
+   ลบรายการ
+===================================================== */
+
+function deleteRice(id){
+
+    const item =
+        rice.find(
+            r =>
+            String(r.id) ===
+            String(id)
+        );
+
+
+    if(!item){
+
+        return;
+
+    }
+
+
+    const confirmed =
+        confirm(
+            "ต้องการลบรายการนี้หรือไม่?\n\n" +
+            item.name +
+            "\n" +
+            "บ้านเลขที่ " +
+            item.house +
+            "\n" +
+            "จำนวน " +
+            item.amount +
+            " ถุง"
+        );
+
+
+    if(!confirmed){
+
+        return;
+
+    }
+
+
+    rice =
+        rice.filter(
+            r =>
+            String(r.id) !==
+            String(id)
+        );
+
+
+    saveData();
+
+    showList();
 
 
     alert(
-        "บันทึกข้าวสารเข้ากลุ่มเรียบร้อยแล้ว"
+        "ลบรายการเรียบร้อยแล้ว"
     );
 
 }
 
 
-/* ป้องกัน HTML */
+/* =====================================================
+   แสดงรายการ
+===================================================== */
+
+function showList(){
+
+    const keyword =
+        document.getElementById("search")
+            .value
+            .trim()
+            .toLowerCase();
+
+
+    const received =
+        rice.filter(
+            r =>
+            r.type === "รับ"
+        );
+
+
+    const filtered =
+        received.filter(item=>{
+
+            const name =
+                String(item.name || "")
+                    .toLowerCase();
+
+
+            const house =
+                String(item.house || "")
+                    .toLowerCase();
+
+
+            return(
+                name.includes(keyword)
+                ||
+                house.includes(keyword)
+            );
+
+        });
+
+
+    let total = 0;
+
+
+    received.forEach(item=>{
+
+        total +=
+            Number(item.amount || 0);
+
+    });
+
+
+    document.getElementById("totalRice")
+        .innerText =
+        total;
+
+
+    document.getElementById("totalItems")
+        .innerText =
+        received.length;
+
+
+    let html = "";
+
+
+    filtered.forEach((item,index)=>{
+
+        html += `
+
+        <div class="item">
+
+            <strong>
+
+                ${index + 1}.
+                ${escapeHTML(item.name)}
+
+            </strong>
+
+            <br>
+
+            🏠 บ้านเลขที่:
+            ${escapeHTML(item.house)}
+
+            <br>
+
+            📦 จำนวน:
+            <strong>
+                ${Number(item.amount)}
+                ถุง
+            </strong>
+
+            <br>
+
+            📅 วันที่:
+            ${escapeHTML(item.date)}
+
+            <br>
+
+            📝 หมายเหตุ:
+            ${escapeHTML(item.note || "-")}
+
+            <br>
+
+            <button
+                class="edit"
+                onclick="
+                    editRice(
+                        '${escapeAttribute(item.id)}'
+                    )
+                "
+            >
+
+                ✏️ แก้ไข
+
+            </button>
+
+
+            <button
+                class="delete"
+                onclick="
+                    deleteRice(
+                        '${escapeAttribute(item.id)}'
+                    )
+                "
+            >
+
+                🗑 ลบรายการ
+
+            </button>
+
+        </div>
+
+        `;
+
+    });
+
+
+    if(filtered.length === 0){
+
+        html = `
+
+        <div
+            style="
+                text-align:center;
+                color:#777;
+                padding:20px;
+            "
+        >
+
+            ยังไม่มีรายการรับข้าวสาร
+
+        </div>
+
+        `;
+
+    }
+
+
+    document.getElementById("list")
+        .innerHTML =
+        html;
+
+}
+
+
+/* =====================================================
+   ป้องกัน HTML
+===================================================== */
 
 function escapeHTML(value){
 
@@ -415,7 +892,20 @@ function escapeHTML(value){
 }
 
 
-showData();
+function escapeAttribute(value){
+
+    return String(value || "")
+        .replace(/\\/g,"\\\\")
+        .replace(/'/g,"\\'");
+
+}
+
+
+/* =====================================================
+   เริ่มระบบ
+===================================================== */
+
+showList();
 
 </script>
 
