@@ -61,7 +61,13 @@ body{margin:0;font-family:Tahoma,"Noto Sans Thai",sans-serif;color:#fff;min-heig
 .summary-content{position:relative;z-index:2}.summary-title{font-size:15px;color:#c9efd3;font-weight:600}.summary-number{margin-top:6px;font-size:46px;line-height:1;font-weight:900}.summary-unit{margin-top:8px;font-size:13px;color:#9ed6ad}
 
 /* dashboard */
-.dashboard{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.card{position:relative;overflow:hidden;padding:24px;min-height:170px;border-radius:25px;background:linear-gradient(145deg,rgba(255,255,255,.15),rgba(255,255,255,.055));border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(16px);box-shadow:0 20px 50px rgba(0,0,0,.20);transform:translateY(50px);opacity:0;animation:cardEnter .8s cubic-bezier(.2,.8,.2,1) forwards}
+/* ค้นหาสมาชิก / บันทึกส่งข้าวสาร */
+.rice-check-card{margin:0 0 25px;padding:24px;border-radius:28px;background:linear-gradient(145deg,rgba(255,255,255,.14),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(16px);box-shadow:0 20px 55px rgba(0,0,0,.22)}
+.rice-check-header{display:flex;align-items:center;gap:14px;margin-bottom:18px}.rice-check-icon{width:58px;height:58px;display:flex;align-items:center;justify-content:center;border-radius:18px;font-size:30px;background:rgba(255,255,255,.10)}.rice-check-header h2{margin:0;color:#fff4b0;font-size:22px}.rice-check-header p{margin:5px 0 0;color:#b9e9c7;font-size:13px}
+.rice-search-row{display:grid;grid-template-columns:1fr 120px;gap:10px}.rice-search-row input{width:100%;padding:14px 16px;border:1px solid rgba(255,255,255,.18);border-radius:14px;background:rgba(0,0,0,.15);color:#fff;font-size:16px;outline:none}.rice-search-row input::placeholder{color:rgba(255,255,255,.55)}.rice-search-row button{border:0;border-radius:14px;background:linear-gradient(135deg,#1f9d4c,#126b31);color:#fff;font-size:16px;font-weight:900;cursor:pointer}
+.rice-member-results{margin-top:15px}.rice-member-results:empty{display:none}.rice-search-empty{padding:18px;text-align:center;color:#a9ceb1;border:1px dashed rgba(255,255,255,.16);border-radius:16px}.rice-member-result{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:15px 16px;margin-top:10px;border-radius:18px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12)}.rice-member-info strong{display:block;font-size:18px}.rice-member-info span{display:block;margin-top:5px;color:#b9e9c7;font-size:13px}.rice-member-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.rice-amount{width:90px;padding:10px;border:1px solid rgba(255,255,255,.18);border-radius:11px;background:rgba(0,0,0,.16);color:#fff}.rice-save-btn{padding:11px 14px;border:0;border-radius:11px;background:linear-gradient(135deg,#1f9d4c,#0f6b31);color:#fff;font-weight:900;cursor:pointer}.rice-status{margin-top:9px;font-size:12px;color:#9fd6ad}.rice-status.ok{color:#baf3c9}.rice-status.warn{color:#ffd36b}
+
+.dashboard{grid-template-columns:repeat(4,1fr);gap:16px}.card{position:relative;overflow:hidden;padding:24px;min-height:170px;border-radius:25px;background:linear-gradient(145deg,rgba(255,255,255,.15),rgba(255,255,255,.055));border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(16px);box-shadow:0 20px 50px rgba(0,0,0,.20);transform:translateY(50px);opacity:0;animation:cardEnter .8s cubic-bezier(.2,.8,.2,1) forwards}
 .card:nth-child(1){animation-delay:.10s}.card:nth-child(2){animation-delay:.20s}.card:nth-child(3){animation-delay:.30s}.card:nth-child(4){animation-delay:.40s}.card::before{content:"";position:absolute;width:220px;height:220px;right:-100px;top:-100px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.12),transparent 70%)}.card::after{content:"";position:absolute;width:100%;height:2px;left:-100%;bottom:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.8),transparent);animation:lightSweep 3.5s linear infinite}
 @keyframes cardEnter{to{transform:translateY(0);opacity:1}}@keyframes lightSweep{0%{left:-100%}50%{left:100%}100%{left:100%}}.card:hover{transform:translateY(-10px) scale(1.025)}.card-icon{font-size:42px;margin-bottom:10px;animation:iconFloat 2s ease-in-out infinite}@keyframes iconFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}.card-title{color:#b9e9c7;font-size:14px}.card-number{margin-top:5px;font-size:38px;font-weight:900}.card-unit{color:#9ed6ad;font-size:13px}
 
@@ -136,6 +142,26 @@ body{margin:0;font-family:Tahoma,"Noto Sans Thai",sans-serif;color:#fff;min-heig
     <div class="summary-main-card members-card"><div class="summary-icon">👥</div><div class="summary-content"><div class="summary-title">สมาชิกทั้งหมด</div><div class="summary-number" id="memberCount">192</div><div class="summary-unit">ครัวเรือน</div></div></div>
     <div class="summary-main-card normal-card"><div class="summary-icon">✅</div><div class="summary-content"><div class="summary-title">สมาชิกปกติ</div><div class="summary-number" id="normalCount">182</div><div class="summary-unit">ครัวเรือน</div></div></div>
     <div class="summary-main-card rice-card"><div class="summary-icon">🌾</div><div class="summary-content"><div class="summary-title">ข้าวสารช่วยงานศพ</div><div class="summary-number" id="funeralRice">182</div><div class="summary-unit">ถุง</div></div></div>
+</section>
+
+<!-- ค้นหาสมาชิกและบันทึกการส่งข้าวสาร -->
+<section class="rice-check-card">
+    <div class="rice-check-header">
+        <div class="rice-check-icon">🔎</div>
+        <div>
+            <h2>ค้นหาสมาชิก / บันทึกการส่งข้าวสาร</h2>
+            <p>ค้นหาด้วยชื่อสมาชิกหรือบ้านเลขที่ แล้วบันทึกเมื่อสมาชิกนำข้าวสารมาส่ง</p>
+        </div>
+    </div>
+
+    <div class="rice-search-row">
+        <input id="riceMemberSearch" type="text" placeholder="🔎 พิมพ์ชื่อสมาชิก หรือ บ้านเลขที่" oninput="searchRiceMember()">
+        <button type="button" onclick="searchRiceMember()">ค้นหา</button>
+    </div>
+
+    <div id="riceMemberResults" class="rice-member-results">
+        <div class="rice-search-empty">พิมพ์ชื่อหรือบ้านเลขที่เพื่อค้นหาสมาชิก</div>
+    </div>
 </section>
 
 <section class="dashboard">
@@ -309,7 +335,105 @@ const followupMembers=[
 {name:"นายประทุม ดาวกระจาย",house:"328",pending:2,funeralPending:["นายเกษมสุข ใฝ่ใจ","นายบูรณพิภพ ผัดดี"]}
 ];
 
-function showFollowupMembers(){
+function getRiceMembers(){
+    const raw = JSON.parse(localStorage.getItem("members")) || [];
+    return raw.map((item,index)=>({
+        ...item,
+        id:item.id || `member-${index}`,
+        name:item.name || item.fullname || item.fullName || item.memberName || "",
+        house:item.house || item.houseNo || item.houseNumber || "",
+        pending:Number(item.pending || 0)
+    })).filter(item=>item.name || item.house);
+}
+
+function getRiceRecords(){
+    return JSON.parse(localStorage.getItem("riceDeliveryRecords")) || [];
+}
+
+function saveRiceRecords(records){
+    localStorage.setItem("riceDeliveryRecords",JSON.stringify(records));
+}
+
+function riceDeliveredCount(memberId){
+    return getRiceRecords().filter(r=>String(r.memberId)===String(memberId)).length;
+}
+
+function searchRiceMember(){
+    const keyword=(document.getElementById("riceMemberSearch")?.value || "").trim().toLowerCase();
+    const box=document.getElementById("riceMemberResults");
+    if(!box)return;
+
+    if(!keyword){
+        box.innerHTML='<div class="rice-search-empty">พิมพ์ชื่อหรือบ้านเลขที่เพื่อค้นหาสมาชิก</div>';
+        return;
+    }
+
+    const membersForRice=getRiceMembers().filter(member=>{
+        const name=String(member.name||"").toLowerCase();
+        const house=String(member.house||"").toLowerCase();
+        return name.includes(keyword) || house.includes(keyword);
+    }).slice(0,12);
+
+    if(!membersForRice.length){
+        box.innerHTML='<div class="rice-search-empty">ไม่พบสมาชิกที่ค้นหา</div>';
+        return;
+    }
+
+    box.innerHTML=membersForRice.map(member=>{
+        const delivered=riceDeliveredCount(member.id);
+        return `<div class="rice-member-result">
+            <div class="rice-member-info">
+                <strong>👤 ${escapeText(member.name || "ไม่ระบุชื่อ")}</strong>
+                <span>🏠 บ้านเลขที่ ${escapeText(member.house || "-")} ${delivered?`• ส่งแล้ว ${delivered} ครั้ง`:""}</span>
+                <div id="riceStatus-${escapeAttr(member.id)}" class="rice-status"></div>
+            </div>
+            <div class="rice-member-actions">
+                <input id="riceAmount-${escapeAttr(member.id)}" class="rice-amount" type="number" min="1" value="1" aria-label="จำนวนถุง">
+                <button class="rice-save-btn" type="button" onclick="recordRiceDelivery('${escapeAttribute(member.id)}')">✅ บันทึกส่ง</button>
+            </div>
+        </div>`;
+    }).join("");
+}
+
+function recordRiceDelivery(memberId){
+    const member=getRiceMembers().find(m=>String(m.id)===String(memberId));
+    if(!member){ alert("ไม่พบสมาชิก"); return; }
+
+    const amountInput=document.getElementById(`riceAmount-${memberId}`);
+    const amount=Number(amountInput?.value || 0);
+    if(!amount || amount<1){ alert("กรุณาระบุจำนวนข้าวสาร"); return; }
+
+    const records=getRiceRecords();
+    records.push({
+        id:`rice-${Date.now()}-${Math.random().toString(36).slice(2,7)}`,
+        memberId:member.id,
+        name:member.name,
+        house:member.house,
+        amount,
+        date:new Date().toLocaleDateString("th-TH"),
+        timestamp:Date.now()
+    });
+    saveRiceRecords(records);
+
+    const status=document.getElementById(`riceStatus-${memberId}`);
+    if(status){
+        status.className="rice-status ok";
+        status.innerText=`บันทึกแล้ว ${amount} ถุง • ${new Date().toLocaleDateString("th-TH")}`;
+    }
+
+    refreshRiceSummary();
+}
+
+function refreshRiceSummary(){
+    // เก็บสถิติการส่งไว้ใน riceDeliveryRecords โดยไม่เปลี่ยนยอดสรุปหน้าแรกอัตโนมัติ
+    return getRiceRecords();
+}
+
+function escapeText(value){
+    return String(value||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;").replace(/'/g,"&#039;");
+}
+
+
     const box=document.getElementById("followupList");
     box.innerHTML=followupMembers.map((member,index)=>{
         const danger=Number(member.pending)>=2;
@@ -332,6 +456,8 @@ function printFollowupReport(){
 showFollowupMembers();
 showLatestFuneral();
 showCondolence();
+searchRiceMember();
+refreshRiceSummary();
 </script>
 </body>
 </html>
