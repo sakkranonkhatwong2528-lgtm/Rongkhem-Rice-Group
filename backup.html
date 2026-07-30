@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+สำรองข้อมูลระบบกลุ่มข้าวสาร
+</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Tahoma,sans-serif;
+    background:#f3f7f0;
+    color:#333;
+}
+
+.header{
+    background:linear-gradient(
+        135deg,
+        #176b2c,
+        #4caf50
+    );
+
+    color:white;
+
+    padding:25px 15px;
+
+    text-align:center;
+}
+
+.container{
+    max-width:800px;
+
+    margin:auto;
+
+    padding:15px;
+}
+
+.box{
+    background:white;
+
+    padding:20px;
+
+    margin-bottom:15px;
+
+    border-radius:16px;
+
+    box-shadow:
+        0 3px 10px
+        rgba(0,0,0,.08);
+}
+
+.summary{
+    display:grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:10px;
+}
+
+.card{
+    background:#f8fff8;
+
+    padding:15px;
+
+    border-radius:12px;
+
+    text-align:center;
+}
+
+.number{
+    font-size:28px;
+
+    font-weight:bold;
+
+    color:#228B22;
+}
+
+button{
+    width:100%;
+
+    padding:14px;
+
+    margin-top:10px;
+
+    border:0;
+
+    border-radius:10px;
+
+    background:#228B22;
+
+    color:white;
+
+    font-size:16px;
+
+    cursor:pointer;
+}
+
+button.blue{
+    background:#1976d2;
+}
+
+button.red{
+    background:#c62828;
+}
+
+input[type="file"]{
+    width:100%;
+
+    padding:12px;
+
+    margin-top:10px;
+}
+
+.warning{
+    background:#fff3cd;
+
+    color:#856404;
+
+    padding:14px;
+
+    border-radius:12px;
+
+    margin-top:10px;
+}
+
+.success{
+    background:#e8f7e8;
+
+    color:#1b7a1b;
+
+    padding:14px;
+
+    border-radius:12px;
+
+    margin-top:10px;
+}
+
+.back{
+    display:block;
+
+    text-align:center;
+
+    padding:18px;
+
+    color:#228B22;
+
+    text-decoration:none;
+}
+
+@media(max-width:600px){
+
+    .summary{
+        grid-template-columns:1fr 1fr;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<div class="header">
+
+<h1>
+💾 สำรองข้อมูล
+</h1>
+
+<p>
+กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
+</p>
+
+</div>
+
+
+<div class="container">
+
+
+<!-- =========================
+     สรุปข้อมูล
+========================= -->
+
+<div class="box">
+
+<h2>
+📊 ข้อมูลในระบบ
+</h2>
+
+
+<div class="summary">
+
+
+<div class="card">
+
+👥 สมาชิก
+
+<div
+    class="number"
+    id="memberCount"
+>
+0
+</div>
+
+ครัวเรือน
+
+</div>
+
+
+<div class="card">
+
+⚰️ งานศพ
+
+<div
+    class="number"
+    id="funeralCount"
+>
+0
+</div>
+
+งาน
+
+</div>
+
+
+<div class="card">
+
+🌾 รายการข้าวสาร
+
+<div
+    class="number"
+    id="riceCount"
+>
+0
+</div>
+
+รายการ
+
+</div>
+
+
+<div class="card">
+
+📦 ช่วยงานศพ
+
+<div
+    class="number"
+    id="sendCount"
+>
+0
+</div>
+
+รายการ
+
+</div>
+
+
+</div>
+
+</div>
+
+
+<!-- =========================
+     สำรองข้อมูล
+========================= -->
+
+<div class="box">
+
+<h2>
+📥 ส่งออกข้อมูล
+</h2>
+
+<p>
+บันทึกข้อมูลทั้งหมดจากระบบเป็นไฟล์
+เพื่อเก็บไว้เป็นข้อมูลสำรอง
+</p>
+
+
+<button
+    onclick="backupData()"
+>
+💾 ดาวน์โหลดข้อมูลสำรอง
+</button>
+
+
+<div
+    id="backupMessage"
+></div>
+
+</div>
+
+
+<!-- =========================
+     นำเข้าข้อมูล
+========================= -->
+
+<div class="box">
+
+<h2>
+📤 นำเข้าข้อมูลสำรอง
+</h2>
+
+<p>
+เลือกไฟล์ข้อมูลสำรองที่เคยดาวน์โหลดไว้
+</p>
+
+
+<input
+    id="backupFile"
+    type="file"
+    accept=".json"
+>
+
+
+<button
+    class="blue"
+    onclick="restoreData()"
+>
+📤 นำเข้าข้อมูล
+</button>
+
+
+<div
+    id="restoreMessage"
+></div>
+
+</div>
+
+
+<!-- =========================
+     กลับหน้าแรก
+========================= -->
+
+<a
+    class="back"
+    href="index.html"
+>
+← กลับหน้าหลัก
+</a>
+
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   แสดงจำนวนข้อมูล
+===================================================== */
+
+function showSummary(){
+
+    const members =
+        JSON.parse(
+            localStorage.getItem("members")
+        ) || [];
+
+
+    const funerals =
+        JSON.parse(
+            localStorage.getItem("funerals")
+        ) || [];
+
+
+    const rice =
+        JSON.parse(
+            localStorage.getItem("rice")
+        ) || [];
+
+
+    const funeralSends =
+        JSON.parse(
+            localStorage.getItem("funeralSends")
+        ) || [];
+
+
+    document.getElementById(
+        "memberCount"
+    ).innerText =
+        members.length;
+
+
+    document.getElementById(
+        "funeralCount"
+    ).innerText =
+        funerals.length;
+
+
+    document.getElementById(
+        "riceCount"
+    ).innerText =
+        rice.length;
+
+
+    document.getElementById(
+        "sendCount"
+    ).innerText =
+        funeralSends.length;
+
+}
+
+
+/* =====================================================
+   สำรองข้อมูล
+===================================================== */
+
+function backupData(){
+
+    const backup = {
+
+        ระบบ:
+            "กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6",
+
+        วันที่สำรอง:
+            new Date().toLocaleString(
+                "th-TH"
+            ),
+
+        members:
+            JSON.parse(
+                localStorage.getItem(
+                    "members"
+                )
+            ) || [],
+
+        funerals:
+            JSON.parse(
+                localStorage.getItem(
+                    "funerals"
+                )
+            ) || [],
+
+        rice:
+            JSON.parse(
+                localStorage.getItem(
+                    "rice"
+                )
+            ) || [],
+
+        funeralSends:
+            JSON.parse(
+                localStorage.getItem(
+                    "funeralSends"
+                )
+            ) || [],
+
+        selectedFuneralId:
+            localStorage.getItem(
+                "selectedFuneralId"
+            ) || ""
+
+    };
+
+
+    const data =
+        JSON.stringify(
+            backup,
+            null,
+            2
+        );
+
+
+    const blob =
+        new Blob(
+            [data],
+            {
+                type:
+                    "application/json"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(
+            blob
+        );
+
+
+    const link =
+        document.createElement("a");
+
+
+    const date =
+        new Date()
+        .toISOString()
+        .slice(0,10);
+
+
+    link.href =
+        url;
+
+
+    link.download =
+        "backup-rongkhem-rice-" +
+        date +
+        ".json";
+
+
+    document.body.appendChild(
+        link
+    );
+
+
+    link.click();
+
+
+    link.remove();
+
+
+    URL.revokeObjectURL(
+        url
+    );
+
+
+    document.getElementById(
+        "backupMessage"
+    ).innerHTML = `
+
+        <div class="success">
+
+            ✅ สำรองข้อมูลเรียบร้อยแล้ว
+
+            <br>
+
+            กรุณาเก็บไฟล์ไว้ในที่ปลอดภัย
+
+        </div>
+
+    `;
+
+}
+
+
+/* =====================================================
+   นำเข้าข้อมูล
+===================================================== */
+
+function restoreData(){
+
+    const fileInput =
+        document.getElementById(
+            "backupFile"
+        );
+
+
+    const file =
+        fileInput.files[0];
+
+
+    if(!file){
+
+        alert(
+            "กรุณาเลือกไฟล์ข้อมูลสำรอง"
+        );
+
+        return;
+
+    }
+
+
+    const confirmed =
+        confirm(
+            "การนำเข้าข้อมูลจะเขียนทับข้อมูลปัจจุบัน\n\n" +
+            "ต้องการดำเนินการต่อหรือไม่?"
+        );
+
+
+    if(!confirmed){
+
+        return;
+
+    }
+
+
+    const reader =
+        new FileReader();
+
+
+    reader.onload =
+        function(event){
+
+            try{
+
+                const data =
+                    JSON.parse(
+                        event.target.result
+                    );
+
+
+                if(!data){
+
+                    throw new Error(
+                        "ไฟล์ไม่ถูกต้อง"
+                    );
+
+                }
+
+
+                if(
+                    !Array.isArray(
+                        data.members
+                    )
+                ){
+
+                    throw new Error(
+                        "ไม่พบข้อมูลสมาชิก"
+                    );
+
+                }
+
+
+                localStorage.setItem(
+                    "members",
+                    JSON.stringify(
+                        data.members
+                    )
+                );
+
+
+                localStorage.setItem(
+                    "funerals",
+                    JSON.stringify(
+                        data.funerals || []
+                    )
+                );
+
+
+                localStorage.setItem(
+                    "rice",
+                    JSON.stringify(
+                        data.rice || []
+                    )
+                );
+
+
+                localStorage.setItem(
+                    "funeralSends",
+                    JSON.stringify(
+                        data.funeralSends || []
+                    )
+                );
+
+
+                localStorage.setItem(
+                    "selectedFuneralId",
+                    data.selectedFuneralId || ""
+                );
+
+
+                showSummary();
+
+
+                document.getElementById(
+                    "restoreMessage"
+                ).innerHTML = `
+
+                    <div class="success">
+
+                        ✅ นำเข้าข้อมูลเรียบร้อยแล้ว
+
+                    </div>
+
+                `;
+
+
+            }catch(error){
+
+                document.getElementById(
+                    "restoreMessage"
+                ).innerHTML = `
+
+                    <div class="warning">
+
+                        ❌ นำเข้าข้อมูลไม่สำเร็จ
+
+                        <br>
+
+                        ${error.message}
+
+                    </div>
+
+                `;
+
+            }
+
+        };
+
+
+    reader.readAsText(
+        file
+    );
+
+}
+
+
+/* =====================================================
+   เริ่มต้น
+===================================================== */
+
+showSummary();
+
+</script>
+
+</body>
+
+</html>
