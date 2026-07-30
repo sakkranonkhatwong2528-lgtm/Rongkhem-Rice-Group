@@ -727,6 +727,7 @@ body{
     flex-shrink:0;
 
     display:flex;
+
     align-items:center;
     justify-content:center;
 
@@ -764,8 +765,11 @@ body{
 }
 
 .summary-content{
+
     position:relative;
+
     z-index:2;
+
 }
 
 .summary-title{
@@ -802,7 +806,7 @@ body{
 
 
 /* =====================================================
-   Dashboard อื่น
+   Dashboard
 ===================================================== */
 
 .dashboard{
@@ -864,7 +868,6 @@ body{
 .card:nth-child(3){animation-delay:.30s;}
 .card:nth-child(4){animation-delay:.40s;}
 .card:nth-child(5){animation-delay:.50s;}
-.card:nth-child(6){animation-delay:.60s;}
 
 @keyframes cardEnter{
 
@@ -1267,7 +1270,9 @@ body{
 }
 
 .funeral-history.show{
+
     display:block;
+
 }
 
 .history-header{
@@ -1406,21 +1411,15 @@ body{
 @keyframes historyEnter{
 
     from{
-
         opacity:0;
-
         transform:
             translateY(15px);
-
     }
 
     to{
-
         opacity:1;
-
         transform:
             translateY(0);
-
     }
 
 }
@@ -1461,15 +1460,19 @@ body{
 @keyframes alertPulse{
 
     0%,100%{
+
         box-shadow:
             0 0 20px
             rgba(255,50,50,.08);
+
     }
 
     50%{
+
         box-shadow:
             0 0 45px
             rgba(255,50,50,.22);
+
     }
 
 }
@@ -1916,15 +1919,20 @@ body{
     }
 
     .latest-funeral-card{
+
         grid-column:
             span 2;
+
         min-height:300px;
+
     }
 
     .latest-funeral-info,
     .history-info{
+
         grid-template-columns:
             1fr;
+
     }
 
     .latest-funeral-name{
@@ -1932,30 +1940,46 @@ body{
     }
 
     .summary-main-card{
+
         min-height:145px;
+
         padding:18px;
+
         border-radius:22px;
+
     }
 
     .summary-icon{
+
         width:58px;
         height:58px;
+
         font-size:30px;
+
         border-radius:18px;
+
     }
 
     .summary-number{
+
         font-size:36px;
+
     }
 
     .followup-header{
+
         align-items:flex-start;
+
         flex-direction:column;
+
     }
 
     .history-header{
+
         align-items:flex-start;
+
         flex-direction:column;
+
     }
 
 }
@@ -1981,6 +2005,10 @@ body{
 
 <div class="page">
 
+
+<!-- =====================================================
+   HERO
+===================================================== -->
 
 <header class="hero">
 
@@ -2012,6 +2040,8 @@ body{
 <section class="main-summary">
 
 
+    <!-- สมาชิกทั้งหมด -->
+
     <div class="summary-main-card members-card">
 
         <div class="summary-icon">
@@ -2040,6 +2070,8 @@ body{
     </div>
 
 
+    <!-- สมาชิกปกติ -->
+
     <div class="summary-main-card normal-card">
 
         <div class="summary-icon">
@@ -2067,6 +2099,8 @@ body{
 
     </div>
 
+
+    <!-- ข้าวสารช่วยงานศพ -->
 
     <div class="summary-main-card rice-card">
 
@@ -2106,6 +2140,8 @@ body{
 <section class="dashboard">
 
 
+    <!-- งานศพ -->
+
     <div class="card">
 
         <div class="card-icon">
@@ -2129,6 +2165,8 @@ body{
 
     </div>
 
+
+    <!-- งานศพล่าสุด -->
 
     <div class="card latest-funeral-card">
 
@@ -2234,6 +2272,7 @@ body{
 
             </div>
 
+
         </div>
 
 
@@ -2248,29 +2287,7 @@ body{
     </div>
 
 
-    <div class="card">
-
-        <div class="card-icon">
-            🌾
-        </div>
-
-        <div class="card-title">
-            ข้าวสารคงเหลือ
-        </div>
-
-        <div
-            class="card-number"
-            id="riceBalance"
-        >
-            0
-        </div>
-
-        <div class="card-unit">
-            ถุง
-        </div>
-
-    </div>
-
+    <!-- สมาชิกค้าง -->
 
     <div class="card">
 
@@ -2296,6 +2313,8 @@ body{
     </div>
 
 
+    <!-- ค้าง 2 ครั้ง -->
+
     <div class="card">
 
         <div class="card-icon">
@@ -2319,6 +2338,8 @@ body{
 
     </div>
 
+
+    <!-- ประวัติงานศพ -->
 
     <div
         id="funeralHistory"
@@ -2372,6 +2393,10 @@ body{
 
 <div id="notice"></div>
 
+
+<!-- =====================================================
+   เมนูระบบ
+===================================================== -->
 
 <h2 class="section-title">
     เมนูระบบ
@@ -2513,14 +2538,10 @@ const members =
         localStorage.getItem("members")
     ) || [];
 
+
 const funerals =
     JSON.parse(
         localStorage.getItem("funerals")
-    ) || [];
-
-const rice =
-    JSON.parse(
-        localStorage.getItem("rice")
     ) || [];
 
 
@@ -2540,6 +2561,7 @@ function animateNumber(
     const start =
         performance.now();
 
+
     function update(current){
 
         const progress =
@@ -2550,6 +2572,7 @@ function animateNumber(
                 1
             );
 
+
         const eased =
             1 -
             Math.pow(
@@ -2557,15 +2580,18 @@ function animateNumber(
                 3
             );
 
+
         const value =
             Math.floor(
                 target * eased
             );
 
+
         element.innerText =
             value.toLocaleString(
                 "th-TH"
             );
+
 
         if(
             progress < 1
@@ -2587,6 +2613,7 @@ function animateNumber(
 
     }
 
+
     requestAnimationFrame(
         update
     );
@@ -2601,6 +2628,7 @@ function animateNumber(
 const memberTotal =
     members.length || 192;
 
+
 const pendingMembers =
     members.filter(
         member =>
@@ -2609,6 +2637,7 @@ const pendingMembers =
             ) > 0
     );
 
+
 const dangerMembers =
     members.filter(
         member =>
@@ -2616,6 +2645,7 @@ const dangerMembers =
                 member.pending || 0
             ) >= 2
     );
+
 
 const normalMembers =
     members.filter(
@@ -2677,67 +2707,6 @@ animateNumber(
         "funeralCount"
     ),
     funerals.length
-);
-
-
-/* =====================================================
-   ข้าวสารคงเหลือ
-   ใช้ rice เดิม
-===================================================== */
-
-let riceIn = 0;
-
-let otherRice = 0;
-
-
-rice.forEach(
-    item => {
-
-        if(
-            item.type === "รับ"
-        ){
-
-            riceIn +=
-                Number(
-                    item.amount || 0
-                );
-
-        }
-
-        if(
-            item.type === "จ่าย"
-        ){
-
-            otherRice +=
-                Number(
-                    item.amount || 0
-                );
-
-        }
-
-    }
-);
-
-
-let riceBalance =
-    riceIn -
-    otherRice;
-
-
-if(
-    riceBalance < 0
-){
-
-    riceBalance = 0;
-
-}
-
-
-animateNumber(
-    document.getElementById(
-        "riceBalance"
-    ),
-    riceBalance
 );
 
 
@@ -2825,15 +2794,13 @@ else if(
 
 
 /* =====================================================
-   ระบบวันที่
+   วันที่งานศพ
 ===================================================== */
 
 function parseFuneralDate(value){
 
     if(!value){
-
         return 0;
-
     }
 
 
@@ -2842,7 +2809,6 @@ function parseFuneralDate(value){
     ){
 
         return value;
-
     }
 
 
@@ -2873,7 +2839,6 @@ function parseFuneralDate(value){
         ){
 
             year -= 543;
-
         }
 
 
@@ -2909,7 +2874,6 @@ function parseFuneralDate(value){
         ){
 
             year -= 543;
-
         }
 
 
@@ -2945,7 +2909,6 @@ function parseFuneralDate(value){
         ){
 
             year -= 543;
-
         }
 
 
@@ -3059,15 +3022,18 @@ function showLatestFuneral(){
             "latestFuneralName"
         );
 
+
     const dateElement =
         document.getElementById(
             "latestFuneralDate"
         );
 
+
     const houseElement =
         document.getElementById(
             "latestFuneralHouse"
         );
+
 
     const cremateElement =
         document.getElementById(
@@ -3194,7 +3160,9 @@ function showFuneralHistory(){
                     text-align:center;
                 "
             >
+
                 ยังไม่มีประวัติงานศพ
+
             </div>
 
         `;
@@ -3226,6 +3194,7 @@ function showFuneralHistory(){
 
         </div>
 
+
         ${
             sorted
             .map(
@@ -3235,9 +3204,11 @@ function showFuneralHistory(){
                         item.name ||
                         "ไม่ระบุชื่อ";
 
+
                     const house =
                         item.house ||
                         "-";
+
 
                     const death =
                         item.death
@@ -3245,6 +3216,7 @@ function showFuneralHistory(){
                                 item.death
                               )
                             : "-";
+
 
                     const cremate =
                         item.cremate
@@ -3463,7 +3435,9 @@ function showFollowupMembers(){
 
 
     if(!box){
+
         return;
+
     }
 
 
@@ -3639,6 +3613,17 @@ function printFollowupReport(){
         );
 
 
+    if(!printWindow){
+
+        alert(
+            "เบราว์เซอร์บล็อกหน้าต่างพิมพ์ กรุณาอนุญาต Pop-up"
+        );
+
+        return;
+
+    }
+
+
     printWindow.document.write(`
 
         <!DOCTYPE html>
@@ -3675,7 +3660,9 @@ function printFollowupReport(){
                 }
 
                 h2{
+
                     font-weight:normal;
+
                 }
 
                 table{
@@ -3717,6 +3704,7 @@ function printFollowupReport(){
 
         </head>
 
+
         <body>
 
             <h1>
@@ -3743,15 +3731,21 @@ function printFollowupReport(){
                     <tr>
 
                         <th>ลำดับ</th>
+
                         <th>ชื่อสมาชิก</th>
+
                         <th>บ้านเลขที่</th>
+
                         <th>ค้างส่ง</th>
+
                         <th>งานศพที่ค้าง</th>
+
                         <th>สถานะ</th>
 
                     </tr>
 
                 </thead>
+
 
                 <tbody>
 
