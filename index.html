@@ -342,6 +342,17 @@ body{
     </a>
 
 
+    <a href="แจ้งเตือน.html">
+
+        <div class="menu-icon">
+            🔔
+        </div>
+
+        แจ้งเตือนสมาชิก
+
+    </a>
+
+
     <a href="รายงาน.html">
 
         <div class="menu-icon">
@@ -353,13 +364,13 @@ body{
     </a>
 
 
-    <a href="แจ้งเตือน.html">
+    <a href="พิมพ์รายงาน.html">
 
         <div class="menu-icon">
-            🔔
+            📄
         </div>
 
-        แจ้งเตือนสมาชิก
+        พิมพ์รายงานงานศพ
 
     </a>
 
@@ -384,7 +395,7 @@ body{
 <script>
 
 /* =====================================================
-   โหลดข้อมูล
+   โหลดข้อมูลสมาชิก
 ===================================================== */
 
 const members =
@@ -393,17 +404,29 @@ const members =
     ) || [];
 
 
+/* =====================================================
+   โหลดงานศพ
+===================================================== */
+
 const funerals =
     JSON.parse(
         localStorage.getItem("funerals")
     ) || [];
 
 
+/* =====================================================
+   โหลดรับ-จ่าย
+===================================================== */
+
 const rice =
     JSON.parse(
         localStorage.getItem("rice")
     ) || [];
 
+
+/* =====================================================
+   โหลดการส่งข้าวสารช่วยงานศพ
+===================================================== */
 
 const funeralSends =
     JSON.parse(
@@ -421,29 +444,32 @@ const memberTotal =
     : 185;
 
 
-document.getElementById("memberCount")
-    .innerText =
-        memberTotal;
+document.getElementById(
+    "memberCount"
+).innerText =
+    memberTotal;
 
 
-document.getElementById("memberHeader")
-    .innerText =
-        "สมาชิกทั้งหมด " +
-        memberTotal +
-        " ครัวเรือน";
+document.getElementById(
+    "memberHeader"
+).innerText =
+    "สมาชิกทั้งหมด " +
+    memberTotal +
+    " ครัวเรือน";
 
 
 /* =====================================================
    งานศพ
 ===================================================== */
 
-document.getElementById("funeralCount")
-    .innerText =
-        funerals.length;
+document.getElementById(
+    "funeralCount"
+).innerText =
+    funerals.length;
 
 
 /* =====================================================
-   ข้าวสาร
+   คำนวณข้าวสาร
 ===================================================== */
 
 let riceIn = 0;
@@ -451,7 +477,7 @@ let riceIn = 0;
 let riceOut = 0;
 
 
-/* รับข้าวสาร */
+/* รับเข้าคลัง */
 
 rice.forEach(item => {
 
@@ -461,6 +487,7 @@ rice.forEach(item => {
             Number(item.amount || 0);
 
     }
+
 
     if(item.type === "จ่าย"){
 
@@ -496,9 +523,10 @@ if(riceBalance < 0){
 }
 
 
-document.getElementById("riceCount")
-    .innerText =
-        riceBalance;
+document.getElementById(
+    "riceCount"
+).innerText =
+    riceBalance;
 
 
 /* =====================================================
@@ -507,31 +535,33 @@ document.getElementById("riceCount")
 
 const pendingMembers =
     members.filter(
-        m =>
-        Number(m.pending || 0) > 0
+        member =>
+        Number(member.pending || 0) > 0
     );
 
 
-document.getElementById("pendingCount")
-    .innerText =
-        pendingMembers.length;
+document.getElementById(
+    "pendingCount"
+).innerText =
+    pendingMembers.length;
 
 
 /* =====================================================
-   แจ้งเตือนค้าง 2 ครั้ง
+   สมาชิกค้าง 2 ครั้ง
 ===================================================== */
 
 const dangerMembers =
     members.filter(
-        m =>
-        Number(m.pending || 0) >= 2
+        member =>
+        Number(member.pending || 0) >= 2
     );
 
 
 if(dangerMembers.length > 0){
 
-    document.getElementById("notice")
-        .innerHTML = `
+    document.getElementById(
+        "notice"
+    ).innerHTML = `
 
         <div class="notice notice-danger">
 
@@ -555,8 +585,9 @@ if(dangerMembers.length > 0){
 
 }else{
 
-    document.getElementById("notice")
-        .innerHTML = `
+    document.getElementById(
+        "notice"
+    ).innerHTML = `
 
         <div class="notice">
 
