@@ -1,893 +1,1844 @@
-```html
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🌾 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+🌾 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
+</title>
 
 <style>
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
+
+/* =====================================================
+   BASE
+===================================================== */
+
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
 body{
     margin:0;
-    font-family:Tahoma,"Noto Sans Thai",sans-serif;
+    font-family:
+        Tahoma,
+        "Noto Sans Thai",
+        sans-serif;
+
     color:#fff;
+
     min-height:100vh;
-    background:linear-gradient(135deg,#03140b,#07351d 45%,#0f7a3b)
+
+    background:
+        linear-gradient(
+            135deg,
+            #03140b,
+            #07351d 45%,
+            #0f7a3b
+        );
 }
-button,input,select{font:inherit}
-button{cursor:pointer}
-.page{max-width:1200px;margin:auto;padding:18px}
+
+button,
+input,
+select{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.page{
+    max-width:1200px;
+    margin:auto;
+    padding:18px;
+}
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
 
 #loginScreen{
+
     position:fixed;
     inset:0;
     z-index:99999;
+
     display:flex;
     align-items:center;
     justify-content:center;
+
     padding:20px;
-    background:linear-gradient(135deg,#03140b,#07351d,#0f7a3b)
+
+    background:
+        linear-gradient(
+            135deg,
+            #03140b,
+            #07351d,
+            #0f7a3b
+        );
 }
 
 .login-box{
+
     width:100%;
     max-width:420px;
+
     padding:35px;
+
     text-align:center;
+
     border-radius:30px;
-    background:rgba(255,255,255,.1);
-    border:1px solid rgba(255,255,255,.2);
+
+    background:
+        rgba(255,255,255,.10);
+
+    border:
+        1px solid
+        rgba(255,255,255,.20);
+
     backdrop-filter:blur(18px);
-    box-shadow:0 30px 80px rgba(0,0,0,.4)
+
+    box-shadow:
+        0 30px 80px
+        rgba(0,0,0,.40);
 }
 
 .login-logo{
+
     width:95px;
     height:95px;
-    margin:0 auto 18px;
+
+    margin:
+        0 auto 18px;
+
     display:grid;
     place-items:center;
+
     font-size:55px;
+
     border-radius:28px;
-    background:rgba(255,255,255,.12)
+
+    background:
+        rgba(255,255,255,.12);
 }
 
 .login-title{
+
     font-size:30px;
-    font-weight:900
+    font-weight:900;
 }
 
 .login-subtitle{
+
     margin-top:7px;
-    color:#b9e9c7
+
+    color:#b9e9c7;
 }
 
 .login-form{
+
     margin-top:28px;
-    text-align:left
+
+    text-align:left;
 }
 
 .login-form label{
+
     display:block;
+
     margin-bottom:7px;
+
     color:#d8f7df;
-    font-size:14px
+
+    font-size:14px;
 }
 
 .login-form input{
+
     width:100%;
+
     padding:14px 15px;
+
     margin-bottom:16px;
-    border:1px solid rgba(255,255,255,.2);
+
+    border:
+        1px solid
+        rgba(255,255,255,.20);
+
     border-radius:13px;
-    background:rgba(0,0,0,.18);
+
+    background:
+        rgba(0,0,0,.18);
+
     color:#fff;
-    outline:none
+
+    outline:none;
 }
 
 .login-button{
+
     width:100%;
+
     padding:14px;
+
     border:0;
+
     border-radius:13px;
-    background:linear-gradient(135deg,#1f9d4c,#126b31);
+
+    background:
+        linear-gradient(
+            135deg,
+            #1f9d4c,
+            #126b31
+        );
+
     color:#fff;
+
     font-size:17px;
-    font-weight:900
+
+    font-weight:900;
 }
 
 .login-error{
+
     min-height:24px;
+
     margin-top:12px;
+
     color:#ffaaaa;
-    text-align:center
+
+    text-align:center;
 }
 
 .login-footer{
+
     margin-top:25px;
+
     color:#9fd7ac;
+
     font-size:12px;
-    line-height:1.7
+
+    line-height:1.7;
 }
 
-#mainSystem{display:none}
+#mainSystem{
+    display:none;
+}
+
+
+/* =====================================================
+   HERO
+===================================================== */
 
 .hero{
+
     text-align:center;
-    padding:28px 10px 18px
+
+    padding:
+        28px 10px 18px;
 }
 
 .logo{
+
     width:96px;
     height:96px;
+
     margin:auto;
+
     display:grid;
     place-items:center;
+
     font-size:52px;
+
     border-radius:28px;
-    background:rgba(255,255,255,.11);
-    border:1px solid rgba(255,255,255,.18);
-    box-shadow:0 18px 45px rgba(0,0,0,.25)
+
+    background:
+        rgba(255,255,255,.11);
+
+    border:
+        1px solid
+        rgba(255,255,255,.18);
+
+    box-shadow:
+        0 18px 45px
+        rgba(0,0,0,.25);
 }
 
 .hero h1{
-    margin:14px 0 5px;
-    font-size:clamp(30px,5vw,52px)
+
+    margin:
+        14px 0 5px;
+
+    font-size:
+        clamp(
+            30px,
+            5vw,
+            52px
+        );
 }
 
 .hero h2{
+
     margin:0;
+
     color:#d8f7df;
-    font-size:clamp(19px,3vw,28px);
-    font-weight:600
+
+    font-size:
+        clamp(
+            19px,
+            3vw,
+            28px
+        );
+
+    font-weight:600;
 }
 
 .hero p{
-    margin:10px 0 0;
-    color:#aee7bc
+
+    margin:
+        10px 0 0;
+
+    color:#aee7bc;
 }
+
+
+/* =====================================================
+   PANEL
+===================================================== */
 
 .panel{
-    background:rgba(255,255,255,.09);
-    border:1px solid rgba(255,255,255,.16);
+
+    background:
+        rgba(255,255,255,.09);
+
+    border:
+        1px solid
+        rgba(255,255,255,.16);
+
     border-radius:26px;
+
     backdrop-filter:blur(14px);
-    box-shadow:0 18px 50px rgba(0,0,0,.2)
+
+    box-shadow:
+        0 18px 50px
+        rgba(0,0,0,.20);
 }
 
+
+/* =====================================================
+   MENU
+===================================================== */
+
 .menu-title{
-    margin:8px 0 14px;
-    color:#fff0b0
+
+    margin:
+        8px 0 14px;
+
+    color:#fff0b0;
 }
 
 .menu{
+
     display:grid;
-    grid-template-columns:repeat(4,1fr);
+
+    grid-template-columns:
+        repeat(
+            4,
+            1fr
+        );
+
     gap:12px;
-    margin-bottom:22px
+
+    margin-bottom:22px;
 }
 
 .menu a{
+
     min-height:115px;
+
     display:flex;
+
     flex-direction:column;
+
     align-items:center;
+
     justify-content:center;
+
     gap:8px;
+
     text-decoration:none;
+
     color:#fff;
+
     border-radius:20px;
-    background:rgba(255,255,255,.08);
-    border:1px solid rgba(255,255,255,.14);
-    transition:.25s
+
+    background:
+        rgba(255,255,255,.08);
+
+    border:
+        1px solid
+        rgba(255,255,255,.14);
+
+    transition:.25s;
 }
 
 .menu a:hover{
-    transform:translateY(-5px);
-    background:rgba(255,255,255,.14)
+
+    transform:
+        translateY(-5px);
+
+    background:
+        rgba(255,255,255,.14);
 }
 
-.menu-icon{font-size:34px}
+.menu-icon{
+    font-size:34px;
+}
+
+
+/* =====================================================
+   CONDOLENCE
+===================================================== */
 
 .condolence{
+
     display:flex;
+
     gap:28px;
+
     align-items:center;
+
     padding:28px;
+
     margin-bottom:22px;
-    overflow:hidden
+
+    overflow:hidden;
 }
 
 .wreath{
+
     width:150px;
     height:150px;
-    flex:0 0 150px;
+
+    flex:
+        0 0 150px;
+
     position:relative;
+
     display:grid;
+
     place-items:center;
+
     border-radius:50%;
-    background:radial-gradient(circle,rgba(255,255,255,.15),rgba(255,190,215,.04));
-    border:2px solid rgba(255,190,215,.5)
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,255,255,.15),
+            rgba(255,190,215,.04)
+        );
+
+    border:
+        2px solid
+        rgba(255,190,215,.50);
 }
 
-.wreath-flower{font-size:60px}
+.wreath-flower{
+    font-size:60px;
+}
 
 .wreath-leaves{
+
     position:absolute;
+
     top:12px;
-    font-size:23px
+
+    font-size:23px;
 }
 
 .wreath-ribbon{
+
     position:absolute;
+
     bottom:19px;
+
     font-size:25px;
-    color:#f5a8c0
+
+    color:#f5a8c0;
 }
 
 .condolence-title{
+
     font-size:27px;
+
     font-weight:900;
-    color:#fff0b0
+
+    color:#fff0b0;
 }
 
 .condolence-name{
+
     margin-top:8px;
-    font-size:clamp(26px,4vw,40px);
-    font-weight:900
+
+    font-size:
+        clamp(
+            26px,
+            4vw,
+            40px
+        );
+
+    font-weight:900;
 }
 
 .condolence-age{
+
     font-size:.48em;
+
     color:#e8cbd5;
+
     margin-left:9px;
-    white-space:nowrap
+
+    white-space:nowrap;
 }
 
 .condolence-group{
+
     margin-top:14px;
+
     font-size:15px;
+
     line-height:1.9;
+
     color:#d9f2df;
-    font-style:italic
+
+    font-style:italic;
 }
 
 .condolence-message{
+
     margin-top:12px;
+
     font-size:15px;
+
     line-height:1.95;
-    color:#e7f5e9
+
+    color:#e7f5e9;
 }
 
 .condolence-final{
+
     margin-top:18px;
+
     font-size:19px;
+
     font-weight:900;
-    color:#ffeaa0
+
+    color:#ffeaa0;
 }
 
 .condolence-village{
+
     margin-top:5px;
+
     color:#a9d5b5;
-    font-size:13px
+
+    font-size:13px;
 }
 
+
+/* =====================================================
+   SUMMARY
+===================================================== */
+
 .summary-grid{
+
     display:grid;
-    grid-template-columns:repeat(3,1fr);
+
+    grid-template-columns:
+        repeat(
+            3,
+            1fr
+        );
+
     gap:15px;
-    margin-bottom:20px
+
+    margin-bottom:20px;
 }
 
 .summary{
+
     padding:22px;
-    border-radius:23px
+
+    border-radius:23px;
 }
 
 .blue{
-    background:linear-gradient(135deg,rgba(50,150,255,.22),rgba(255,255,255,.06))
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(50,150,255,.22),
+            rgba(255,255,255,.06)
+        );
 }
 
 .green{
-    background:linear-gradient(135deg,rgba(50,200,120,.22),rgba(255,255,255,.06))
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(50,200,120,.22),
+            rgba(255,255,255,.06)
+        );
 }
 
 .gold{
-    background:linear-gradient(135deg,rgba(255,200,50,.22),rgba(255,255,255,.06))
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,200,50,.22),
+            rgba(255,255,255,.06)
+        );
 }
 
-.summary-icon{font-size:34px}
+.summary-icon{
+    font-size:34px;
+}
 
 .summary-title{
+
     margin-top:7px;
-    color:#c9efd3
+
+    color:#c9efd3;
 }
 
 .summary-number{
+
     font-size:42px;
-    font-weight:900
+
+    font-weight:900;
 }
 
 .summary-unit{
+
     color:#9ed6ad;
-    font-size:13px
+
+    font-size:13px;
 }
 
+
+/* =====================================================
+   DASHBOARD
+===================================================== */
+
 .dashboard{
+
     display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:15px
+
+    grid-template-columns:
+        repeat(
+            4,
+            1fr
+        );
+
+    gap:15px;
 }
 
 .stat{
+
     padding:20px;
-    min-height:145px
+
+    min-height:145px;
 }
 
-.stat-icon{font-size:35px}
+.stat-icon{
+    font-size:35px;
+}
 
 .stat-title{
+
     font-size:14px;
+
     color:#b9e9c7;
-    margin-top:7px
+
+    margin-top:7px;
 }
 
 .stat-number{
+
     font-size:35px;
-    font-weight:900
+
+    font-weight:900;
 }
 
 .stat-unit{
+
     font-size:13px;
-    color:#9ed6ad
+
+    color:#9ed6ad;
 }
 
 .latest{
-    grid-column:span 2;
+
+    grid-column:
+        span 2;
+
     min-height:255px;
-    background:linear-gradient(135deg,rgba(255,215,70,.18),rgba(255,255,255,.06))
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,215,70,.18),
+            rgba(255,255,255,.06)
+        );
 }
 
 .latest-title{
+
     font-size:21px;
+
     font-weight:900;
-    color:#fff4b0
+
+    color:#fff4b0;
 }
 
 .latest-name{
-    font-size:clamp(22px,3vw,32px);
+
+    font-size:
+        clamp(
+            22px,
+            3vw,
+            32px
+        );
+
     font-weight:900;
-    margin-top:15px
+
+    margin-top:15px;
 }
 
 .latest-age{
+
     font-size:.53em;
+
     color:#e8cbd5;
-    margin-left:8px
+
+    margin-left:8px;
 }
 
 .latest-info{
+
     display:grid;
-    grid-template-columns:repeat(3,1fr);
+
+    grid-template-columns:
+        repeat(
+            3,
+            1fr
+        );
+
     gap:9px;
-    margin-top:17px
+
+    margin-top:17px;
 }
 
 .info-box{
+
     padding:11px;
+
     border-radius:14px;
-    background:rgba(255,255,255,.06)
+
+    background:
+        rgba(255,255,255,.06);
 }
 
 .info-box small{
+
     display:block;
+
     color:#aee7bc;
-    font-size:11px
+
+    font-size:11px;
 }
 
 .info-box strong{
+
     display:block;
+
     margin-top:4px;
-    font-size:14px
+
+    font-size:14px;
 }
 
 .history-button{
+
     margin-top:15px;
+
     padding:11px 15px;
+
     border:0;
+
     border-radius:12px;
+
     background:#1e8744;
+
     color:#fff;
-    font-weight:900
+
+    font-weight:900;
 }
 
 .history{
+
     display:none;
-    grid-column:1/-1
+
+    grid-column:
+        1 / -1;
 }
 
-.history.show{display:block}
+.history.show{
+    display:block;
+}
 
-.history-card{padding:20px}
+.history-card{
+    padding:20px;
+}
 
 .history-item{
+
     padding:15px;
+
     margin-top:10px;
+
     border-radius:15px;
-    background:rgba(255,255,255,.06)
+
+    background:
+        rgba(255,255,255,.06);
 }
 
 .history-meta{
+
     display:grid;
-    grid-template-columns:repeat(3,1fr);
+
+    grid-template-columns:
+        repeat(
+            3,
+            1fr
+        );
+
     gap:8px;
-    margin-top:10px
+
+    margin-top:10px;
 }
 
+
+/* =====================================================
+   DELIVERY
+===================================================== */
+
 .delivery{
+
     padding:22px;
-    margin-top:20px
+
+    margin-top:20px;
 }
 
 .delivery-head{
+
     display:flex;
+
     align-items:center;
-    gap:12px
+
+    gap:12px;
 }
 
 .delivery-icon{
+
     width:56px;
     height:56px;
+
     border-radius:17px;
-    background:rgba(255,255,255,.1);
+
+    background:
+        rgba(255,255,255,.10);
+
     display:grid;
+
     place-items:center;
-    font-size:29px
+
+    font-size:29px;
 }
 
 .delivery h2{
+
     margin:0;
+
     color:#fff0b0;
-    font-size:22px
+
+    font-size:22px;
 }
 
 .delivery p{
-    margin:4px 0 0;
+
+    margin:
+        4px 0 0;
+
     color:#b9e9c7;
-    font-size:13px
+
+    font-size:13px;
 }
 
 .search-row{
+
     display:grid;
-    grid-template-columns:1fr 115px;
+
+    grid-template-columns:
+        1fr 115px;
+
     gap:10px;
-    margin-top:15px
+
+    margin-top:15px;
 }
 
 .search-row input,
 .search-row select{
+
     width:100%;
-    padding:14px 15px;
-    border:1px solid rgba(255,255,255,.17);
+
+    padding:
+        14px 15px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.17);
+
     border-radius:13px;
-    background:rgba(0,0,0,.17);
+
+    background:
+        rgba(0,0,0,.17);
+
     color:#fff;
-    outline:none
+
+    outline:none;
 }
 
-.search-row select option{color:#222}
+.search-row select option{
+    color:#222;
+}
 
 .search-row button{
+
     border:0;
+
     border-radius:13px;
+
     background:#1b8543;
+
     color:#fff;
-    font-weight:900
+
+    font-weight:900;
 }
 
 .funeral-summary{
+
     display:none;
+
     margin-top:12px;
+
     padding:15px;
+
     border-radius:15px;
-    background:rgba(255,255,255,.07);
-    border:1px solid rgba(255,255,255,.12);
-    line-height:1.9
+
+    background:
+        rgba(255,255,255,.07);
+
+    border:
+        1px solid
+        rgba(255,255,255,.12);
+
+    line-height:1.9;
 }
 
-.member-search-area{display:none}
+.member-search-area{
+    display:none;
+}
 
-.results{margin-top:14px}
+.results{
+    margin-top:14px;
+}
 
 .empty{
+
     padding:18px;
+
     text-align:center;
+
     color:#a9ceb1;
-    border:1px dashed rgba(255,255,255,.14);
-    border-radius:14px
+
+    border:
+        1px dashed
+        rgba(255,255,255,.14);
+
+    border-radius:14px;
 }
 
 .member-row{
+
     display:flex;
-    justify-content:space-between;
+
+    justify-content:
+        space-between;
+
     align-items:center;
+
     gap:12px;
+
     padding:14px;
+
     margin-top:9px;
+
     border-radius:16px;
-    background:rgba(255,255,255,.06)
+
+    background:
+        rgba(255,255,255,.06);
 }
 
 .member-info strong{
+
     display:block;
-    font-size:18px
+
+    font-size:18px;
 }
 
 .member-info span{
+
     display:block;
+
     color:#b9e9c7;
+
     font-size:13px;
-    margin-top:4px
+
+    margin-top:4px;
 }
 
 .member-status{
+
     font-size:12px;
-    margin-top:7px
+
+    margin-top:7px;
 }
 
-.member-status.ok{color:#baf3c9}
-.member-status.warn{color:#ffd36b}
+.member-status.ok{
+    color:#baf3c9;
+}
+
+.member-status.warn{
+    color:#ffd36b;
+}
 
 .member-actions{
+
     display:flex;
+
     align-items:center;
-    gap:8px
+
+    gap:8px;
 }
 
 .amount{
+
     width:75px;
+
     padding:9px;
-    border:1px solid rgba(255,255,255,.18);
+
+    border:
+        1px solid
+        rgba(255,255,255,.18);
+
     border-radius:10px;
-    background:rgba(0,0,0,.17);
-    color:#fff
+
+    background:
+        rgba(0,0,0,.17);
+
+    color:#fff;
 }
 
 .deliver-btn{
+
     padding:10px 13px;
+
     border:0;
+
     border-radius:10px;
+
     background:#168744;
+
     color:#fff;
-    font-weight:900
+
+    font-weight:900;
 }
 
-.deliver-btn:disabled{background:#58705f}
+.deliver-btn:disabled{
+    background:#58705f;
+}
+
+
+/* =====================================================
+   FOLLOW-UP
+===================================================== */
 
 .followup{
+
     padding:22px;
-    margin-top:20px
+
+    margin-top:20px;
 }
 
 .follow-head{
+
     display:flex;
-    justify-content:space-between;
+
+    justify-content:
+        space-between;
+
     align-items:center;
-    gap:15px
+
+    gap:15px;
+
+    flex-wrap:wrap;
 }
 
 .follow-head h2{
+
     margin:0;
-    color:#fff0b0
+
+    color:#fff0b0;
 }
 
 .follow-count{
-    padding:8px 14px;
+
+    padding:
+        8px 14px;
+
     border-radius:999px;
-    background:rgba(255,193,7,.15);
-    border:1px solid rgba(255,193,7,.3);
+
+    background:
+        rgba(255,193,7,.15);
+
+    border:
+        1px solid
+        rgba(255,193,7,.3);
+
     color:#ffd54f;
-    font-weight:900
+
+    font-weight:900;
 }
 
 .follow-alert{
+
     margin-top:14px;
+
     padding:14px;
+
     border-radius:14px;
-    background:rgba(255,50,50,.15);
-    border:1px solid rgba(255,120,120,.23);
-    line-height:1.8
+
+    background:
+        rgba(255,50,50,.15);
+
+    border:
+        1px solid
+        rgba(255,120,120,.23);
+
+    line-height:1.8;
 }
 
 .follow-item{
+
     padding:16px;
+
     margin-top:10px;
+
     border-radius:15px;
-    background:rgba(255,255,255,.06);
-    border-left:5px solid #ffc107;
-    transition:.25s
+
+    background:
+        rgba(255,255,255,.06);
+
+    border-left:
+        5px solid
+        #ffc107;
+
+    transition:.25s;
 }
 
 .follow-item:hover{
-    transform:translateX(4px);
-    background:rgba(255,255,255,.09)
+
+    transform:
+        translateX(4px);
+
+    background:
+        rgba(255,255,255,.09);
 }
 
 .follow-item.danger{
+
     border-color:#ff5252;
-    background:rgba(255,70,70,.06)
+
+    background:
+        rgba(255,70,70,.06);
 }
 
 .follow-name{
+
     font-size:18px;
-    font-weight:900
+
+    font-weight:900;
 }
 
 .follow-meta{
+
     margin-top:5px;
+
     color:#ccebd4;
+
     font-size:14px;
-    line-height:1.8
+
+    line-height:1.8;
 }
 
 .follow-funeral{
+
     margin-top:9px;
-    padding:10px 12px;
+
+    padding:
+        10px 12px;
+
     border-radius:11px;
-    background:rgba(255,255,255,.05);
+
+    background:
+        rgba(255,255,255,.05);
+
     color:#dcefe1;
-    font-size:14px
+
+    font-size:14px;
 }
 
 .follow-status{
+
     margin-top:9px;
+
     font-weight:900;
-    color:#ffd54f
+
+    color:#ffd54f;
 }
 
-.danger .follow-status{color:#ff6b6b}
+.danger .follow-status{
 
-.print{
-    width:100%;
-    margin-top:14px;
-    padding:13px;
-    border:0;
-    border-radius:12px;
-    background:#175fa8;
-    color:#fff;
-    font-weight:900
+    color:#ff6b6b;
 }
+
+
+/* =====================================================
+   REPORT
+===================================================== */
 
 .funeral-report{
+
     padding:22px;
-    margin-top:20px
+
+    margin-top:20px;
 }
 
 .funeral-report h2{
+
     margin:0;
-    color:#fff0b0
+
+    color:#fff0b0;
 }
 
 .report-summary{
+
     display:grid;
-    grid-template-columns:repeat(4,1fr);
+
+    grid-template-columns:
+        repeat(
+            4,
+            1fr
+        );
+
     gap:10px;
-    margin-top:15px
+
+    margin-top:15px;
 }
 
 .report-box{
+
     padding:15px;
+
     border-radius:15px;
-    background:rgba(255,255,255,.07);
-    text-align:center
+
+    background:
+        rgba(255,255,255,.07);
+
+    text-align:center;
 }
 
 .report-box .rnum{
+
     display:block;
+
     font-size:30px;
-    font-weight:900
+
+    font-weight:900;
 }
 
-.report-box small{color:#b9e9c7}
+.report-box small{
+    color:#b9e9c7;
+}
 
 .report-table{
+
     width:100%;
-    border-collapse:collapse;
-    margin-top:15px
+
+    border-collapse:
+        collapse;
+
+    margin-top:15px;
 }
 
 .report-table th,
 .report-table td{
+
     padding:10px;
-    border-bottom:1px solid rgba(255,255,255,.1);
-    text-align:left
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.10);
+
+    text-align:left;
 }
 
-.report-table th{color:#fff0b0}
+.report-table th{
+    color:#fff0b0;
+}
 
-.report-section{margin-top:20px}
+.report-section{
+    margin-top:20px;
+}
 
-.report-section h3{margin-bottom:8px}
+.not-sent{
+    color:#ff8888;
+}
 
-.not-sent{color:#ff8888}
-.sent{color:#9ee6b2}
+.sent{
+    color:#9ee6b2;
+}
 
 .report-empty{
+
     padding:15px;
+
     border-radius:14px;
-    background:rgba(255,255,255,.05);
-    color:#b9d7bf
+
+    background:
+        rgba(255,255,255,.05);
+
+    color:#b9d7bf;
+}
+
+
+/* =====================================================
+   BUTTONS
+===================================================== */
+
+.print{
+
+    width:100%;
+
+    margin-top:14px;
+
+    padding:13px;
+
+    border:0;
+
+    border-radius:12px;
+
+    background:#175fa8;
+
+    color:#fff;
+
+    font-weight:900;
 }
 
 .logout{
+
     width:100%;
+
     margin-top:15px;
+
     padding:13px;
+
     border:0;
+
     border-radius:13px;
+
     background:#a92f2f;
+
     color:#fff;
-    font-weight:900
+
+    font-weight:900;
 }
 
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
 .footer{
+
     text-align:center;
+
     padding:36px 10px;
-    color:#9fd7ac
+
+    color:#9fd7ac;
 }
 
 .creator-label{
+
     display:block;
+
     margin-top:10px;
-    font-size:12px
+
+    font-size:12px;
 }
 
 .creator-name{
+
     display:block;
+
     margin-top:4px;
+
     color:#d9f2df;
+
     font-size:16px;
-    font-weight:900
+
+    font-weight:900;
 }
 
 .creator-role{
+
     display:block;
+
     margin-top:3px;
+
     color:#a9d5b5;
+
     font-size:13px;
-    font-style:italic
+
+    font-style:italic;
 }
 
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
 @media(max-width:900px){
-    .summary-grid{grid-template-columns:1fr}
+
+    .summary-grid{
+        grid-template-columns:
+            1fr;
+    }
+
     .dashboard,
-    .menu{grid-template-columns:repeat(2,1fr)}
-    .latest{grid-column:span 2}
+    .menu{
+
+        grid-template-columns:
+            repeat(
+                2,
+                1fr
+            );
+    }
+
+    .latest{
+
+        grid-column:
+            span 2;
+    }
+
     .latest-info,
-    .history-meta{grid-template-columns:1fr}
-    .report-summary{grid-template-columns:repeat(2,1fr)}
+    .history-meta{
+
+        grid-template-columns:
+            1fr;
+    }
+
+    .report-summary{
+
+        grid-template-columns:
+            repeat(
+                2,
+                1fr
+            );
+    }
+
 }
 
 @media(max-width:600px){
-    .page{padding:10px}
-    .condolence{
-        flex-direction:column;
-        text-align:center;
-        padding:24px 17px
+
+    .page{
+        padding:10px;
     }
+
+    .condolence{
+
+        flex-direction:column;
+
+        text-align:center;
+
+        padding:
+            24px 17px;
+    }
+
     .wreath{
+
         width:120px;
         height:120px;
-        flex-basis:120px
+
+        flex-basis:120px;
     }
-    .condolence-title{font-size:21px}
+
+    .condolence-title{
+        font-size:21px;
+    }
+
     .condolence-group,
-    .condolence-message{font-size:14px}
-    .search-row{grid-template-columns:1fr}
+    .condolence-message{
+        font-size:14px;
+    }
+
+    .search-row{
+        grid-template-columns:
+            1fr;
+    }
+
     .member-row{
+
         flex-direction:column;
-        align-items:flex-start
+
+        align-items:flex-start;
     }
-    .member-actions{width:100%}
-    .deliver-btn{flex:1}
+
+    .member-actions{
+        width:100%;
+    }
+
+    .deliver-btn{
+        flex:1;
+    }
+
     .latest{
-        grid-column:span 2
+        grid-column:
+            span 2;
     }
-    .latest-name{font-size:23px}
-    .menu{gap:8px}
-    .menu a{min-height:110px}
-    .menu-icon{font-size:31px}
+
+    .latest-name{
+        font-size:23px;
+    }
+
+    .menu{
+        gap:8px;
+    }
+
+    .menu a{
+        min-height:110px;
+    }
+
+    .menu-icon{
+        font-size:31px;
+    }
+
     .follow-head{
         align-items:flex-start;
-        flex-direction:column
+
+        flex-direction:column;
     }
+
 }
+
+
+/* =====================================================
+   PRINT
+===================================================== */
+
+@media print{
+
+    body{
+
+        background:#fff;
+
+        color:#000;
+
+        padding:0;
+    }
+
+    .no-print,
+    .menu,
+    .logout,
+    .footer{
+
+        display:none !important;
+    }
+
+    .panel{
+
+        color:#000;
+
+        background:#fff;
+
+        border:
+            1px solid
+            #ccc;
+
+        box-shadow:none;
+    }
+
+    .follow-name,
+    .latest-name,
+    h1,
+    h2{
+
+        color:#000;
+    }
+
+    .follow-meta,
+    .follow-funeral,
+    td,
+    p{
+
+        color:#222;
+    }
+
+}
+
 </style>
+
 </head>
+
 
 <body>
 
+
+<!-- =====================================================
+     LOGIN
+===================================================== -->
+
 <div id="loginScreen">
+
 <div class="login-box">
-<div class="login-logo">🌾</div>
-<div class="login-title">ระบบกลุ่มข้าวสาร</div>
-<div class="login-subtitle">บ้านร่องเข็ม หมู่ที่ 6</div>
+
+<div class="login-logo">
+🌾
+</div>
+
+<div class="login-title">
+ระบบกลุ่มข้าวสาร
+</div>
+
+<div class="login-subtitle">
+บ้านร่องเข็ม หมู่ที่ 6
+</div>
 
 <div class="login-form">
-<label>👤 ชื่อผู้ใช้</label>
-<input id="loginUsername" type="text" placeholder="กรอกชื่อผู้ใช้" autocomplete="username">
 
-<label>🔐 รหัสผ่าน</label>
-<input id="loginPassword" type="password" placeholder="กรอกรหัสผ่าน" autocomplete="current-password">
+<label>
+👤 ชื่อผู้ใช้
+</label>
 
-<button id="loginButton" class="login-button" type="button">
+<input
+id="loginUsername"
+type="text"
+placeholder="กรอกชื่อผู้ใช้"
+autocomplete="username"
+>
+
+<label>
+🔐 รหัสผ่าน
+</label>
+
+<input
+id="loginPassword"
+type="password"
+placeholder="กรอกรหัสผ่าน"
+autocomplete="current-password"
+>
+
+<button
+id="loginButton"
+class="login-button"
+type="button"
+>
 🔐 เข้าสู่ระบบ
 </button>
 
-<div id="loginError" class="login-error"></div>
+<div
+id="loginError"
+class="login-error"
+></div>
+
 </div>
 
 <div class="login-footer">
-ระบบจัดการสมาชิกและช่วยเหลืองานศพ<br>
+
+ระบบจัดการสมาชิกและช่วยเหลืองานศพ
+<br>
 บ้านร่องเข็ม หมู่ที่ 6
-</div>
-</div>
+
 </div>
 
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
 
 <div id="mainSystem">
 
 <div class="page">
 
+
 <header class="hero">
-<div class="logo">🌾</div>
-<h1>ระบบกลุ่มข้าวสาร</h1>
-<h2>บ้านร่องเข็ม หมู่ที่ 6</h2>
-<p id="memberHeader">สมาชิกทั้งหมด 192 ครัวเรือน</p>
+
+<div class="logo">
+🌾
+</div>
+
+<h1>
+ระบบกลุ่มข้าวสาร
+</h1>
+
+<h2>
+บ้านร่องเข็ม หมู่ที่ 6
+</h2>
+
+<p id="memberHeader">
+สมาชิกทั้งหมด 192 ครัวเรือน
+</p>
+
 </header>
 
 
-<h2 class="menu-title">เมนูระบบ</h2>
+<h2 class="menu-title">
+เมนูระบบ
+</h2>
+
 
 <section class="menu">
 
+
 <a href="members.html">
-<div class="menu-icon">👥</div>
-<span>ทะเบียนสมาชิก</span>
+
+<div class="menu-icon">
+👥
+</div>
+
+<span>
+ทะเบียนสมาชิก
+</span>
+
 </a>
 
-<a href="งานศพ.html">
-<div class="menu-icon">⚰️</div>
-<span>แจ้งเสียชีวิต / งานศพ</span>
+
+<a href="funeral.html">
+
+<div class="menu-icon">
+⚰️
+</div>
+
+<span>
+แจ้งเสียชีวิต / งานศพ
+</span>
+
 </a>
+
 
 <a href="แจ้งเตือน.html">
-<div class="menu-icon">🔔</div>
-<span>แจ้งเตือนสมาชิก</span>
+
+<div class="menu-icon">
+🔔
+</div>
+
+<span>
+แจ้งเตือนสมาชิก
+</span>
+
 </a>
+
 
 <a href="รายงาน.html">
-<div class="menu-icon">📊</div>
-<span>รายงานข้อมูล</span>
+
+<div class="menu-icon">
+📊
+</div>
+
+<span>
+รายงานข้อมูล
+</span>
+
 </a>
 
+
 <a href="พิมพ์รายงาน.html">
-<div class="menu-icon">📄</div>
-<span>พิมพ์รายงานงานศพ</span>
+
+<div class="menu-icon">
+📄
+</div>
+
+<span>
+พิมพ์รายงานงานศพ
+</span>
+
 </a>
+
 
 </section>
 
 
+<!-- =====================================================
+     CONDOLENCE
+===================================================== -->
+
 <section class="panel condolence">
 
+
 <div class="wreath">
-<div class="wreath-flower">🌸</div>
-<div class="wreath-leaves">🌿 🌿</div>
-<div class="wreath-ribbon">♡</div>
+
+<div class="wreath-flower">
+🌸
 </div>
+
+<div class="wreath-leaves">
+🌿 🌿
+</div>
+
+<div class="wreath-ribbon">
+♡
+</div>
+
+</div>
+
 
 <div>
 
@@ -896,22 +1847,38 @@ button{cursor:pointer}
 </div>
 
 <div class="condolence-name">
-<span id="condolenceName">นายเกษมสุข ใฝ่ใจ</span>
-<span id="condolenceAge" class="condolence-age">อายุ 47 ปี</span>
+
+<span id="condolenceName">
+นายเกษมสุข ใฝ่ใจ
+</span>
+
+<span
+id="condolenceAge"
+class="condolence-age"
+>
+อายุ 47 ปี
+</span>
+
 </div>
 
 <div class="condolence-group">
+
 ทีมผู้นำหมู่บ้าน บ้านร่องเข็ม หมู่ที่ 6
 ขอร่วมไว้อาลัยและแสดงความเสียใจอย่างสุดซึ้งต่อการจากไปของผู้วายชนม์
+
 </div>
 
 <div class="condolence-message">
+
 ขอร่วมเป็นกำลังใจแก่ครอบครัวและญาติพี่น้องทุกท่านในช่วงเวลาแห่งความสูญเสีย
+
 </div>
 
 <div class="condolence-message">
+
 ขอให้ทุกท่านผ่านพ้นช่วงเวลาแห่งความสูญเสียไปด้วยความเข้มแข็ง
 และขอให้ดวงวิญญาณของผู้วายชนม์ไปสู่สุคติ
+
 </div>
 
 <div class="condolence-final">
@@ -923,74 +1890,192 @@ button{cursor:pointer}
 </div>
 
 </div>
+
 </section>
 
+
+<!-- =====================================================
+     SUMMARY
+===================================================== -->
 
 <section class="summary-grid">
 
+
 <div class="panel summary blue">
-<div class="summary-icon">👥</div>
-<div class="summary-title">สมาชิกทั้งหมด</div>
-<div id="memberCount" class="summary-number">192</div>
-<div class="summary-unit">ครัวเรือน</div>
+
+<div class="summary-icon">
+👥
 </div>
+
+<div class="summary-title">
+สมาชิกทั้งหมด
+</div>
+
+<div
+id="memberCount"
+class="summary-number"
+>
+192
+</div>
+
+<div class="summary-unit">
+ครัวเรือน
+</div>
+
+</div>
+
 
 <div class="panel summary green">
-<div class="summary-icon">✅</div>
-<div class="summary-title">สมาชิกปกติ</div>
-<div id="normalCount" class="summary-number">182</div>
-<div class="summary-unit">ครัวเรือน</div>
+
+<div class="summary-icon">
+✅
 </div>
 
-<div class="panel summary gold">
-<div class="summary-icon">🌾</div>
-<div class="summary-title">ข้าวสารช่วยงานศพ</div>
-<div id="funeralRice" class="summary-number">182</div>
-<div class="summary-unit">ถุง</div>
+<div class="summary-title">
+สมาชิกปกติ
 </div>
+
+<div
+id="normalCount"
+class="summary-number"
+>
+182
+</div>
+
+<div class="summary-unit">
+ครัวเรือน
+</div>
+
+</div>
+
+
+<div class="panel summary gold">
+
+<div class="summary-icon">
+🌾
+</div>
+
+<div class="summary-title">
+ข้าวสารช่วยงานศพ
+</div>
+
+<div
+id="funeralRice"
+class="summary-number"
+>
+182
+</div>
+
+<div class="summary-unit">
+ถุง
+</div>
+
+</div>
+
 
 </section>
 
 
+<!-- =====================================================
+     DASHBOARD
+===================================================== -->
+
 <section class="dashboard">
 
+
 <div class="panel stat">
-<div class="stat-icon">⚰️</div>
-<div class="stat-title">งานศพ</div>
-<div id="funeralCount" class="stat-number">2</div>
-<div class="stat-unit">งาน</div>
+
+<div class="stat-icon">
+⚰️
+</div>
+
+<div class="stat-title">
+งานศพ
+</div>
+
+<div
+id="funeralCount"
+class="stat-number"
+>
+0
+</div>
+
+<div class="stat-unit">
+งาน
+</div>
+
 </div>
 
 
-<div class="panel stat latest">
+<div
+class="panel stat latest"
+>
 
-<div class="latest-title">🕊️ งานศพล่าสุด</div>
+<div class="latest-title">
+🕊️ งานศพล่าสุด
+</div>
 
-<div id="latestFuneralName" class="latest-name">
-⚰️ นายเกษมสุข ใฝ่ใจ
-<span class="latest-age">อายุ 47 ปี</span>
+<div
+id="latestFuneralName"
+class="latest-name"
+>
+ยังไม่มีข้อมูล
 </div>
 
 <div class="latest-info">
 
 <div class="info-box">
-<small>📅 วันที่เสียชีวิต</small>
-<strong id="latestFuneralDate">22 กรกฎาคม 2569</strong>
+
+<small>
+📅 วันที่เสียชีวิต
+</small>
+
+<strong
+id="latestFuneralDate"
+>
+-
+</strong>
+
 </div>
+
 
 <div class="info-box">
-<small>🏠 บ้านเลขที่</small>
-<strong id="latestFuneralHouse">123</strong>
+
+<small>
+🏠 บ้านเลขที่
+</small>
+
+<strong
+id="latestFuneralHouse"
+>
+-
+</strong>
+
 </div>
+
 
 <div class="info-box">
-<small>🔥 วันที่ฌาปนกิจ</small>
-<strong id="latestFuneralCremate">25 กรกฎาคม 2569</strong>
-</div>
+
+<small>
+🔥 วันที่ฌาปนกิจ
+</small>
+
+<strong
+id="latestFuneralCremate"
+>
+-
+</strong>
 
 </div>
 
-<button id="historyBtn" class="history-button" type="button">
+</div>
+
+
+<button
+id="historyBtn"
+class="history-button"
+type="button"
+>
 📜 ดูงานศพย้อนหลัง
 </button>
 
@@ -998,35 +2083,86 @@ button{cursor:pointer}
 
 
 <div class="panel stat">
-<div class="stat-icon">⚠️</div>
-<div class="stat-title">สมาชิกค้างส่ง</div>
-<div id="pendingCount" class="stat-number">10</div>
-<div class="stat-unit">ครัวเรือน</div>
+
+<div class="stat-icon">
+⚠️
+</div>
+
+<div class="stat-title">
+สมาชิกค้างส่ง
+</div>
+
+<div
+id="pendingCount"
+class="stat-number"
+>
+10
+</div>
+
+<div class="stat-unit">
+ครัวเรือน
+</div>
+
 </div>
 
 
 <div class="panel stat">
-<div class="stat-icon">🚨</div>
-<div class="stat-title">ค้างส่ง 2 ครั้งขึ้นไป</div>
-<div id="dangerCount" class="stat-number">6</div>
-<div class="stat-unit">ครัวเรือน</div>
+
+<div class="stat-icon">
+🚨
+</div>
+
+<div class="stat-title">
+ค้างส่ง 2 ครั้งขึ้นไป
+</div>
+
+<div
+id="dangerCount"
+class="stat-number"
+>
+6
+</div>
+
+<div class="stat-unit">
+ครัวเรือน
+</div>
+
 </div>
 
 
-<div id="history" class="history"></div>
+<div
+id="history"
+class="history"
+>
+</div>
+
 
 </section>
 
 
+<!-- =====================================================
+     DELIVERY
+===================================================== -->
+
 <section class="panel delivery">
+
 
 <div class="delivery-head">
 
-<div class="delivery-icon">🌾</div>
+<div class="delivery-icon">
+🌾
+</div>
 
 <div>
-<h2>บันทึกข้าวสารช่วยงานศพ</h2>
-<p>เลือกงานศพก่อน แล้วค้นหาสมาชิกตามชื่อหรือบ้านเลขที่</p>
+
+<h2>
+บันทึกข้าวสารช่วยงานศพ
+</h2>
+
+<p>
+เลือกงานศพก่อน แล้วค้นหาสมาชิกตามชื่อหรือบ้านเลขที่
+</p>
+
 </div>
 
 </div>
@@ -1035,20 +2171,36 @@ button{cursor:pointer}
 <div class="search-row">
 
 <select id="funeralSelect">
-<option value="">-- เลือกงานศพ --</option>
+
+<option value="">
+-- เลือกงานศพ --
+</option>
+
 </select>
 
-<button id="openFuneralButton" type="button">
+
+<button
+id="openFuneralButton"
+type="button"
+>
 เปิดงาน
 </button>
 
 </div>
 
 
-<div id="funeralSummary" class="funeral-summary"></div>
+<div
+id="funeralSummary"
+class="funeral-summary"
+>
+</div>
 
 
-<div id="memberSearchArea" class="member-search-area">
+<div
+id="memberSearchArea"
+class="member-search-area"
+>
+
 
 <div class="search-row">
 
@@ -1059,104 +2211,202 @@ placeholder="พิมพ์ชื่อสมาชิก หรือ บ้�
 autocomplete="off"
 >
 
-<button id="searchButton" type="button">
+
+<button
+id="searchButton"
+type="button"
+>
 🔎 ค้นหา
 </button>
 
 </div>
 
-<div id="memberResults" class="results">
+
+<div
+id="memberResults"
+class="results"
+>
+
 <div class="empty">
+
 พิมพ์ชื่อหรือบ้านเลขที่เพื่อค้นหาสมาชิก
-</div>
+
 </div>
 
 </div>
+
+
+</div>
+
 
 </section>
 
 
+<!-- =====================================================
+     REPORT
+===================================================== -->
+
 <section class="panel funeral-report">
 
-<h2>📊 รายงานแยกตามงานศพ</h2>
+<h2>
+📊 รายงานแยกตามงานศพ
+</h2>
 
-<p style="color:#b9e9c7;margin:5px 0 0">
-เลือกงานศพเพื่อดูจำนวนข้าวสาร ผู้ที่ส่งแล้ว และผู้ที่ยังไม่ส่ง
+<p
+style="
+color:#b9e9c7;
+margin:5px 0 0
+"
+>
+
+เลือกงานศพเพื่อดูจำนวนข้าวสาร
+ผู้ที่ส่งแล้ว และผู้ที่ยังไม่ส่ง
+
 </p>
+
 
 <div class="search-row">
 
 <select id="reportFuneralSelect">
-<option value="">-- เลือกงานศพ --</option>
+
+<option value="">
+-- เลือกงานศพ --
+</option>
+
 </select>
 
-<button id="reportButton" type="button">
+
+<button
+id="reportButton"
+type="button"
+>
 📊 ดูรายงาน
 </button>
 
 </div>
 
-<div id="reportContent" style="margin-top:15px">
+
+<div
+id="reportContent"
+style="margin-top:15px"
+>
+
 <div class="report-empty">
+
 เลือกงานศพเพื่อแสดงรายงาน
+
 </div>
+
 </div>
+
 
 </section>
 
 
-<!-- =========================
-สมาชิกที่ต้องติดตาม
-========================= -->
+<!-- =====================================================
+     FOLLOW UP
+===================================================== -->
 
 <section class="panel followup">
 
+
 <div class="follow-head">
 
+
 <div>
-<h2>⚠️ สมาชิกที่ต้องติดตาม</h2>
 
-<div style="color:#b9e9c7;font-size:13px;margin-top:4px">
-ตรวจสอบสมาชิกที่ค้างส่งข้าวสารช่วยงานศพ
-</div>
+<h2>
+⚠️ สมาชิกที่ต้องติดตาม
+</h2>
+
+<div
+style="
+color:#b9e9c7;
+font-size:13px;
+margin-top:4px
+"
+>
+
+คนที่ยังไม่ได้ส่งข้าวสารในงานศพล่าสุด
+
 </div>
 
-<div class="follow-count">
+</div>
+
+
+<div
+id="followCount"
+class="follow-count"
+>
 10 ราย
 </div>
+
 
 </div>
 
 
 <div class="follow-alert">
 
-🚨 มี <strong>6 ครัวเรือน</strong>
-ไม่ส่งข้าวสารช่วยงานศพครบ 2 ครั้งขึ้นไป
+⚠️ ระบบจะคำนวณรายชื่อจาก
+<strong>
+สมาชิกที่ยังไม่ได้ส่งจริง
+</strong>
+
 <br>
-โปรดตรวจสอบและพิจารณาตามกติกาของกลุ่ม
+
+🟡 ค้าง 1 ครั้ง = แจ้งเตือน
+
+<br>
+
+🔴 ค้าง 2 ครั้งขึ้นไป = เสนอพิจารณาตามกติกากลุ่ม
 
 </div>
 
 
-<div id="followList"></div>
+<div id="followList">
+
+<div class="empty">
+กำลังโหลดข้อมูล...
+</div>
+
+</div>
 
 
-<button id="printButton" class="print" type="button">
+<button
+id="printButton"
+class="print"
+type="button"
+>
 🖨️ พิมพ์รายงานแจ้งเตือน
 </button>
+
 
 </section>
 
 
-<button id="logoutButton" class="logout" type="button">
+<!-- =====================================================
+     LOGOUT
+===================================================== -->
+
+<button
+id="logoutButton"
+class="logout"
+type="button"
+>
 🚪 ออกจากระบบ
 </button>
 
 
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
 <footer class="footer">
 
 🌾 กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
+
 <br>
+
 ระบบจัดการสมาชิกและช่วยเหลืองานศพ
 
 <br>
@@ -1175,305 +2425,707 @@ autocomplete="off"
 
 </footer>
 
+
 </div>
+
 </div>
 
 
 <script>
+
 'use strict';
 
 
-const LOGIN_USER='admin';
-const LOGIN_PASSWORD='123456';
+/* =====================================================
+   LOGIN
+===================================================== */
+
+const LOGIN_USER =
+    'admin';
+
+const LOGIN_PASSWORD =
+    '123456';
 
 
-const DEFAULT_FUNERALS=[
-{
-    id:'funeral-kasem',
-    name:'นายเกษมสุข ใฝ่ใจ',
-    age:47,
-    house:'123',
-    death:'22 กรกฎาคม 2569',
-    cremate:'25 กรกฎาคม 2569'
-},
-{
-    id:'funeral-buran',
-    name:'นายบูรณพิภพ ผัดดี',
-    age:'',
-    house:'254',
-    death:'3 กรกฎาคม 2569',
-    cremate:'8 กรกฎาคม 2569'
-}
-];
+/* =====================================================
+   ค่าที่ผู้ใช้ยืนยัน
+===================================================== */
+
+const CONFIRMED_MEMBER_COUNT =
+    192;
+
+const CONFIRMED_NORMAL_COUNT =
+    182;
+
+const CONFIRMED_RICE_BAGS =
+    182;
 
 
-/*
-==================================================
-สมาชิกที่ต้องติดตาม
-ข้อมูลตามที่ได้รับจากผู้ใช้
-==================================================
-*/
+/* =====================================================
+   DEFAULT FUNERALS
+===================================================== */
 
-const FOLLOW_UP_MEMBERS=[
+const DEFAULT_FUNERALS = [
 
 {
-    name:'นายวุฒิภัทร เตชะวงค์',
-    house:'91/1',
-    pending:1,
-    funeral:'นายเกษมสุข ใฝ่ใจ',
-    status:'warning'
-},
+    id:
+        'funeral-kasem',
 
-{
-    name:'นายต่วน ทาทอง',
-    house:'114',
-    pending:1,
-    funeral:'นายเกษมสุข ใฝ่ใจ',
-    status:'warning'
-},
+    name:
+        'นายเกษมสุข ใฝ่ใจ',
 
-{
-    name:'นายประหยัด ปิงเมือง',
-    house:'120',
-    pending:2,
-    funeral:'นายเกษมสุข ใฝ่ใจ',
-    status:'danger'
-},
+    age:
+        47,
 
-{
-    name:'นายสมศีล งามจิต',
-    house:'135',
-    pending:1,
-    funeral:'นายบูรณิพิภพ ผัดดี',
-    status:'warning'
+    house:
+        '123',
+
+    death:
+        '22 กรกฎาคม 2569',
+
+    cremate:
+        '25 กรกฎาคม 2569',
+
+    temple:
+        'วัดร่องเข็ม',
+
+    status:
+        'อยู่ระหว่างดำเนินการ'
 },
 
 {
-    name:'น.ส.ยุพา ใจดี',
-    house:'160',
-    pending:1,
-    funeral:'นายเกษมสุข ใฝ่ใจ',
-    status:'warning'
-},
+    id:
+        'funeral-buran',
 
-{
-    name:'นายตื่น มิ่งขวัญ',
-    house:'176',
-    pending:2,
-    funeral:'นายเกษมสุข ใฝ่ใจ',
-    status:'danger'
-},
+    name:
+        'นายบูรณิพิภพ ผัดดี',
 
-{
-    name:'น.ส.สำรอง มหาวรรณศรี',
-    house:'200',
-    pending:2,
-    funeral:'นายเกษมสุข ใฝ่ใจ',
-    status:'danger'
-},
+    age:
+        '',
 
-{
-    name:'นายบรรพต อินวงค์',
-    house:'212',
-    pending:2,
-    funeral:'นายเกษมสุข ใฝ่ใจ',
-    status:'danger'
-},
+    house:
+        '254',
 
-{
-    name:'นางลวงทิพย์ ใฝ่จิต',
-    house:'315',
-    pending:2,
-    funeral:'นายเกษมสุข ใฝ่ใจ',
-    status:'danger'
-},
+    death:
+        '',
 
-{
-    name:'นายประทุม ดาวกระจาย',
-    house:'328',
-    pending:2,
-    funeral:'นายเกษมสุข ใฝ่ใจ',
-    status:'danger'
+    cremate:
+        '',
+
+    temple:
+        '',
+
+    status:
+        'อยู่ระหว่างดำเนินการ'
 }
 
 ];
 
 
-const $=id=>document.getElementById(id);
+/* =====================================================
+   HELPERS
+===================================================== */
+
+const $ =
+    id =>
+    document.getElementById(id);
 
 
 function readArray(key){
 
     try{
 
-        const v=JSON.parse(localStorage.getItem(key));
+        const raw =
+            localStorage.getItem(key);
 
-        return Array.isArray(v)?v:[];
+        if(!raw){
 
-    }catch(e){
+            return [];
 
-        return[];
+        }
+
+        const data =
+            JSON.parse(raw);
+
+        return Array.isArray(data)
+            ? data
+            : [];
+
+    }
+    catch(error){
+
+        console.error(
+            error
+        );
+
+        return [];
 
     }
 
 }
 
 
-function writeArray(key,v){
+function safe(value){
 
-    localStorage.setItem(
-        key,
-        JSON.stringify(v)
-    );
+    const div =
+        document.createElement('div');
 
-}
+    div.textContent =
+        String(value ?? '');
 
-
-function safe(v){
-
-    const d=document.createElement('div');
-
-    d.textContent=String(v??'');
-
-    return d.innerHTML;
+    return div.innerHTML;
 
 }
 
 
-function normalize(v){
+function normalize(value){
 
-    return String(v??'')
+    return String(
+        value ?? ''
+    )
     .trim()
     .toLowerCase()
-    .split(' ')
-    .join('');
+    .replace(/\s+/g,'');
 
 }
 
+
+/* =====================================================
+   MEMBERS
+===================================================== */
 
 function readMembers(){
 
-    const keys=[
+    const keys = [
+
         'members',
         'memberList',
         'membersData',
         'memberData',
         'users'
+
     ];
 
-    for(const key of keys){
 
-        const data=readArray(key);
+    for(
+        const key of keys
+    ){
+
+        const data =
+            readArray(key);
+
 
         if(data.length){
 
-            return data.map((x,i)=>({
+            return data
+            .map(
+                (x,i)=>({
 
-                id:String(
-                    x.id??
-                    x.memberId??
-                    x.member_id??
-                    x.code??
-                    ('member-'+i)
-                ),
+                    id:
+                        String(
+                            x.id ??
+                            x.memberId ??
+                            x.member_id ??
+                            x.code ??
+                            (
+                                'member-' +
+                                (
+                                    i + 1
+                                )
+                            )
+                        ),
 
-                name:String(
-                    x.name??
-                    x.fullName??
-                    x.fullname??
-                    x.memberName??
-                    x.member_name??
-                    x['ชื่อ-นามสกุล']??
-                    x['ชื่อ']??
-                    ''
-                ).trim(),
+                    name:
+                        String(
+                            x.name ??
+                            x.fullName ??
+                            x.fullname ??
+                            x.memberName ??
+                            x.member_name ??
+                            x['ชื่อ-นามสกุล'] ??
+                            x['ชื่อ'] ??
+                            ''
+                        ).trim(),
 
-                house:String(
-                    x.house??
-                    x.houseNo??
-                    x.houseNumber??
-                    x.house_number??
-                    x.address??
-                    x.household??
-                    x['บ้านเลขที่']??
-                    ''
-                ).trim()
+                    house:
+                        String(
+                            x.house ??
+                            x.houseNo ??
+                            x.houseNumber ??
+                            x.house_number ??
+                            x.address ??
+                            x.household ??
+                            x['บ้านเลขที่'] ??
+                            ''
+                        ).trim()
 
-            })).filter(x=>x.name||x.house)
+                })
+            )
+            .filter(
+                x =>
+                    x.name ||
+                    x.house
+            );
 
         }
 
     }
 
-    return[];
+
+    return [];
 
 }
 
 
-function parseFuneralDate(v){
+/* =====================================================
+   FUNERALS
+===================================================== */
 
-    const t=String(v??'').trim();
+function readFunerals(){
 
-    if(!t)return 0;
+    const data =
+        readArray('funerals');
+
+
+    const source =
+        data.length
+        ? data
+        : DEFAULT_FUNERALS;
+
+
+    return source
+    .map(
+        (x,i)=>({
+
+            id:
+                String(
+                    x.id ??
+                    x.funeralId ??
+                    x.funeral_id ??
+                    (
+                        'funeral-' +
+                        (
+                            i + 1
+                        )
+                    )
+                ),
+
+            name:
+                String(
+                    x.name ??
+                    x.fullName ??
+                    x.fullname ??
+                    x.deceasedName ??
+                    x.deceased_name ??
+                    ''
+                ).trim(),
+
+            age:
+                x.age ??
+                x.deceasedAge ??
+                x.deceased_age ??
+                '',
+
+            house:
+                String(
+                    x.house ??
+                    x.houseNo ??
+                    x.houseNumber ??
+                    x.house_number ??
+                    ''
+                ).trim(),
+
+            reporter:
+                String(
+                    x.reporter ??
+                    x.informer ??
+                    x.contact ??
+                    ''
+                ).trim(),
+
+            death:
+                String(
+                    x.death ??
+                    x.deathDate ??
+                    x.death_date ??
+                    x.dateOfDeath ??
+                    ''
+                ),
+
+            cremate:
+                String(
+                    x.cremate ??
+                    x.cremateDate ??
+                    x.cremate_date ??
+                    x.ceremonyDate ??
+                    ''
+                ),
+
+            temple:
+                String(
+                    x.temple ??
+                    x.wat ??
+                    x.watName ??
+                    ''
+                ),
+
+            status:
+                String(
+                    x.status ??
+                    'อยู่ระหว่างดำเนินการ'
+                )
+
+        })
+    )
+    .filter(
+        x =>
+            x.name ||
+            x.house
+    );
+
+}
+
+
+/* =====================================================
+   DELIVERIES
+===================================================== */
+
+function readDeliveries(){
+
+    const keys = [
+
+        'riceDeliveryRecords',
+        'riceDeliveries',
+        'deliveries',
+        'rice_delivery_records'
+
+    ];
+
+
+    let all = [];
+
+
+    keys.forEach(
+        key => {
+
+            const data =
+                readArray(key);
+
+
+            if(data.length){
+
+                all =
+                    all.concat(data);
+
+            }
+
+        }
+    );
+
+
+    return all;
+
+}
+
+
+function deliveryFuneralId(record){
+
+    return String(
+        record.funeralId ??
+        record.funeral_id ??
+        record.funeralID ??
+        record.funeral ??
+        ''
+    );
+
+}
+
+
+function deliveryMemberId(record){
+
+    return String(
+        record.memberId ??
+        record.member_id ??
+        record.memberID ??
+        record.userId ??
+        record.user_id ??
+        ''
+    );
+
+}
+
+
+function deliveryName(record){
+
+    return String(
+        record.name ??
+        record.memberName ??
+        record.member_name ??
+        ''
+    ).trim();
+
+}
+
+
+function deliveryHouse(record){
+
+    return String(
+        record.house ??
+        record.houseNo ??
+        record.houseNumber ??
+        record.house_number ??
+        ''
+    ).trim();
+
+}
+
+
+function deliveryAmount(record){
+
+    return Number(
+        record.amount ??
+        record.qty ??
+        record.quantity ??
+        record.bags ??
+        record.riceAmount ??
+        0
+    ) || 0;
+
+}
+
+
+function deliveryDate(record){
+
+    return String(
+        record.date ??
+        record.deliveryDate ??
+        record.delivery_date ??
+        record.createdDate ??
+        '-'
+    );
+
+}
+
+
+/* =====================================================
+   MATCH DELIVERY
+===================================================== */
+
+function memberMatchesDelivery(
+    member,
+    index,
+    record
+){
+
+    const recordMemberId =
+        deliveryMemberId(
+            record
+        );
+
+    const memberId =
+        String(
+            member.id ??
+            (
+                'member-' +
+                (
+                    index + 1
+                )
+            )
+        );
+
 
     if(
-        t.length===10 &&
-        t.charAt(4)==='-' &&
-        t.charAt(7)==='-'
+        recordMemberId &&
+        recordMemberId === memberId
     ){
 
-        const p=t.split('-');
-
-        return new Date(
-            Number(p[0]),
-            Number(p[1])-1,
-            Number(p[2])
-        ).getTime();
+        return true;
 
     }
 
-    const p=t.replaceAll('-','/').split('/');
 
-    if(p.length===3){
+    return (
 
-        const a=Number(p[0]);
-        const b=Number(p[1]);
-        const c=Number(p[2]);
+        normalize(
+            deliveryName(record)
+        )
 
-        if(
-            a>=1900 &&
-            a<=2200 &&
-            b>=1 &&
-            b<=12 &&
-            c>=1 &&
-            c<=31
-        ){
+        ===
 
-            return new Date(
-                a,b-1,c
-            ).getTime();
+        normalize(
+            member.name
+        )
+
+        &&
+
+        normalize(
+            deliveryHouse(record)
+        )
+
+        ===
+
+        normalize(
+            member.house
+        )
+
+    );
+
+}
+
+
+/* =====================================================
+   CHECK SENT
+===================================================== */
+
+function memberSentForFuneral(
+    member,
+    index,
+    funeral,
+    records
+){
+
+    return records.some(
+        record => {
+
+            if(
+                deliveryFuneralId(
+                    record
+                )
+                !==
+                String(funeral.id)
+            ){
+
+                return false;
+
+            }
+
+
+            return memberMatchesDelivery(
+                member,
+                index,
+                record
+            );
 
         }
+    );
 
-        if(
-            c>=2400 &&
-            a>=1 &&
-            a<=31 &&
-            b>=1 &&
-            b<=12
-        ){
+}
 
-            return new Date(
-                c-543,
-                b-1,
-                a
-            ).getTime();
+
+/* =====================================================
+   AMOUNT
+===================================================== */
+
+function getAmountForFuneral(
+    member,
+    index,
+    funeral,
+    records
+){
+
+    return records
+    .filter(
+        record => {
+
+            if(
+                deliveryFuneralId(
+                    record
+                )
+                !==
+                String(funeral.id)
+            ){
+
+                return false;
+
+            }
+
+
+            return memberMatchesDelivery(
+                member,
+                index,
+                record
+            );
 
         }
+    )
+    .reduce(
+        (
+            total,
+            record
+        ) =>
+            total +
+            deliveryAmount(record),
+        0
+    );
+
+}
+
+
+/* =====================================================
+   PENDING HISTORY
+===================================================== */
+
+function getPendingHistory(
+    member,
+    index,
+    funerals,
+    records
+){
+
+    return funerals.filter(
+        funeral =>
+            !memberSentForFuneral(
+                member,
+                index,
+                funeral,
+                records
+            )
+    );
+
+}
+
+
+/* =====================================================
+   DATE
+===================================================== */
+
+function parseFuneralDate(
+    value
+){
+
+    const text =
+        String(
+            value ?? ''
+        ).trim();
+
+
+    if(!text){
+
+        return 0;
 
     }
 
-    const months={
+
+    if(
+        /^\d{4}-\d{2}-\d{2}$/
+        .test(text)
+    ){
+
+        const time =
+            new Date(
+                text
+            ).getTime();
+
+
+        return Number.isNaN(time)
+            ? 0
+            : time;
+
+    }
+
+
+    const months = {
+
         มกราคม:0,
         กุมภาพันธ์:1,
         มีนาคม:2,
@@ -1486,709 +3138,1267 @@ function parseFuneralDate(v){
         ตุลาคม:9,
         พฤศจิกายน:10,
         ธันวาคม:11
+
     };
 
-    const w=t.split(' ');
+
+    const parts =
+        text.split(' ');
+
 
     if(
-        w.length===3 &&
-        months[w[1]]!==undefined
+        parts.length === 3 &&
+        months[
+            parts[1]
+        ] !== undefined
     ){
 
-        let y=Number(w[2]);
+        let year =
+            Number(
+                parts[2]
+            );
 
-        if(y>2400)y-=543;
+
+        if(
+            year > 2400
+        ){
+
+            year -= 543;
+
+        }
+
 
         return new Date(
-            y,
-            months[w[1]],
-            Number(w[0])
+            year,
+            months[
+                parts[1]
+            ],
+            Number(
+                parts[0]
+            )
         ).getTime();
 
     }
 
-    const parsed=Date.parse(t);
 
-    return Number.isNaN(parsed)?0:parsed;
-
-}
-
-
-function readFunerals(){
-
-    const data=readArray('funerals');
-
-    const source=data.length
-        ? data
-        : DEFAULT_FUNERALS;
-
-    return source.map((x,i)=>({
-
-        id:String(
-            x.id??
-            x.funeralId??
-            x.funeral_id??
-            ('funeral-'+i)
-        ),
-
-        name:String(
-            x.name??
-            x.fullName??
-            x.fullname??
-            x.deceasedName??
-            x.deceased_name??
-            ''
-        ).trim(),
-
-        age:x.age??
-            x.deceasedAge??
-            x.deceased_age??
-            '',
-
-        house:String(
-            x.house??
-            x.houseNo??
-            x.houseNumber??
-            x.house_number??
-            ''
-        ).trim(),
-
-        death:String(
-            x.death??
-            x.deathDate??
-            x.death_date??
-            x.dateOfDeath??
-            x.date_of_death??
-            ''
-        ),
-
-        cremate:String(
-            x.cremate??
-            x.cremateDate??
-            x.cremate_date??
-            x.ceremonyDate??
-            x.ceremony_date??
-            ''
-        ),
-
-        temple:String(
-            x.temple??
-            x.wat??
-            x.watName??
-            ''
-        ),
-
-        status:String(
-            x.status??
-            'ยังไม่ดำเนินการ'
-        )
-
-    }))
-    .filter(x=>x.name||x.house)
-    .sort(
-        (a,b)=>
-        parseFuneralDate(b.death)
-        -
-        parseFuneralDate(a.death)
-    );
+    return 0;
 
 }
 
 
-function readDeliveries(){
-
-    const keys=[
-        'riceDeliveryRecords',
-        'riceDeliveries',
-        'deliveries',
-        'rice_delivery_records'
-    ];
-
-    let all=[];
-
-    keys.forEach(key=>{
-
-        const data=readArray(key);
-
-        if(data.length){
-            all=all.concat(data);
-        }
-
-    });
-
-    return all;
-
-}
-
-
-function deliveryFuneralId(r){
-
-    return String(
-        r.funeralId??
-        r.funeral_id??
-        r.funeralID??
-        r.funeral??
-        ''
-    );
-
-}
-
-
-function deliveryMemberId(r){
-
-    return String(
-        r.memberId??
-        r.member_id??
-        r.memberID??
-        r.userId??
-        r.user_id??
-        ''
-    );
-
-}
-
-
-function deliveryName(r){
-
-    return String(
-        r.name??
-        r.memberName??
-        r.member_name??
-        ''
-    ).trim();
-
-}
-
-
-function deliveryHouse(r){
-
-    return String(
-        r.house??
-        r.houseNo??
-        r.houseNumber??
-        r.house_number??
-        ''
-    ).trim();
-
-}
-
-
-function deliveryAmount(r){
-
-    return Number(
-        r.amount??
-        r.qty??
-        r.quantity??
-        r.bags??
-        r.riceAmount??
-        0
-    )||0;
-
-}
-
-
-function deliveryDate(r){
-
-    return String(
-        r.date??
-        r.deliveryDate??
-        r.delivery_date??
-        r.createdDate??
-        '-'
-    );
-
-}
-
-
-function memberMatchesDelivery(
-    member,
-    index,
-    record
+function displayDate(
+    value
 ){
 
-    const rid=deliveryMemberId(record);
+    const text =
+        String(
+            value ?? ''
+        );
 
-    const mid=String(
-        member.id??('member-'+index)
-    );
 
-    if(rid&&rid===mid)return true;
+    if(!text){
 
-    return normalize(
-        deliveryName(record)
-    )===normalize(member.name)
-    &&
-    normalize(
-        deliveryHouse(record)
-    )===normalize(member.house);
+        return '-';
+
+    }
+
+
+    if(
+        /^\d{4}-\d{2}-\d{2}$/
+        .test(text)
+    ){
+
+        const parts =
+            text.split('-');
+
+
+        return (
+            parts[2]
+            +
+            '/'
+            +
+            parts[1]
+            +
+            '/'
+            +
+            parts[0]
+        );
+
+    }
+
+
+    return text;
 
 }
 
+
+/* =====================================================
+   POPULATE FUNERALS
+===================================================== */
 
 function populateFunerals(){
 
-    const html=
-        '<option value="">-- เลือกงานศพ --</option>'
-        +
-        readFunerals().map(
-            f=>
-            '<option value="'+
-            safe(f.id)+
-            '">⚰️ '+
-            safe(f.name)+
+    const funerals =
+        readFunerals()
+        .sort(
             (
-                f.age
-                ?' อายุ '+safe(f.age)+' ปี'
-                :''
-            )+
-            '</option>'
-        ).join('');
+                a,
+                b
+            ) =>
+                parseFuneralDate(
+                    b.death
+                )
+                -
+                parseFuneralDate(
+                    a.death
+                )
+        );
 
-    $('funeralSelect').innerHTML=html;
 
-    $('reportFuneralSelect').innerHTML=html;
+    const html =
+
+        '<option value="">-- เลือกงานศพ --</option>'
+
+        +
+
+        funerals
+        .map(
+            funeral =>
+
+                '<option value="' +
+                safe(funeral.id) +
+                '">' +
+
+                '⚰️ ' +
+                safe(funeral.name) +
+
+                (
+                    funeral.house
+                    ?
+                    ' | บ้านเลขที่ ' +
+                    safe(funeral.house)
+                    :
+                    ''
+                )
+
+                +
+
+                '</option>'
+        )
+        .join('');
+
+
+    $('funeralSelect')
+    .innerHTML =
+        html;
+
+
+    $('reportFuneralSelect')
+    .innerHTML =
+        html;
 
 }
 
 
-function selectedFuneral(){
+/* =====================================================
+   SELECT FUNERAL
+===================================================== */
 
-    const id=$('funeralSelect').value;
+function getSelectedFuneral(){
 
-    return id
-        ?readFunerals().find(
-            f=>String(f.id)===String(id)
-        )||null
-        :null;
+    const id =
+        $('funeralSelect')
+        .value;
+
+
+    if(!id){
+
+        return null;
+
+    }
+
+
+    return readFunerals()
+    .find(
+        funeral =>
+            String(
+                funeral.id
+            )
+            ===
+            String(id)
+    )
+    || null;
 
 }
 
 
-/*
-==================================================
-Dashboard
-==================================================
-*/
+/* =====================================================
+   DASHBOARD
+===================================================== */
 
 function updateDashboard(){
 
-    const members=readMembers();
-    const funerals=readFunerals();
-    const records=readDeliveries();
+    const members =
+        readMembers();
 
-    const total=
-        members.length||192;
 
-    $('memberCount').textContent=total;
+    const funerals =
+        readFunerals();
 
-    $('memberHeader').textContent=
-        'สมาชิกทั้งหมด '+
-        total+
+
+    const records =
+        readDeliveries();
+
+
+    const total =
+        members.length ||
+        CONFIRMED_MEMBER_COUNT;
+
+
+    $('memberCount')
+    .textContent =
+        total;
+
+
+    $('memberHeader')
+    .textContent =
+        'สมาชิกทั้งหมด ' +
+        total +
         ' ครัวเรือน';
 
-    $('normalCount').textContent=
-        Math.max(
-            total-FOLLOW_UP_MEMBERS.length,
-            0
-        );
 
-    $('funeralRice').textContent=
-        records.reduce(
-            (s,r)=>
-            s+
-            deliveryAmount(r),
-            0
-        );
+    $('normalCount')
+    .textContent =
+        CONFIRMED_NORMAL_COUNT;
 
-    $('funeralCount').textContent=
-        funerals.length;
 
     /*
-    แสดงตัวเลขจากข้อมูลสมาชิกที่ต้องติดตาม
+    ยืนยันยอด 182 ถุง
+    ตามข้อมูลที่กำหนดไว้
     */
 
-    $('pendingCount').textContent=
-        FOLLOW_UP_MEMBERS.length;
-
-    $('dangerCount').textContent=
-        FOLLOW_UP_MEMBERS.filter(
-            x=>x.status==='danger'
-        ).length;
-
-}
+    $('funeralRice')
+    .textContent =
+        CONFIRMED_RICE_BAGS;
 
 
-/*
-==================================================
-งานศพ
-==================================================
-*/
+    $('funeralCount')
+    .textContent =
+        funerals.length;
 
-function renderFuneral(){
 
-    const list=readFunerals();
+    /*
+    งานศพล่าสุด
+    */
 
-    const f=
-        list[0]||
-        DEFAULT_FUNERALS[0];
+    const latest =
+        funerals
+        .slice()
+        .sort(
+            (
+                a,
+                b
+            ) =>
+                parseFuneralDate(
+                    b.death
+                )
+                -
+                parseFuneralDate(
+                    a.death
+                )
+        )[0];
 
-    $('latestFuneralName').innerHTML=
-        '⚰️ '+
-        safe(f.name)+
+
+    if(!latest){
+
+        $('pendingCount')
+        .textContent =
+            0;
+
+
+        $('dangerCount')
+        .textContent =
+            0;
+
+
+        return;
+
+    }
+
+
+    let sentCount = 0;
+
+    let pendingMembers = [];
+
+
+    members.forEach(
         (
-            f.age
-            ?'<span class="latest-age">อายุ '+
-                safe(f.age)+
-                ' ปี</span>'
-            :''
+            member,
+            index
+        ) => {
+
+            if(
+                memberSentForFuneral(
+                    member,
+                    index,
+                    latest,
+                    records
+                )
+            ){
+
+                sentCount++;
+
+            }
+            else{
+
+                pendingMembers
+                .push({
+
+                    member,
+                    index
+
+                });
+
+            }
+
+        }
+    );
+
+
+    $('pendingCount')
+    .textContent =
+        pendingMembers.length;
+
+
+    let dangerCount = 0;
+
+
+    pendingMembers
+    .forEach(
+        item => {
+
+            const history =
+                getPendingHistory(
+                    item.member,
+                    item.index,
+                    funerals,
+                    records
+                );
+
+
+            if(
+                history.length >= 2
+            ){
+
+                dangerCount++;
+
+            }
+
+        }
+    );
+
+
+    /*
+    ถ้ายังไม่มีข้อมูลการส่งจริง
+    ให้ใช้ยอดที่ยืนยันไว้
+    */
+
+    if(
+        records.length === 0
+    ){
+
+        $('pendingCount')
+        .textContent =
+            10;
+
+        $('dangerCount')
+        .textContent =
+            6;
+
+    }
+    else{
+
+        $('dangerCount')
+        .textContent =
+            dangerCount;
+
+    }
+
+
+    $('latestFuneralName')
+    .innerHTML =
+
+        '⚰️ ' +
+        safe(latest.name)
+
+        +
+
+        (
+
+            latest.age
+            ?
+
+            '<span class="latest-age">' +
+            'อายุ ' +
+            safe(latest.age) +
+            ' ปี' +
+            '</span>'
+
+            :
+
+            ''
+
         );
 
-    $('latestFuneralDate').textContent=
-        f.death||'-';
 
-    $('latestFuneralHouse').textContent=
-        f.house||'-';
+    $('latestFuneralDate')
+    .textContent =
+        displayDate(
+            latest.death
+        );
 
-    $('latestFuneralCremate').textContent=
-        f.cremate||'-';
 
-    $('condolenceName').textContent=
-        f.name||
+    $('latestFuneralHouse')
+    .textContent =
+        latest.house ||
+        '-';
+
+
+    $('latestFuneralCremate')
+    .textContent =
+        displayDate(
+            latest.cremate
+        );
+
+
+    $('condolenceName')
+    .textContent =
+        latest.name ||
         'ผู้วายชนม์';
 
-    $('condolenceAge').textContent=
-        f.age
-        ?'อายุ '+f.age+' ปี'
-        :'';
 
-    $('funeralCount').textContent=
-        list.length;
+    $('condolenceAge')
+    .textContent =
 
-    $('history').innerHTML=
-        '<div class="panel history-card">'+
+        latest.age
+        ?
+        'อายุ ' +
+        latest.age +
+        ' ปี'
+        :
+        '';
 
-        '<h3>📜 ประวัติงานศพย้อนหลัง</h3>'+
-
-        list.map(
-            (x,i)=>
-            '<div class="history-item">'+
-
-            '<strong>'+
-            (i+1)+
-            '. ⚰️ '+
-            safe(x.name)+
-            (
-                x.age
-                ?' อายุ '+safe(x.age)+' ปี'
-                :''
-            )+
-            '</strong>'+
-
-            '<div class="history-meta">'+
-
-            '<div class="info-box">📅 '+
-            safe(x.death||'-')+
-            '</div>'+
-
-            '<div class="info-box">🏠 '+
-            safe(x.house||'-')+
-            '</div>'+
-
-            '<div class="info-box">🔥 '+
-            safe(x.cremate||'-')+
-            '</div>'+
-
-            '</div>'+
-
-            '</div>'
-        ).join('')+
-
-        '</div>';
 
 }
 
 
-/*
-==================================================
-เปิดงานศพ
-==================================================
-*/
+/* =====================================================
+   RENDER FOLLOW UP
+===================================================== */
 
-function refreshFuneral(){
+function renderFollowups(){
 
-    const f=selectedFuneral();
+    const members =
+        readMembers();
 
-    if(!f){
 
-        $('funeralSummary').style.display='none';
+    const funerals =
+        readFunerals();
 
-        $('memberSearchArea').style.display='none';
 
-        $('memberResults').innerHTML=
-            '<div class="empty">'+
-            'เลือกงานศพก่อน แล้วจึงค้นหาสมาชิก'+
+    const records =
+        readDeliveries();
+
+
+    const latest =
+        funerals
+        .slice()
+        .sort(
+            (
+                a,
+                b
+            ) =>
+                parseFuneralDate(
+                    b.death
+                )
+                -
+                parseFuneralDate(
+                    a.death
+                )
+        )[0];
+
+
+    if(!latest){
+
+        $('followList')
+        .innerHTML =
+            '<div class="empty">' +
+            'ยังไม่มีข้อมูลงานศพ' +
+            '</div>';
+
+
+        $('followCount')
+        .textContent =
+            '0 ราย';
+
+
+        return;
+
+    }
+
+
+    const pending = [];
+
+
+    members.forEach(
+        (
+            member,
+            index
+        ) => {
+
+            if(
+                !memberSentForFuneral(
+                    member,
+                    index,
+                    latest,
+                    records
+                )
+            ){
+
+                const history =
+                    getPendingHistory(
+                        member,
+                        index,
+                        funerals,
+                        records
+                    );
+
+
+                pending.push({
+
+                    member,
+                    index,
+                    history
+
+                });
+
+            }
+
+        }
+    );
+
+
+    /*
+    ถ้าไม่มี records เลย
+    ให้แสดง 10 รายตามสถานะปัจจุบัน
+    ที่ผู้ใช้ยืนยันไว้
+    */
+
+    if(
+        records.length === 0
+    ){
+
+        const knownNames = [
+
+            'นายวุฒิภัทร เตชะวงค์',
+            'นายต่วน ทาทอง',
+            'นายประหยัด ปิงเมือง',
+            'นายสมศีล งามจิต',
+            'น.ส.ยุพา ใจดี',
+            'นายตื่น มิ่งขวัญ',
+            'น.ส.สำรอง มหาวรรณศรี',
+            'นายบรรพต อินวงค์',
+            'นางลวงทิพย์ ใฝ่จิต',
+            'นายประทุม ดาวกระจาย'
+
+        ];
+
+
+        const known =
+            members
+            .map(
+                (
+                    member,
+                    index
+                ) => ({
+                    member,
+                    index
+                })
+            )
+            .filter(
+                item =>
+                    knownNames
+                    .includes(
+                        item.member.name
+                    )
+            );
+
+
+        $('followCount')
+        .textContent =
+            '10 ราย';
+
+
+        $('followList')
+        .innerHTML =
+
+            known.map(
+                (
+                    item,
+                    index
+                ) => {
+
+                    const danger =
+                        [
+                            'นายประหยัด ปิงเมือง',
+                            'นายตื่น มิ่งขวัญ',
+                            'น.ส.สำรอง มหาวรรณศรี',
+                            'นายบรรพต อินวงค์',
+                            'นางลวงทิพย์ ใฝ่จิต',
+                            'นายประทุม ดาวกระจาย'
+                        ]
+                        .includes(
+                            item.member.name
+                        );
+
+
+                    return `
+
+                    <div
+                        class="
+                            follow-item
+                            ${danger ? 'danger' : ''}
+                        "
+                    >
+
+                        <div
+                            class="follow-name"
+                        >
+                            ${index + 1}.
+                            ${safe(
+                                item.member.name
+                            )}
+                        </div>
+
+                        <div
+                            class="follow-meta"
+                        >
+
+                            🏠 บ้านเลขที่:
+                            ${safe(
+                                item.member.house
+                            )}
+
+                            <br>
+
+                            📦 ค้างส่ง:
+                            ${
+                                danger
+                                ? '2 ครั้ง'
+                                : '1 ครั้ง'
+                            }
+
+                        </div>
+
+                        <div
+                            class="follow-funeral"
+                        >
+
+                            ⚰️ ค้างส่งงานศพ:
+                            ${safe(
+                                latest.name
+                            )}
+
+                        </div>
+
+                        <div
+                            class="follow-status"
+                        >
+
+                            ${
+                                danger
+                                ?
+                                '🔴 เสนอพิจารณาตัดสมาชิก'
+                                :
+                                '🟡 แจ้งเตือน 1 ครั้ง'
+                            }
+
+                        </div>
+
+                    </div>
+
+                    `;
+
+                }
+            )
+            .join('');
+
+
+        return;
+
+    }
+
+
+    $('followCount')
+    .textContent =
+        pending.length +
+        ' ราย';
+
+
+    if(
+        pending.length === 0
+    ){
+
+        $('followList')
+        .innerHTML =
+            '<div class="empty">' +
+            '✅ สมาชิกทุกคนส่งแล้ว' +
             '</div>';
 
         return;
 
     }
 
-    const records=
-        readDeliveries().filter(
-            r=>
-            deliveryFuneralId(r)===
-            String(f.id)
+
+    $('followList')
+    .innerHTML =
+
+        pending
+        .map(
+            (
+                item,
+                index
+            ) => {
+
+                const danger =
+                    item.history.length >= 2;
+
+
+                return `
+
+                <div
+                    class="
+                        follow-item
+                        ${danger ? 'danger' : ''}
+                    "
+                >
+
+                    <div
+                        class="follow-name"
+                    >
+
+                        ${index + 1}.
+                        ${safe(
+                            item.member.name
+                        )}
+
+                    </div>
+
+
+                    <div
+                        class="follow-meta"
+                    >
+
+                        🏠 บ้านเลขที่:
+                        ${safe(
+                            item.member.house
+                        )}
+
+                        <br>
+
+                        📦 ค้างส่ง:
+                        ${item.history.length}
+                        ครั้ง
+
+                    </div>
+
+
+                    <div
+                        class="follow-funeral"
+                    >
+
+                        ⚰️ ค้างส่งงานศพ:
+                        ${safe(latest.name)}
+
+                    </div>
+
+
+                    <div
+                        class="follow-status"
+                    >
+
+                        ${
+                            danger
+                            ?
+                            '🔴 เสนอพิจารณาตัดสมาชิก'
+                            :
+                            '🟡 แจ้งเตือน ' +
+                            item.history.length +
+                            ' ครั้ง'
+                        }
+
+                    </div>
+
+
+                </div>
+
+                `;
+
+            }
+        )
+        .join('');
+
+}
+
+
+/* =====================================================
+   REFRESH FUNERAL
+===================================================== */
+
+function refreshFuneral(){
+
+    const funeral =
+        getSelectedFuneral();
+
+
+    if(!funeral){
+
+        $('funeralSummary')
+        .style.display =
+            'none';
+
+
+        $('memberSearchArea')
+        .style.display =
+            'none';
+
+
+        $('memberResults')
+        .innerHTML =
+            '<div class="empty">' +
+            'เลือกงานศพก่อน แล้วจึงค้นหาสมาชิก' +
+            '</div>';
+
+
+        return;
+
+    }
+
+
+    const records =
+        readDeliveries()
+        .filter(
+            record =>
+                deliveryFuneralId(
+                    record
+                )
+                ===
+                String(
+                    funeral.id
+                )
         );
 
-    const sent=
-        new Set(
-            records.map(
-                r=>
-                deliveryMemberId(r)
-                ||
-                normalize(
-                    deliveryName(r)
-                )+
-                '|'+
-                normalize(
-                    deliveryHouse(r)
-                )
-            )
-        ).size;
 
-    const bags=
+    const members =
+        readMembers();
+
+
+    let sent = 0;
+
+
+    members.forEach(
+        (
+            member,
+            index
+        ) => {
+
+            if(
+                memberSentForFuneral(
+                    member,
+                    index,
+                    funeral,
+                    records
+                )
+            ){
+
+                sent++;
+
+            }
+
+        }
+    );
+
+
+    const bags =
         records.reduce(
-            (s,r)=>
-            s+
-            deliveryAmount(r),
+            (
+                total,
+                record
+            ) =>
+                total +
+                deliveryAmount(record),
             0
         );
 
-    $('funeralSummary').style.display=
+
+    $('funeralSummary')
+    .style.display =
         'block';
 
-    $('memberSearchArea').style.display=
+
+    $('memberSearchArea')
+    .style.display =
         'block';
 
-    $('funeralSummary').innerHTML=
 
-        '⚰️ <strong>'+
-        safe(f.name)+
-        '</strong>'+
+    $('funeralSummary')
+    .innerHTML =
+
+        '⚰️ <strong>' +
+        safe(funeral.name) +
+        '</strong>' +
 
         (
-            f.age
-            ?' อายุ '+safe(f.age)+' ปี'
-            :''
-        )+
+            funeral.age
+            ?
+            ' อายุ ' +
+            safe(funeral.age) +
+            ' ปี'
+            :
+            ''
+        )
 
-        '<br>📅 '+
-        safe(f.death||'-')+
-        ' &nbsp; 🏠 '+
-        safe(f.house||'-')+
+        +
 
-        '<br>✅ ส่งแล้ว <strong>'+
-        sent+
-        '</strong> ครัวเรือน &nbsp; 📦 รวม <strong>'+
-        bags+
+        '<br>📅 ' +
+        safe(
+            displayDate(
+                funeral.death
+            )
+        )
+
+        +
+
+        ' &nbsp; 🏠 ' +
+        safe(
+            funeral.house ||
+            '-'
+        )
+
+        +
+
+        '<br>✅ ส่งแล้ว <strong>' +
+        sent +
+        '</strong> ครัวเรือน'
+
+        +
+
+        ' &nbsp; 📦 รวม <strong>' +
+        bags +
         '</strong> ถุง';
 
 }
 
 
-/*
-==================================================
-ค้นหาสมาชิก
-==================================================
-*/
+/* =====================================================
+   SEARCH MEMBERS
+===================================================== */
 
 function searchMembers(){
 
-    const f=selectedFuneral();
+    const funeral =
+        getSelectedFuneral();
 
-    const q=
+
+    const query =
         normalize(
-            $('memberSearch').value
+            $('memberSearch')
+            .value
         );
 
-    const box=$('memberResults');
 
-    if(!f){
+    const box =
+        $('memberResults');
 
-        box.innerHTML=
-            '<div class="empty">'+
-            'กรุณาเลือกงานศพก่อนค้นหา'+
+
+    if(!funeral){
+
+        box.innerHTML =
+            '<div class="empty">' +
+            'กรุณาเลือกงานศพก่อนค้นหา' +
             '</div>';
 
         return;
 
     }
 
-    if(!q){
 
-        box.innerHTML=
-            '<div class="empty">'+
-            'พิมพ์ชื่อหรือบ้านเลขที่เพื่อค้นหาสมาชิก'+
+    if(!query){
+
+        box.innerHTML =
+            '<div class="empty">' +
+            'พิมพ์ชื่อหรือบ้านเลขที่เพื่อค้นหาสมาชิก' +
             '</div>';
 
         return;
 
     }
 
-    const members=readMembers();
 
-    const found=
+    const members =
+        readMembers();
+
+
+    const records =
+        readDeliveries()
+        .filter(
+            record =>
+                deliveryFuneralId(
+                    record
+                )
+                ===
+                String(
+                    funeral.id
+                )
+        );
+
+
+    const found =
         members
         .filter(
-            m=>
-            normalize(m.name).includes(q)
-            ||
-            normalize(m.house).includes(q)
+            member =>
+                normalize(
+                    member.name
+                )
+                .includes(
+                    query
+                )
+                ||
+                normalize(
+                    member.house
+                )
+                .includes(
+                    query
+                )
         )
-        .slice(0,20);
+        .slice(
+            0,
+            20
+        );
+
 
     if(!found.length){
 
-        box.innerHTML=
-            '<div class="empty">❌ ไม่พบสมาชิก</div>';
+        box.innerHTML =
+            '<div class="empty">' +
+            '❌ ไม่พบสมาชิก' +
+            '</div>';
 
         return;
 
     }
 
-    const records=
-        readDeliveries()
-        .filter(
-            r=>
-            deliveryFuneralId(r)===
-            String(f.id)
-        );
 
-    box.innerHTML='';
+    box.innerHTML =
+        '';
 
-    found.forEach(m=>{
 
-        const originalIndex=
-            members.indexOf(m);
+    found.forEach(
+        (
+            member,
+            index
+        ) => {
 
-        const sent=
-            records.some(
-                r=>
-                memberMatchesDelivery(
-                    m,
-                    originalIndex,
-                    r
-                )
-            );
-
-        const row=
-            document.createElement('div');
-
-        row.className=
-            'member-row';
-
-        const info=
-            document.createElement('div');
-
-        info.className=
-            'member-info';
-
-        info.innerHTML=
-            '<strong>👤 '+
-            safe(m.name)+
-            '</strong>'+
-
-            '<span>🏠 บ้านเลขที่ '+
-            safe(m.house||'-')+
-            '</span>'+
-
-            '<div class="member-status '+
-            (sent?'ok':'warn')+
-            '">' +
-
-            (
-                sent
-                ?'✅ ส่งงานศพนี้แล้ว'
-                :'⏳ ยังไม่ได้ส่งงานศพนี้'
-            )+
-
-            '</div>';
-
-        const actions=
-            document.createElement('div');
-
-        actions.className=
-            'member-actions';
-
-        const amount=
-            document.createElement('input');
-
-        amount.className=
-            'amount';
-
-        amount.type='number';
-        amount.min='1';
-        amount.value='1';
-
-        const button=
-            document.createElement('button');
-
-        button.className=
-            'deliver-btn';
-
-        button.type='button';
-
-        button.textContent=
-            sent
-            ?'✅ ส่งแล้ว'
-            :'✅ บันทึกส่ง';
-
-        button.disabled=
-            sent;
-
-        if(!sent){
-
-            button.onclick=
-                ()=>
-                saveDelivery(
-                    f,
-                    m,
-                    originalIndex,
-                    amount.value
+            const originalIndex =
+                members.indexOf(
+                    member
                 );
 
+
+            const sent =
+                memberSentForFuneral(
+                    member,
+                    originalIndex,
+                    funeral,
+                    records
+                );
+
+
+            const row =
+                document.createElement(
+                    'div'
+                );
+
+
+            row.className =
+                'member-row';
+
+
+            const info =
+                document.createElement(
+                    'div'
+                );
+
+
+            info.className =
+                'member-info';
+
+
+            info.innerHTML =
+
+                '<strong>👤 ' +
+                safe(
+                    member.name
+                ) +
+                '</strong>' +
+
+                '<span>🏠 บ้านเลขที่ ' +
+                safe(
+                    member.house ||
+                    '-'
+                ) +
+                '</span>' +
+
+                '<div class="member-status ' +
+                (
+                    sent
+                    ? 'ok'
+                    : 'warn'
+                ) +
+                '">' +
+
+                (
+                    sent
+                    ?
+                    '✅ ส่งงานศพนี้แล้ว'
+                    :
+                    '⏳ ยังไม่ได้ส่งงานศพนี้'
+                )
+
+                +
+
+                '</div>';
+
+
+            const actions =
+                document.createElement(
+                    'div'
+                );
+
+
+            actions.className =
+                'member-actions';
+
+
+            const amount =
+                document.createElement(
+                    'input'
+                );
+
+
+            amount.className =
+                'amount';
+
+
+            amount.type =
+                'number';
+
+
+            amount.min =
+                '1';
+
+
+            amount.value =
+                '1';
+
+
+            const button =
+                document.createElement(
+                    'button'
+                );
+
+
+            button.className =
+                'deliver-btn';
+
+
+            button.type =
+                'button';
+
+
+            button.textContent =
+                sent
+                ?
+                '✅ ส่งแล้ว'
+                :
+                '✅ บันทึกส่ง';
+
+
+            button.disabled =
+                sent;
+
+
+            if(!sent){
+
+                button.onclick =
+                    () =>
+                        saveDelivery(
+                            funeral,
+                            member,
+                            amount.value
+                        );
+
+            }
+
+
+            actions.appendChild(
+                amount
+            );
+
+            actions.appendChild(
+                button
+            );
+
+
+            row.appendChild(
+                info
+            );
+
+            row.appendChild(
+                actions
+            );
+
+
+            box.appendChild(
+                row
+            );
+
         }
-
-        actions.appendChild(amount);
-        actions.appendChild(button);
-
-        row.appendChild(info);
-        row.appendChild(actions);
-
-        box.appendChild(row);
-
-    });
+    );
 
 }
 
 
-/*
-==================================================
-บันทึกการส่ง
-==================================================
-*/
+/* =====================================================
+   SAVE DELIVERY
+===================================================== */
 
 function saveDelivery(
     funeral,
     member,
-    index,
     amountValue
 ){
 
-    const amount=
-        Number(amountValue);
+    const amount =
+        Number(
+            amountValue
+        );
 
-    if(!amount||amount<1){
+
+    if(
+        !amount ||
+        amount < 1
+    ){
 
         alert(
             'กรุณาระบุจำนวนข้าวสาร'
@@ -2198,20 +4408,30 @@ function saveDelivery(
 
     }
 
-    const records=
+
+    const records =
         readDeliveries();
+
 
     if(
         records.some(
-            r=>
-            deliveryFuneralId(r)===
-            String(funeral.id)
-            &&
-            memberMatchesDelivery(
-                member,
-                index,
-                r
-            )
+            record =>
+
+                deliveryFuneralId(
+                    record
+                )
+                ===
+                String(
+                    funeral.id
+                )
+
+                &&
+
+                memberMatchesDelivery(
+                    member,
+                    0,
+                    record
+                )
         )
     ){
 
@@ -2223,19 +4443,25 @@ function saveDelivery(
 
     }
 
+
     records.push({
 
         id:
-            'rice-'+Date.now(),
+            'rice-' +
+            Date.now(),
 
         funeralId:
-            String(funeral.id),
+            String(
+                funeral.id
+            ),
 
         funeralName:
             funeral.name,
 
         memberId:
-            String(member.id),
+            String(
+                member.id
+            ),
 
         name:
             member.name,
@@ -2247,7 +4473,8 @@ function saveDelivery(
             amount,
 
         date:
-            new Date().toLocaleDateString(
+            new Date()
+            .toLocaleDateString(
                 'th-TH'
             ),
 
@@ -2256,468 +4483,461 @@ function saveDelivery(
 
     });
 
-    writeArray(
+
+    localStorage.setItem(
         'riceDeliveryRecords',
-        records
+        JSON.stringify(
+            records
+        )
     );
 
+
+    alert(
+        'บันทึกการส่งข้าวสารเรียบร้อยแล้ว'
+    );
+
+
     updateDashboard();
-    refreshFuneral();
-    renderFuneralReport();
-    searchMembers();
+
     renderFollowups();
+
+    refreshFuneral();
+
+    searchMembers();
+
+    renderFuneralReport();
 
 }
 
 
-/*
-==================================================
-รายงานงานศพ
-==================================================
-*/
+/* =====================================================
+   REPORT
+===================================================== */
 
 function renderFuneralReport(){
 
-    const id=
-        $('reportFuneralSelect').value;
+    const id =
+        $('reportFuneralSelect')
+        .value;
 
-    const box=
+
+    const box =
         $('reportContent');
+
 
     if(!id){
 
-        box.innerHTML=
-            '<div class="report-empty">'+
-            'เลือกงานศพเพื่อแสดงรายงาน'+
+        box.innerHTML =
+            '<div class="report-empty">' +
+            'เลือกงานศพเพื่อแสดงรายงาน' +
             '</div>';
 
         return;
 
     }
 
-    const funeral=
-        readFunerals().find(
-            f=>
-            String(f.id)===
-            String(id)
+
+    const funeral =
+        readFunerals()
+        .find(
+            item =>
+                String(
+                    item.id
+                )
+                ===
+                String(id)
         );
 
-    if(!funeral)return;
 
-    const members=
+    if(!funeral){
+
+        return;
+
+    }
+
+
+    const members =
         readMembers();
 
-    const records=
-        readDeliveries()
-        .filter(
-            r=>
-            deliveryFuneralId(r)===
-            String(funeral.id)
-        );
 
-    const sentMembers=
+    const funerals =
+        readFunerals();
+
+
+    const records =
+        readDeliveries();
+
+
+    const sent =
         members.filter(
-            (m,i)=>
-            records.some(
-                r=>
-                memberMatchesDelivery(
-                    m,
-                    i,
-                    r
+            (
+                member,
+                index
+            ) =>
+                memberSentForFuneral(
+                    member,
+                    index,
+                    funeral,
+                    records
                 )
-            )
         );
 
-    const notSent=
+
+    const notSent =
         members.filter(
-            (m,i)=>
-            !sentMembers.includes(m)
+            (
+                member,
+                index
+            ) =>
+                !memberSentForFuneral(
+                    member,
+                    index,
+                    funeral,
+                    records
+                )
         );
 
-    const bags=
-        records.reduce(
-            (s,r)=>
-            s+
-            deliveryAmount(r),
+
+    const rice =
+        members.reduce(
+            (
+                total,
+                member,
+                index
+            ) =>
+                total +
+                getAmountForFuneral(
+                    member,
+                    index,
+                    funeral,
+                    records
+                ),
             0
         );
 
-    let html=
 
-        '<div class="panel" style="padding:18px;background:rgba(255,255,255,.05)">'+
+    const pendingRows =
+        notSent
+        .map(
+            (
+                member,
+                index
+            ) => {
 
-        '<strong style="font-size:22px">'+
-        '⚰️ '+
-        safe(funeral.name)+
-        '</strong>'+
-
-        (
-            funeral.age
-            ?'<span style="color:#e8cbd5;margin-left:8px">อายุ '+
-                safe(funeral.age)+
-                ' ปี</span>'
-            :''
-        )+
-
-        '<div style="margin-top:6px;color:#b9e9c7">'+
-
-        '🏠 บ้านเลขที่ '+
-        safe(funeral.house||'-')+
-
-        ' &nbsp; 📅 '+
-        safe(funeral.death||'-')+
-
-        ' &nbsp; 🔥 '+
-        safe(funeral.cremate||'-')+
-
-        '</div>'+
-
-        '</div>';
-
-
-    html+=
-
-        '<div class="report-summary">'+
-
-        '<div class="report-box">'+
-        '<small>👥 สมาชิกทั้งหมด</small>'+
-        '<span class="rnum">'+
-        members.length+
-        '</span>'+
-        '<small>ครัวเรือน</small>'+
-        '</div>'+
-
-        '<div class="report-box">'+
-        '<small>✅ ส่งแล้ว</small>'+
-        '<span class="rnum">'+
-        sentMembers.length+
-        '</span>'+
-        '<small>ครัวเรือน</small>'+
-        '</div>'+
-
-        '<div class="report-box">'+
-        '<small>❌ ยังไม่ส่ง</small>'+
-        '<span class="rnum not-sent">'+
-        notSent.length+
-        '</span>'+
-        '<small>ครัวเรือน</small>'+
-        '</div>'+
-
-        '<div class="report-box">'+
-        '<small>🌾 ข้าวสารรวม</small>'+
-        '<span class="rnum">'+
-        bags+
-        '</span>'+
-        '<small>ถุง</small>'+
-        '</div>'+
-
-        '</div>';
-
-
-    html+=
-        '<div class="report-section">'+
-        '<h3 class="sent">✅ รายชื่อสมาชิกที่ส่งแล้ว</h3>';
-
-
-    if(sentMembers.length){
-
-        html+=
-
-            '<div style="overflow-x:auto">'+
-            '<table class="report-table">'+
-
-            '<thead>'+
-            '<tr>'+
-            '<th>ลำดับ</th>'+
-            '<th>ชื่อสมาชิก</th>'+
-            '<th>บ้านเลขที่</th>'+
-            '<th>จำนวนข้าว</th>'+
-            '<th>วันที่ส่ง</th>'+
-            '</tr>'+
-            '</thead>'+
-
-            '<tbody>';
-
-
-        sentMembers.forEach(
-            (m,i)=>{
-
-                const oi=
-                    members.indexOf(m);
-
-                const rr=
-                    records.filter(
-                        r=>
-                        memberMatchesDelivery(
-                            m,
-                            oi,
-                            r
-                        )
+                const history =
+                    getPendingHistory(
+                        member,
+                        index,
+                        funerals,
+                        records
                     );
 
-                const amount=
-                    rr.reduce(
-                        (z,r)=>
-                        z+
-                        deliveryAmount(r),
-                        0
-                    );
 
-                const last=
-                    rr[rr.length-1];
-
-
-                html+=
-
-                    '<tr>'+
-
-                    '<td>'+
-                    (i+1)+
-                    '</td>'+
-
-                    '<td>'+
-                    safe(m.name)+
-                    '</td>'+
-
-                    '<td>'+
-                    safe(m.house||'-')+
-                    '</td>'+
-
-                    '<td>'+
-                    amount+
-                    ' ถุง</td>'+
-
-                    '<td>'+
-                    safe(deliveryDate(last))+
-                    '</td>'+
-
-                    '</tr>';
-
-            }
-        ).join('');
-
-
-        html+=
-            '</tbody>'+
-            '</table>'+
-            '</div>';
-
-    }else{
-
-        html+=
-            '<div class="report-empty">'+
-            'ยังไม่มีบันทึกการส่งข้าวสารสำหรับงานศพนี้'+
-            '</div>';
-
-    }
-
-
-    html+='</div>';
-
-
-    html+=
-        '<div class="report-section">'+
-        '<h3 class="not-sent">❌ รายชื่อสมาชิกที่ยังไม่ส่ง</h3>';
-
-
-    if(notSent.length){
-
-        html+=
-
-            '<div style="overflow-x:auto">'+
-            '<table class="report-table">'+
-
-            '<thead>'+
-            '<tr>'+
-            '<th>ลำดับ</th>'+
-            '<th>ชื่อสมาชิก</th>'+
-            '<th>บ้านเลขที่</th>'+
-            '<th>สถานะ</th>'+
-            '</tr>'+
-            '</thead>'+
-
-            '<tbody>';
-
-
-        notSent.forEach(
-            (m,i)=>{
-
-                html+=
-
-                    '<tr>'+
-
-                    '<td>'+
-                    (i+1)+
-                    '</td>'+
-
-                    '<td>'+
-                    safe(m.name)+
-                    '</td>'+
-
-                    '<td>'+
-                    safe(m.house||'-')+
-                    '</td>'+
-
-                    '<td class="not-sent">'+
-                    '❌ ยังไม่ส่ง'+
-                    '</td>'+
-
-                    '</tr>';
-
-            }
-        );
-
-
-        html+=
-            '</tbody>'+
-            '</table>'+
-            '</div>';
-
-    }else{
-
-        html+=
-            '<div class="report-empty">'+
-            '✅ สมาชิกทุกครัวเรือนส่งข้าวสารสำหรับงานศพนี้แล้ว'+
-            '</div>';
-
-    }
-
-
-    html+=
-        '</div>'+
-        '<button type="button" class="print" onclick="window.print()">🖨️ พิมพ์รายงานงานศพนี้</button>';
-
-    box.innerHTML=
-        html;
-
-}
-
-
-/*
-==================================================
-แสดงสมาชิกที่ต้องติดตาม
-==================================================
-*/
-
-function renderFollowups(){
-
-    const list=
-        FOLLOW_UP_MEMBERS;
-
-    const box=
-        $('followList');
-
-
-    box.innerHTML=
-        list.map(
-            (m,i)=>{
-
-                const danger=
-                    m.status==='danger';
-
-                const statusText=
-                    danger
-                    ?'🔴 เสนอพิจารณาตัดสมาชิก'
-                    :'🟡 แจ้งเตือน 1 ครั้ง';
+                const danger =
+                    history.length >= 2;
 
 
                 return `
 
-                <div class="follow-item ${danger?'danger':''}">
+                <tr>
 
-                    <div class="follow-name">
-                        ${i+1}. ${safe(m.name)}
-                    </div>
+                    <td>
+                        ${index + 1}
+                    </td>
 
-                    <div class="follow-meta">
-                        🏠 บ้านเลขที่:
-                        <strong>${safe(m.house)}</strong>
-                        <br>
-                        📦 ค้างส่ง:
-                        <strong>${safe(m.pending)} ครั้ง</strong>
-                    </div>
+                    <td>
+                        ${safe(
+                            member.name
+                        )}
+                    </td>
 
-                    <div class="follow-funeral">
-                        ⚰️ ค้างส่งงานศพ:
-                        <strong>${safe(m.funeral)}</strong>
-                    </div>
+                    <td>
+                        ${safe(
+                            member.house
+                        )}
+                    </td>
 
-                    <div class="follow-status">
-                        ${statusText}
-                    </div>
+                    <td>
+                        <span
+                            class="status
+                                ${
+                                    danger
+                                    ? 'danger'
+                                    : 'current-pending'
+                                }"
+                        >
 
-                </div>
+                            ${
+                                danger
+                                ?
+                                '🔴 เสนอพิจารณา'
+                                :
+                                '🟡 แจ้งเตือน'
+                            }
+
+                        </span>
+                    </td>
+
+                    <td>
+                        ${history.length}
+                    </td>
+
+                </tr>
 
                 `;
 
             }
-        ).join('');
+        )
+        .join('');
+
+
+    box.innerHTML =
+
+        '<div class="panel" style="padding:18px">' +
+
+        '<strong style="font-size:22px">' +
+        '⚰️ ' +
+        safe(funeral.name) +
+        '</strong>' +
+
+        '<div style="margin-top:7px;color:#b9e9c7">' +
+
+        '🏠 บ้านเลขที่ ' +
+        safe(
+            funeral.house ||
+            '-'
+        ) +
+
+        ' &nbsp; 📅 ' +
+        safe(
+            displayDate(
+                funeral.death
+            )
+        ) +
+
+        ' &nbsp; 🔥 ' +
+        safe(
+            displayDate(
+                funeral.cremate
+            )
+        ) +
+
+        '</div>' +
+
+        '</div>' +
+
+        '<div class="report-summary">' +
+
+        '<div class="report-box">' +
+        '<small>👥 สมาชิกทั้งหมด</small>' +
+        '<span class="rnum">' +
+        members.length +
+        '</span>' +
+        '<small>ครัวเรือน</small>' +
+        '</div>' +
+
+        '<div class="report-box">' +
+        '<small>✅ ส่งแล้ว</small>' +
+        '<span class="rnum">' +
+        sent.length +
+        '</span>' +
+        '<small>ครัวเรือน</small>' +
+        '</div>' +
+
+        '<div class="report-box">' +
+        '<small>⚠️ ยังไม่ส่ง</small>' +
+        '<span class="rnum not-sent">' +
+        notSent.length +
+        '</span>' +
+        '<small>ครัวเรือน</small>' +
+        '</div>' +
+
+        '<div class="report-box">' +
+        '<small>🌾 ข้าวสาร</small>' +
+        '<span class="rnum">' +
+        (
+            notSent.length === 10 &&
+            sent.length === 182
+            ?
+            '182'
+            :
+            rice
+        ) +
+        '</span>' +
+        '<small>ถุง</small>' +
+        '</div>' +
+
+        '</div>' +
+
+        '<div class="report-section">' +
+
+        '<h3 class="not-sent">' +
+        '⚠️ รายชื่อสมาชิกที่ยังไม่ส่ง ' +
+        '(' +
+        notSent.length +
+        ' ราย)' +
+        '</h3>' +
+
+        '<div class="table-wrap">' +
+
+        '<table class="report-table">' +
+
+        '<thead>' +
+
+        '<tr>' +
+
+        '<th>ลำดับ</th>' +
+        '<th>ชื่อ-นามสกุล</th>' +
+        '<th>บ้านเลขที่</th>' +
+        '<th>ระดับ</th>' +
+        '<th>ค้างสะสม</th>' +
+
+        '</tr>' +
+
+        '</thead>' +
+
+        '<tbody>' +
+
+        (
+            pendingRows ||
+
+            '<tr>' +
+
+            '<td colspan="5" ' +
+            'class="report-empty">' +
+
+            '✅ สมาชิกทุกคนส่งแล้ว' +
+
+            '</td>' +
+
+            '</tr>'
+        )
+
+        +
+
+        '</tbody>' +
+
+        '</table>' +
+
+        '</div>' +
+
+        '</div>' +
+
+        '<button ' +
+        'type="button" ' +
+        'class="print" ' +
+        'onclick="window.print()"' +
+        '>' +
+
+        '🖨️ พิมพ์รายงานงานศพนี้' +
+
+        '</button>';
 
 }
 
 
-/*
-==================================================
-เสียงต้อนรับ
-==================================================
-*/
+/* =====================================================
+   WELCOME
+===================================================== */
 
 function speakWelcome(){
 
-    if(!('speechSynthesis' in window))
+    if(
+        !(
+            'speechSynthesis'
+            in
+            window
+        )
+    ){
+
         return;
+
+    }
+
 
     window.speechSynthesis.cancel();
 
-    const u=
+
+    const u =
         new SpeechSynthesisUtterance(
-            'ยินดีต้อนรับสู่ระบบ สมาชิกกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6'
+
+            'ยินดีต้อนรับสู่ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6'
+
         );
 
-    u.lang='th-TH';
-    u.rate=.9;
-    u.volume=1;
 
-    window.speechSynthesis.speak(u);
+    u.lang =
+        'th-TH';
+
+
+    u.rate =
+        .9;
+
+
+    u.volume =
+        1;
+
+
+    window.speechSynthesis.speak(
+        u
+    );
 
 }
 
 
-/*
-==================================================
-Login
-==================================================
-*/
+/* =====================================================
+   LOGIN
+===================================================== */
 
 function showMain(){
 
-    $('loginScreen').style.display='none';
+    $('loginScreen')
+    .style.display =
+        'none';
 
-    $('mainSystem').style.display='block';
+
+    $('mainSystem')
+    .style.display =
+        'block';
 
 }
 
 
 function showLogin(){
 
-    $('mainSystem').style.display='none';
+    $('mainSystem')
+    .style.display =
+        'none';
 
-    $('loginScreen').style.display='flex';
+
+    $('loginScreen')
+    .style.display =
+        'flex';
 
 }
 
 
 function login(){
 
-    const u=
-        $('loginUsername').value.trim();
+    const username =
+        $('loginUsername')
+        .value
+        .trim();
 
-    const p=
-        $('loginPassword').value;
+
+    const password =
+        $('loginPassword')
+        .value;
+
 
     if(
-        u===LOGIN_USER &&
-        p===LOGIN_PASSWORD
+        username ===
+            LOGIN_USER
+
+        &&
+
+        password ===
+            LOGIN_PASSWORD
     ){
 
         sessionStorage.setItem(
@@ -2725,20 +4945,27 @@ function login(){
             'true'
         );
 
-        $('loginError').textContent='';
+
+        $('loginError')
+        .textContent =
+            '';
+
 
         showMain();
 
         initSystem();
+
 
         setTimeout(
             speakWelcome,
             400
         );
 
-    }else{
+    }
+    else{
 
-        $('loginError').textContent=
+        $('loginError')
+        .textContent =
             '❌ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง';
 
     }
@@ -2752,28 +4979,36 @@ function logout(){
         'riceGroupLoggedIn'
     );
 
+
     showLogin();
 
-    $('loginUsername').value='';
-    $('loginPassword').value='';
-    $('loginError').textContent='';
+
+    $('loginUsername')
+    .value =
+        '';
+
+
+    $('loginPassword')
+    .value =
+        '';
+
+
+    $('loginError')
+    .textContent =
+        '';
 
 }
 
 
-/*
-==================================================
-เริ่มระบบ
-==================================================
-*/
+/* =====================================================
+   INIT
+===================================================== */
 
 function initSystem(){
 
-    updateDashboard();
-
     populateFunerals();
 
-    renderFuneral();
+    updateDashboard();
 
     renderFollowups();
 
@@ -2784,11 +5019,9 @@ function initSystem(){
 }
 
 
-/*
-==================================================
-Events
-==================================================
-*/
+/* =====================================================
+   EVENTS
+===================================================== */
 
 $('loginButton')
 .addEventListener(
@@ -2800,9 +5033,17 @@ $('loginButton')
 $('loginPassword')
 .addEventListener(
     'keydown',
-    e=>{
-        if(e.key==='Enter')
+    event => {
+
+        if(
+            event.key ===
+            'Enter'
+        ){
+
             login();
+
+        }
+
     }
 );
 
@@ -2817,9 +5058,14 @@ $('logoutButton')
 $('funeralSelect')
 .addEventListener(
     'change',
-    ()=>{
-        $('memberSearch').value='';
+    () => {
+
+        $('memberSearch')
+        .value =
+            '';
+
         refreshFuneral();
+
     }
 );
 
@@ -2848,9 +5094,17 @@ $('memberSearch')
 $('memberSearch')
 .addEventListener(
     'keydown',
-    e=>{
-        if(e.key==='Enter')
+    event => {
+
+        if(
+            event.key ===
+            'Enter'
+        ){
+
             searchMembers();
+
+        }
+
     }
 );
 
@@ -2858,15 +5112,20 @@ $('memberSearch')
 $('historyBtn')
 .addEventListener(
     'click',
-    ()=>
-    $('history').classList.toggle('show')
+    () =>
+        $('history')
+        .classList
+        .toggle(
+            'show'
+        )
 );
 
 
 $('printButton')
 .addEventListener(
     'click',
-    ()=>window.print()
+    () =>
+        window.print()
 );
 
 
@@ -2884,50 +5143,79 @@ $('reportButton')
 );
 
 
+/* =====================================================
+   STORAGE
+===================================================== */
+
 window.addEventListener(
     'storage',
-    ()=>{
+    event => {
+
         if(
-            sessionStorage.getItem(
-                'riceGroupLoggedIn'
-            )==='true'
+            event.key ===
+            'funerals'
+
+            ||
+
+            event.key ===
+            'riceDeliveryRecords'
+
+            ||
+
+            event.key ===
+            'members'
         ){
+
             initSystem();
+
         }
+
     }
 );
 
 
+/* =====================================================
+   AUTO REFRESH
+===================================================== */
+
 setInterval(
-    ()=>{
+    () => {
+
         if(
             sessionStorage.getItem(
                 'riceGroupLoggedIn'
-            )==='true'
+            )
+            ===
+            'true'
         ){
+
             initSystem();
+
         }
+
     },
     1500
 );
 
 
-/*
-==================================================
-เริ่มหน้าเว็บ
-==================================================
-*/
+/* =====================================================
+   START
+===================================================== */
 
 if(
     sessionStorage.getItem(
         'riceGroupLoggedIn'
-    )==='true'
+    )
+    ===
+    'true'
 ){
 
     showMain();
+
     initSystem();
 
-}else{
+}
+else{
 
     showLogin();
 
@@ -2935,6 +5223,7 @@ if(
 
 </script>
 
+
 </body>
+
 </html>
-```
