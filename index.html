@@ -24,7 +24,7 @@ body{
 .header{
     background:linear-gradient(135deg,#176b2c,#4caf50);
     color:white;
-    padding:25px 15px;
+    padding:28px 15px;
     text-align:center;
     border-radius:0 0 25px 25px;
 }
@@ -35,7 +35,7 @@ body{
 
 .header h1{
     margin:5px 0;
-    font-size:26px;
+    font-size:27px;
 }
 
 .header h2{
@@ -55,8 +55,9 @@ body{
 
 .dashboard{
     display:grid;
-    grid-template-columns:repeat(2,1fr);
+    grid-template-columns:1fr 1fr;
     gap:12px;
+    margin-top:15px;
 }
 
 .card{
@@ -67,7 +68,7 @@ body{
     box-shadow:0 3px 10px rgba(0,0,0,.08);
 }
 
-.card .icon{
+.icon{
     font-size:38px;
 }
 
@@ -77,7 +78,7 @@ body{
 }
 
 .number{
-    font-size:26px;
+    font-size:27px;
     font-weight:bold;
     color:#228B22;
 }
@@ -87,12 +88,12 @@ body{
 }
 
 .title{
-    margin:25px 5px 10px;
+    margin:25px 5px 12px;
 }
 
 .menu{
     display:grid;
-    grid-template-columns:repeat(2,1fr);
+    grid-template-columns:1fr 1fr;
     gap:12px;
 }
 
@@ -116,20 +117,17 @@ body{
     margin-bottom:8px;
 }
 
-.alert-box{
+.notice{
     margin-top:15px;
-    background:#fff3cd;
-    color:#7a5a00;
     padding:15px;
     border-radius:14px;
-}
-
-.success-box{
-    margin-top:15px;
     background:#e8f7e8;
     color:#1b7a1b;
-    padding:15px;
-    border-radius:14px;
+}
+
+.danger{
+    background:#ffe5e5;
+    color:#c62828;
 }
 
 footer{
@@ -141,10 +139,7 @@ footer{
 
 @media(max-width:600px){
 
-    .dashboard{
-        grid-template-columns:1fr 1fr;
-    }
-
+    .dashboard,
     .menu{
         grid-template-columns:1fr 1fr;
     }
@@ -180,72 +175,40 @@ footer{
 
 <div class="container">
 
-
     <section class="dashboard">
 
         <div class="card">
-
             <div class="icon">👥</div>
-
             <h3>สมาชิกทั้งหมด</h3>
-
-            <div class="number" id="memberCount">
-                185
-            </div>
-
+            <div class="number" id="memberCount">185</div>
             <small>ครัวเรือน</small>
-
         </div>
 
-
         <div class="card">
-
             <div class="icon">⚰️</div>
-
             <h3>งานศพ</h3>
-
-            <div class="number" id="funeralCount">
-                0
-            </div>
-
+            <div class="number" id="funeralCount">0</div>
             <small>งาน</small>
-
         </div>
 
-
         <div class="card">
-
             <div class="icon">🌾</div>
-
             <h3>ข้าวสารคงเหลือ</h3>
-
-            <div class="number" id="riceCount">
-                0
-            </div>
-
+            <div class="number" id="riceCount">0</div>
             <small>ถุง</small>
-
         </div>
 
-
         <div class="card">
-
             <div class="icon">⚠️</div>
-
             <h3>สมาชิกค้างส่ง</h3>
-
-            <div class="number warning-number" id="pendingCount">
-                0
-            </div>
-
+            <div class="number warning-number" id="pendingCount">0</div>
             <small>ครัวเรือน</small>
-
         </div>
 
     </section>
 
 
-    <div id="dashboardAlert"></div>
+    <div id="notice"></div>
 
 
     <h2 class="title">
@@ -255,54 +218,32 @@ footer{
 
     <section class="menu">
 
-
         <a href="สมาชิก.html">
-
             <div class="menu-icon">👥</div>
-
             ทะเบียนสมาชิก
-
         </a>
-
 
         <a href="งานศพ.html">
-
             <div class="menu-icon">⚰️</div>
-
             แจ้งเสียชีวิต / งานศพ
-
         </a>
-
 
         <a href="รับ.html">
-
             <div class="menu-icon">📥</div>
-
             รับข้าวสารเข้ากลุ่ม
-
         </a>
-
 
         <a href="สต็อก.html">
-
             <div class="menu-icon">🌾</div>
-
             คลังข้าวสาร
-
         </a>
-
 
         <a href="รายงาน.html">
-
             <div class="menu-icon">📊</div>
-
             รายงานข้อมูล
-
         </a>
 
-
     </section>
-
 
 </div>
 
@@ -320,47 +261,31 @@ footer{
 
 <script>
 
-/* สมาชิก */
-
-let members =
+const members =
     JSON.parse(localStorage.getItem("members")) || [];
 
-
-/* งานศพ */
-
-let funerals =
+const funerals =
     JSON.parse(localStorage.getItem("funerals")) || [];
 
+const rice =
+    JSON.parse(localStorage.getItem("rice")) || [];
 
-/* การส่งข้าวสารช่วยงาน */
-
-let funeralSends =
+const funeralSends =
     JSON.parse(localStorage.getItem("funeralSends")) || [];
 
 
-/* รับ-จ่ายข้าวสาร */
+/* จำนวนสมาชิก */
 
-let rice =
-    JSON.parse(localStorage.getItem("rice")) || [];
+const memberTotal =
+    members.length > 0 ? members.length : 185;
 
-
-/* จำนวนสมาชิก
-   ถ้ายังไม่มีข้อมูล ให้แสดง 185 ครัวเรือน
-*/
-
-let memberTotal =
-    members.length > 0
-    ? members.length
-    : 185;
-
-
-document.getElementById("memberCount").innerText =
+document.getElementById("memberCount").textContent =
     memberTotal;
 
 
 /* จำนวนงานศพ */
 
-document.getElementById("funeralCount").innerText =
+document.getElementById("funeralCount").textContent =
     funerals.length;
 
 
@@ -368,65 +293,42 @@ document.getElementById("funeralCount").innerText =
 
 let riceTotal = 0;
 
-rice.forEach(r => {
+rice.forEach(item => {
 
-    if(r.type === "รับ"){
-        riceTotal += Number(r.amount || 0);
+    if(item.type === "รับ"){
+        riceTotal += Number(item.amount || 0);
     }
 
-    if(r.type === "จ่าย"){
-        riceTotal -= Number(r.amount || 0);
+    if(item.type === "จ่าย"){
+        riceTotal -= Number(item.amount || 0);
     }
 
 });
 
-
-/* ถ้ามีข้อมูลช่วยงานศพ
-   ให้หักจากคลังด้วย
-*/
-
 riceTotal -= funeralSends.length;
-
 
 if(riceTotal < 0){
     riceTotal = 0;
 }
 
-
-document.getElementById("riceCount").innerText =
+document.getElementById("riceCount").textContent =
     riceTotal;
 
 
-/* ตรวจสอบสมาชิกค้างส่ง */
+/* สมาชิกค้างส่ง */
 
-let pendingCount = 0;
+const pendingMembers =
+    members.filter(
+        m => Number(m.pending || 0) > 0
+    );
 
-
-members.forEach(m => {
-
-    let pending =
-        Number(m.pending || 0);
-
-    if(pending > 0){
-
-        pendingCount++;
-
-    }
-
-});
+document.getElementById("pendingCount").textContent =
+    pendingMembers.length;
 
 
-document.getElementById("pendingCount").innerText =
-    pendingCount;
+/* แจ้งเตือนสมาชิกที่ค้าง 2 ครั้ง */
 
-
-/* ข้อความแจ้งเตือน */
-
-const alertBox =
-    document.getElementById("dashboardAlert");
-
-
-let dangerMembers =
+const dangerMembers =
     members.filter(
         m => Number(m.pending || 0) >= 2
     );
@@ -434,15 +336,11 @@ let dangerMembers =
 
 if(dangerMembers.length > 0){
 
-    alertBox.innerHTML = `
+    document.getElementById("notice").innerHTML = `
 
-        <div class="alert-box">
+        <div class="notice danger">
 
-            🚨 มีสมาชิก
-            <strong>
-                ${dangerMembers.length}
-            </strong>
-            ครัวเรือน
+            🚨 มี ${dangerMembers.length} ครัวเรือน
 
             <br>
 
@@ -450,8 +348,7 @@ if(dangerMembers.length > 0){
 
             <br>
 
-            🔴 สถานะ:
-            เสนอพิจารณาตัดสมาชิก
+            โปรดตรวจสอบและพิจารณาตามกติกาของกลุ่ม
 
         </div>
 
@@ -459,11 +356,11 @@ if(dangerMembers.length > 0){
 
 }else{
 
-    alertBox.innerHTML = `
+    document.getElementById("notice").innerHTML = `
 
-        <div class="success-box">
+        <div class="notice">
 
-            ✅ ยังไม่มีสมาชิกที่ค้างส่งครบ 2 ครั้ง
+            ✅ ระบบกลุ่มข้าวสารพร้อมใช้งาน
 
         </div>
 
@@ -472,7 +369,6 @@ if(dangerMembers.length > 0){
 }
 
 </script>
-
 
 </body>
 
