@@ -55,108 +55,218 @@
 </div></div>
 <script>
 'use strict';
-const LOGIN_USER='admin',LOGIN_PASSWORD='123456';
-const DEFAULT_FUNERALS=[{id:'funeral-kasem',name:'นายเกษมสุข ใฝ่ใจ',age:47,house:'123',death:'22 กรกฎาคม 2569',cremate:'25 กรกฎาคม 2569'},{id:'funeral-buran',name:'นายบูรณพิภพ ผัดดี',age:'',house:'254',death:'3 กรกฎาคม 2569',cremate:'8 กรกฎาคม 2569'}];
-const FOLLOWUPS=[{name:'นายวุฒิภัทร เตชะวงค์',house:'91/1',pending:1},{name:'นายต่วน ทาทอง',house:'114',pending:1},{name:'นายประหยัด ปิงเมือง',house:'120',pending:2},{name:'นายสมศีล งามจิต',house:'135',pending:1},{name:'น.ส.ยุพา ใจดี',house:'160',pending:1},{name:'นายตื่น มิ่งขวัญ',house:'176',pending:2},{name:'น.ส.สำรอง มหาวรรณศรี',house:'200',pending:2},{name:'นายบรรพต อินวงค์',house:'212',pending:2},{name:'นางลวงทิพย์ ใฝ่จิต',house:'315',pending:2},{name:'นายประทุม ดาวกระจาย',house:'328',pending:2}];
-function readArray(key){try{const v=JSON.parse(localStorage.getItem(key));return Array.isArray(v)?v:[]}catch(e){return []}}
-const ORIGINAL_MEMBERS = [
-["นายปิ๊ก ขัติย์วงศ์","12"],["นางแสงเพียร วงค์ขัติย์","6"],["นายจักร์กวัส ประพลรัตนัง","2"],["นายยนต์ ปิงเมือง","7"],["นางสมศรี ปิงเมือง","8"],["นายชัด ปิงเมือง","10"],["นายรังษี ใฝ่จิต","14"],["นายยรรยง ผัดดี","14/1"],["นายหมื่น วังมูล","15"],["นายโกวัฒนธฤทธิ์ ประพลรัตนัง","17"],["นายภาณุวัฒน์ บุญยา","20"],["นายสมอน ศรีเมือง","22"],["นายพรชัย ปัญใจ","29"],["นายชูชาติ จำปา","30"],["นางน้อย วิศรีใจ","31"],["นายอินทร์ ถิ่นลำปาง","32"],["นายคำตั๋น วังมูล","34"],["นางวิไลพร วังมูล","35"],["นายบุญ ไฝ่จิตร์","36"],["นายช่วย เครือวัลย์","37"],["นายมา วังมูล","38"],["นายสมาน วังมูล","39"],["นายวัชร ถิ่นลำปาง","40"],["นางพิมพร ใฝ่ใจ","41"],["นางถวิล ใฝ่ใจ","42"],["นายบรรลัง ใฝ่ใจ","42/1"],["น.ส. ปวีณา มิ่งขวัญ","44"],["นายอิ่น จักจุ่ม","46"],["นางทองดี วงค์ขัติย์","47"],["นายชุม ใฝ่ใจ","49"],["นายทองดี พลูคำ","50"],["นายผัด ทาแก้ว","51"],["นางสายทอง ชุ่มธิ","51/1"],["นายอดิศักดิ์ ขัติธิ","52"],["นายนพคุณ จอมภา","53"],["นายพิพัฒน์ ใฝใ่จ","56"],["น.ส.เตือนธิวา ใฝ่ใจ","58"],["นางเหล็ง วิศรีใจ","60"],["นายบุญเสริม วิศรีใจ","60/1"],["น.ส.กรพิน กาวิน","61"],["นายบุญเรือง ถิ่นลำปาง","62"],["นางวิไล ถิ่นลำปาง","62/2"],["นายวิทยา งามจิต","64"],["นายแสวง ศรีไชยอินทร์","67"],["นางอำไพวิทย์ ปัญญา","68"],["นางเลข ใฝ่จิตร์","69"],["นายก ถิ่นลำปาง","70"],["น.ส.ผ่องศรี ปัญใจ","72"],["น.ส.บรรณารักษ์ พลูคำ","73"],["นางสุดารัตน์ จักจุ่ม","73/1"],["นายธนวัฒน์ ปันใจ","74"],["นายแก้วมูล ทินนา","75"],["นางหล้า ใฝ่ใจ","76"],["นายสุทัศน์ ปัญใจ","79/1"],["นายผล งามจิตร","82"],["นางเครือวัลย์ บุญธิวงค์","84"],["นางเป็ง ใฝ่จิต","85"],["นายพัสกร งามจิต","86"],["น.ส.วิภารัตน์ กันทะวัง","88"],["นางบุญปั๋น ทาทอง","89"],["นางฝน งามจิต","91"],["นายวุฒิภัทร เตชะวงค์","91/1"],["นายนวล ศรีเมือง","93"],["นายทิน วิศรีใจ","96"],["นายธีระพันธ์ ถิ่นลำปาง","96/1"],["นายเสาร์แก้ว คิดอ่าน","98"],["นายผัด เครือนวล","100"],["นายปัน ผัดดี","101"],["นายลักษณ์ คำวงษา","103"],["นายไหล่ ศรีเมือง","104"],["นายพิชัย ปัญใจ","105"],["นางจันทร์เพ็ญ ใฝ่ใจ","106"],["นายสรชัย ใฝ่ใจ","106/1"],["นายวรวรรธน์ ลำพูน","109"],["นางป้อ ใฝ่ใจ","111"],["นางอ่อน จักจุ่ม","112"],["นายยนต์ บุญธิวงค์","112/1"],["นางขันคำ จันทวงศ์","113"],["นายต่วน ทาทอง","114"],["นายธวัชชัย บุญเก่ง","116"],["นายผล วิศรีใจ","117"],["นางจันทร์ทิพย์ ถิ่นลำปาง","118"],["นายอัครวัฒน์ วริพัฒน์ผัดดี","119"],["นายประหยัด ปิงเมือง","120"],["นายสุพนธ์ นาแพร่","121"],["นายเกษมสุข ใฝ่ใจ","123"],["นายบุญศรี ศรีคำ","125"],["นางหวิง นามวงค์","126"],["นายกิตติศักดิ์ นามจิต","130"],["นายสุนิตย์ ไข่หนู","130/1"],["นางวิไล ใจชื่น","131"],["นายนิกร งามจิต","132"],["นายสมศีล งามจิต","135"],["นายประสิทธิ์ วงค์ขัติย์","136"],["นายเม็ด งามจิต","137"],["นายส่ง ปิงเมือง","138"],["นายบุญศักดิ์ ลำพูน","139"],["นายวีระ นามจิตต์","140"],["นายสิงห์ธนู วงค์ปัญญา","141"],["นายสุทัศน์ ตุ่นคำ","142"],["นายเขียน ศรีเมือง","143"],["นางลาวัลย์ ปัญใจ","144"],["นายบุญธรรม ศรีเมือง","145"],["นางทับ บุญรมย์","147"],["น.ส.เนียม ศรีเมือง","148"],["น.ส.สุทัตตา พลูคำ","148/1"],["นายผล ไชยยศ","149"],["นายศักดิ์ จันทร์มูล","151/1"],["น.ส.นิติการณ์ จันทร์มูล","152"],["นางสายใจ ธรรมสาร","153"],["นายปัญญา เขียวนาค","153/1"],["นายเกียรติศักดิ์ จันทร์มูล","154/1"],["นายจำรัส ปัญใจ","155"],["นางศรีอร ใฝ่ใจ","157"],["นางยวงคำ ถิ่นลำปาง","159"],["นายวิเชียร ถิ่นลำปาง","159/1"],["น.ส.ยุพา ใจดี","160"],["นายเกียรติศักดิ์ พลูคำ","162"],["น.ส.น้อย บุญธิวงค์","162/1"],["น.ส.พวงผกา จันทร์ชมพู","163"],["นางสุพรรณ เรือนมูล","165"],["นางคำหมาย สมคิด","166"],["นางอาลิษา กอเตอะ","167"],["นางวิภาวดี ถิ่นลำปาง","168"],["นายศรีนวล วงค์ขัติย์","169"],["น.ส.สุภาวดี วังมูล","169/1"],["นางทองสุข ค้านาค","174"],["นายตื่น มิ่งขวัญ","176"],["นายสม ขัติย์วงศ์","177"],["นายสงัด ศรีไชยอินทร์","178"],["นายมิตร ผัดดี","179"],["นางศรีลา งามจิต","181"],["นายธวัชชัย พลูคำ","182"],["นายนิยม ละเอียด","184"],["นางแสงคล้าย นามจิต","186"],["นายสุนทร ปิงเมือง","188"],["นายชุมพล ใฝ่ใจ","189"],["นางเหลี่ยม สมศรี","192"],["นางสมศรี สัตย์สม","193"],["นางจุฑามาศ งามจิต","195"],["นางยุพา กิ่งก้าน","199"],["น.ส.สำรอง มหาวรรณศรี","200"],["นายบัว ศรีเมือง","201"],["นายอิ่น ฉลาดการ","204"],["นางเพ็ญ อิ่นทอง","205"],["นางพรศรี ใฝ่ใจ","206"],["นายบรรพต อินวงค์","212"],["นายประจักร์ งานดี","213"],["นายวัชร จอมภา","214"],["น.ส.อำภา งามจิต","222"],["นายบุญช่วย จำปา","223"],["นายบุญธรรม สมคิด","226"],["นางวาสนา เต","232"],["นายภาณุพงค์ ผัดดี","236"],["นายเสมียน ศรีเมือง","237"],["นายสง่า จันทร์มูล","238"],["นายภาณุพงศ์ ใฝ่ใจ","239"],["นายสมบูรณ์ ปิงเมือง","243"],["นางนิตยา ใฝ่จิตต์","245"],["นางจอมศรี นามจิต","247"],["นางหล้า ฉลาดการ","249"],["น.ส.กรรณิการ์ ปัญใจ","252"],["น.ส.จีรวรรณ ผัดดี","254"],["นายชัยชนะ ทิศรีชัย","260"],["น.ส.วิลาวัลย์ ไกรอ่อน","267"],["น.ส.ปัณณพัฒน์ อุดมอัครกรณ์","268"],["นายอินโสน บุญธิวงค์","270"],["นางอรุณ ถิ่นลำปาง","271"],["นายชิษณุพงษ์ ฟองทา","274"],["นายอริยพล ขัติย์วงศ์","275"],["ศุภลักษ์ สุพยน","278"],["น.ส.ศิริลภัศ คำวงษา","281"],["นายเกียรติพงษ์ ศักดิ์สูง","282"],["นายช่วย วิศรีใจ","285"],["น.ส.ไพลิน ใจชื่น","287"],["นายพิชัย ใจดี","288"],["น.ส.ปานหทัย สุวรรณรัตน์","302"],["นายปรีชา ผัดดี","308"],["นายจิตพันธ์ จำปา","309"],["นายนพดล นามวงค์","310"],["นางลวงทิพย์ ใฝ่จิต","315"],["นายสงวน จันทร์มูล","316"],["นางพร พลุคำ","317"],["นายทวน ทาฤทธิ์","325"],["นายประทุม ดาวกระจาย","328"],["น.ส.ถนิตา พัฒนกรวนิช","329"],["นายสนธิยา สารเชื้อ","330"],["นายยงหยัด พลุคำ","331"],["น.ส.อรพินฑ์ เครือวัลย์","333"],["นายธนารินทร์ ทินนา","336"],["นางวาสนา ศรีไชยอินทร์","340"],["นางหล้า วงค์ขัติย์","348"]
+
+const LOGIN_USER='admin';
+const LOGIN_PASSWORD='123456';
+const DEFAULT_FUNERALS=[
+ {id:'funeral-kasem',name:'นายเกษมสุข ใฝ่ใจ',age:47,house:'123',death:'22 กรกฎาคม 2569',cremate:'25 กรกฎาคม 2569'},
+ {id:'funeral-buran',name:'นายบูรณพิภพ ผัดดี',age:'',house:'254',death:'3 กรกฎาคม 2569',cremate:'8 กรกฎาคม 2569'}
 ];
 
+const $=id=>document.getElementById(id);
+
+function readArray(key){
+ try{const v=JSON.parse(localStorage.getItem(key));return Array.isArray(v)?v:[]}
+ catch(e){return[]}
+}
+function writeArray(key,v){localStorage.setItem(key,JSON.stringify(v))}
+function safe(v){const d=document.createElement('div');d.textContent=String(v??'');return d.innerHTML}
+function normalize(v){return String(v??'').trim().toLowerCase().split(' ').join('')}
+
 function readMembers(){
-    return ORIGINAL_MEMBERS.map((item,index)=>({
-        id:'member-original-'+(index+1),
-        name:item[0],
-        house:item[1]
-    }));
+ const keys=['members','memberList','membersData','memberData','users'];
+ for(const key of keys){
+  const data=readArray(key);
+  if(data.length){
+   return data.map((x,i)=>({
+    id:String(x.id??x.memberId??x.member_id??x.code??('member-'+i)),
+    name:String(x.name??x.fullName??x.fullname??x.memberName??x.member_name??x['ชื่อ-นามสกุล']??x['ชื่อ']??'').trim(),
+    house:String(x.house??x.houseNo??x.houseNumber??x.house_number??x.address??x.household??x['บ้านเลขที่']??'').trim()
+   })).filter(x=>x.name||x.house)
+  }
+ }
+ return[]
 }
 
-function getDeliveryFuneralId(record){
-    return String(record.funeralId??record.funeral_id??record.funeralID??record.funeral??'');
+function parseFuneralDate(v){
+ const t=String(v??'').trim();
+ if(!t)return 0;
+ if(t.length===10&&t.charAt(4)==='-'&&t.charAt(7)==='-'){
+  const p=t.split('-');
+  return new Date(Number(p[0]),Number(p[1])-1,Number(p[2])).getTime()
+ }
+ const p=t.replaceAll('-','/').split('/');
+ if(p.length===3){
+  const a=Number(p[0]),b=Number(p[1]),c=Number(p[2]);
+  if(a>=1900&&a<=2200&&b>=1&&b<=12&&c>=1&&c<=31)return new Date(a,b-1,c).getTime();
+  if(c>=2400&&a>=1&&a<=31&&b>=1&&b<=12)return new Date(c-543,b-1,a).getTime()
+ }
+ const months={มกราคม:0,กุมภาพันธ์:1,มีนาคม:2,เมษายน:3,พฤษภาคม:4,มิถุนายน:5,กรกฎาคม:6,สิงหาคม:7,กันยายน:8,ตุลาคม:9,พฤศจิกายน:10,ธันวาคม:11};
+ const w=t.split(' ');
+ if(w.length===3&&months[w[1]]!==undefined){let y=Number(w[2]);if(y>2400)y-=543;return new Date(y,months[w[1]],Number(w[0])).getTime()}
+ const parsed=Date.parse(t);return Number.isNaN(parsed)?0:parsed
 }
 
-function getDeliveryMemberId(record){
-    return String(record.memberId??record.member_id??record.memberID??record.userId??record.user_id??'');
+function readFunerals(){
+ const data=readArray('funerals');
+ const source=data.length?data:DEFAULT_FUNERALS;
+ return source.map((x,i)=>({
+  id:String(x.id??x.funeralId??x.funeral_id??('funeral-'+i)),
+  name:String(x.name??x.fullName??x.fullname??x.deceasedName??x.deceased_name??'').trim(),
+  age:x.age??x.deceasedAge??x.deceased_age??'',
+  house:String(x.house??x.houseNo??x.houseNumber??x.house_number??'').trim(),
+  death:String(x.death??x.deathDate??x.death_date??x.dateOfDeath??x.date_of_death??''),
+  cremate:String(x.cremate??x.cremateDate??x.cremate_date??x.ceremonyDate??x.ceremony_date??''),
+  temple:String(x.temple??x.wat??x.watName??''),
+  status:String(x.status??'ยังไม่ดำเนินการ')
+ })).filter(x=>x.name||x.house).sort((a,b)=>parseFuneralDate(b.death)-parseFuneralDate(a.death))
 }
 
-function getDeliveryName(record){
-    return String(record.name??record.memberName??record.member_name??'').trim();
+function readDeliveries(){
+ const keys=['riceDeliveryRecords','riceDeliveries','deliveries','rice_delivery_records'];
+ let all=[];
+ keys.forEach(key=>{const data=readArray(key);if(data.length)all=all.concat(data)});
+ return all
+}
+function deliveryFuneralId(r){return String(r.funeralId??r.funeral_id??r.funeralID??r.funeral??'')}
+function deliveryMemberId(r){return String(r.memberId??r.member_id??r.memberID??r.userId??r.user_id??'')}
+function deliveryName(r){return String(r.name??r.memberName??r.member_name??'').trim()}
+function deliveryHouse(r){return String(r.house??r.houseNo??r.houseNumber??r.house_number??'').trim()}
+function deliveryAmount(r){return Number(r.amount??r.qty??r.quantity??r.bags??r.riceAmount??0)||0}
+function deliveryDate(r){return String(r.date??r.deliveryDate??r.delivery_date??r.createdDate??'-')}
+
+function memberMatchesDelivery(member,index,record){
+ const rid=deliveryMemberId(record);
+ const mid=String(member.id??('member-'+index));
+ if(rid&&rid===mid)return true;
+ return normalize(deliveryName(record))===normalize(member.name)&&normalize(deliveryHouse(record))===normalize(member.house)
 }
 
-function getDeliveryHouse(record){
-    return String(record.house??record.houseNo??record.houseNumber??record.house_number??'').trim();
+function populateFunerals(){
+ const html='<option value="">-- เลือกงานศพ --</option>'+readFunerals().map(f=>'<option value="'+safe(f.id)+'">⚰️ '+safe(f.name)+(f.age?' อายุ '+safe(f.age)+' ปี':'')+'</option>').join('');
+ $('funeralSelect').innerHTML=html;
+ $('reportFuneralSelect').innerHTML=html
+}
+function selectedFuneral(){const id=$('funeralSelect').value;return id?readFunerals().find(f=>String(f.id)===String(id))||null:null}
+
+function updateDashboard(){
+ const members=readMembers(),funerals=readFunerals(),records=readDeliveries();
+ const total=members.length||192;
+ $('memberCount').textContent=total;
+ $('memberHeader').textContent='สมาชิกทั้งหมด '+total+' ครัวเรือน';
+ $('normalCount').textContent=total;
+ $('funeralRice').textContent=records.reduce((s,r)=>s+deliveryAmount(r),0);
+ $('funeralCount').textContent=funerals.length;
+ const latest=funerals[0];
+ if(!latest){$('pendingCount').textContent=0;$('dangerCount').textContent=0;return}
+ const lr=records.filter(r=>deliveryFuneralId(r)===String(latest.id));
+ let sent=0;
+ members.forEach((m,i)=>{if(lr.some(r=>memberMatchesDelivery(m,i,r)))sent++});
+ $('pendingCount').textContent=Math.max(total-sent,0);
+ $('dangerCount').textContent=0
 }
 
-function getDeliveryAmount(record){
-    return Number(record.amount??record.qty??record.quantity??record.bags??record.riceAmount??0)||0;
+function renderFuneral(){
+ const list=readFunerals(),f=list[0]||DEFAULT_FUNERALS[0];
+ $('latestFuneralName').innerHTML='⚰️ '+safe(f.name)+(f.age?'<span class="latest-age">อายุ '+safe(f.age)+' ปี</span>':'');
+ $('latestFuneralDate').textContent=f.death||'-';
+ $('latestFuneralHouse').textContent=f.house||'-';
+ $('latestFuneralCremate').textContent=f.cremate||'-';
+ $('condolenceName').textContent=f.name||'ผู้วายชนม์';
+ $('condolenceAge').textContent=f.age?'อายุ '+f.age+' ปี':'';
+ $('funeralCount').textContent=list.length;
+ $('history').innerHTML='<div class="panel history-card"><h3>📜 ประวัติงานศพย้อนหลัง</h3>'+list.map((x,i)=>'<div class="history-item"><strong>'+(i+1)+'. ⚰️ '+safe(x.name)+(x.age?' อายุ '+safe(x.age)+' ปี':'')+'</strong><div class="history-meta"><div class="info-box">📅 '+safe(x.death||'-')+'</div><div class="info-box">🏠 '+safe(x.house||'-')+'</div><div class="info-box">🔥 '+safe(x.cremate||'-')+'</div></div></div>').join('')+'</div>'
 }
 
-function getDeliveryDate(record){
-    return String(record.date??record.deliveryDate??record.delivery_date??record.createdDate??'-');
+function refreshFuneral(){
+ const f=selectedFuneral();
+ if(!f){$('funeralSummary').style.display='none';$('memberSearchArea').style.display='none';$('memberResults').innerHTML='<div class="empty">เลือกงานศพก่อน แล้วจึงค้นหาสมาชิก</div>';return}
+ const records=readDeliveries().filter(r=>deliveryFuneralId(r)===String(f.id));
+ const sent=new Set(records.map(r=>deliveryMemberId(r)||normalize(deliveryName(r))+'|'+normalize(deliveryHouse(r)))).size;
+ const bags=records.reduce((s,r)=>s+deliveryAmount(r),0);
+ $('funeralSummary').style.display='block';
+ $('memberSearchArea').style.display='block';
+ $('funeralSummary').innerHTML='⚰️ <strong>'+safe(f.name)+'</strong>'+(f.age?' อายุ '+safe(f.age)+' ปี':'')+'<br>📅 '+safe(f.death||'-')+' &nbsp; 🏠 '+safe(f.house||'-')+'<br>✅ ส่งแล้ว <strong>'+sent+'</strong> ครัวเรือน &nbsp; 📦 รวม <strong>'+bags+'</strong> ถุง'
 }
 
-function getDeliveryFuneralId(record){
-    return String(record.funeralId??record.funeral_id??record.funeralID??record.funeral??'');
+function searchMembers(){
+ const f=selectedFuneral(),q=normalize($('memberSearch').value),box=$('memberResults');
+ if(!f){box.innerHTML='<div class="empty">กรุณาเลือกงานศพก่อนค้นหา</div>';return}
+ if(!q){box.innerHTML='<div class="empty">พิมพ์ชื่อหรือบ้านเลขที่เพื่อค้นหาสมาชิก</div>';return}
+ const members=readMembers(),found=members.filter(m=>normalize(m.name).includes(q)||normalize(m.house).includes(q)).slice(0,20);
+ if(!found.length){box.innerHTML='<div class="empty">❌ ไม่พบสมาชิก</div>';return}
+ const records=readDeliveries().filter(r=>deliveryFuneralId(r)===String(f.id));box.innerHTML='';
+ found.forEach(m=>{
+  const originalIndex=members.indexOf(m);
+  const sent=records.some(r=>memberMatchesDelivery(m,originalIndex,r));
+  const row=document.createElement('div');row.className='member-row';
+  const info=document.createElement('div');info.className='member-info';info.innerHTML='<strong>👤 '+safe(m.name)+'</strong><span>🏠 บ้านเลขที่ '+safe(m.house||'-')+'</span><div class="member-status '+(sent?'ok':'warn')+'">'+(sent?'✅ ส่งงานศพนี้แล้ว':'⏳ ยังไม่ได้ส่งงานศพนี้')+'</div>';
+  const actions=document.createElement('div');actions.className='member-actions';
+  const amount=document.createElement('input');amount.className='amount';amount.type='number';amount.min='1';amount.value='1';
+  const button=document.createElement('button');button.className='deliver-btn';button.type='button';button.textContent=sent?'✅ ส่งแล้ว':'✅ บันทึกส่ง';button.disabled=sent;
+  if(!sent)button.onclick=()=>saveDelivery(f,m,originalIndex,amount.value);
+  actions.appendChild(amount);actions.appendChild(button);row.appendChild(info);row.appendChild(actions);box.appendChild(row)
+ })
 }
 
-function getDeliveryMemberId(record){
-    return String(record.memberId??record.member_id??record.memberID??record.userId??record.user_id??'');
+function saveDelivery(funeral,member,index,amountValue){
+ const amount=Number(amountValue);if(!amount||amount<1){alert('กรุณาระบุจำนวนข้าวสาร');return}
+ const records=readDeliveries();
+ if(records.some(r=>deliveryFuneralId(r)===String(funeral.id)&&memberMatchesDelivery(member,index,r))){alert('สมาชิกนี้ส่งข้าวสารสำหรับงานศพนี้แล้ว');return}
+ records.push({id:'rice-'+Date.now(),funeralId:String(funeral.id),funeralName:funeral.name,memberId:String(member.id),name:member.name,house:member.house,amount:amount,date:new Date().toLocaleDateString('th-TH'),timestamp:Date.now()});
+ writeArray('riceDeliveryRecords',records);
+ updateDashboard();refreshFuneral();renderFuneralReport();searchMembers();renderFollowups()
 }
 
-function getDeliveryName(record){
-    return String(record.name??record.memberName??record.member_name??'').trim();
+function renderFuneralReport(){
+ const id=$('reportFuneralSelect').value,box=$('reportContent');
+ if(!id){box.innerHTML='<div class="report-empty">เลือกงานศพเพื่อแสดงรายงาน</div>';return}
+ const funeral=readFunerals().find(f=>String(f.id)===String(id));if(!funeral)return;
+ const members=readMembers(),records=readDeliveries().filter(r=>deliveryFuneralId(r)===String(funeral.id));
+ const sentMembers=members.filter((m,i)=>records.some(r=>memberMatchesDelivery(m,i,r)));
+ const notSent=members.filter((m,i)=>!sentMembers.includes(m));
+ const bags=records.reduce((s,r)=>s+deliveryAmount(r),0);
+ let html='<div class="panel" style="padding:18px;background:rgba(255,255,255,.05)"><strong style="font-size:22px">⚰️ '+safe(funeral.name)+'</strong>'+(funeral.age?'<span style="color:#e8cbd5;margin-left:8px">อายุ '+safe(funeral.age)+' ปี</span>':'')+'<div style="margin-top:6px;color:#b9e9c7">🏠 บ้านเลขที่ '+safe(funeral.house||'-')+' &nbsp; 📅 '+safe(funeral.death||'-')+' &nbsp; 🔥 '+safe(funeral.cremate||'-')+'</div></div>';
+ html+='<div class="report-summary"><div class="report-box"><small>👥 สมาชิกทั้งหมด</small><span class="rnum">'+members.length+'</span><small>ครัวเรือน</small></div><div class="report-box"><small>✅ ส่งแล้ว</small><span class="rnum">'+sentMembers.length+'</span><small>ครัวเรือน</small></div><div class="report-box"><small>❌ ยังไม่ส่ง</small><span class="rnum not-sent">'+notSent.length+'</span><small>ครัวเรือน</small></div><div class="report-box"><small>🌾 ข้าวสารรวม</small><span class="rnum">'+bags+'</span><small>ถุง</small></div></div>';
+ html+='<div class="report-section"><h3 class="sent">✅ รายชื่อสมาชิกที่ส่งแล้ว</h3>';
+ if(sentMembers.length){html+='<div style="overflow-x:auto"><table class="report-table"><thead><tr><th>ลำดับ</th><th>ชื่อสมาชิก</th><th>บ้านเลขที่</th><th>จำนวนข้าว</th><th>วันที่ส่ง</th></tr></thead><tbody>';sentMembers.forEach((m,i)=>{const oi=members.indexOf(m),rr=records.filter(r=>memberMatchesDelivery(m,oi,r)),amount=rr.reduce((z,r)=>z+deliveryAmount(r),0),last=rr[rr.length-1];html+='<tr><td>'+(i+1)+'</td><td>'+safe(m.name)+'</td><td>'+safe(m.house||'-')+'</td><td>'+amount+' ถุง</td><td>'+safe(deliveryDate(last))+'</td></tr>'});html+='</tbody></table></div>'}else html+='<div class="report-empty">ยังไม่มีบันทึกการส่งข้าวสารสำหรับงานศพนี้</div>';
+ html+='</div><div class="report-section"><h3 class="not-sent">❌ รายชื่อสมาชิกที่ยังไม่ส่ง</h3>';
+ if(notSent.length){html+='<div style="overflow-x:auto"><table class="report-table"><thead><tr><th>ลำดับ</th><th>ชื่อสมาชิก</th><th>บ้านเลขที่</th><th>สถานะ</th></tr></thead><tbody>';notSent.forEach((m,i)=>{html+='<tr><td>'+(i+1)+'</td><td>'+safe(m.name)+'</td><td>'+safe(m.house||'-')+'</td><td class="not-sent">❌ ยังไม่ส่ง</td></tr>'});html+='</tbody></table></div>'}else html+='<div class="report-empty">✅ สมาชิกทุกครัวเรือนส่งข้าวสารสำหรับงานศพนี้แล้ว</div>';
+ html+='</div><button type="button" class="print" onclick="window.print()">🖨️ พิมพ์รายงานงานศพนี้</button>';
+ box.innerHTML=html
 }
 
-function getDeliveryHouse(record){
-    return String(record.house??record.houseNo??record.houseNumber??record.house_number??'').trim();
+function renderFollowups(){
+ const funerals=readFunerals(),members=readMembers(),records=readDeliveries(),latest=funerals[0];
+ if(!latest){$('followList').innerHTML='<div class="report-empty">ยังไม่มีข้อมูล</div>';return}
+ const lr=records.filter(r=>deliveryFuneralId(r)===String(latest.id));
+ const pending=members.filter((m,i)=>!lr.some(r=>memberMatchesDelivery(m,i,r)));
+ $('followList').innerHTML=pending.slice(0,20).map((m,i)=>'<div class="follow-item"><div class="follow-name">'+(i+1)+'. '+safe(m.name)+'</div><div class="follow-meta">🏠 บ้านเลขที่ '+safe(m.house||'-')+' • ❌ ยังไม่ส่งงานศพล่าสุด</div><div class="follow-status">🟡 รอส่ง</div></div>').join('')||'<div class="report-empty">✅ สมาชิกทุกคนส่งแล้ว</div>'
 }
 
-function getDeliveryAmount(record){
-    return Number(record.amount??record.qty??record.quantity??record.bags??record.riceAmount??0)||0;
-}
-
-function getDeliveryDate(record){
-    return String(record.date??record.deliveryDate??record.delivery_date??record.createdDate??'-');
-}
-function saveRecords(v){localStorage.setItem('riceDeliveryRecords',JSON.stringify(v))}
-function parseFuneralDate(v){const t=String(v??'').trim();if(!t)return 0;const p=t.replaceAll('-','/').split('/');if(p.length===3){const d=Number(p[0]),m=Number(p[1]);let y=Number(p[2]);if(d&&m&&y){if(y>2400)y-=543;return new Date(y,m-1,d).getTime()}}const months={มกราคม:0,กุมภาพันธ์:1,มีนาคม:2,เมษายน:3,พฤษภาคม:4,มิถุนายน:5,กรกฎาคม:6,สิงหาคม:7,กันยายน:8,ตุลาคม:9,พฤศจิกายน:10,ธันวาคม:11};const w=t.split(' ');if(w.length===3&&months[w[1]]!==undefined){const d=Number(w[0]);let y=Number(w[2]);if(y>2400)y-=543;return new Date(y,months[w[1]],d).getTime()}return 0}
-function readFunerals(){const a=readArray('funerals');return (a.length?a:DEFAULT_FUNERALS).map((x,n)=>({id:String(x.id??x.funeralId??x.funeral_id??('funeral-'+n)),name:String(x.name??x.fullName??x.fullname??x.deceasedName??x.deceased_name??''),age:x.age??x.deceasedAge??x.deceased_age??'',house:String(x.house??x.houseNo??x.houseNumber??x.house_number??''),death:String(x.death??x.deathDate??x.death_date??x.dateOfDeath??x.date_of_death??''),cremate:String(x.cremate??x.cremateDate??x.cremate_date??x.ceremonyDate??x.ceremony_date??''),temple:String(x.temple??x.wat??x.watName??''),status:String(x.status??'ยังไม่ดำเนินการ')})).sort((a,b)=>parseFuneralDate(b.death)-parseFuneralDate(a.death))}
-function selectedFuneral(){const s=document.getElementById('funeralSelect');if(!s||!s.value)return null;return readFunerals().find(x=>String(x.id)===String(s.value))||null}
-function populateFunerals(){const s=document.getElementById('funeralSelect');s.innerHTML='<option value="">-- เลือกงานศพ --</option>'+readFunerals().map(f=>'<option value="'+escapeHTML(f.id)+'">⚰️ '+escapeHTML(f.name)+(f.age?' (อายุ '+escapeHTML(f.age)+' ปี)':'')+'</option>').join('')}
-function updateSummary(){const n=readMembers().length||192;document.getElementById('memberCount').textContent=n;document.getElementById('memberHeader').textContent='สมาชิกทั้งหมด '+n+' ครัวเรือน';document.getElementById('normalCount').textContent=Math.max(n-10,0);document.getElementById('pendingCount').textContent=10;document.getElementById('dangerCount').textContent=6;document.getElementById('funeralRice').textContent=182}
-function renderFuneral(){const a=readFunerals(),f=a[0]||DEFAULT_FUNERALS[0];document.getElementById('funeralCount').textContent=a.length;document.getElementById('latestFuneralName').innerHTML='⚰️ '+escapeHTML(f.name)+(f.age?'<span class="latest-age">อายุ '+escapeHTML(f.age)+' ปี</span>':'');document.getElementById('latestFuneralDate').textContent=f.death||'-';document.getElementById('latestFuneralHouse').textContent=f.house||'-';document.getElementById('latestFuneralCremate').textContent=f.cremate||'-';document.getElementById('condolenceName').textContent=f.name||'ผู้วายชนม์';document.getElementById('condolenceAge').textContent=f.age?'อายุ '+f.age+' ปี':'';document.getElementById('history').innerHTML='<div class="panel history-card"><h3>📜 ประวัติงานศพย้อนหลัง</h3>'+a.map((x,i)=>'<div class="history-item"><strong>'+String(i+1)+'. ⚰️ '+escapeHTML(x.name)+(x.age?' อายุ '+escapeHTML(x.age)+' ปี':'')+'</strong><div class="history-meta"><div class="info-box">📅 '+escapeHTML(x.death||'-')+'</div><div class="info-box">🏠 '+escapeHTML(x.house||'-')+'</div><div class="info-box">🔥 '+escapeHTML(x.cremate||'-')+'</div></div></div>').join('')+'</div>'}
-function refreshFuneral(){const f=selectedFuneral(),s=document.getElementById('funeralSummary'),a=document.getElementById('memberSearchArea'),r=document.getElementById('memberResults');if(!f){s.style.display='none';a.style.display='none';r.innerHTML='<div class="empty">เลือกงานศพก่อน แล้วจึงค้นหาสมาชิก</div>';return}const rec=deliveryRecords().filter(x=>getDeliveryFuneralId(x)===String(f.id));const h=new Set(rec.map(x=>getDeliveryMemberId(x)||normalize(getDeliveryName(x))+'|'+normalize(getDeliveryHouse(x)))).size;const bags=rec.reduce((z,x)=>z+getDeliveryAmount(x),0);s.style.display='block';a.style.display='block';s.innerHTML='⚰️ <strong>'+escapeHTML(f.name)+'</strong>'+(f.age?' อายุ '+escapeHTML(f.age)+' ปี':'')+'<br>📅 '+escapeHTML(f.death||'-')+' &nbsp; 🏠 '+escapeHTML(f.house||'-')+'<br>✅ นำส่งแล้ว <strong>'+h+'</strong> ครัวเรือน &nbsp; 📦 รวม <strong>'+bags+'</strong> ถุง'}
-function searchMembers(){const f=selectedFuneral(),input=document.getElementById('memberSearch'),box=document.getElementById('memberResults');if(!f){box.innerHTML='<div class="empty">กรุณาเลือกงานศพก่อนค้นหา</div>';return}const q=normalize(input.value);if(!q){box.innerHTML='<div class="empty">พิมพ์ชื่อหรือบ้านเลขที่เพื่อค้นหาสมาชิก</div>';return}const members=readMembers().map((x,i)=>({id:memberId(x,i),name:memberName(x),house:memberHouse(x)})).filter(x=>x.name||x.house);const found=members.filter(x=>normalize(x.name).includes(q)||normalize(x.house).includes(q)).slice(0,20);if(!found.length){box.innerHTML='<div class="empty">❌ ไม่พบสมาชิกในทะเบียนสมาชิก<br><br>จำนวนสมาชิกที่ระบบอ่านได้: <strong>'+members.length+'</strong></div>';return}const rec=deliveryRecords().filter(x=>getDeliveryFuneralId(x)===String(f.id));box.innerHTML='';found.forEach(m=>{const sent=rec.some(x=>getDeliveryMemberId(x)===String(m.id)||(normalize(getDeliveryName(x))===normalize(m.name)&&normalize(getDeliveryHouse(x))===normalize(m.house)));const row=document.createElement('div');row.className='member-row';const info=document.createElement('div');info.className='member-info';info.innerHTML='<strong>👤 '+escapeHTML(m.name||'ไม่ระบุชื่อ')+'</strong><span>🏠 บ้านเลขที่ '+escapeHTML(m.house||'-')+'</span><div class="member-status '+(sent?'ok':'warn')+'">'+(sent?'✅ ส่งงานศพนี้แล้ว':'⏳ ยังไม่ได้ส่งงานศพนี้')+'</div>';const act=document.createElement('div');act.className='member-actions';const amt=document.createElement('input');amt.className='amount';amt.type='number';amt.min='1';amt.value='1';const btn=document.createElement('button');btn.className='deliver-btn';btn.type='button';btn.textContent=sent?'✅ ส่งแล้ว':'✅ บันทึกส่ง';if(sent){amt.disabled=true;btn.disabled=true}else{btn.onclick=()=>saveDelivery(m,amt.value,f)}act.appendChild(amt);act.appendChild(btn);row.appendChild(info);row.appendChild(act);box.appendChild(row)})}
-function saveDelivery(m,v,f){const amount=Number(v);if(!amount||amount<1){alert('กรุณาระบุจำนวนข้าวสาร');return}const rec=deliveryRecords();if(rec.some(x=>String(x.funeralId)===String(f.id)&&String(x.memberId)===String(m.id))){alert('สมาชิกนี้ส่งข้าวสารสำหรับงานศพนี้แล้ว');searchMembers();return}rec.push({id:'rice-'+Date.now(),funeralId:String(f.id),funeralName:f.name,memberId:String(m.id),name:m.name,house:m.house,amount,date:new Date().toLocaleDateString('th-TH'),timestamp:Date.now()});saveRecords(rec);refreshFuneral();searchMembers()}
-function populateReportFunerals(){const s=document.getElementById('reportFuneralSelect');if(!s)return;s.innerHTML='<option value="">-- เลือกงานศพ --</option>'+readFunerals().map(f=>'<option value="'+escapeHTML(f.id)+'">⚰️ '+escapeHTML(f.name)+(f.age?' อายุ '+escapeHTML(f.age)+' ปี':'')+'</option>').join('')}
-function renderFuneralReport(){const s=document.getElementById('reportFuneralSelect'),box=document.getElementById('reportContent');if(!s||!box)return;const funeral=readFunerals().find(f=>String(f.id)===String(s.value));if(!funeral){box.innerHTML='<div class="report-empty">เลือกงานศพเพื่อแสดงรายงาน</div>';return}const members=readMembers().map((item,index)=>({id:memberId(item,index),name:memberName(item),house:memberHouse(item)})).filter(m=>m.name||m.house);const records=deliveryRecords().filter(r=>getDeliveryFuneralId(r)===String(funeral.id));const sentMembers=members.filter(m=>records.some(r=>getDeliveryMemberId(r)===String(m.id)||(normalize(getDeliveryName(r))===normalize(m.name)&&normalize(getDeliveryHouse(r))===normalize(m.house))));const notSent=members.filter(m=>!sentMembers.some(s=>String(s.id)===String(m.id)));const bags=records.reduce((sum,r)=>sum+getDeliveryAmount(r),0);box.innerHTML='<div class="panel" style="padding:18px;background:rgba(255,255,255,.05)"><strong style="font-size:22px">⚰️ '+escapeHTML(funeral.name)+'</strong>'+(funeral.age?'<span style="color:#e8cbd5;margin-left:8px">อายุ '+escapeHTML(funeral.age)+' ปี</span>':'')+'<div style="margin-top:6px;color:#b9e9c7">🏠 บ้านเลขที่ '+escapeHTML(funeral.house||'-')+' &nbsp; 📅 '+escapeHTML(funeral.death||'-')+' &nbsp; 🔥 '+escapeHTML(funeral.cremate||'-')+'</div></div><div class="report-summary"><div class="report-box"><small>👥 สมาชิกทั้งหมด</small><span class="rnum">'+members.length+'</span><small>ครัวเรือน</small></div><div class="report-box"><small>✅ ส่งแล้ว</small><span class="rnum">'+sentMembers.length+'</span><small>ครัวเรือน</small></div><div class="report-box"><small>❌ ยังไม่ส่ง</small><span class="rnum not-sent">'+notSent.length+'</span><small>ครัวเรือน</small></div><div class="report-box"><small>🌾 ข้าวสารรวม</small><span class="rnum">'+bags+'</span><small>ถุง</small></div></div><div class="report-section"><h3 class="sent">✅ รายชื่อสมาชิกที่ส่งแล้ว</h3>'+(sentMembers.length?'<div style="overflow-x:auto"><table class="report-table"><thead><tr><th>ลำดับ</th><th>ชื่อสมาชิก</th><th>บ้านเลขที่</th><th>จำนวนข้าว</th><th>วันที่ส่ง</th></tr></thead><tbody>'+sentMembers.map((m,i)=>{const rr=records.filter(r=>getDeliveryMemberId(r)===String(m.id)||(normalize(getDeliveryName(r))===normalize(m.name)&&normalize(getDeliveryHouse(r))===normalize(m.house)));const amount=rr.reduce((z,r)=>z+getDeliveryAmount(r),0);const last=rr[rr.length-1];return '<tr><td>'+(i+1)+'</td><td>'+escapeHTML(m.name)+'</td><td>'+escapeHTML(m.house||'-')+'</td><td>'+amount+' ถุง</td><td>'+escapeHTML(getDeliveryDate(last))+'</td></tr>'}).join('')+'</tbody></table></div>':'<div class="report-empty">ยังไม่มีบันทึกการส่งข้าวสารสำหรับงานศพนี้</div>')+'</div><div class="report-section"><h3 class="not-sent">❌ รายชื่อสมาชิกที่ยังไม่ส่ง</h3>'+(notSent.length?'<div style="overflow-x:auto"><table class="report-table"><thead><tr><th>ลำดับ</th><th>ชื่อสมาชิก</th><th>บ้านเลขที่</th><th>สถานะ</th></tr></thead><tbody>'+notSent.map((m,i)=>'<tr><td>'+(i+1)+'</td><td>'+escapeHTML(m.name)+'</td><td>'+escapeHTML(m.house||'-')+'</td><td class="not-sent">❌ ยังไม่ส่ง</td></tr>').join('')+'</tbody></table></div>':'<div class="report-empty">✅ สมาชิกทุกครัวเรือนส่งข้าวสารสำหรับงานศพนี้แล้ว</div>')+'</div><button type="button" class="print" onclick="window.print()">🖨️ พิมพ์รายงานงานศพนี้</button>'}
-function renderFollowups(){const b=document.getElementById('followList');b.innerHTML=FOLLOWUPS.map((x,i)=>'<div class="follow-item '+(x.pending>=2?'danger':'')+'"><div class="follow-name">'+(i+1)+'. '+escapeHTML(x.name)+'</div><div class="follow-meta">🏠 บ้านเลขที่ '+escapeHTML(x.house)+' • 📦 ค้างส่ง '+x.pending+' ครั้ง</div><div class="follow-status">'+(x.pending>=2?'🔴 เสนอพิจารณาตัดสมาชิก':'🟡 แจ้งเตือน 1 ครั้ง')+'</div></div>').join('')}
 function speakWelcome(){if(!('speechSynthesis' in window))return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance('ยินดีต้อนรับสู่ระบบ สมาชิกกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6');u.lang='th-TH';u.rate=.9;u.volume=1;window.speechSynthesis.speak(u)}
-function initSystem(){updateSummary();populateFunerals();populateReportFunerals();renderFuneral();renderFollowups();refreshFuneral();renderFuneralReport();}
-function showMain(){document.getElementById('loginScreen').style.display='none';document.getElementById('mainSystem').style.display='block'}
-function showLogin(){document.getElementById('mainSystem').style.display='none';document.getElementById('loginScreen').style.display='flex'}
-function login(){const u=document.getElementById('loginUsername').value.trim(),p=document.getElementById('loginPassword').value,e=document.getElementById('loginError');if(u===LOGIN_USER&&p===LOGIN_PASSWORD){sessionStorage.setItem('riceGroupLoggedIn','true');e.textContent='';showMain();initSystem();setTimeout(speakWelcome,400)}else{e.textContent='❌ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง'}}
-function logout(){sessionStorage.removeItem('riceGroupLoggedIn');showLogin();document.getElementById('loginUsername').value='';document.getElementById('loginPassword').value='';document.getElementById('loginError').textContent=''}
-document.getElementById('loginButton').addEventListener('click',login);document.getElementById('loginPassword').addEventListener('keydown',e=>{if(e.key==='Enter')login()});document.getElementById('logoutButton').addEventListener('click',logout);document.getElementById('funeralSelect').addEventListener('change',()=>{document.getElementById('memberSearch').value='';refreshFuneral()});document.getElementById('openFuneralButton').addEventListener('click',refreshFuneral);document.getElementById('searchButton').addEventListener('click',searchMembers);document.getElementById('memberSearch').addEventListener('input',searchMembers);document.getElementById('memberSearch').addEventListener('keydown',e=>{if(e.key==='Enter')searchMembers()});document.getElementById('historyBtn').addEventListener('click',()=>document.getElementById('history').classList.toggle('show'));document.getElementById('printButton').addEventListener('click',()=>window.print());document.getElementById('reportFuneralSelect').addEventListener('change',renderFuneralReport);document.getElementById('reportButton').addEventListener('click',renderFuneralReport);
-window.addEventListener('storage',function(){
-    if(sessionStorage.getItem('riceGroupLoggedIn')==='true'){
-        updateSummary();
-        populateFunerals();
-        populateReportFunerals();
-        renderFuneral();
-        renderFuneralReport();
-    }
-});
-setInterval(function(){
-    if(sessionStorage.getItem('riceGroupLoggedIn')==='true'){
-        updateSummary();
-        populateFunerals();
-        populateReportFunerals();
-        renderFuneral();
-        refreshFuneral();
-        renderFuneralReport();
-    }
-},1000);
+function showMain(){$('loginScreen').style.display='none';$('mainSystem').style.display='block'}
+function showLogin(){$('mainSystem').style.display='none';$('loginScreen').style.display='flex'}
+function login(){const u=$('loginUsername').value.trim(),p=$('loginPassword').value;if(u===LOGIN_USER&&p===LOGIN_PASSWORD){sessionStorage.setItem('riceGroupLoggedIn','true');$('loginError').textContent='';showMain();initSystem();setTimeout(speakWelcome,400)}else{$('loginError').textContent='❌ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง'}}
+function logout(){sessionStorage.removeItem('riceGroupLoggedIn');showLogin();$('loginUsername').value='';$('loginPassword').value='';$('loginError').textContent=''}
+function initSystem(){updateDashboard();populateFunerals();renderFuneral();renderFollowups();refreshFuneral();renderFuneralReport()}
+
+$('loginButton').addEventListener('click',login);
+$('loginPassword').addEventListener('keydown',e=>{if(e.key==='Enter')login()});
+$('logoutButton').addEventListener('click',logout);
+$('funeralSelect').addEventListener('change',()=>{$('memberSearch').value='';refreshFuneral()});
+$('openFuneralButton').addEventListener('click',refreshFuneral);
+$('searchButton').addEventListener('click',searchMembers);
+$('memberSearch').addEventListener('input',searchMembers);
+$('memberSearch').addEventListener('keydown',e=>{if(e.key==='Enter')searchMembers()});
+$('historyBtn').addEventListener('click',()=>$('history').classList.toggle('show'));
+$('printButton').addEventListener('click',()=>window.print());
+$('reportFuneralSelect').addEventListener('change',renderFuneralReport);
+$('reportButton').addEventListener('click',renderFuneralReport);
+
+window.addEventListener('storage',()=>{if(sessionStorage.getItem('riceGroupLoggedIn')==='true')initSystem()});
+setInterval(()=>{if(sessionStorage.getItem('riceGroupLoggedIn')==='true')initSystem()},1500);
+
 if(sessionStorage.getItem('riceGroupLoggedIn')==='true'){showMain();initSystem()}else{showLogin()}
 </script>
 </body>
