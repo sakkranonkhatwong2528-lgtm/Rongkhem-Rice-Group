@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>รายงานกลุ่มข้าวสาร บ้านร่องเข็ม</title>
+<title>รายงานกลุ่มข้าวสาร</title>
 
 <style>
 
@@ -24,12 +24,12 @@ body{
 .header{
     background:linear-gradient(135deg,#176b2c,#4caf50);
     color:white;
-    padding:22px 15px;
+    padding:25px 15px;
     text-align:center;
 }
 
 .container{
-    max-width:950px;
+    max-width:1000px;
     margin:auto;
     padding:15px;
 }
@@ -48,7 +48,7 @@ body{
     gap:12px;
 }
 
-.summary-card{
+.card{
     background:#f8fff8;
     padding:18px;
     border-radius:14px;
@@ -56,21 +56,25 @@ body{
 }
 
 .icon{
-    font-size:34px;
+    font-size:35px;
 }
 
 .number{
-    font-size:28px;
+    font-size:30px;
     font-weight:bold;
     color:#228B22;
+}
+
+.yellow{
+    color:#b88600;
 }
 
 .red{
     color:#c62828;
 }
 
-.yellow{
-    color:#b88600;
+.blue{
+    color:#1976d2;
 }
 
 .table-wrap{
@@ -80,63 +84,49 @@ body{
 table{
     width:100%;
     border-collapse:collapse;
-    min-width:650px;
+    min-width:700px;
 }
 
 th,td{
     border:1px solid #ddd;
     padding:10px;
-    text-align:left;
 }
 
 th{
     background:#e8f5e8;
 }
 
-.status-ok{
-    color:#1b7a1b;
-    font-weight:bold;
-}
-
-.status-warning{
-    color:#b88600;
-    font-weight:bold;
-}
-
-.status-danger{
-    color:#c62828;
-    font-weight:bold;
-}
-
 button{
     width:100%;
     padding:14px;
-    margin-top:8px;
     border:0;
     border-radius:10px;
     background:#228B22;
     color:white;
-    font-size:17px;
+    font-size:16px;
 }
 
 .back{
     display:block;
     text-align:center;
-    padding:15px;
+    padding:18px;
     color:#228B22;
     text-decoration:none;
 }
 
-@media(max-width:600px){
+.ok{
+    color:#1b7a1b;
+    font-weight:bold;
+}
 
-    .summary{
-        grid-template-columns:1fr 1fr;
-    }
+.warn{
+    color:#b88600;
+    font-weight:bold;
+}
 
-    th,td{
-        font-size:14px;
-    }
-
+.danger{
+    color:#c62828;
+    font-weight:bold;
 }
 
 @media print{
@@ -146,19 +136,14 @@ button{
     }
 
     .header{
-        color:black;
         background:white;
-        border-bottom:2px solid #333;
+        color:#000;
+        border-bottom:2px solid #222;
     }
 
     button,
     .back{
         display:none;
-    }
-
-    .box{
-        box-shadow:none;
-        border:1px solid #ddd;
     }
 
 }
@@ -175,15 +160,15 @@ button{
 
 <p>บ้านร่องเข็ม หมู่ที่ 6</p>
 
-<p>สมาชิก 185 ครัวเรือน</p>
+<p id="headerMember">
+สมาชิกทั้งหมด 0 ครัวเรือน
+</p>
 
 </div>
 
 
 <div class="container">
 
-
-<!-- สรุปภาพรวม -->
 
 <div class="box">
 
@@ -192,92 +177,146 @@ button{
 <div class="summary">
 
 
-<div class="summary-card">
+<div class="card">
 
 <div class="icon">👥</div>
 
-<div>สมาชิก</div>
+สมาชิกทั้งหมด
 
-<div class="number" id="memberTotal">
-185
+<div
+    class="number"
+    id="memberTotal"
+>
+0
 </div>
 
-<small>ครัวเรือน</small>
+ครัวเรือน
 
 </div>
 
 
-<div class="summary-card">
+<div class="card">
 
 <div class="icon">⚰️</div>
 
-<div>งานศพ</div>
+งานศพทั้งหมด
 
-<div class="number" id="funeralTotal">
+<div
+    class="number blue"
+    id="funeralTotal"
+>
 0
 </div>
 
-<small>งาน</small>
+งาน
 
 </div>
 
 
-<div class="summary-card">
-
-<div class="icon">📦</div>
-
-<div>ข้าวสารรับเข้า</div>
-
-<div class="number" id="riceIn">
-0
-</div>
-
-<small>ถุง</small>
-
-</div>
-
-
-<div class="summary-card">
+<div class="card">
 
 <div class="icon">🌾</div>
 
-<div>ข้าวสารคงเหลือ</div>
+ข้าวสารรับเข้า
 
-<div class="number" id="riceBalance">
+<div
+    class="number"
+    id="riceIn"
+>
 0
 </div>
 
-<small>ถุง</small>
+ถุง
 
 </div>
 
 
-<div class="summary-card">
+<div class="card">
+
+<div class="icon">📤</div>
+
+ข้าวสารนำออก
+
+<div
+    class="number red"
+    id="riceOut"
+>
+0
+</div>
+
+ถุง
+
+</div>
+
+
+<div class="card">
+
+<div class="icon">🌾</div>
+
+ข้าวสารคงเหลือ
+
+<div
+    class="number"
+    id="riceBalance"
+>
+0
+</div>
+
+ถุง
+
+</div>
+
+
+<div class="card">
 
 <div class="icon">⚠️</div>
 
-<div>ค้างส่ง</div>
+สมาชิกค้างส่ง
 
-<div class="number yellow" id="pendingTotal">
+<div
+    class="number yellow"
+    id="pendingTotal"
+>
 0
 </div>
 
-<small>ครัวเรือน</small>
+ครัวเรือน
 
 </div>
 
 
-<div class="summary-card">
+<div class="card">
 
 <div class="icon">🚨</div>
 
-<div>ค้างส่ง 2 ครั้ง</div>
+ค้างส่ง 2 ครั้งขึ้นไป
 
-<div class="number red" id="dangerTotal">
+<div
+    class="number red"
+    id="dangerTotal"
+>
 0
 </div>
 
-<small>ครัวเรือน</small>
+ครัวเรือน
+
+</div>
+
+
+<div class="card">
+
+<div class="icon">✅</div>
+
+ปฏิบัติตามปกติ
+
+<div
+    class="number"
+    id="normalTotal"
+>
+0
+</div>
+
+ครัวเรือน
 
 </div>
 
@@ -287,7 +326,7 @@ button{
 </div>
 
 
-<!-- รายงานสมาชิก -->
+<!-- สมาชิก -->
 
 <div class="box">
 
@@ -311,9 +350,7 @@ button{
 
 </thead>
 
-<tbody id="memberTable">
-
-</tbody>
+<tbody id="memberTable"></tbody>
 
 </table>
 
@@ -322,7 +359,7 @@ button{
 </div>
 
 
-<!-- รายงานงานศพ -->
+<!-- งานศพ -->
 
 <div class="box">
 
@@ -342,14 +379,13 @@ button{
 <th>บ้านเลขที่</th>
 <th>วันที่เสียชีวิต</th>
 <th>ฌาปนกิจ</th>
+<th>สถานะ</th>
 
 </tr>
 
 </thead>
 
-<tbody id="funeralTable">
-
-</tbody>
+<tbody id="funeralTable"></tbody>
 
 </table>
 
@@ -358,7 +394,7 @@ button{
 </div>
 
 
-<!-- รายงานการช่วยงานศพ -->
+<!-- การช่วยงานศพ -->
 
 <div class="box">
 
@@ -383,9 +419,7 @@ button{
 
 </thead>
 
-<tbody id="sendTable">
-
-</tbody>
+<tbody id="sendTable"></tbody>
 
 </table>
 
@@ -394,7 +428,7 @@ button{
 </div>
 
 
-<!-- ปุ่มพิมพ์ -->
+<!-- พิมพ์ -->
 
 <div class="box">
 
@@ -407,7 +441,10 @@ button{
 </div>
 
 
-<a class="back" href="ดัชนี.html">
+<a
+    class="back"
+    href="index.html"
+>
 ← กลับหน้าหลัก
 </a>
 
@@ -417,105 +454,41 @@ button{
 
 <script>
 
-/* ----------------------------
+/* ==========================================
    โหลดข้อมูล
----------------------------- */
+========================================== */
 
 const members =
-    JSON.parse(localStorage.getItem("members")) || [];
+    JSON.parse(
+        localStorage.getItem("members")
+    ) || [];
+
 
 const funerals =
-    JSON.parse(localStorage.getItem("funerals")) || [];
+    JSON.parse(
+        localStorage.getItem("funerals")
+    ) || [];
+
 
 const rice =
-    JSON.parse(localStorage.getItem("rice")) || [];
+    JSON.parse(
+        localStorage.getItem("rice")
+    ) || [];
+
 
 const funeralSends =
-    JSON.parse(localStorage.getItem("funeralSends")) || [];
+    JSON.parse(
+        localStorage.getItem("funeralSends")
+    ) || [];
 
 
-/* ----------------------------
-   จำนวนสมาชิก
----------------------------- */
+/* ==========================================
+   สมาชิก
+========================================== */
 
-const memberTotal =
-    members.length > 0
-    ? members.length
-    : 185;
+const totalMembers =
+    members.length;
 
-document.getElementById("memberTotal").innerText =
-    memberTotal;
-
-
-/* ----------------------------
-   จำนวนงานศพ
----------------------------- */
-
-document.getElementById("funeralTotal").innerText =
-    funerals.length;
-
-
-/* ----------------------------
-   คำนวณข้าวสาร
----------------------------- */
-
-let riceIn = 0;
-
-let riceOut = 0;
-
-
-/* รับเข้าจากระบบรับข้าว */
-
-rice.forEach(item => {
-
-    if(item.type === "รับ"){
-
-        riceIn += Number(item.amount || 0);
-
-    }
-
-    if(item.type === "จ่าย"){
-
-        riceOut += Number(item.amount || 0);
-
-    }
-
-});
-
-
-/* ช่วยงานศพ */
-
-const funeralOut =
-    funeralSends.reduce(
-        (sum,item) =>
-            sum + Number(item.amount || 0),
-        0
-    );
-
-
-const totalOut =
-    riceOut + funeralOut;
-
-
-let balance =
-    riceIn - totalOut;
-
-
-if(balance < 0){
-    balance = 0;
-}
-
-
-document.getElementById("riceIn").innerText =
-    riceIn;
-
-document.getElementById("riceBalance").innerText =
-    balance;
-
-
-/* ----------------------------
-   สมาชิกค้างส่ง
----------------------------- */
 
 const pendingMembers =
     members.filter(
@@ -529,212 +502,344 @@ const dangerMembers =
     );
 
 
-document.getElementById("pendingTotal").innerText =
+const normalMembers =
+    members.filter(
+        m => Number(m.pending || 0) === 0
+    );
+
+
+document.getElementById("memberTotal")
+    .innerText =
+    totalMembers;
+
+
+document.getElementById("headerMember")
+    .innerText =
+    "สมาชิกทั้งหมด " +
+    totalMembers +
+    " ครัวเรือน";
+
+
+document.getElementById("pendingTotal")
+    .innerText =
     pendingMembers.length;
 
-document.getElementById("dangerTotal").innerText =
+
+document.getElementById("dangerTotal")
+    .innerText =
     dangerMembers.length;
 
 
-/* ----------------------------
+document.getElementById("normalTotal")
+    .innerText =
+    normalMembers.length;
+
+
+/* ==========================================
+   งานศพ
+========================================== */
+
+document.getElementById("funeralTotal")
+    .innerText =
+    funerals.length;
+
+
+/* ==========================================
+   ข้าวสาร
+========================================== */
+
+let riceIn = 0;
+
+let normalOut = 0;
+
+
+rice.forEach(item => {
+
+    if(item.type === "รับ"){
+
+        riceIn +=
+            Number(item.amount || 0);
+
+    }
+
+
+    if(item.type === "จ่าย"){
+
+        normalOut +=
+            Number(item.amount || 0);
+
+    }
+
+});
+
+
+const funeralOut =
+    funeralSends.reduce(
+        (sum,item) =>
+            sum +
+            Number(item.amount || 0),
+        0
+    );
+
+
+const totalOut =
+    normalOut +
+    funeralOut;
+
+
+let balance =
+    riceIn -
+    totalOut;
+
+
+if(balance < 0){
+    balance = 0;
+}
+
+
+document.getElementById("riceIn")
+    .innerText =
+    riceIn;
+
+
+document.getElementById("riceOut")
+    .innerText =
+    totalOut;
+
+
+document.getElementById("riceBalance")
+    .innerText =
+    balance;
+
+
+/* ==========================================
    ตารางสมาชิก
----------------------------- */
+========================================== */
 
 let memberHTML = "";
 
 
-if(members.length === 0){
+members.forEach((m,index)=>{
 
-    memberHTML = `
-        <tr>
-            <td colspan="5">
-                ยังไม่มีรายชื่อสมาชิก
-            </td>
-        </tr>
+    const pending =
+        Number(m.pending || 0);
+
+
+    let status =
+        "🟢 ปกติ";
+
+
+    let className =
+        "ok";
+
+
+    if(pending === 1){
+
+        status =
+            "🟡 แจ้งเตือน 1 ครั้ง";
+
+        className =
+            "warn";
+
+    }
+
+
+    if(pending >= 2){
+
+        status =
+            "🔴 เสนอพิจารณาตัดสมาชิก";
+
+        className =
+            "danger";
+
+    }
+
+
+    memberHTML += `
+
+    <tr>
+
+        <td>
+            ${index + 1}
+        </td>
+
+        <td>
+            ${escapeHTML(m.name)}
+        </td>
+
+        <td>
+            ${escapeHTML(m.house)}
+        </td>
+
+        <td>
+            ${pending}
+        </td>
+
+        <td class="${className}">
+            ${status}
+        </td>
+
+    </tr>
+
     `;
 
-}else{
-
-    members.forEach((m,index)=>{
-
-        const pending =
-            Number(m.pending || 0);
-
-        let status = "ปกติ";
-
-        let className = "status-ok";
+});
 
 
-        if(pending === 1){
-
-            status = "แจ้งเตือน 1 ครั้ง";
-            className = "status-warning";
-
-        }
-
-
-        if(pending >= 2){
-
-            status = "เสนอพิจารณาตัดสมาชิก";
-            className = "status-danger";
-
-        }
-
-
-        memberHTML += `
-
-            <tr>
-
-                <td>${index + 1}</td>
-
-                <td>${m.name || "-"}</td>
-
-                <td>${m.house || "-"}</td>
-
-                <td>${pending}</td>
-
-                <td class="${className}">
-                    ${status}
-                </td>
-
-            </tr>
-
-        `;
-
-    });
-
-}
-
-
-document.getElementById("memberTable").innerHTML =
+document.getElementById("memberTable")
+    .innerHTML =
     memberHTML;
 
 
-/* ----------------------------
+/* ==========================================
    ตารางงานศพ
----------------------------- */
+========================================== */
 
 let funeralHTML = "";
 
 
-if(funerals.length === 0){
+funerals.forEach((f,index)=>{
 
-    funeralHTML = `
-        <tr>
-            <td colspan="6">
-                ยังไม่มีข้อมูลงานศพ
-            </td>
-        </tr>
+    funeralHTML += `
+
+    <tr>
+
+        <td>
+            ${index + 1}
+        </td>
+
+        <td>
+            ${escapeHTML(f.name)}
+        </td>
+
+        <td>
+            ${escapeHTML(f.age || "-")}
+        </td>
+
+        <td>
+            ${escapeHTML(f.house || "-")}
+        </td>
+
+        <td>
+            ${formatDate(f.deadDate)}
+        </td>
+
+        <td>
+            ${formatDate(f.burnDate)}
+        </td>
+
+        <td>
+            ${
+                f.closed
+                ? "✅ ปิดงานแล้ว"
+                : "🟡 อยู่ระหว่างดำเนินการ"
+            }
+        </td>
+
+    </tr>
+
     `;
 
-}else{
-
-    funerals.forEach((f,index)=>{
-
-        funeralHTML += `
-
-            <tr>
-
-                <td>${index + 1}</td>
-
-                <td>${f.name || "-"}</td>
-
-                <td>${f.age || "-"}</td>
-
-                <td>${f.house || "-"}</td>
-
-                <td>${formatDate(f.deadDate || f.dead)}</td>
-
-                <td>${formatDate(f.burnDate || f.burn)}</td>
-
-            </tr>
-
-        `;
-
-    });
-
-}
+});
 
 
-document.getElementById("funeralTable").innerHTML =
-    funeralHTML;
+document.getElementById("funeralTable")
+    .innerHTML =
+    funeralHTML ||
+    `
+    <tr>
+        <td colspan="7">
+            ยังไม่มีข้อมูลงานศพ
+        </td>
+    </tr>
+    `;
 
 
-/* ----------------------------
+/* ==========================================
    ตารางช่วยงานศพ
----------------------------- */
+========================================== */
 
 let sendHTML = "";
 
 
-if(funeralSends.length === 0){
+funeralSends.forEach((s,index)=>{
 
-    sendHTML = `
-        <tr>
-            <td colspan="6">
-                ยังไม่มีรายการนำข้าวสารช่วยงานศพ
-            </td>
-        </tr>
+    const funeral =
+        funerals.find(
+            f =>
+            String(f.id) ===
+            String(s.funeralId)
+        );
+
+
+    sendHTML += `
+
+    <tr>
+
+        <td>
+            ${index + 1}
+        </td>
+
+        <td>
+            ${escapeHTML(
+                s.memberName || "-"
+            )}
+        </td>
+
+        <td>
+            ${escapeHTML(
+                s.memberHouse || "-"
+            )}
+        </td>
+
+        <td>
+            ${
+                funeral
+                ?
+                escapeHTML(funeral.name)
+                :
+                "-"
+            }
+        </td>
+
+        <td>
+            ${Number(s.amount || 1)}
+            ถุง
+        </td>
+
+        <td>
+            ${escapeHTML(s.date || "-")}
+        </td>
+
+    </tr>
+
     `;
 
-}else{
-
-    funeralSends.forEach((s,index)=>{
-
-        const funeral =
-            funerals.find(
-                f =>
-                    String(f.id) ===
-                    String(s.funeralId)
-            );
+});
 
 
-        sendHTML += `
-
-            <tr>
-
-                <td>${index + 1}</td>
-
-                <td>${s.memberName || "-"}</td>
-
-                <td>${s.memberHouse || "-"}</td>
-
-                <td>
-                    ${funeral
-                        ? funeral.name
-                        : "-"}
-                </td>
-
-                <td>
-                    ${s.amount || 1} ถุง
-                </td>
-
-                <td>
-                    ${s.date || "-"}
-                </td>
-
-            </tr>
-
-        `;
-
-    });
-
-}
+document.getElementById("sendTable")
+    .innerHTML =
+    sendHTML ||
+    `
+    <tr>
+        <td colspan="6">
+            ยังไม่มีข้อมูลการช่วยงานศพ
+        </td>
+    </tr>
+    `;
 
 
-document.getElementById("sendTable").innerHTML =
-    sendHTML;
-
-
-/* ----------------------------
-   วันที่
----------------------------- */
+/* ==========================================
+   ฟังก์ชันวันที่
+========================================== */
 
 function formatDate(value){
 
     if(!value){
         return "-";
     }
+
 
     const parts =
         String(value).split("-");
@@ -745,14 +850,33 @@ function formatDate(value){
     }
 
 
-    return `
-        ${parts[2]}/${parts[1]}/${parts[0]}
-    `;
+    return (
+        parts[2] +
+        "/" +
+        parts[1] +
+        "/" +
+        parts[0]
+    );
+
+}
+
+
+/* ==========================================
+   ป้องกัน HTML
+========================================== */
+
+function escapeHTML(value){
+
+    return String(value || "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
 
 }
 
 </script>
-
 
 </body>
 
