@@ -1,54 +1,479 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Tahoma,sans-serif;
+    background:#f3f7f0;
+    color:#333;
+}
+
+.header{
+    background:linear-gradient(135deg,#176b2c,#4caf50);
+    color:white;
+    padding:25px 15px;
+    text-align:center;
+    border-radius:0 0 25px 25px;
+}
+
+.logo{
+    font-size:55px;
+}
+
+.header h1{
+    margin:5px 0;
+    font-size:26px;
+}
+
+.header h2{
+    margin:5px 0;
+    font-size:20px;
+}
+
+.header p{
+    margin:8px 0 0;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+    padding:15px;
+}
+
+.dashboard{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+}
+
+.card{
+    background:white;
+    padding:18px;
+    border-radius:18px;
+    text-align:center;
+    box-shadow:0 3px 10px rgba(0,0,0,.08);
+}
+
+.card .icon{
+    font-size:38px;
+}
+
+.card h3{
+    margin:8px 0;
+    font-size:16px;
+}
+
+.number{
+    font-size:26px;
+    font-weight:bold;
+    color:#228B22;
+}
+
+.warning-number{
+    color:#c62828;
+}
+
+.title{
+    margin:25px 5px 10px;
+}
+
+.menu{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+}
+
+.menu a{
+    background:white;
+    padding:22px 10px;
+    border-radius:18px;
+    text-align:center;
+    text-decoration:none;
+    color:#333;
+    font-size:17px;
+    box-shadow:0 3px 10px rgba(0,0,0,.08);
+}
+
+.menu a:hover{
+    background:#e9f8e9;
+}
+
+.menu-icon{
+    font-size:35px;
+    margin-bottom:8px;
+}
+
+.alert-box{
+    margin-top:15px;
+    background:#fff3cd;
+    color:#7a5a00;
+    padding:15px;
+    border-radius:14px;
+}
+
+.success-box{
+    margin-top:15px;
+    background:#e8f7e8;
+    color:#1b7a1b;
+    padding:15px;
+    border-radius:14px;
+}
+
+footer{
+    text-align:center;
+    padding:25px;
+    color:#777;
+    font-size:14px;
+}
+
+@media(max-width:600px){
+
+    .dashboard{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .menu{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .header h1{
+        font-size:23px;
+    }
+
+    .header h2{
+        font-size:18px;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+    <div class="logo">🌾</div>
+
+    <h1>ระบบกลุ่มข้าวสาร</h1>
+
+    <h2>บ้านร่องเข็ม หมู่ที่ 6</h2>
+
+    <p>สมาชิกทั้งหมด 185 ครัวเรือน</p>
+
+</div>
+
+
+<div class="container">
+
+
+    <section class="dashboard">
+
+        <div class="card">
+
+            <div class="icon">👥</div>
+
+            <h3>สมาชิกทั้งหมด</h3>
+
+            <div class="number" id="memberCount">
+                185
+            </div>
+
+            <small>ครัวเรือน</small>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="icon">⚰️</div>
+
+            <h3>งานศพ</h3>
+
+            <div class="number" id="funeralCount">
+                0
+            </div>
+
+            <small>งาน</small>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="icon">🌾</div>
+
+            <h3>ข้าวสารคงเหลือ</h3>
+
+            <div class="number" id="riceCount">
+                0
+            </div>
+
+            <small>ถุง</small>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="icon">⚠️</div>
+
+            <h3>สมาชิกค้างส่ง</h3>
+
+            <div class="number warning-number" id="pendingCount">
+                0
+            </div>
+
+            <small>ครัวเรือน</small>
+
+        </div>
+
+    </section>
+
+
+    <div id="dashboardAlert"></div>
+
+
+    <h2 class="title">
+        เมนูระบบ
+    </h2>
+
+
+    <section class="menu">
+
+
+        <a href="สมาชิก.html">
+
+            <div class="menu-icon">👥</div>
+
+            ทะเบียนสมาชิก
+
+        </a>
+
+
+        <a href="งานศพ.html">
+
+            <div class="menu-icon">⚰️</div>
+
+            แจ้งเสียชีวิต / งานศพ
+
+        </a>
+
+
+        <a href="รับ.html">
+
+            <div class="menu-icon">📥</div>
+
+            รับข้าวสารเข้ากลุ่ม
+
+        </a>
+
+
+        <a href="สต็อก.html">
+
+            <div class="menu-icon">🌾</div>
+
+            คลังข้าวสาร
+
+        </a>
+
+
+        <a href="รายงาน.html">
+
+            <div class="menu-icon">📊</div>
+
+            รายงานข้อมูล
+
+        </a>
+
+
+    </section>
+
+
+</div>
+
+
+<footer>
+
+    🌾 กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
+
+    <br>
+
+    ระบบจัดการสมาชิกและช่วยเหลืองานศพ
+
+</footer>
+
+
 <script>
 
-let members = JSON.parse(localStorage.getItem("members")) || [];
+/* สมาชิก */
 
-let list = members.filter(
-    m => m.status === "ยังไม่ส่ง"
-);
+let members =
+    JSON.parse(localStorage.getItem("members")) || [];
 
-let alertBox = "";
 
-if (list.length === 0) {
+/* งานศพ */
 
-    alertBox = `
-        <div class="success">
-            ✅ ทุกครัวเรือนส่งข้าวสารครบแล้ว
-        </div>
-    `;
+let funerals =
+    JSON.parse(localStorage.getItem("funerals")) || [];
 
-} else {
 
-    alertBox = `
-        <div class="warning">
-            ❌ มีครัวเรือนยังไม่ส่ง ${list.length} ครัวเรือน
-            <br><br>
-    `;
+/* การส่งข้าวสารช่วยงาน */
 
-    list.forEach(m => {
+let funeralSends =
+    JSON.parse(localStorage.getItem("funeralSends")) || [];
 
-        alertBox += `
-            🏠 ${m.name || "-"}
-            <br>
-            📌 สถานะ : ${m.status || "ยังไม่ส่ง"}
-            <br>
-            📦 ค้างส่ง : ${m.pending || 0} งาน
-            <br>
-            ⚰️ ค้างส่งงานศพ : ${m.pendingFor || "-"}
-            <br><br>
-        `;
 
-    });
+/* รับ-จ่ายข้าวสาร */
 
-    alertBox += `
-        </div>
-    `;
+let rice =
+    JSON.parse(localStorage.getItem("rice")) || [];
+
+
+/* จำนวนสมาชิก
+   ถ้ายังไม่มีข้อมูล ให้แสดง 185 ครัวเรือน
+*/
+
+let memberTotal =
+    members.length > 0
+    ? members.length
+    : 185;
+
+
+document.getElementById("memberCount").innerText =
+    memberTotal;
+
+
+/* จำนวนงานศพ */
+
+document.getElementById("funeralCount").innerText =
+    funerals.length;
+
+
+/* คำนวณข้าวสารคงเหลือ */
+
+let riceTotal = 0;
+
+rice.forEach(r => {
+
+    if(r.type === "รับ"){
+        riceTotal += Number(r.amount || 0);
+    }
+
+    if(r.type === "จ่าย"){
+        riceTotal -= Number(r.amount || 0);
+    }
+
+});
+
+
+/* ถ้ามีข้อมูลช่วยงานศพ
+   ให้หักจากคลังด้วย
+*/
+
+riceTotal -= funeralSends.length;
+
+
+if(riceTotal < 0){
+    riceTotal = 0;
 }
 
 
-const alertElement = document.getElementById("alert");
+document.getElementById("riceCount").innerText =
+    riceTotal;
 
-if (alertElement) {
-    alertElement.innerHTML = alertBox;
+
+/* ตรวจสอบสมาชิกค้างส่ง */
+
+let pendingCount = 0;
+
+
+members.forEach(m => {
+
+    let pending =
+        Number(m.pending || 0);
+
+    if(pending > 0){
+
+        pendingCount++;
+
+    }
+
+});
+
+
+document.getElementById("pendingCount").innerText =
+    pendingCount;
+
+
+/* ข้อความแจ้งเตือน */
+
+const alertBox =
+    document.getElementById("dashboardAlert");
+
+
+let dangerMembers =
+    members.filter(
+        m => Number(m.pending || 0) >= 2
+    );
+
+
+if(dangerMembers.length > 0){
+
+    alertBox.innerHTML = `
+
+        <div class="alert-box">
+
+            🚨 มีสมาชิก
+            <strong>
+                ${dangerMembers.length}
+            </strong>
+            ครัวเรือน
+
+            <br>
+
+            ไม่ส่งข้าวสารช่วยงานศพครบ 2 ครั้ง
+
+            <br>
+
+            🔴 สถานะ:
+            เสนอพิจารณาตัดสมาชิก
+
+        </div>
+
+    `;
+
+}else{
+
+    alertBox.innerHTML = `
+
+        <div class="success-box">
+
+            ✅ ยังไม่มีสมาชิกที่ค้างส่งครบ 2 ครั้ง
+
+        </div>
+
+    `;
+
 }
 
 </script>
+
+
+</body>
+
+</html>
