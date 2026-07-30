@@ -6,284 +6,404 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>
-คลังข้าวสาร
-</title>
-
+<title>คลังข้าวสาร</title>
 
 <style>
 
-body{
-
-margin:0;
-font-family:Tahoma,sans-serif;
-background:#f4f7f2;
-
+*{
+    box-sizing:border-box;
 }
 
+body{
+    margin:0;
+    font-family:Tahoma,sans-serif;
+    background:#f3f7f0;
+    color:#333;
+}
 
 .header{
-
-background:#8B7500;
-color:white;
-padding:20px;
-text-align:center;
-
+    background:linear-gradient(135deg,#176b2c,#4caf50);
+    color:white;
+    padding:22px 15px;
+    text-align:center;
 }
 
+.container{
+    max-width:800px;
+    margin:auto;
+    padding:15px;
+}
 
 .box{
-
-background:white;
-margin:15px;
-padding:20px;
-border-radius:15px;
-
+    background:white;
+    padding:18px;
+    margin-bottom:15px;
+    border-radius:16px;
+    box-shadow:0 3px 10px rgba(0,0,0,.08);
 }
 
-
-input,select{
-
-width:100%;
-padding:12px;
-margin:8px 0;
-box-sizing:border-box;
-border-radius:8px;
-border:1px solid #ccc;
-
+.summary{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
 }
 
-
-button{
-
-width:100%;
-padding:15px;
-background:#228B22;
-color:white;
-border:0;
-border-radius:10px;
-font-size:18px;
-
+.summary-card{
+    background:#f7fff7;
+    padding:18px;
+    border-radius:14px;
+    text-align:center;
 }
 
-
-.item{
-
-background:#fffbe6;
-padding:15px;
-margin-top:10px;
-border-radius:10px;
-
+.summary-icon{
+    font-size:35px;
 }
 
+.number{
+    font-size:28px;
+    font-weight:bold;
+    color:#228B22;
+}
+
+.out{
+    color:#c62828;
+}
 
 .balance{
+    grid-column:1 / -1;
+    background:#e8f7e8;
+}
 
-text-align:center;
-font-size:25px;
-color:#228B22;
+.item{
+    background:#fafafa;
+    padding:15px;
+    margin-top:10px;
+    border-radius:12px;
+    border-left:5px solid #228B22;
+}
+
+.item.out-item{
+    border-left-color:#c62828;
+}
+
+button{
+    width:100%;
+    padding:13px;
+    border:0;
+    border-radius:10px;
+    background:#228B22;
+    color:white;
+    font-size:16px;
+}
+
+.back{
+    display:block;
+    text-align:center;
+    padding:15px;
+    color:#228B22;
+    text-decoration:none;
+}
+
+.empty{
+    text-align:center;
+    color:#777;
+}
+
+@media(max-width:600px){
+
+    .summary{
+        grid-template-columns:1fr 1fr;
+    }
 
 }
 
 </style>
 
-
 </head>
-
 
 <body>
 
-
 <div class="header">
 
-<h1>🌾 คลังข้าวสาร</h1>
+    <h1>🌾 คลังข้าวสาร</h1>
 
-<p>
-กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
-</p>
+    <p>กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</p>
 
 </div>
 
+
+<div class="container">
 
 
 <div class="box">
 
-<h2>
-📦 ยอดคงเหลือ
-</h2>
+    <div class="summary">
+
+        <div class="summary-card">
+
+            <div class="summary-icon">📥</div>
+
+            <div>รับเข้าทั้งหมด</div>
+
+            <div class="number" id="totalIn">
+                0
+            </div>
+
+            <small>ถุง</small>
+
+        </div>
 
 
-<div class="balance">
+        <div class="summary-card">
 
-<span id="total">
-0
-</span>
+            <div class="summary-icon">📤</div>
 
-ถุง
+            <div>นำออกช่วยงาน</div>
+
+            <div class="number out" id="totalOut">
+                0
+            </div>
+
+            <small>ถุง</small>
+
+        </div>
+
+
+        <div class="summary-card balance">
+
+            <div class="summary-icon">🌾</div>
+
+            <div>ข้าวสารคงเหลือ</div>
+
+            <div class="number" id="balance">
+                0
+            </div>
+
+            <small>ถุง</small>
+
+        </div>
+
+    </div>
 
 </div>
-
-
-</div>
-
-
 
 
 <div class="box">
 
+    <h2>📋 ประวัติรับข้าวสาร</h2>
 
-<h2>
-เพิ่มรายการ
-</h2>
-
-
-<select id="type">
-
-<option value="in">
-รับเข้าข้าวสาร
-</option>
-
-<option value="out">
-จ่ายข้าวสาร
-</option>
-
-</select>
-
-
-
-<input id="amount"
-placeholder="จำนวนถุง">
-
-
-
-<button onclick="saveStock()">
-
-บันทึก
-
-</button>
-
-
+    <div id="receiveList"></div>
 
 </div>
-
-
 
 
 <div class="box">
 
-<h2>
-📋 รายการย้อนหลัง
-</h2>
+    <h2>⚰️ ประวัติข้าวสารช่วยงานศพ</h2>
 
-
-<div id="list"></div>
-
+    <div id="funeralList"></div>
 
 </div>
 
 
+<a class="back" href="ดัชนี.html">
+    ← กลับหน้าหลัก
+</a>
+
+
+</div>
 
 
 <script>
 
+/* -----------------------------
+   ข้อมูลรับข้าวสาร
+----------------------------- */
 
-let stock =
-JSON.parse(localStorage.getItem("stock")) || [];
-
-
-
-function showStock(){
-
-
-let total=0;
-
-let html="";
+const rice =
+    JSON.parse(localStorage.getItem("rice")) || [];
 
 
-stock.forEach((s,i)=>{
+/* -----------------------------
+   ข้อมูลช่วยงานศพ
+----------------------------- */
+
+const funeralSends =
+    JSON.parse(localStorage.getItem("funeralSends")) || [];
 
 
-if(s.type=="in"){
+/* -----------------------------
+   ข้อมูลงานศพ
+----------------------------- */
 
-total += Number(s.amount);
-
-}else{
-
-total -= Number(s.amount);
-
-}
+const funerals =
+    JSON.parse(localStorage.getItem("funerals")) || [];
 
 
+/* -----------------------------
+   คำนวณคลัง
+----------------------------- */
 
-html +=`
+let totalIn = 0;
 
-<div class="item">
+let totalOut = 0;
 
-<b>${i+1}</b>
 
-<br>
+/* รับเข้าจากระบบรับข้าวสาร */
 
-${s.type=="in"?"📥 รับเข้า":"📤 จ่ายออก"}
+rice.forEach(item => {
 
-<br>
+    if(item.type === "รับ"){
 
-จำนวน ${s.amount} ถุง
+        totalIn += Number(item.amount || 0);
 
-</div>
+    }
 
-`;
+    if(item.type === "จ่าย"){
+
+        totalOut += Number(item.amount || 0);
+
+    }
 
 });
 
 
-document.getElementById("total").innerHTML=total;
+/* ข้าวสารที่นำไปช่วยงานศพ */
 
-
-document.getElementById("list").innerHTML=html;
-
-
-}
-
-
-
-function saveStock(){
-
-
-let data={
-
-type:
-document.getElementById("type").value,
-
-amount:
-document.getElementById("amount").value
-
-};
-
-
-stock.push(data);
-
-
-localStorage.setItem(
-"stock",
-JSON.stringify(stock)
+totalOut += funeralSends.reduce(
+    (sum,item) => sum + Number(item.amount || 0),
+    0
 );
 
 
-showStock();
+let balance =
+    totalIn - totalOut;
 
 
-alert("บันทึกคลังข้าวสารแล้ว");
-
-
+if(balance < 0){
+    balance = 0;
 }
 
 
+/* แสดงยอด */
 
-showStock();
+document.getElementById("totalIn").innerText =
+    totalIn;
 
+document.getElementById("totalOut").innerText =
+    totalOut;
+
+document.getElementById("balance").innerText =
+    balance;
+
+
+/* -----------------------------
+   ประวัติรับข้าวสาร
+----------------------------- */
+
+let receiveHTML = "";
+
+const received =
+    rice.filter(item => item.type === "รับ");
+
+
+received.forEach((item,index) => {
+
+    receiveHTML += `
+
+        <div class="item">
+
+            <strong>
+                ${index + 1}. ${item.name || "-"}
+            </strong>
+
+            <br>
+
+            🏠 บ้านเลขที่:
+            ${item.house || "-"}
+
+            <br>
+
+            📦 รับเข้า:
+            ${item.amount || 0} ถุง
+
+            <br>
+
+            📅 วันที่:
+            ${item.date || "-"}
+
+            <br>
+
+            📝 หมายเหตุ:
+            ${item.note || "-"}
+
+        </div>
+
+    `;
+
+});
+
+
+document.getElementById("receiveList").innerHTML =
+    receiveHTML ||
+    `<div class="empty">ยังไม่มีรายการรับข้าวสาร</div>`;
+
+
+/* -----------------------------
+   ประวัติช่วยงานศพ
+----------------------------- */
+
+let funeralHTML = "";
+
+
+funeralSends.forEach((item,index) => {
+
+    const funeral =
+        funerals.find(
+            f => String(f.id) === String(item.funeralId)
+        );
+
+
+    funeralHTML += `
+
+        <div class="item out-item">
+
+            <strong>
+                ${index + 1}. ${item.memberName || "-"}
+            </strong>
+
+            <br>
+
+            🏠 บ้านเลขที่:
+            ${item.memberHouse || "-"}
+
+            <br>
+
+            ⚰️ งานศพ:
+            ${funeral ? funeral.name : "ไม่พบข้อมูลงานศพ"}
+
+            <br>
+
+            🌾 ช่วยงาน:
+            ${item.amount || 1} ถุง
+
+            <br>
+
+            📅 วันที่:
+            ${item.date || "-"}
+
+        </div>
+
+    `;
+
+});
+
+
+document.getElementById("funeralList").innerHTML =
+    funeralHTML ||
+    `<div class="empty">ยังไม่มีการนำข้าวสารช่วยงานศพ</div>`;
 
 </script>
-
 
 </body>
 
