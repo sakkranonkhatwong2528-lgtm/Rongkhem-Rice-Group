@@ -4,241 +4,804 @@
 <head>
 
 <meta charset="UTF-8">
-
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>
-ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
+ระบบกลุ่มข้าวสาร | บ้านร่องเข็ม หมู่ที่ 6
 </title>
 
 <style>
 
+/* =====================================================
+   RESET
+===================================================== */
+
 *{
     box-sizing:border-box;
+    margin:0;
+    padding:0;
 }
 
 body{
-    margin:0;
-    font-family:Tahoma,sans-serif;
-    background:#f3f7f0;
-    color:#333;
-}
 
-.header{
+    font-family:
+        Tahoma,
+        "Noto Sans Thai",
+        sans-serif;
+
     background:
         linear-gradient(
             135deg,
-            #176b2c,
-            #4caf50
+            #061b10,
+            #0d4228,
+            #176b2c
         );
+
+    min-height:100vh;
 
     color:white;
 
-    padding:28px 15px;
+    overflow-x:hidden;
+
+}
+
+
+/* =====================================================
+   พื้นหลังเคลื่อนไหว
+===================================================== */
+
+body::before{
+
+    content:"";
+
+    position:fixed;
+
+    width:500px;
+    height:500px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(92,255,150,.20),
+            transparent 70%
+        );
+
+    top:-180px;
+    right:-150px;
+
+    filter:blur(20px);
+
+    animation:
+        floatLight 8s ease-in-out infinite;
+
+    pointer-events:none;
+
+}
+
+body::after{
+
+    content:"";
+
+    position:fixed;
+
+    width:450px;
+    height:450px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,220,80,.12),
+            transparent 70%
+        );
+
+    bottom:-180px;
+    left:-140px;
+
+    filter:blur(20px);
+
+    animation:
+        floatLight2 10s ease-in-out infinite;
+
+    pointer-events:none;
+
+}
+
+
+@keyframes floatLight{
+
+    0%,100%{
+        transform:
+            translate(0,0)
+            scale(1);
+    }
+
+    50%{
+        transform:
+            translate(-60px,40px)
+            scale(1.15);
+    }
+
+}
+
+
+@keyframes floatLight2{
+
+    0%,100%{
+        transform:
+            translate(0,0)
+            scale(1);
+    }
+
+    50%{
+        transform:
+            translate(70px,-40px)
+            scale(1.12);
+    }
+
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.hero{
+
+    position:relative;
+
+    max-width:1200px;
+
+    margin:auto;
+
+    padding:
+        55px
+        20px
+        35px;
 
     text-align:center;
 
-    border-radius:
-        0 0 25px 25px;
 }
+
 
 .logo{
-    font-size:55px;
+
+    width:95px;
+    height:95px;
+
+    margin:
+        0 auto
+        18px;
+
+    border-radius:30px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    font-size:52px;
+
+    background:
+        rgba(255,255,255,.12);
+
+    border:
+        1px solid
+        rgba(255,255,255,.2);
+
+    backdrop-filter:
+        blur(12px);
+
+    box-shadow:
+        0 20px 60px
+        rgba(0,0,0,.25);
+
+    animation:
+        logoFloat 4s ease-in-out infinite;
+
 }
 
-.header h1{
-    margin:5px 0;
-    font-size:27px;
+
+@keyframes logoFloat{
+
+    0%,100%{
+        transform:
+            translateY(0)
+            rotate(0deg);
+    }
+
+    50%{
+        transform:
+            translateY(-8px)
+            rotate(2deg);
+    }
+
 }
 
-.header h2{
-    margin:5px 0;
-    font-size:19px;
+
+.hero h1{
+
+    font-size:
+        clamp(
+            30px,
+            5vw,
+            54px
+        );
+
+    font-weight:800;
+
+    letter-spacing:.5px;
+
+    text-shadow:
+        0 8px 30px
+        rgba(0,0,0,.35);
+
 }
 
-.header p{
-    margin:8px 0;
+
+.hero h2{
+
+    margin-top:10px;
+
+    font-size:
+        clamp(
+            19px,
+            3vw,
+            27px
+        );
+
+    font-weight:500;
+
+    opacity:.92;
+
 }
+
+
+.hero p{
+
+    margin-top:15px;
+
+    color:#d8f5df;
+
+    font-size:16px;
+
+}
+
+
+/* =====================================================
+   CONTAINER
+===================================================== */
 
 .container{
-    max-width:1000px;
+
+    position:relative;
+
+    max-width:1200px;
+
     margin:auto;
-    padding:15px;
+
+    padding:
+        0 20px 40px;
+
 }
+
+
+/* =====================================================
+   DASHBOARD
+===================================================== */
 
 .dashboard{
 
     display:grid;
 
     grid-template-columns:
-        repeat(2,1fr);
+        repeat(
+            4,
+            1fr
+        );
 
-    gap:12px;
+    gap:16px;
 
-    margin-top:15px;
 }
 
-.card{
 
-    background:white;
+.stat{
 
-    padding:18px;
+    position:relative;
 
-    border-radius:18px;
+    overflow:hidden;
 
-    text-align:center;
+    padding:24px;
+
+    border-radius:26px;
+
+    background:
+        rgba(255,255,255,.10);
+
+    border:
+        1px solid
+        rgba(255,255,255,.15);
+
+    backdrop-filter:
+        blur(14px);
 
     box-shadow:
-        0 3px 10px
-        rgba(0,0,0,.08);
+        0 20px 50px
+        rgba(0,0,0,.18);
+
+    transition:
+        transform .35s ease,
+        box-shadow .35s ease;
+
+    animation:
+        cardUp .8s ease both;
 
 }
 
-.icon{
-    font-size:38px;
+
+.stat:nth-child(2){
+    animation-delay:.08s;
 }
 
-.card h3{
-
-    margin:8px 0;
-
-    font-size:16px;
-
+.stat:nth-child(3){
+    animation-delay:.16s;
 }
 
-.number{
-
-    font-size:28px;
-
-    font-weight:bold;
-
-    color:#228B22;
-
+.stat:nth-child(4){
+    animation-delay:.24s;
 }
 
-.warning-number{
-    color:#b88600;
+.stat:nth-child(5){
+    animation-delay:.32s;
 }
 
-.danger-number{
-    color:#c62828;
+.stat:nth-child(6){
+    animation-delay:.40s;
 }
 
-.blue-number{
-    color:#1976d2;
+.stat:nth-child(7){
+    animation-delay:.48s;
 }
 
-.rice-number{
-    color:#228B22;
+.stat:nth-child(8){
+    animation-delay:.56s;
 }
 
-.notice{
 
-    margin-top:15px;
+@keyframes cardUp{
 
-    padding:15px;
+    from{
 
-    border-radius:14px;
+        opacity:0;
 
-    background:#e8f7e8;
+        transform:
+            translateY(35px);
 
-    color:#1b7a1b;
+    }
 
-}
+    to{
 
-.notice-warning{
+        opacity:1;
 
-    background:#fff3cd;
+        transform:
+            translateY(0);
 
-    color:#856404;
+    }
 
 }
 
-.notice-danger{
 
-    background:#ffe5e5;
+.stat:hover{
 
-    color:#c62828;
+    transform:
+        translateY(-8px)
+        scale(1.02);
+
+    box-shadow:
+        0 28px 70px
+        rgba(0,0,0,.28);
 
 }
 
-.title{
+
+.stat::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:120px;
+    height:120px;
+
+    border-radius:50%;
+
+    background:
+        rgba(255,255,255,.08);
+
+    right:-35px;
+    top:-35px;
+
+}
+
+
+.stat-icon{
+
+    font-size:36px;
+
+    margin-bottom:10px;
+
+}
+
+
+.stat-title{
+
+    color:#d8f5df;
+
+    font-size:14px;
+
+}
+
+
+.stat-number{
+
+    margin-top:5px;
+
+    font-size:36px;
+
+    font-weight:800;
+
+}
+
+
+.stat-unit{
+
+    color:#bde7c8;
+
+    font-size:13px;
+
+}
+
+
+/* =====================================================
+   ALERT
+===================================================== */
+
+.alert{
 
     margin:
-        25px
-        5px
-        12px;
+        18px 0;
+
+    padding:18px 20px;
+
+    border-radius:20px;
+
+    background:
+        rgba(255,70,70,.12);
+
+    border:
+        1px solid
+        rgba(255,100,100,.25);
+
+    backdrop-filter:
+        blur(12px);
+
+    animation:
+        pulseAlert 3s ease-in-out infinite;
 
 }
+
+
+.alert strong{
+
+    font-size:20px;
+
+}
+
+
+@keyframes pulseAlert{
+
+    0%,100%{
+
+        box-shadow:
+            0 0 0
+            rgba(255,80,80,0);
+
+    }
+
+    50%{
+
+        box-shadow:
+            0 0 30px
+            rgba(255,80,80,.12);
+
+    }
+
+}
+
+
+/* =====================================================
+   SECTION TITLE
+===================================================== */
+
+.section-title{
+
+    margin:
+        30px 0 15px;
+
+    font-size:24px;
+
+}
+
+
+/* =====================================================
+   MENU
+===================================================== */
 
 .menu{
 
     display:grid;
 
     grid-template-columns:
-        repeat(2,1fr);
+        repeat(
+            4,
+            1fr
+        );
 
-    gap:12px;
+    gap:16px;
 
 }
 
+
 .menu a{
 
-    background:white;
+    position:relative;
 
-    padding:22px 10px;
+    overflow:hidden;
 
-    border-radius:18px;
+    min-height:150px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:10px;
+
+    padding:20px;
 
     text-align:center;
 
     text-decoration:none;
 
-    color:#333;
+    color:white;
 
-    font-size:17px;
+    border-radius:25px;
 
-    box-shadow:
-        0 3px 10px
-        rgba(0,0,0,.08);
+    background:
+        rgba(255,255,255,.09);
+
+    border:
+        1px solid
+        rgba(255,255,255,.15);
+
+    backdrop-filter:
+        blur(14px);
+
+    transition:
+        transform .3s ease,
+        background .3s ease,
+        box-shadow .3s ease;
+
+    animation:
+        menuIn .8s ease both;
 
 }
+
+
+.menu a:nth-child(2){
+    animation-delay:.05s;
+}
+
+.menu a:nth-child(3){
+    animation-delay:.10s;
+}
+
+.menu a:nth-child(4){
+    animation-delay:.15s;
+}
+
+.menu a:nth-child(5){
+    animation-delay:.20s;
+}
+
+.menu a:nth-child(6){
+    animation-delay:.25s;
+}
+
+.menu a:nth-child(7){
+    animation-delay:.30s;
+}
+
+.menu a:nth-child(8){
+    animation-delay:.35s;
+}
+
+
+@keyframes menuIn{
+
+    from{
+
+        opacity:0;
+
+        transform:
+            scale(.9)
+            translateY(20px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:
+            scale(1)
+            translateY(0);
+
+    }
+
+}
+
+
+.menu a::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:180px;
+    height:180px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,255,255,.12),
+            transparent 70%
+        );
+
+    top:-90px;
+    right:-80px;
+
+    transition:
+        transform .5s ease;
+
+}
+
+
+.menu a:hover::before{
+
+    transform:
+        scale(1.5);
+
+}
+
 
 .menu a:hover{
 
-    background:#e9f8e9;
+    transform:
+        translateY(-8px);
+
+    background:
+        rgba(255,255,255,.16);
+
+    box-shadow:
+        0 25px 60px
+        rgba(0,0,0,.25);
 
 }
+
 
 .menu-icon{
 
-    font-size:35px;
+    font-size:44px;
 
-    margin-bottom:8px;
+    filter:
+        drop-shadow(
+            0 8px 12px
+            rgba(0,0,0,.25)
+        );
 
 }
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
 
 .footer{
 
     text-align:center;
 
-    padding:25px;
+    padding:
+        35px 15px;
 
-    color:#777;
+    color:#bde7c8;
 
     font-size:14px;
 
 }
 
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width:950px){
+
+    .dashboard{
+
+        grid-template-columns:
+            repeat(
+                2,
+                1fr
+            );
+
+    }
+
+    .menu{
+
+        grid-template-columns:
+            repeat(
+                2,
+                1fr
+            );
+
+    }
+
+}
+
+
 @media(max-width:600px){
+
+    .hero{
+
+        padding-top:35px;
+
+    }
 
     .dashboard{
 
         grid-template-columns:
             1fr 1fr;
+
+        gap:10px;
+
+    }
+
+    .stat{
+
+        padding:16px;
+
+        border-radius:20px;
+
+    }
+
+    .stat-icon{
+
+        font-size:30px;
+
+    }
+
+    .stat-number{
+
+        font-size:27px;
 
     }
 
@@ -247,30 +810,23 @@ body{
         grid-template-columns:
             1fr 1fr;
 
-    }
-
-    .header h1{
-
-        font-size:23px;
+        gap:10px;
 
     }
 
-    .header h2{
+    .menu a{
 
-        font-size:18px;
+        min-height:125px;
 
-    }
+        border-radius:20px;
 
-    .card{
-
-        padding:
-            14px 8px;
+        font-size:14px;
 
     }
 
-    .number{
+    .menu-icon{
 
-        font-size:24px;
+        font-size:34px;
 
     }
 
@@ -280,11 +836,12 @@ body{
 
 </head>
 
-
 <body>
 
 
-<div class="header">
+<!-- HERO -->
+
+<header class="hero">
 
     <div class="logo">
         🌾
@@ -299,248 +856,208 @@ body{
     </h2>
 
     <p id="memberHeader">
-        สมาชิกทั้งหมด 0 ครัวเรือน
+        กำลังโหลดข้อมูล...
     </p>
 
-</div>
+</header>
 
 
-<div class="container">
+<main class="container">
 
+
+<!-- DASHBOARD -->
 
 <section class="dashboard">
 
 
-    <!-- สมาชิก -->
+    <div class="stat">
 
-    <div class="card">
-
-        <div class="icon">
+        <div class="stat-icon">
             👥
         </div>
 
-        <h3>
+        <div class="stat-title">
             สมาชิกทั้งหมด
-        </h3>
+        </div>
 
         <div
-            class="number"
+            class="stat-number"
             id="memberCount"
         >
             0
         </div>
 
-        <small>
+        <div class="stat-unit">
             ครัวเรือน
-        </small>
+        </div>
 
     </div>
 
 
-    <!-- งานศพ -->
+    <div class="stat">
 
-    <div class="card">
-
-        <div class="icon">
+        <div class="stat-icon">
             ⚰️
         </div>
 
-        <h3>
+        <div class="stat-title">
             งานศพ
-        </h3>
+        </div>
 
         <div
-            class="number blue-number"
+            class="stat-number"
             id="funeralCount"
         >
             0
         </div>
 
-        <small>
+        <div class="stat-unit">
             งาน
-        </small>
+        </div>
 
     </div>
 
 
-    <!-- รับข้าวสาร -->
+    <div class="stat">
 
-    <div class="card">
-
-        <div class="icon">
+        <div class="stat-icon">
             📥
         </div>
 
-        <h3>
+        <div class="stat-title">
             ข้าวสารรับเข้าทั้งหมด
-        </h3>
+        </div>
 
         <div
-            class="number rice-number"
+            class="stat-number"
             id="riceInTotal"
         >
             0
         </div>
 
-        <small>
+        <div class="stat-unit">
             ถุง
-        </small>
+        </div>
 
     </div>
 
 
-    <!-- ช่วยงานศพ -->
+    <div class="stat">
 
-    <div class="card">
-
-        <div class="icon">
-            ⚰️
-        </div>
-
-        <h3>
-            ข้าวสารช่วยงานศพ
-        </h3>
-
-        <div
-            class="number blue-number"
-            id="riceFuneralTotal"
-        >
-            0
-        </div>
-
-        <small>
-            ถุง
-        </small>
-
-    </div>
-
-
-    <!-- จ่ายอื่น -->
-
-    <div class="card">
-
-        <div class="icon">
-            📤
-        </div>
-
-        <h3>
-            ข้าวสารจ่ายอื่น
-        </h3>
-
-        <div
-            class="number danger-number"
-            id="riceOtherTotal"
-        >
-            0
-        </div>
-
-        <small>
-            ถุง
-        </small>
-
-    </div>
-
-
-    <!-- คงเหลือ -->
-
-    <div class="card">
-
-        <div class="icon">
+        <div class="stat-icon">
             🌾
         </div>
 
-        <h3>
+        <div class="stat-title">
             ข้าวสารคงเหลือ
-        </h3>
+        </div>
 
         <div
-            class="number rice-number"
-            id="riceCount"
+            class="stat-number"
+            id="riceBalance"
         >
             0
         </div>
 
-        <small>
+        <div class="stat-unit">
             ถุง
-        </small>
+        </div>
 
     </div>
 
 
-    <!-- ค้างส่ง -->
+    <div class="stat">
 
-    <div class="card">
-
-        <div class="icon">
+        <div class="stat-icon">
             ⚠️
         </div>
 
-        <h3>
+        <div class="stat-title">
             สมาชิกค้างส่ง
-        </h3>
+        </div>
 
         <div
-            class="number warning-number"
+            class="stat-number"
             id="pendingCount"
         >
             0
         </div>
 
-        <small>
+        <div class="stat-unit">
             ครัวเรือน
-        </small>
+        </div>
 
     </div>
 
 
-    <!-- ค้าง 2 ครั้ง -->
+    <div class="stat">
 
-    <div class="card">
-
-        <div class="icon">
+        <div class="stat-icon">
             🚨
         </div>
 
-        <h3>
+        <div class="stat-title">
             ค้างส่ง 2 ครั้งขึ้นไป
-        </h3>
+        </div>
 
         <div
-            class="number danger-number"
+            class="stat-number"
             id="dangerCount"
         >
             0
         </div>
 
-        <small>
+        <div class="stat-unit">
             ครัวเรือน
-        </small>
+        </div>
 
     </div>
 
 
-    <!-- ปกติ -->
+    <div class="stat">
 
-    <div class="card">
+        <div class="stat-icon">
+            ⚰️
+        </div>
 
-        <div class="icon">
+        <div class="stat-title">
+            ข้าวสารช่วยงานศพ
+        </div>
+
+        <div
+            class="stat-number"
+            id="funeralRice"
+        >
+            0
+        </div>
+
+        <div class="stat-unit">
+            ถุง
+        </div>
+
+    </div>
+
+
+    <div class="stat">
+
+        <div class="stat-icon">
             ✅
         </div>
 
-        <h3>
+        <div class="stat-title">
             สมาชิกปกติ
-        </h3>
+        </div>
 
         <div
-            class="number"
+            class="stat-number"
             id="normalCount"
         >
             0
         </div>
 
-        <small>
+        <div class="stat-unit">
             ครัวเรือน
-        </small>
+        </div>
 
     </div>
 
@@ -548,10 +1065,14 @@ body{
 </section>
 
 
+<!-- ALERT -->
+
 <div id="notice"></div>
 
 
-<h2 class="title">
+<!-- MENU -->
+
+<h2 class="section-title">
     เมนูระบบ
 </h2>
 
@@ -565,7 +1086,9 @@ body{
             👥
         </div>
 
-        ทะเบียนสมาชิก
+        <span>
+            ทะเบียนสมาชิก
+        </span>
 
     </a>
 
@@ -576,7 +1099,9 @@ body{
             ⚰️
         </div>
 
-        แจ้งเสียชีวิต / งานศพ
+        <span>
+            แจ้งเสียชีวิต / งานศพ
+        </span>
 
     </a>
 
@@ -587,7 +1112,9 @@ body{
             📥
         </div>
 
-        รับข้าวสารเข้ากลุ่ม
+        <span>
+            รับข้าวสารเข้ากลุ่ม
+        </span>
 
     </a>
 
@@ -598,7 +1125,9 @@ body{
             🌾
         </div>
 
-        คลังข้าวสาร
+        <span>
+            คลังข้าวสาร
+        </span>
 
     </a>
 
@@ -609,7 +1138,9 @@ body{
             🔔
         </div>
 
-        แจ้งเตือนสมาชิก
+        <span>
+            แจ้งเตือนสมาชิก
+        </span>
 
     </a>
 
@@ -620,7 +1151,9 @@ body{
             📊
         </div>
 
-        รายงานข้อมูล
+        <span>
+            รายงานข้อมูล
+        </span>
 
     </a>
 
@@ -631,7 +1164,9 @@ body{
             📄
         </div>
 
-        พิมพ์รายงานงานศพ
+        <span>
+            พิมพ์รายงานงานศพ
+        </span>
 
     </a>
 
@@ -642,7 +1177,9 @@ body{
             💾
         </div>
 
-        สำรองข้อมูล
+        <span>
+            สำรองข้อมูล
+        </span>
 
     </a>
 
@@ -650,10 +1187,10 @@ body{
 </section>
 
 
-</div>
+</main>
 
 
-<div class="footer">
+<footer class="footer">
 
     🌾 กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
 
@@ -661,84 +1198,79 @@ body{
 
     ระบบจัดการสมาชิกและช่วยเหลืองานศพ
 
-</div>
+</footer>
 
 
 <script>
 
 /* =====================================================
-   โหลดข้อมูลสมาชิก
+   โหลดข้อมูล
 ===================================================== */
 
 const members =
     JSON.parse(
-        localStorage.getItem("members")
+        localStorage.getItem(
+            "members"
+        )
     ) || [];
 
-
-/* =====================================================
-   โหลดข้อมูลงานศพ
-===================================================== */
 
 const funerals =
     JSON.parse(
-        localStorage.getItem("funerals")
+        localStorage.getItem(
+            "funerals"
+        )
     ) || [];
 
-
-/* =====================================================
-   โหลดข้อมูลรับ-จ่ายข้าวสาร
-===================================================== */
 
 const rice =
     JSON.parse(
-        localStorage.getItem("rice")
+        localStorage.getItem(
+            "rice"
+        )
     ) || [];
 
-
-/* =====================================================
-   โหลดข้อมูลช่วยงานศพ
-===================================================== */
 
 const funeralSends =
     JSON.parse(
-        localStorage.getItem("funeralSends")
+        localStorage.getItem(
+            "funeralSends"
+        )
     ) || [];
 
 
 /* =====================================================
-   สมาชิกทั้งหมด
+   จำนวนสมาชิก
 ===================================================== */
 
 const memberTotal =
-    members.length > 0
-    ? members.length
-    : 185;
+    members.length ||
+    185;
 
 
 const pendingMembers =
     members.filter(
-        member =>
+        m =>
         Number(
-            member.pending || 0
+            m.pending || 0
         ) > 0
     );
 
 
 const dangerMembers =
     members.filter(
-        member =>
+        m =>
         Number(
-            member.pending || 0
+            m.pending || 0
         ) >= 2
     );
 
 
 const normalMembers =
     members.filter(
-        member =>
+        m =>
         Number(
-            member.pending || 0
+            m.pending || 0
         ) === 0
     );
 
@@ -776,7 +1308,7 @@ document.getElementById(
 
 
 /* =====================================================
-   จำนวนงานศพ
+   งานศพ
 ===================================================== */
 
 document.getElementById(
@@ -786,21 +1318,20 @@ document.getElementById(
 
 
 /* =====================================================
-   รวมข้าวสารรับเข้าทั้งหมด
+   ข้าวสารรับเข้า
 ===================================================== */
 
-let riceInTotal = 0;
+let riceIn = 0;
 
 
 rice.forEach(
     item => {
 
         if(
-            item.type ===
-            "รับ"
+            item.type === "รับ"
         ){
 
-            riceInTotal +=
+            riceIn +=
                 Number(
                     item.amount || 0
                 );
@@ -812,16 +1343,16 @@ rice.forEach(
 
 
 /* =====================================================
-   รวมข้าวสารช่วยงานศพ
+   ข้าวสารช่วยงานศพ
 ===================================================== */
 
-let riceFuneralTotal = 0;
+let riceFuneral = 0;
 
 
 funeralSends.forEach(
     item => {
 
-        riceFuneralTotal +=
+        riceFuneral +=
             Number(
                 item.amount || 0
             );
@@ -831,21 +1362,20 @@ funeralSends.forEach(
 
 
 /* =====================================================
-   รวมข้าวสารจ่ายอื่น
+   ข้าวสารจ่ายอื่น
 ===================================================== */
 
-let riceOtherTotal = 0;
+let riceOther = 0;
 
 
 rice.forEach(
     item => {
 
         if(
-            item.type ===
-            "จ่าย"
+            item.type === "จ่าย"
         ){
 
-            riceOtherTotal +=
+            riceOther +=
                 Number(
                     item.amount || 0
                 );
@@ -857,15 +1387,13 @@ rice.forEach(
 
 
 /* =====================================================
-   คำนวณข้าวสารคงเหลือ
+   คงเหลือ
 ===================================================== */
 
 let riceBalance =
-    riceInTotal
-    -
-    riceFuneralTotal
-    -
-    riceOtherTotal;
+    riceIn -
+    riceFuneral -
+    riceOther;
 
 
 if(
@@ -878,29 +1406,23 @@ if(
 
 
 /* =====================================================
-   แสดงยอดข้าวสาร
+   แสดงตัวเลข
 ===================================================== */
 
 document.getElementById(
     "riceInTotal"
 ).innerText =
-    riceInTotal;
+    riceIn;
 
 
 document.getElementById(
-    "riceFuneralTotal"
+    "funeralRice"
 ).innerText =
-    riceFuneralTotal;
+    riceFuneral;
 
 
 document.getElementById(
-    "riceOtherTotal"
-).innerText =
-    riceOtherTotal;
-
-
-document.getElementById(
-    "riceCount"
+    "riceBalance"
 ).innerText =
     riceBalance;
 
@@ -921,18 +1443,13 @@ if(
 
     notice.innerHTML = `
 
-        <div
-            class="
-                notice
-                notice-danger
-            "
-        >
+        <div class="alert">
 
-            🚨 มี
+            🚨
             <strong>
-                ${dangerMembers.length}
+                มี ${dangerMembers.length}
+                ครัวเรือน
             </strong>
-            ครัวเรือน
 
             <br>
 
@@ -941,7 +1458,7 @@ if(
 
             <br>
 
-            โปรดตรวจสอบและพิจารณา
+            กรุณาตรวจสอบและพิจารณา
             ตามกติกาของกลุ่ม
 
         </div>
@@ -957,43 +1474,31 @@ else if(
 
         <div
             class="
-                notice
-                notice-warning
+                alert
+                style="
+            background:
+                rgba(255,190,40,.12);
             "
         >
 
-            ⚠️ มี
+            ⚠️
             <strong>
-                ${pendingMembers.length}
+                มี ${pendingMembers.length}
+                ครัวเรือนค้างส่ง
             </strong>
-            ครัวเรือน
 
             <br>
 
-            ที่มีประวัติค้างส่ง
-            ข้าวสารช่วยงานศพ
+            กรุณาตรวจสอบรายการสมาชิก
 
         </div>
 
     `;
 
 }
-else{
 
-    notice.innerHTML = `
-
-        <div class="notice">
-
-            ✅ สมาชิกปฏิบัติตามกติกาครบถ้วน
-
-        </div>
-
-    `;
-
-}
 
 </script>
-
 
 </body>
 
