@@ -29,7 +29,7 @@ body{
 }
 
 .container{
-    max-width:700px;
+    max-width:800px;
     margin:auto;
     padding:15px;
 }
@@ -42,23 +42,24 @@ body{
     box-shadow:0 3px 10px rgba(0,0,0,.08);
 }
 
-input,
-button{
+input{
     width:100%;
     padding:13px;
     margin:7px 0;
+    border:1px solid #ccc;
     border-radius:10px;
     font-size:16px;
 }
 
-input{
-    border:1px solid #ccc;
-}
-
 button{
+    width:100%;
+    padding:14px;
+    margin-top:8px;
     border:0;
+    border-radius:10px;
     background:#228B22;
     color:white;
+    font-size:17px;
 }
 
 .summary{
@@ -67,7 +68,7 @@ button{
 }
 
 .total{
-    font-size:32px;
+    font-size:34px;
     font-weight:bold;
     color:#228B22;
 }
@@ -80,12 +81,16 @@ button{
     border-left:5px solid #228B22;
 }
 
+.delete{
+    background:#c62828;
+}
+
 .back{
     display:block;
     text-align:center;
-    margin-top:15px;
-    text-decoration:none;
+    padding:15px;
     color:#228B22;
+    text-decoration:none;
 }
 
 </style>
@@ -96,137 +101,132 @@ button{
 
 <div class="header">
 
-<h1>📥 รับข้าวสารเข้ากลุ่ม</h1>
+    <h1>📥 รับข้าวสารเข้ากลุ่ม</h1>
 
-<p>กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</p>
+    <p>กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</p>
 
 </div>
+
 
 <div class="container">
 
+
 <div class="box summary">
 
-<h2>🌾 ข้าวสารในคลัง</h2>
+    <h2>🌾 ข้าวสารคงเหลือ</h2>
 
-<div class="total" id="totalRice">
-0
-</div>
+    <div
+        class="total"
+        id="balance"
+    >
+        0
+    </div>
 
-ถุง
-
-</div>
-
-
-<div class="box">
-
-<h2>➕ บันทึกข้าวสารที่ได้รับ</h2>
-
-<input
-    id="name"
-    type="text"
-    placeholder="ชื่อ-นามสกุล ผู้ส่งมอบ"
->
-
-<input
-    id="house"
-    type="text"
-    placeholder="บ้านเลขที่"
->
-
-<input
-    id="amount"
-    type="number"
-    min="1"
-    placeholder="จำนวนข้าวสาร (ถุง)"
->
-
-<input
-    id="note"
-    type="text"
-    placeholder="หมายเหตุ"
->
-
-<button onclick="saveRice()">
-💾 บันทึกข้าวสารเข้ากลุ่ม
-</button>
+    ถุง
 
 </div>
 
 
 <div class="box">
 
-<h2>📋 ประวัติการรับข้าวสาร</h2>
+    <h2>➕ บันทึกการรับข้าวสาร</h2>
 
-<div id="list"></div>
+    <input
+        id="name"
+        type="text"
+        placeholder="ชื่อ-นามสกุล ผู้ส่งข้าวสาร"
+    >
+
+    <input
+        id="house"
+        type="text"
+        placeholder="บ้านเลขที่"
+    >
+
+    <input
+        id="amount"
+        type="number"
+        min="1"
+        placeholder="จำนวนข้าวสาร (ถุง)"
+    >
+
+    <input
+        id="note"
+        type="text"
+        placeholder="หมายเหตุ เช่น สมาชิกนำมาสมทบ"
+    >
+
+    <button onclick="saveRice()">
+        💾 บันทึกข้าวสารเข้ากลุ่ม
+    </button>
 
 </div>
 
 
-<a class="back" href="ดัชนี.html">
-← กลับหน้าหลัก
+<div class="box">
+
+    <h2>📋 ประวัติการรับข้าวสาร</h2>
+
+    <div id="list"></div>
+
+</div>
+
+
+<a
+    class="back"
+    href="index.html"
+>
+    ← กลับหน้าหลัก
 </a>
+
 
 </div>
 
 
 <script>
 
-let rice =
-    JSON.parse(localStorage.getItem("rice")) || [];
+let rice = [];
+
+try{
+
+    rice =
+        JSON.parse(
+            localStorage.getItem("rice")
+        ) || [];
+
+}catch(error){
+
+    rice = [];
+
+}
 
 
-/* แสดงข้อมูล */
+/* แสดงยอด */
 
 function showData(){
 
     let total = 0;
+
     let html = "";
+
 
     rice.forEach((item,index)=>{
 
         if(item.type === "รับ"){
-            total += Number(item.amount || 0);
+
+            total +=
+                Number(item.amount || 0);
+
         }
+
 
         if(item.type === "จ่าย"){
-            total -= Number(item.amount || 0);
-        }
 
-        if(item.type === "รับ"){
-
-            html += `
-
-                <div class="item">
-
-                    <strong>
-                        ${index + 1}. ${item.name || "-"}
-                    </strong>
-
-                    <br>
-
-                    🏠 บ้านเลขที่:
-                    ${item.house || "-"}
-
-                    <br>
-
-                    📦 จำนวน:
-                    ${item.amount} ถุง
-
-                    <br>
-
-                    📅 วันที่:
-                    ${item.date}
-
-                    <br>
-
-                    📝 หมายเหตุ:
-                    ${item.note || "-"}
-
-                </div>
-
-            `;
+            total -=
+                Number(item.amount || 0);
 
         }
+
 
     });
 
@@ -235,11 +235,59 @@ function showData(){
         total = 0;
     }
 
-    document.getElementById("totalRice").innerText =
-        total;
 
-    document.getElementById("list").innerHTML =
-        html || "<p>ยังไม่มีรายการรับข้าวสาร</p>";
+    document.getElementById("balance")
+        .innerText = total;
+
+
+    const received =
+        rice.filter(
+            item =>
+            item.type === "รับ"
+        );
+
+
+    received.forEach((item,index)=>{
+
+        html += `
+
+        <div class="item">
+
+            <strong>
+                ${index + 1}. ${escapeHTML(item.name)}
+            </strong>
+
+            <br>
+
+            🏠 บ้านเลขที่:
+            ${escapeHTML(item.house)}
+
+            <br>
+
+            📦 รับเข้า:
+            ${Number(item.amount)} ถุง
+
+            <br>
+
+            📅 วันที่:
+            ${escapeHTML(item.date)}
+
+            <br>
+
+            📝 หมายเหตุ:
+            ${escapeHTML(item.note || "-")}
+
+        </div>
+
+        `;
+
+    });
+
+
+    document.getElementById("list")
+        .innerHTML =
+        html ||
+        "<p>ยังไม่มีรายการรับข้าวสาร</p>";
 
 }
 
@@ -249,21 +297,33 @@ function showData(){
 function saveRice(){
 
     const name =
-        document.getElementById("name").value.trim();
+        document.getElementById("name")
+            .value.trim();
+
 
     const house =
-        document.getElementById("house").value.trim();
+        document.getElementById("house")
+            .value.trim();
+
 
     const amount =
-        Number(document.getElementById("amount").value);
+        Number(
+            document.getElementById("amount")
+                .value
+        );
+
 
     const note =
-        document.getElementById("note").value.trim();
+        document.getElementById("note")
+            .value.trim();
 
 
     if(!name){
 
-        alert("กรุณากรอกชื่อผู้ส่งมอบ");
+        alert(
+            "กรุณากรอกชื่อผู้ส่งข้าวสาร"
+        );
+
         return;
 
     }
@@ -271,7 +331,10 @@ function saveRice(){
 
     if(!house){
 
-        alert("กรุณากรอกบ้านเลขที่");
+        alert(
+            "กรุณากรอกบ้านเลขที่"
+        );
+
         return;
 
     }
@@ -279,13 +342,18 @@ function saveRice(){
 
     if(!amount || amount < 1){
 
-        alert("กรุณากรอกจำนวนข้าวสาร");
+        alert(
+            "กรุณากรอกจำนวนข้าวสาร"
+        );
+
         return;
 
     }
 
 
-    const item = {
+    rice.push({
+
+        id:Date.now(),
 
         type:"รับ",
 
@@ -297,12 +365,11 @@ function saveRice(){
 
         note:note,
 
-        date:new Date().toLocaleDateString("th-TH")
+        date:
+            new Date()
+            .toLocaleDateString("th-TH")
 
-    };
-
-
-    rice.push(item);
+    });
 
 
     localStorage.setItem(
@@ -311,15 +378,39 @@ function saveRice(){
     );
 
 
-    document.getElementById("name").value = "";
-    document.getElementById("house").value = "";
-    document.getElementById("amount").value = "";
-    document.getElementById("note").value = "";
+    document.getElementById("name")
+        .value = "";
+
+    document.getElementById("house")
+        .value = "";
+
+    document.getElementById("amount")
+        .value = "";
+
+    document.getElementById("note")
+        .value = "";
 
 
     showData();
 
-    alert("บันทึกข้าวสารเข้ากลุ่มเรียบร้อยแล้ว");
+
+    alert(
+        "บันทึกข้าวสารเข้ากลุ่มเรียบร้อยแล้ว"
+    );
+
+}
+
+
+/* ป้องกัน HTML */
+
+function escapeHTML(value){
+
+    return String(value || "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
 
 }
 
