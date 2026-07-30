@@ -6,431 +6,385 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>
-🔔 แจ้งเตือนกลุ่มข้าวสาร
-</title>
-
+<title>แจ้งเตือนสมาชิก</title>
 
 <style>
 
-body{
-
-margin:0;
-font-family:Tahoma,sans-serif;
-background:#f5f7f2;
-
+*{
+    box-sizing:border-box;
 }
 
+body{
+    margin:0;
+    font-family:Tahoma,sans-serif;
+    background:#f3f7f0;
+    color:#333;
+}
 
 .header{
-
-background:linear-gradient(135deg,#ff9800,#f57c00);
-color:white;
-padding:30px;
-text-align:center;
-
+    background:linear-gradient(135deg,#176b2c,#4caf50);
+    color:white;
+    padding:22px 15px;
+    text-align:center;
 }
-
 
 .container{
-
-padding:20px;
-
+    max-width:850px;
+    margin:auto;
+    padding:15px;
 }
 
+.summary{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+}
 
 .card{
-
-background:white;
-padding:20px;
-margin-bottom:20px;
-border-radius:15px;
-box-shadow:0 3px 10px #ccc;
-
+    background:white;
+    padding:15px;
+    border-radius:15px;
+    text-align:center;
+    box-shadow:0 3px 8px rgba(0,0,0,.08);
 }
 
-
-.warning{
-
-background:#fff3cd;
-border-left:8px solid #ff9800;
-padding:15px;
-border-radius:10px;
-
+.number{
+    font-size:28px;
+    font-weight:bold;
 }
 
-
-.danger{
-
-background:#ffebee;
-border-left:8px solid #d32f2f;
-padding:15px;
-border-radius:10px;
-
+.green{
+    color:#228B22;
 }
 
-
-.success{
-
-background:#e8f5e9;
-border-left:8px solid #2e7d32;
-padding:15px;
-border-radius:10px;
-
+.yellow{
+    color:#b88600;
 }
 
+.red{
+    color:#c62828;
+}
+
+.member{
+    background:white;
+    margin-top:10px;
+    padding:15px;
+    border-radius:14px;
+    box-shadow:0 2px 7px rgba(0,0,0,.08);
+}
+
+.member.warning{
+    border-left:6px solid #b88600;
+}
+
+.member.danger{
+    border-left:6px solid #c62828;
+}
 
 button{
+    width:100%;
+    padding:13px;
+    margin-top:10px;
+    border:0;
+    border-radius:10px;
+    background:#228B22;
+    color:white;
+    font-size:16px;
+}
 
-background:#2e7d32;
-color:white;
-border:0;
-padding:10px 15px;
-border-radius:8px;
+.back{
+    display:block;
+    text-align:center;
+    padding:18px;
+    color:#228B22;
+    text-decoration:none;
+}
+
+@media(max-width:600px){
+
+    .summary{
+        grid-template-columns:1fr 1fr 1fr;
+    }
+
+    .card{
+        padding:10px 5px;
+        font-size:13px;
+    }
 
 }
 
+@media print{
+
+    button,
+    .back{
+        display:none;
+    }
+
+}
 
 </style>
 
 </head>
 
-
 <body>
-
 
 <div class="header">
 
-<h1>
-🔔 ศูนย์แจ้งเตือน
-</h1>
+    <h1>🔔 แจ้งเตือนสมาชิก</h1>
 
-<p>
-กลุ่มข้าวสารบ้านร่องเข็ม หมู่ที่ 6
-</p>
+    <p>กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</p>
 
 </div>
-
-
 
 
 <div class="container">
 
 
-<div id="alert">
+<div class="summary">
+
+    <div class="card">
+
+        🟢 ปกติ
+
+        <div class="number green" id="normalCount">
+            0
+        </div>
+
+        ครัวเรือน
+
+    </div>
+
+
+    <div class="card">
+
+        🟡 ค้าง 1 ครั้ง
+
+        <div class="number yellow" id="warningCount">
+            0
+        </div>
+
+        ครัวเรือน
+
+    </div>
+
+
+    <div class="card">
+
+        🔴 ค้าง 2 ครั้งขึ้นไป
+
+        <div class="number red" id="dangerCount">
+            0
+        </div>
+
+        ครัวเรือน
+
+    </div>
 
 </div>
 
 
+<div class="card" style="margin-top:15px;">
 
-<br>
+    <strong>
+        สมาชิกทั้งหมด
+    </strong>
+
+    <div class="number" id="totalCount">
+        0
+    </div>
+
+    ครัวเรือน
+
+</div>
 
 
-<a href="index.html">
+<h2>
+⚠️ รายชื่อที่ต้องติดตาม
+</h2>
 
-⬅ กลับหน้าหลัก
+<div id="warningList"></div>
 
+
+<button onclick="window.print()">
+🖨️ พิมพ์รายงานแจ้งเตือน
+</button>
+
+
+<a class="back" href="ดัชนี.html">
+← กลับหน้าหลัก
 </a>
 
 
 </div>
 
 
-
-
-
 <script>
 
-
 let members =
-JSON.parse(
-localStorage.getItem("members")
-)||[];
+    JSON.parse(
+        localStorage.getItem("members")
+    ) || [];
 
 
-let funerals =
-JSON.parse(
-localStorage.getItem("funerals")
-)||[];
+/* นับสถานะ */
+
+let normal = 0;
+
+let warning = 0;
+
+let danger = 0;
 
 
-let riceData =
-JSON.parse(
-localStorage.getItem("riceData")
-)||[];
+members.forEach(m => {
+
+    const pending =
+        Number(m.pending || 0);
 
 
+    if(pending >= 2){
 
+        danger++;
 
-let html="";
+    }else if(pending === 1){
 
+        warning++;
 
+    }else{
 
+        normal++;
 
-// =================
-// สมาชิกยังไม่ส่ง
-// =================
-
-
-let notSend =
-members.filter(
-m=>m.status=="ยังไม่ส่ง"
-);
-
-
-
-html +=`
-
-<div class="card">
-
-<h2>
-👥 แจ้งเตือนสมาชิก
-</h2>
-
-`;
-
-
-
-if(notSend.length==0){
-
-
-html +=`
-
-<div class="success">
-
-✅ สมาชิกส่งข้าวครบทุกคน
-
-</div>
-
-`;
-
-
-}else{
-
-
-html +=`
-
-<div class="warning">
-
-❌ ยังไม่ส่ง ${notSend.length} คน
-
-<br><br>
-
-`;
-
-
-notSend.forEach(m=>{
-
-
-html +=`
-
-<p>
-
-❌ ${m.name}
-
-<br>
-
-🏠 บ้านเลขที่ ${m.house}
-
-</p>
-
-`;
+    }
 
 });
 
 
-html+=`
+/* แสดงตัวเลข */
 
-</div>
+document.getElementById("normalCount").innerText =
+    normal;
 
-`;
+document.getElementById("warningCount").innerText =
+    warning;
 
-}
+document.getElementById("dangerCount").innerText =
+    danger;
 
-
-html+=`
-
-</div>
-
-`;
-
+document.getElementById("totalCount").innerText =
+    members.length || 185;
 
 
+/* รายชื่อที่ต้องติดตาม */
+
+let html = "";
 
 
+const pendingMembers =
+    members.filter(
+        m => Number(m.pending || 0) > 0
+    );
 
 
-// =================
-// งานศพ
-// =================
+if(pendingMembers.length === 0){
 
+    html = `
 
-html+=`
+        <div class="card">
 
-<div class="card">
+            ✅ ยังไม่มีสมาชิกค้างส่ง
 
-<h2>
-⚰️ แจ้งงานศพ
-</h2>
+        </div>
 
-`;
-
-
-
-if(funerals.length==0){
-
-
-html+=`
-
-<div class="success">
-
-ไม่มีรายการแจ้งเสียชีวิต
-
-</div>
-
-`;
+    `;
 
 }else{
 
+    pendingMembers.forEach((m,index)=>{
 
-let f =
-funerals[funerals.length-1];
+        const pending =
+            Number(m.pending || 0);
 
 
-html+=`
+        if(pending >= 2){
 
-<div class="danger">
+            html += `
 
-⚰️ ${f.name}
+                <div class="member danger">
 
-<br>
+                    <strong>
+                        ${index + 1}. ${m.name}
+                    </strong>
 
-🏠 บ้านเลขที่ ${f.house}
+                    <br>
 
-<br>
+                    🏠 บ้านเลขที่:
+                    ${m.house}
 
-📅 วันที่เสียชีวิต ${f.death}
+                    <br>
 
-<br>
+                    📦 ค้างส่ง:
+                    ${pending} งาน
 
-สถานะ : ${f.status}
+                    <br>
 
-</div>
+                    ⚰️ งานศพที่ค้าง:
+                    ${m.pendingFor || "-"}
 
-`;
+                    <br><br>
+
+                    <strong class="red">
+                        🔴 เสนอพิจารณาตัดสมาชิก
+                    </strong>
+
+                </div>
+
+            `;
+
+        }else{
+
+            html += `
+
+                <div class="member warning">
+
+                    <strong>
+                        ${index + 1}. ${m.name}
+                    </strong>
+
+                    <br>
+
+                    🏠 บ้านเลขที่:
+                    ${m.house}
+
+                    <br>
+
+                    📦 ค้างส่ง:
+                    ${pending} งาน
+
+                    <br>
+
+                    ⚰️ งานศพที่ค้าง:
+                    ${m.pendingFor || "-"}
+
+                    <br><br>
+
+                    <strong class="yellow">
+                        🟡 แจ้งเตือน 1 ครั้ง
+                    </strong>
+
+                </div>
+
+            `;
+
+        }
+
+    });
 
 }
 
 
-
-html+=`
-
-</div>
-
-`;
-
-
-
-
-
-
-// =================
-// คลังข้าว
-// =================
-
-
-let stock=0;
-
-
-riceData.forEach(r=>{
-
-
-if(r.type=="รับเข้า"){
-
-stock+=Number(r.amount);
-
-}else{
-
-stock-=Number(r.amount);
-
-}
-
-});
-
-
-
-
-
-html+=`
-
-<div class="card">
-
-<h2>
-🌾 แจ้งเตือนคลังข้าว
-</h2>
-
-`;
-
-
-
-if(stock<=10){
-
-
-html+=`
-
-<div class="danger">
-
-⚠️ ข้าวคงเหลือน้อย
-
-<br>
-
-🌾 เหลือ ${stock} กก.
-
-<br>
-
-ควรเตรียมข้าวเพิ่ม
-
-</div>
-
-`;
-
-}else{
-
-
-html+=`
-
-<div class="success">
-
-✅ คลังข้าวปกติ
-
-<br>
-
-🌾 คงเหลือ ${stock} กก.
-
-</div>
-
-`;
-
-}
-
-
-
-html+=`
-
-</div>
-
-`;
-
-
-
-
-
-document.getElementById("alert").innerHTML=html;
-
-
+document.getElementById("warningList").innerHTML =
+    html;
 
 </script>
-
 
 </body>
 
