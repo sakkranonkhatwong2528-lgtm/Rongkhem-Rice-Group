@@ -56,7 +56,7 @@ body{
 
 
 /* =====================================================
-   พื้นหลังวงแสงเคลื่อนไหว
+   พื้นหลังวงแสง
 ===================================================== */
 
 .bg-orb{
@@ -73,7 +73,10 @@ body{
 
     opacity:.55;
 
+    will-change:transform;
+
 }
+
 
 .orb1{
 
@@ -92,11 +95,12 @@ body{
 
     animation:
         orbMove1
-        7s
+        5s
         ease-in-out
         infinite;
 
 }
+
 
 .orb2{
 
@@ -115,11 +119,12 @@ body{
 
     animation:
         orbMove2
-        9s
+        6s
         ease-in-out
         infinite;
 
 }
+
 
 .orb3{
 
@@ -138,7 +143,7 @@ body{
 
     animation:
         orbMove3
-        11s
+        7s
         ease-in-out
         infinite;
 
@@ -148,15 +153,19 @@ body{
 @keyframes orbMove1{
 
     0%,100%{
+
         transform:
             translate(0,0)
             scale(1);
+
     }
 
     50%{
+
         transform:
             translate(-80px,60px)
             scale(1.25);
+
     }
 
 }
@@ -165,15 +174,19 @@ body{
 @keyframes orbMove2{
 
     0%,100%{
+
         transform:
             translate(0,0)
             scale(1);
+
     }
 
     50%{
+
         transform:
             translate(80px,-70px)
             scale(1.20);
+
     }
 
 }
@@ -182,15 +195,19 @@ body{
 @keyframes orbMove3{
 
     0%,100%{
+
         transform:
             translate(0,0)
             scale(1);
+
     }
 
     50%{
+
         transform:
             translate(50px,-40px)
             scale(1.15);
+
     }
 
 }
@@ -216,6 +233,8 @@ body{
 
     pointer-events:none;
 
+    will-change:transform,opacity;
+
     animation:
         particleMove
         linear
@@ -223,73 +242,111 @@ body{
 
 }
 
+
 .p1{
+
     left:10%;
     bottom:-10px;
-    animation-duration:8s;
+
+    animation-duration:
+        7s;
+
 }
 
 .p2{
+
     left:25%;
     bottom:-10px;
-    animation-duration:11s;
-    animation-delay:2s;
+
+    animation-duration:
+        9s;
+
+    animation-delay:
+        2s;
+
 }
 
 .p3{
+
     left:45%;
     bottom:-10px;
-    animation-duration:9s;
-    animation-delay:4s;
+
+    animation-duration:
+        8s;
+
+    animation-delay:
+        4s;
+
 }
 
 .p4{
+
     left:65%;
     bottom:-10px;
-    animation-duration:12s;
-    animation-delay:1s;
+
+    animation-duration:
+        10s;
+
+    animation-delay:
+        1s;
+
 }
 
 .p5{
+
     left:82%;
     bottom:-10px;
-    animation-duration:10s;
-    animation-delay:3s;
+
+    animation-duration:
+        8.5s;
+
+    animation-delay:
+        3s;
+
 }
 
 
 @keyframes particleMove{
 
     from{
+
         transform:
             translateY(0)
+            translateX(0)
             scale(.5);
 
         opacity:0;
+
     }
 
     15%{
+
         opacity:1;
+
     }
 
     85%{
+
         opacity:1;
+
     }
 
     to{
+
         transform:
             translateY(-110vh)
-            translateX(60px)
+            translateX(80px)
             scale(1.5);
 
         opacity:0;
+
     }
 
 }
 
 
 /* =====================================================
-   หน้าหลัก
+   หน้าเว็บ
 ===================================================== */
 
 .page{
@@ -363,9 +420,12 @@ body{
     backdrop-filter:
         blur(15px);
 
+    will-change:
+        transform;
+
     animation:
         logoAnimation
-        3s
+        2.5s
         ease-in-out
         infinite;
 
@@ -375,6 +435,7 @@ body{
 @keyframes logoAnimation{
 
     0%,100%{
+
         transform:
             translateY(0)
             rotate(0deg);
@@ -382,11 +443,14 @@ body{
         box-shadow:
             0 0 25px
             rgba(100,255,150,.20),
+
             0 25px 60px
             rgba(0,0,0,.30);
+
     }
 
     50%{
+
         transform:
             translateY(-12px)
             rotate(3deg);
@@ -394,8 +458,10 @@ body{
         box-shadow:
             0 0 50px
             rgba(100,255,150,.45),
+
             0 30px 70px
             rgba(0,0,0,.35);
+
     }
 
 }
@@ -422,9 +488,10 @@ body{
 
     animation:
         titleGlow
-        3s
+        2s
         ease-in-out
-        infinite alternate;
+        infinite
+        alternate;
 
 }
 
@@ -432,15 +499,19 @@ body{
 @keyframes titleGlow{
 
     from{
+
         text-shadow:
             0 5px 20px
             rgba(0,0,0,.30);
+
     }
 
     to{
+
         text-shadow:
             0 0 30px
             rgba(180,255,200,.35);
+
     }
 
 }
@@ -462,22 +533,25 @@ body{
 
     font-weight:500;
 
-    color:#d8f7df;
+    color:
+        #d8f7df;
 
 }
 
 
 .hero p{
 
-    margin-top:13px;
+    margin-top:
+        13px;
 
-    color:#aee7bc;
+    color:
+        #aee7bc;
 
 }
 
 
 /* =====================================================
-   เส้นวิ่งใต้หัวเรื่อง
+   เส้นวิ่ง
 ===================================================== */
 
 .hero-line{
@@ -521,7 +595,7 @@ body{
 
     animation:
         lineMove
-        1.8s
+        1.4s
         linear
         infinite;
 
@@ -531,13 +605,17 @@ body{
 @keyframes lineMove{
 
     from{
+
         transform:
             translateX(-80px);
+
     }
 
     to{
+
         transform:
             translateX(200px);
+
     }
 
 }
@@ -701,7 +779,7 @@ body{
 
     animation:
         lightSweep
-        4s
+        3.5s
         linear
         infinite;
 
@@ -752,9 +830,12 @@ body{
 
     margin-bottom:10px;
 
+    will-change:
+        transform;
+
     animation:
         iconFloat
-        3s
+        2s
         ease-in-out
         infinite;
 
@@ -764,13 +845,17 @@ body{
 @keyframes iconFloat{
 
     0%,100%{
+
         transform:
             translateY(0);
+
     }
 
     50%{
+
         transform:
-            translateY(-5px);
+            translateY(-6px);
+
     }
 
 }
@@ -778,9 +863,11 @@ body{
 
 .card-title{
 
-    color:#b9e9c7;
+    color:
+        #b9e9c7;
 
-    font-size:14px;
+    font-size:
+        14px;
 
 }
 
@@ -789,26 +876,31 @@ body{
 
     margin-top:5px;
 
-    font-size:38px;
+    font-size:
+        38px;
 
-    font-weight:900;
+    font-weight:
+        900;
 
-    color:white;
+    color:
+        white;
 
 }
 
 
 .card-unit{
 
-    color:#9ed6ad;
+    color:
+        #9ed6ad;
 
-    font-size:13px;
+    font-size:
+        13px;
 
 }
 
 
 /* =====================================================
-   ตัวเลขกระพริบเล็กน้อย
+   ตัวเลข
 ===================================================== */
 
 .number-pulse{
@@ -825,11 +917,17 @@ body{
 @keyframes numberPulse{
 
     0%,100%{
-        transform:scale(1);
+
+        transform:
+            scale(1);
+
     }
 
     50%{
-        transform:scale(1.07);
+
+        transform:
+            scale(1.07);
+
     }
 
 }
@@ -876,15 +974,19 @@ body{
 @keyframes alertPulse{
 
     0%,100%{
+
         box-shadow:
             0 0 20px
             rgba(255,50,50,.08);
+
     }
 
     50%{
+
         box-shadow:
             0 0 45px
             rgba(255,50,50,.22);
+
     }
 
 }
@@ -901,7 +1003,8 @@ body{
         0
         16px;
 
-    font-size:25px;
+    font-size:
+        25px;
 
     animation:
         fadeIn
@@ -914,15 +1017,21 @@ body{
 @keyframes fadeIn{
 
     from{
+
         opacity:0;
+
         transform:
             translateY(15px);
+
     }
 
     to{
+
         opacity:1;
+
         transform:
             translateY(0);
+
     }
 
 }
@@ -1083,6 +1192,7 @@ body{
     position:absolute;
 
     width:40px;
+
     height:180%;
 
     top:-40%;
@@ -1134,7 +1244,8 @@ body{
 
 .menu-icon{
 
-    font-size:47px;
+    font-size:
+        47px;
 
     filter:
         drop-shadow(
@@ -1142,9 +1253,12 @@ body{
             rgba(0,0,0,.30)
         );
 
+    will-change:
+        transform;
+
     animation:
         menuIcon
-        3s
+        2s
         ease-in-out
         infinite;
 
@@ -1154,15 +1268,19 @@ body{
 @keyframes menuIcon{
 
     0%,100%{
+
         transform:
             translateY(0)
             rotate(0deg);
+
     }
 
     50%{
+
         transform:
-            translateY(-5px)
+            translateY(-6px)
             rotate(2deg);
+
     }
 
 }
@@ -1180,278 +1298,11 @@ body{
         40px
         15px;
 
-    color:#9fd7ac;
-
-    font-size:14px;
-
-}
-
-
-/* =====================================================
-   เครื่องเล่นเพลง
-===================================================== */
-
-.music-panel{
-
-    position:fixed;
-
-    top:15px;
-
-    right:15px;
-
-    z-index:9999;
-
-    display:flex;
-
-    align-items:center;
-
-    gap:10px;
-
-    padding:12px 15px;
-
-    width:300px;
-
-    max-width:
-        calc(100vw - 30px);
-
-    border-radius:20px;
-
-    background:
-        rgba(2,25,14,.88);
-
-    border:
-        1px solid
-        rgba(255,255,255,.18);
-
-    backdrop-filter:
-        blur(16px);
-
-    box-shadow:
-        0 16px 45px
-        rgba(0,0,0,.30);
-
-}
-
-
-.music-button{
-
-    width:48px;
-
-    height:48px;
-
-    flex-shrink:0;
-
-    border:0;
-
-    border-radius:50%;
-
-    cursor:pointer;
-
-    font-size:20px;
-
-    color:white;
-
-    background:
-        linear-gradient(
-            135deg,
-            #18a957,
-            #0b6d38
-        );
-
-    transition:
-        .25s
-        ease;
-
-}
-
-
-.music-button:hover{
-
-    transform:
-        scale(1.08);
-
-}
-
-
-.music-button.playing{
-
-    animation:
-        musicPulse
-        1.5s
-        ease-in-out
-        infinite;
-
-}
-
-
-@keyframes musicPulse{
-
-    0%,100%{
-
-        box-shadow:
-            0 0 0
-            rgba(60,255,150,0);
-
-    }
-
-    50%{
-
-        box-shadow:
-            0 0 30px
-            rgba(60,255,150,.50);
-
-    }
-
-}
-
-
-.music-info{
-
-    flex:1;
-
-    min-width:0;
-
-}
-
-
-.music-title{
-
-    font-size:14px;
-
-    font-weight:800;
-
-    white-space:nowrap;
-
-    overflow:hidden;
-
-    text-overflow:ellipsis;
-
-}
-
-
-.music-status{
-
-    font-size:12px;
-
-    color:#aee7bc;
-
-    margin-top:3px;
-
-}
-
-
-.music-volume{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:5px;
-
-    margin-left:auto;
-
-}
-
-
-#volumeControl{
-
-    width:70px;
-
-    cursor:pointer;
-
-    accent-color:#62e79a;
-
-}
-
-
-/* =====================================================
-   Visualizer
-===================================================== */
-
-.visualizer{
-
-    display:flex;
-
-    align-items:flex-end;
-
-    justify-content:center;
-
-    gap:3px;
-
-    width:34px;
-
-    height:28px;
-
-}
-
-
-.visualizer i{
-
-    width:4px;
-
-    height:8px;
-
-    border-radius:4px;
-
-    background:
-        #69e6a0;
-
-    animation:
-        musicBar
-        1s
-        ease-in-out
-        infinite;
-
-    animation-play-state:
-        paused;
-
-}
-
-
-.visualizer i:nth-child(1){
-    animation-delay:.1s;
-}
-
-.visualizer i:nth-child(2){
-    height:15px;
-    animation-delay:.25s;
-}
-
-.visualizer i:nth-child(3){
-    height:22px;
-    animation-delay:.40s;
-}
-
-.visualizer i:nth-child(4){
-    height:12px;
-    animation-delay:.55s;
-}
-
-.visualizer i:nth-child(5){
-    height:18px;
-    animation-delay:.70s;
-}
-
-
-.visualizer.playing i{
-
-    animation-play-state:
-        running;
-
-}
-
-
-@keyframes musicBar{
-
-    0%,100%{
-        transform:
-            scaleY(.45);
-    }
-
-    50%{
-        transform:
-            scaleY(1.25);
-    }
+    color:
+        #9fd7ac;
+
+    font-size:
+        14px;
 
 }
 
@@ -1491,7 +1342,7 @@ body{
     .hero{
 
         padding:
-            95px
+            25px
             5px
             25px;
 
@@ -1560,41 +1411,6 @@ body{
 
     }
 
-    .music-panel{
-
-        top:10px;
-
-        right:10px;
-
-        width:
-            calc(100vw - 20px);
-
-    }
-
-}
-
-
-/* =====================================================
-   ลดการเคลื่อนไหว
-===================================================== */
-
-@media (prefers-reduced-motion: reduce){
-
-    *,
-    *::before,
-    *::after{
-
-        animation-duration:
-            .001ms !important;
-
-        animation-iteration-count:
-            1 !important;
-
-        scroll-behavior:
-            auto !important;
-
-    }
-
 }
 
 </style>
@@ -1606,13 +1422,11 @@ body{
 
 
 <!-- =====================================================
-     พื้นหลัง
+   พื้นหลัง
 ===================================================== -->
 
 <div class="bg-orb orb1"></div>
-
 <div class="bg-orb orb2"></div>
-
 <div class="bg-orb orb3"></div>
 
 <div class="particle p1"></div>
@@ -1622,116 +1436,38 @@ body{
 <div class="particle p5"></div>
 
 
-<!-- =====================================================
-     เครื่องเล่นเพลง
-===================================================== -->
-
-<div
-    class="music-panel"
-    aria-label="เครื่องเล่นเพลง"
->
-
-    <button
-        id="musicToggle"
-        class="music-button"
-        type="button"
-        aria-label="เปิดเพลง"
-        title="เปิด / ปิด เพลง"
-    >
-        ▶️
-    </button>
-
-
-    <div class="music-info">
-
-        <div class="music-title">
-            🎵 เพลงบรรยากาศ
-        </div>
-
-        <div
-            class="music-status"
-            id="musicStatus"
-        >
-            แตะ ▶️ เพื่อเริ่มเพลง
-        </div>
-
-    </div>
-
-
-    <div
-        class="visualizer"
-        id="visualizer"
-        aria-hidden="true"
-    >
-
-        <i></i>
-        <i></i>
-        <i></i>
-        <i></i>
-        <i></i>
-
-    </div>
-
-
-    <div class="music-volume">
-
-        <span>
-            🔊
-        </span>
-
-        <input
-            id="volumeControl"
-            type="range"
-            min="0"
-            max="1"
-            step="0.01"
-            value="0.35"
-            aria-label="ระดับเสียง"
-        >
-
-    </div>
-
-</div>
-
-
 <div class="page">
 
 
 <!-- =====================================================
-     HERO
+   HERO
 ===================================================== -->
 
 <header class="hero">
-
 
     <div class="logo">
         🌾
     </div>
 
-
     <h1>
         ระบบกลุ่มข้าวสาร
     </h1>
-
 
     <h2>
         บ้านร่องเข็ม หมู่ที่ 6
     </h2>
 
-
     <p id="memberHeader">
         กำลังโหลดข้อมูล...
     </p>
 
-
     <div class="hero-line"></div>
-
 
 </header>
 
 
 <!-- =====================================================
-     DASHBOARD
+   DASHBOARD
 ===================================================== -->
 
 <section class="dashboard">
@@ -1933,14 +1669,14 @@ body{
 
 
 <!-- =====================================================
-     แจ้งเตือน
+   แจ้งเตือน
 ===================================================== -->
 
 <div id="notice"></div>
 
 
 <!-- =====================================================
-     เมนู
+   เมนู
 ===================================================== -->
 
 <h2 class="section-title">
@@ -2074,7 +1810,6 @@ body{
 
 <script>
 
-
 /* =====================================================
    โหลดข้อมูล
 ===================================================== */
@@ -2139,7 +1874,7 @@ const normalMembers =
 
 
 /* =====================================================
-   ตัวเลขนับ
+   ตัวเลขนับ Animation
 ===================================================== */
 
 function animateNumber(
@@ -2212,7 +1947,9 @@ function animateNumber(
 }
 
 
-/* สมาชิก */
+/* =====================================================
+   สมาชิก
+===================================================== */
 
 animateNumber(
     document.getElementById(
@@ -2355,7 +2092,7 @@ if(
 
 
 /* =====================================================
-   แสดงตัวเลขข้าวสาร
+   แสดงตัวเลข
 ===================================================== */
 
 animateNumber(
@@ -2401,6 +2138,7 @@ if(
         <div class="alert">
 
             🚨
+
             <strong>
                 มี ${dangerMembers.length}
                 ครัวเรือน
@@ -2430,6 +2168,7 @@ else if(
         <div class="alert">
 
             ⚠️
+
             <strong>
                 มี ${pendingMembers.length}
                 ครัวเรือนค้างส่ง
@@ -2444,482 +2183,6 @@ else if(
     `;
 
 }
-
-
-/* =====================================================
-   ระบบเพลง
-===================================================== */
-
-const musicToggle =
-    document.getElementById(
-        "musicToggle"
-    );
-
-
-const musicStatus =
-    document.getElementById(
-        "musicStatus"
-    );
-
-
-const volumeControl =
-    document.getElementById(
-        "volumeControl"
-    );
-
-
-const visualizer =
-    document.getElementById(
-        "visualizer"
-    );
-
-
-let audioContext = null;
-
-let masterGain = null;
-
-let musicTimer = null;
-
-let musicPlaying = false;
-
-let step = 0;
-
-
-/* =====================================================
-   จำระดับเสียง
-===================================================== */
-
-const savedVolume =
-    Number(
-        localStorage.getItem(
-            "riceMusicVolume"
-        )
-    );
-
-
-if(
-    Number.isFinite(savedVolume) &&
-    savedVolume >= 0 &&
-    savedVolume <= 1
-){
-
-    volumeControl.value =
-        savedVolume;
-
-}
-
-
-/* =====================================================
-   โน้ตเพลง
-===================================================== */
-
-const melody = [
-
-    261.63,
-    293.66,
-    329.63,
-    392.00,
-
-    329.63,
-    293.66,
-    261.63,
-    220.00,
-
-    261.63,
-    329.63,
-    392.00,
-    440.00,
-
-    392.00,
-    329.63,
-    293.66,
-    261.63
-
-];
-
-
-/* =====================================================
-   สร้าง Audio Context
-===================================================== */
-
-function createAudio(){
-
-    if(
-        audioContext
-    ){
-
-        return;
-
-    }
-
-
-    audioContext =
-        new (
-            window.AudioContext ||
-            window.webkitAudioContext
-        )();
-
-
-    masterGain =
-        audioContext.createGain();
-
-
-    masterGain.gain.value =
-        Number(
-            volumeControl.value
-        );
-
-
-    masterGain.connect(
-        audioContext.destination
-    );
-
-}
-
-
-/* =====================================================
-   เล่นโน้ต
-===================================================== */
-
-function playNote(
-    frequency,
-    duration = 0.65
-){
-
-    if(
-        !audioContext ||
-        !masterGain
-    ){
-
-        return;
-
-    }
-
-
-    const now =
-        audioContext.currentTime;
-
-
-    const oscillator =
-        audioContext.createOscillator();
-
-
-    const gain =
-        audioContext.createGain();
-
-
-    const filter =
-        audioContext.createBiquadFilter();
-
-
-    oscillator.type =
-        "sine";
-
-
-    oscillator.frequency.setValueAtTime(
-        frequency,
-        now
-    );
-
-
-    filter.type =
-        "lowpass";
-
-
-    filter.frequency.value =
-        1800;
-
-
-    filter.Q.value =
-        0.4;
-
-
-    gain.gain.setValueAtTime(
-        0.0001,
-        now
-    );
-
-
-    gain.gain.exponentialRampToValueAtTime(
-        0.045,
-        now + 0.04
-    );
-
-
-    gain.gain.exponentialRampToValueAtTime(
-        0.0001,
-        now + duration
-    );
-
-
-    oscillator.connect(
-        filter
-    );
-
-
-    filter.connect(
-        gain
-    );
-
-
-    gain.connect(
-        masterGain
-    );
-
-
-    oscillator.start(
-        now
-    );
-
-
-    oscillator.stop(
-        now +
-        duration +
-        0.05
-    );
-
-}
-
-
-/* =====================================================
-   เปิดเพลง
-===================================================== */
-
-function startMusic(){
-
-    createAudio();
-
-
-    if(
-        audioContext.state ===
-        "suspended"
-    ){
-
-        audioContext.resume();
-
-    }
-
-
-    if(
-        musicPlaying
-    ){
-
-        return;
-
-    }
-
-
-    musicPlaying = true;
-
-
-    musicToggle.textContent =
-        "⏸️";
-
-
-    musicToggle.classList.add(
-        "playing"
-    );
-
-
-    musicToggle.setAttribute(
-        "aria-label",
-        "หยุดเพลง"
-    );
-
-
-    musicStatus.textContent =
-        "กำลังเล่นเพลงบรรยากาศ";
-
-
-    visualizer.classList.add(
-        "playing"
-    );
-
-
-    playNote(
-        melody[
-            step %
-            melody.length
-        ]
-    );
-
-
-    step++;
-
-
-    musicTimer =
-        setInterval(
-            () => {
-
-                if(
-                    !musicPlaying
-                ){
-
-                    return;
-
-                }
-
-
-                const frequency =
-                    melody[
-                        step %
-                        melody.length
-                    ];
-
-
-                playNote(
-                    frequency
-                );
-
-
-                if(
-                    step % 4 === 0
-                ){
-
-                    playNote(
-                        frequency / 2,
-                        1
-                    );
-
-                }
-
-
-                step++;
-
-            },
-            650
-        );
-
-}
-
-
-/* =====================================================
-   หยุดเพลง
-===================================================== */
-
-function stopMusic(){
-
-    musicPlaying = false;
-
-
-    if(
-        musicTimer
-    ){
-
-        clearInterval(
-            musicTimer
-        );
-
-        musicTimer = null;
-
-    }
-
-
-    musicToggle.textContent =
-        "▶️";
-
-
-    musicToggle.classList.remove(
-        "playing"
-    );
-
-
-    musicToggle.setAttribute(
-        "aria-label",
-        "เปิดเพลง"
-    );
-
-
-    musicStatus.textContent =
-        "เพลงหยุดแล้ว — แตะ ▶️ เพื่อเล่น";
-
-
-    visualizer.classList.remove(
-        "playing"
-    );
-
-}
-
-
-/* =====================================================
-   ปุ่มเปิด / ปิดเพลง
-===================================================== */
-
-musicToggle.addEventListener(
-    "click",
-    () => {
-
-        if(
-            musicPlaying
-        ){
-
-            stopMusic();
-
-        }
-        else{
-
-            startMusic();
-
-        }
-
-    }
-);
-
-
-/* =====================================================
-   ปรับระดับเสียง
-===================================================== */
-
-volumeControl.addEventListener(
-    "input",
-    event => {
-
-        const value =
-            Number(
-                event.target.value
-            );
-
-
-        localStorage.setItem(
-            "riceMusicVolume",
-            value.toString()
-        );
-
-
-        if(
-            masterGain
-        ){
-
-            masterGain.gain.value =
-                value;
-
-        }
-
-    }
-);
-
-
-/* =====================================================
-   รองรับมือถือ / การกลับเข้าหน้าเว็บ
-===================================================== */
-
-document.addEventListener(
-    "visibilitychange",
-    () => {
-
-        if(
-            !document.hidden &&
-            musicPlaying &&
-            audioContext
-        ){
-
-            audioContext.resume();
-
-        }
-
-    }
-);
-
 
 </script>
 
