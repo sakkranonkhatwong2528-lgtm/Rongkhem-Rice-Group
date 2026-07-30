@@ -6,262 +6,797 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>ระบบงานศพ กลุ่มข้าวสาร</title>
+<title>แจ้งเสียชีวิต / งานศพ</title>
 
 <style>
 
+*{
+    box-sizing:border-box;
+}
+
 body{
-font-family:Tahoma,sans-serif;
-margin:0;
-background:#f3f7f0;
+    margin:0;
+    font-family:Tahoma,sans-serif;
+    background:#f3f7f0;
 }
 
 .header{
-background:#555;
-color:white;
-padding:20px;
-text-align:center;
+    background:linear-gradient(135deg,#555,#777);
+    color:white;
+    padding:22px 15px;
+    text-align:center;
 }
 
 .container{
-padding:15px;
+    padding:15px;
+    max-width:700px;
+    margin:auto;
 }
 
-input,button{
-width:100%;
-padding:12px;
-margin:5px 0;
-border-radius:10px;
-font-size:16px;
+.box{
+    background:white;
+    padding:18px;
+    margin-bottom:15px;
+    border-radius:16px;
+    box-shadow:0 3px 10px #ddd;
 }
 
-input{
-border:1px solid #ccc;
+input,select,button{
+    width:100%;
+    padding:12px;
+    margin:6px 0;
+    border-radius:10px;
+    font-size:16px;
+}
+
+input,select{
+    border:1px solid #ccc;
+    background:white;
 }
 
 button{
-background:#228B22;
-color:white;
-border:none;
+    border:0;
+    background:#228B22;
+    color:white;
+    cursor:pointer;
 }
 
-.card{
-background:white;
-padding:15px;
-margin-top:10px;
-border-radius:15px;
-box-shadow:0 3px 8px #ddd;
+button.red{
+    background:#c62828;
+}
+
+button.gray{
+    background:#666;
+}
+
+.funeral-card,
+.member-card{
+    background:#fff;
+    padding:15px;
+    margin-top:10px;
+    border-radius:12px;
+    box-shadow:0 2px 7px #ddd;
+}
+
+.success{
+    background:#e8f7e8;
+    color:#1b7a1b;
+    padding:15px;
+    border-radius:12px;
+    margin-top:10px;
+}
+
+.warning{
+    background:#fff3cd;
+    color:#856404;
+    padding:15px;
+    border-radius:12px;
+    margin-top:10px;
+}
+
+.danger{
+    background:#ffe5e5;
+    color:#c62828;
+    padding:15px;
+    border-radius:12px;
+    margin-top:10px;
 }
 
 .status{
-font-weight:bold;
-color:#228B22;
+    font-weight:bold;
 }
 
 </style>
 
 </head>
 
-
 <body>
-
 
 <div class="header">
 
-<h2>
-⚰️ แจ้งเสียชีวิต / งานศพ
-</h2>
+<h1>⚰️ แจ้งเสียชีวิต / งานศพ</h1>
 
-<p>
-กลุ่มข้าวสารบ้านร่องเข็ม หมู่ที่ 6
-</p>
+<p>กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</p>
 
 </div>
-
-
 
 <div class="container">
 
+<div class="box">
 
-<input id="name"
-placeholder="ชื่อผู้เสียชีวิต">
+<h2>➕ บันทึกงานศพ</h2>
 
+<input id="name" placeholder="ชื่อ-นามสกุลผู้เสียชีวิต">
 
-<input id="age"
-placeholder="อายุ (ปี)">
+<input id="age" type="number" placeholder="อายุ (ปี)">
 
+<input id="house" placeholder="บ้านเลขที่">
 
+<label>วันที่เสียชีวิต</label>
+<input id="deadDate" type="date">
 
-<input id="house"
-placeholder="บ้านเลขที่">
+<label>วันที่ฌาปนกิจ</label>
+<input id="burnDate" type="date">
 
+<input id="temple" placeholder="วัดที่จัดงาน">
 
-
-<label>
-วันที่เสียชีวิต
-</label>
-
-<input id="dead"
-type="date">
-
-
-
-<label>
-วันที่ฌาปนกิจ
-</label>
-
-<input id="burn"
-type="date">
-
-
-
-<input id="temple"
-placeholder="วัดที่จัดงาน">
-
-
-
-<button onclick="saveFuneral()">
-
-➕ บันทึกงานศพ
-
+<button onclick="addFuneral()">
+💾 บันทึกงานศพ
 </button>
-
-
-
-<h3>
-รายการงานศพ
-</h3>
-
-
-<div id="list"></div>
-
-
 
 </div>
 
+
+<div class="box">
+
+<h2>⚰️ งานศพที่บันทึกไว้</h2>
+
+<div id="funeralList"></div>
+
+</div>
+
+
+<div class="box">
+
+<h2>🌾 ติดตามการนำข้าวสารช่วยงาน</h2>
+
+<div id="memberList">
+
+กรุณาเลือกงานศพด้านบน
+
+</div>
+
+</div>
+
+
+<div class="box">
+
+<h2>🔔 แจ้งเตือนสมาชิก</h2>
+
+<div id="alert">
+
+ยังไม่มีข้อมูล
+
+</div>
+
+</div>
+
+</div>
 
 
 <script>
 
+let funerals =
+JSON.parse(localStorage.getItem("funerals")) || [];
 
-let funeral =
-JSON.parse(localStorage.getItem("funeral")) || [];
+let members =
+JSON.parse(localStorage.getItem("members")) || [];
 
+let selectedFuneral =
+localStorage.getItem("selectedFuneral") || "";
 
-
-function show(){
-
-
-let html="";
-
-
-funeral.forEach((f,i)=>{
+let funeralSends =
+JSON.parse(localStorage.getItem("funeralSends")) || [];
 
 
-html += `
+/* -----------------------------
+   แปลงสมาชิกเก่าให้มีสถานะ
+----------------------------- */
 
-<div class="card">
-
-<b>
-⚰️ ศพ ${f.name}
-</b>
-
-<br>
-
-อายุ ${f.age} ปี
-
-<br>
-
-บ้านเลขที่ ${f.house}
-
-<br>
-
-วัด ${f.temple}
-
-<br>
-
-วันที่เสียชีวิต ${f.dead}
-
-<br>
-
-วันที่ฌาปนกิจ ${f.burn}
-
-<br><br>
+members = members.map(m => ({
+    ...m,
+    status: m.status || "ปกติ",
+    pending: Number(m.pending || 0),
+    pendingFor: m.pendingFor || ""
+}));
 
 
-<span class="status">
+function saveMembers(){
 
-🌾 รอจัดส่งข้าวสารช่วยงาน
-
-</span>
-
-
-</div>
-
-`;
-
-});
-
-
-document.getElementById("list").innerHTML=html;
-
+    localStorage.setItem(
+        "members",
+        JSON.stringify(members)
+    );
 
 }
 
 
+/* -----------------------------
+   เพิ่มงานศพ
+----------------------------- */
 
-function saveFuneral(){
+function addFuneral(){
 
+    const name =
+        document.getElementById("name").value.trim();
 
-let data={
+    const age =
+        document.getElementById("age").value.trim();
 
-name:
-document.getElementById("name").value,
+    const house =
+        document.getElementById("house").value.trim();
 
-age:
-document.getElementById("age").value,
+    const deadDate =
+        document.getElementById("deadDate").value;
 
-house:
-document.getElementById("house").value,
+    const burnDate =
+        document.getElementById("burnDate").value;
 
-dead:
-document.getElementById("dead").value,
-
-burn:
-document.getElementById("burn").value,
-
-temple:
-document.getElementById("temple").value
-
-};
+    const temple =
+        document.getElementById("temple").value.trim();
 
 
-funeral.push(data);
+    if(!name){
+
+        alert("กรุณากรอกชื่อผู้เสียชีวิต");
+
+        return;
+
+    }
 
 
-localStorage.setItem(
+    const funeral = {
 
-"funeral",
+        id: Date.now(),
 
-JSON.stringify(funeral)
+        name,
+        age,
+        house,
+        deadDate,
+        burnDate,
+        temple,
 
-);
+        closed:false
+
+    };
 
 
-alert("บันทึกงานศพแล้ว");
+    funerals.push(funeral);
 
 
-show();
+    localStorage.setItem(
+        "funerals",
+        JSON.stringify(funerals)
+    );
+
+
+    document.getElementById("name").value = "";
+    document.getElementById("age").value = "";
+    document.getElementById("house").value = "";
+    document.getElementById("deadDate").value = "";
+    document.getElementById("burnDate").value = "";
+    document.getElementById("temple").value = "";
+
+
+    showFunerals();
+
+    alert("บันทึกงานศพเรียบร้อย");
 
 }
 
 
+/* -----------------------------
+   แสดงงานศพ
+----------------------------- */
 
-show();
+function showFunerals(){
 
+    let html = "";
+
+    if(funerals.length === 0){
+
+        html = `
+            <div class="warning">
+                ยังไม่มีข้อมูลการแจ้งเสียชีวิต
+            </div>
+        `;
+
+    }else{
+
+        funerals.forEach(f => {
+
+            html += `
+                <div class="funeral-card">
+
+                    <strong>
+                        ⚰️ ${f.name}
+                    </strong>
+
+                    <br>
+                    อายุ ${f.age || "-"} ปี
+
+                    <br>
+                    🏠 บ้านเลขที่ ${f.house || "-"}
+
+                    <br>
+                    📅 เสียชีวิต ${formatDate(f.deadDate)}
+
+                    <br>
+                    🔥 ฌาปนกิจ ${formatDate(f.burnDate)}
+
+                    <br>
+                    🛕 วัด ${f.temple || "-"}
+
+                    <br><br>
+
+                    <button
+                        onclick="selectFuneral(${f.id})">
+                        🌾 จัดการการส่งข้าวสาร
+                    </button>
+
+                </div>
+            `;
+
+        });
+
+    }
+
+    document.getElementById("funeralList").innerHTML = html;
+
+}
+
+
+/* -----------------------------
+   เลือกงานศพ
+----------------------------- */
+
+function selectFuneral(id){
+
+    selectedFuneral = String(id);
+
+    localStorage.setItem(
+        "selectedFuneral",
+        selectedFuneral
+    );
+
+    showMembers();
+
+}
+
+
+/* -----------------------------
+   แสดงสมาชิก
+----------------------------- */
+
+function showMembers(){
+
+    if(!selectedFuneral){
+
+        document.getElementById("memberList").innerHTML =
+            "กรุณาเลือกงานศพก่อน";
+
+        return;
+
+    }
+
+
+    const funeral =
+        funerals.find(
+            f => String(f.id) === String(selectedFuneral)
+        );
+
+
+    if(!funeral){
+
+        document.getElementById("memberList").innerHTML =
+            "ไม่พบงานศพ";
+
+        return;
+
+    }
+
+
+    let sentCount = 0;
+
+    let html = `
+        <div class="success">
+
+            ⚰️ งานศพของ
+            <strong>${funeral.name}</strong>
+
+            <br>
+
+            🌾 สมาชิก 1 ครัวเรือน = ข้าวสาร 1 ถุง
+
+        </div>
+    `;
+
+
+    members.forEach((m,index)=>{
+
+
+        const alreadySent =
+            funeralSends.some(s =>
+                String(s.funeralId) === String(funeral.id) &&
+                String(s.memberHouse) === String(m.house)
+            );
+
+
+        if(alreadySent){
+
+            sentCount++;
+
+            html += `
+                <div class="member-card">
+
+                    <strong>
+                        ${index + 1}. ${m.name}
+                    </strong>
+
+                    <br>
+
+                    🏠 บ้านเลขที่ ${m.house}
+
+                    <br>
+
+                    <span class="status">
+                        ✅ ส่งแล้ว 1 ถุง
+                    </span>
+
+                </div>
+            `;
+
+        }else{
+
+            html += `
+                <div class="member-card">
+
+                    <strong>
+                        ${index + 1}. ${m.name}
+                    </strong>
+
+                    <br>
+
+                    🏠 บ้านเลขที่ ${m.house}
+
+                    <br>
+
+                    <button
+                        onclick="sendRice(
+                            ${funeral.id},
+                            '${escapeValue(m.name)}',
+                            '${escapeValue(m.house)}'
+                        )">
+
+                        🌾 ส่งข้าวสาร 1 ถุง
+
+                    </button>
+
+                </div>
+            `;
+
+        }
+
+    });
+
+
+    html += `
+        <div class="success">
+
+            ✅ ส่งแล้ว ${sentCount} ครัวเรือน
+
+            <br>
+
+            ⏳ ยังไม่ส่ง ${members.length - sentCount} ครัวเรือน
+
+            <br>
+
+            📦 ใช้ข้าวสารแล้ว ${sentCount} ถุง
+
+        </div>
+    `;
+
+
+    document.getElementById("memberList").innerHTML =
+        html;
+
+
+    checkPending();
+
+}
+
+
+/* -----------------------------
+   บันทึกการส่งข้าวสาร
+----------------------------- */
+
+function sendRice(
+    funeralId,
+    name,
+    house
+){
+
+    const exists =
+        funeralSends.some(s =>
+            String(s.funeralId) === String(funeralId) &&
+            String(s.memberHouse) === String(house)
+        );
+
+
+    if(exists){
+
+        alert("สมาชิกบ้านนี้ส่งข้าวสารแล้ว");
+
+        return;
+
+    }
+
+
+    funeralSends.push({
+
+        id: Date.now(),
+
+        funeralId,
+
+        memberName:name,
+
+        memberHouse:house,
+
+        amount:1,
+
+        date:new Date().toLocaleDateString("th-TH")
+
+    });
+
+
+    localStorage.setItem(
+        "funeralSends",
+        JSON.stringify(funeralSends)
+    );
+
+
+    showMembers();
+
+    alert(
+        "บันทึกการส่งข้าวสาร 1 ถุงแล้ว"
+    );
+
+}
+
+
+/* -----------------------------
+   ตรวจสอบค้างส่ง
+----------------------------- */
+
+function checkPending(){
+
+    let currentMembers = members.filter(
+        m => m.status !== "ตัดสมาชิก"
+    );
+
+
+    let notSendCount = 0;
+
+
+    currentMembers.forEach(m => {
+
+        const sent =
+            funeralSends.some(s =>
+                String(s.funeralId) === String(selectedFuneral) &&
+                String(s.memberHouse) === String(m.house)
+            );
+
+        if(!sent){
+
+            notSendCount++;
+
+        }
+
+    });
+
+
+    if(notSendCount === 0){
+
+        document.getElementById("alert").innerHTML = `
+
+            <div class="success">
+
+                ✅ ทุกครัวเรือนส่งข้าวสารครบแล้ว
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    let html = `
+
+        <div class="warning">
+
+            ⚠️ งานศพนี้ยังมี
+
+            <strong>
+                ${notSendCount}
+            </strong>
+
+            ครัวเรือนที่ยังไม่ส่งข้าวสาร
+
+        </div>
+
+    `;
+
+
+    currentMembers.forEach(m => {
+
+
+        const sent =
+            funeralSends.some(s =>
+                String(s.funeralId) === String(selectedFuneral) &&
+                String(s.memberHouse) === String(m.house)
+            );
+
+
+        if(!sent){
+
+            html += `
+
+                <div class="member-card">
+
+                    🏠 ${m.name}
+
+                    <br>
+
+                    บ้านเลขที่ ${m.house}
+
+                    <br>
+
+                    📌 สถานะ :
+                    ${m.status || "ปกติ"}
+
+                    <br>
+
+                    📦 ค้างส่ง :
+                    ${m.pending || 0} งาน
+
+                    <br>
+
+                    ⚰️ ค้างส่งงานศพ :
+                    ${m.pendingFor || "-"}
+
+                </div>
+
+            `;
+
+        }
+
+    });
+
+
+    document.getElementById("alert").innerHTML =
+        html;
+
+}
+
+
+/* -----------------------------
+   ปิดงานศพ
+----------------------------- */
+
+function closeFuneral(){
+
+    const funeral =
+        funerals.find(
+            f => String(f.id) === String(selectedFuneral)
+        );
+
+
+    if(!funeral){
+
+        alert("กรุณาเลือกงานศพ");
+
+        return;
+
+    }
+
+
+    const notSend = members.filter(m => {
+
+        return !funeralSends.some(s =>
+            String(s.funeralId) === String(funeral.id) &&
+            String(s.memberHouse) === String(m.house)
+        );
+
+    });
+
+
+    notSend.forEach(m => {
+
+        m.pending = Number(m.pending || 0) + 1;
+
+        m.pendingFor = funeral.name;
+
+
+        if(m.pending >= 2){
+
+            m.status =
+                "เสนอพิจารณาตัดสมาชิก";
+
+        }else{
+
+            m.status =
+                "แจ้งเตือน 1 ครั้ง";
+
+        }
+
+    });
+
+
+    funeral.closed = true;
+
+
+    saveMembers();
+
+
+    localStorage.setItem(
+        "funerals",
+        JSON.stringify(funerals)
+    );
+
+
+    showMembers();
+
+    alert(
+        "ปิดงานศพและบันทึกการค้างส่งเรียบร้อย"
+    );
+
+}
+
+
+/* -----------------------------
+   Utilities
+----------------------------- */
+
+function formatDate(date){
+
+    if(!date) return "-";
+
+    const p =
+        date.split("-");
+
+    if(p.length !== 3) return date;
+
+    return `${p[2]}/${p[1]}/${p[0]}`;
+
+}
+
+
+function escapeValue(value){
+
+    return String(value || "")
+        .replace(/\\/g,"\\\\")
+        .replace(/'/g,"\\'")
+        .replace(/"/g,'\\"');
+
+}
+
+
+showFunerals();
+showMembers();
 
 </script>
-
 
 </body>
 
