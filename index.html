@@ -5,8 +5,10 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
 <title>
 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
@@ -242,7 +244,6 @@ body{
 
 }
 
-
 .p1{
     left:10%;
     bottom:-10px;
@@ -314,7 +315,7 @@ body{
 
 
 /* =====================================================
-   หน้าเว็บ
+   หน้าหลัก
 ===================================================== */
 
 .page{
@@ -569,20 +570,24 @@ body{
 @keyframes lineMove{
 
     from{
+
         transform:
             translateX(-80px);
+
     }
 
     to{
+
         transform:
             translateX(200px);
+
     }
 
 }
 
 
 /* =====================================================
-   DASHBOARD
+   Dashboard
 ===================================================== */
 
 .dashboard{
@@ -641,37 +646,16 @@ body{
 }
 
 
-.card:nth-child(1){
-    animation-delay:.10s;
-}
-
-.card:nth-child(2){
-    animation-delay:.20s;
-}
-
-.card:nth-child(3){
-    animation-delay:.30s;
-}
-
-.card:nth-child(4){
-    animation-delay:.40s;
-}
-
-.card:nth-child(5){
-    animation-delay:.50s;
-}
-
-.card:nth-child(6){
-    animation-delay:.60s;
-}
-
-.card:nth-child(7){
-    animation-delay:.70s;
-}
-
-.card:nth-child(8){
-    animation-delay:.80s;
-}
+.card:nth-child(1){ animation-delay:.10s; }
+.card:nth-child(2){ animation-delay:.20s; }
+.card:nth-child(3){ animation-delay:.30s; }
+.card:nth-child(4){ animation-delay:.40s; }
+.card:nth-child(5){ animation-delay:.50s; }
+.card:nth-child(6){ animation-delay:.60s; }
+.card:nth-child(7){ animation-delay:.70s; }
+.card:nth-child(8){ animation-delay:.80s; }
+.card:nth-child(9){ animation-delay:.90s; }
+.card:nth-child(10){ animation-delay:1s; }
 
 
 @keyframes cardEnter{
@@ -853,7 +837,7 @@ body{
 
 
 /* =====================================================
-   ตัวเลขกระพริบ
+   Number animation
 ===================================================== */
 
 .number-pulse{
@@ -890,7 +874,7 @@ body{
         span 2;
 
     min-height:
-        230px;
+        250px;
 
     padding:
         25px;
@@ -916,12 +900,6 @@ body{
 
         0 0 40px
         rgba(255,210,70,.08);
-
-    animation:
-        funeralCardEnter
-        1s
-        cubic-bezier(.2,.8,.2,1)
-        forwards;
 
 }
 
@@ -973,31 +951,6 @@ body{
         transform:scale(1.35);
 
         opacity:.90;
-
-    }
-
-}
-
-
-@keyframes funeralCardEnter{
-
-    from{
-
-        opacity:0;
-
-        transform:
-            translateY(25px)
-            scale(.97);
-
-    }
-
-    to{
-
-        opacity:1;
-
-        transform:
-            translateY(0)
-            scale(1);
 
     }
 
@@ -1159,7 +1112,7 @@ body{
     display:grid;
 
     grid-template-columns:
-        repeat(2,1fr);
+        repeat(3,1fr);
 
     gap:12px;
 
@@ -1224,10 +1177,6 @@ body{
 
 
 .latest-funeral-card:hover{
-
-    transform:
-        translateY(-8px)
-        scale(1.02);
 
     box-shadow:
         0 30px 80px
@@ -1299,7 +1248,7 @@ body{
 
 
 /* =====================================================
-   หัวข้อ
+   ชื่อส่วน
 ===================================================== */
 
 .section-title{
@@ -1415,37 +1364,14 @@ body{
 }
 
 
-.menu a:nth-child(1){
-    animation-delay:.10s;
-}
-
-.menu a:nth-child(2){
-    animation-delay:.20s;
-}
-
-.menu a:nth-child(3){
-    animation-delay:.30s;
-}
-
-.menu a:nth-child(4){
-    animation-delay:.40s;
-}
-
-.menu a:nth-child(5){
-    animation-delay:.50s;
-}
-
-.menu a:nth-child(6){
-    animation-delay:.60s;
-}
-
-.menu a:nth-child(7){
-    animation-delay:.70s;
-}
-
-.menu a:nth-child(8){
-    animation-delay:.80s;
-}
+.menu a:nth-child(1){ animation-delay:.10s; }
+.menu a:nth-child(2){ animation-delay:.20s; }
+.menu a:nth-child(3){ animation-delay:.30s; }
+.menu a:nth-child(4){ animation-delay:.40s; }
+.menu a:nth-child(5){ animation-delay:.50s; }
+.menu a:nth-child(6){ animation-delay:.60s; }
+.menu a:nth-child(7){ animation-delay:.70s; }
+.menu a:nth-child(8){ animation-delay:.80s; }
 
 
 @keyframes menuEnter{
@@ -1636,6 +1562,13 @@ body{
 
     }
 
+    .latest-funeral-info{
+
+        grid-template-columns:
+            repeat(3,1fr);
+
+    }
+
 }
 
 
@@ -1660,7 +1593,6 @@ body{
     .logo{
 
         width:85px;
-
         height:85px;
 
         font-size:48px;
@@ -1726,7 +1658,7 @@ body{
         grid-column:
             span 2;
 
-        min-height:220px;
+        min-height:260px;
 
         padding:20px;
 
@@ -1807,8 +1739,6 @@ body{
 <section class="dashboard">
 
 
-    <!-- สมาชิก -->
-
     <div class="card">
 
         <div class="card-icon">
@@ -1832,8 +1762,6 @@ body{
 
     </div>
 
-
-    <!-- งานศพ -->
 
     <div class="card">
 
@@ -1859,17 +1787,21 @@ body{
     </div>
 
 
-    <!-- งานศพล่าสุด -->
+    <!-- =================================================
+         งานศพล่าสุด
+    ================================================= -->
 
     <div class="card latest-funeral-card">
 
         <div class="latest-funeral-glow"></div>
+
 
         <div class="latest-funeral-top">
 
             <div class="latest-funeral-icon">
                 🕊️
             </div>
+
 
             <div>
 
@@ -1906,7 +1838,7 @@ body{
                 <div>
 
                     <small>
-                        วันที่
+                        วันที่เสียชีวิต
                     </small>
 
                     <strong
@@ -1943,12 +1875,33 @@ body{
             </div>
 
 
+            <div class="funeral-info-item">
+
+                <span class="info-icon">
+                    🔥
+                </span>
+
+                <div>
+
+                    <small>
+                        วันที่ฌาปนกิจ
+                    </small>
+
+                    <strong
+                        id="latestFuneralCremate"
+                    >
+                        -
+                    </strong>
+
+                </div>
+
+            </div>
+
+
         </div>
 
     </div>
 
-
-    <!-- ข้าวสารรับ -->
 
     <div class="card">
 
@@ -1974,8 +1927,6 @@ body{
     </div>
 
 
-    <!-- คงเหลือ -->
-
     <div class="card">
 
         <div class="card-icon">
@@ -1999,8 +1950,6 @@ body{
 
     </div>
 
-
-    <!-- ค้างส่ง -->
 
     <div class="card">
 
@@ -2026,8 +1975,6 @@ body{
     </div>
 
 
-    <!-- ค้าง 2 ครั้ง -->
-
     <div class="card">
 
         <div class="card-icon">
@@ -2052,8 +1999,6 @@ body{
     </div>
 
 
-    <!-- ช่วยงานศพ -->
-
     <div class="card">
 
         <div class="card-icon">
@@ -2077,8 +2022,6 @@ body{
 
     </div>
 
-
-    <!-- ปกติ -->
 
     <div class="card">
 
@@ -2115,7 +2058,7 @@ body{
 
 
 <!-- =====================================================
-   เมนูระบบ
+   เมนู
 ===================================================== -->
 
 <h2 class="section-title">
@@ -2317,7 +2260,7 @@ const normalMembers =
 
 
 /* =====================================================
-   ตัวเลข Animation
+   Animation ตัวเลข
 ===================================================== */
 
 function animateNumber(
@@ -2521,7 +2464,7 @@ rice.forEach(
 
 
 /* =====================================================
-   คงเหลือ
+   ข้าวสารคงเหลือ
 ===================================================== */
 
 let riceBalance =
@@ -2540,7 +2483,7 @@ if(
 
 
 /* =====================================================
-   แสดงตัวเลขข้าวสาร
+   แสดงข้าวสาร
 ===================================================== */
 
 animateNumber(
@@ -2635,110 +2578,82 @@ else if(
 
 /* =====================================================
    งานศพล่าสุด
+   ใช้ field จริง:
+   name
+   house
+   death
+   cremate
 ===================================================== */
 
-function getFuneralDate(item){
-
-    const value =
-        item.date ||
-        item.deathDate ||
-        item.funeralDate ||
-        item.cremationDate ||
-        item.createdAt ||
-        item.created ||
-        item.timestamp ||
-        "";
-
-
-    /* กรณีเป็นตัวเลข timestamp */
+function parseFuneralDate(value){
 
     if(
-        typeof value === "number"
+        !value
     ){
 
-        const numberDate =
-            new Date(value);
-
-        if(
-            !isNaN(
-                numberDate.getTime()
-            )
-        ){
-
-            return numberDate;
-
-        }
+        return 0;
 
     }
 
-
-    /* กรณีเป็นวันที่มาตรฐาน */
 
     const date =
         new Date(value);
 
 
     if(
-        !isNaN(
+        isNaN(
             date.getTime()
         )
     ){
 
-        return date;
+        return 0;
 
     }
 
 
-    return new Date(0);
+    return date.getTime();
 
 }
 
 
-function getFuneralName(item){
+function formatThaiDate(value){
 
-    return (
+    if(
+        !value
+    ){
 
-        item.name ||
+        return "-";
 
-        item.fullName ||
-
-        item.memberName ||
-
-        item.deceasedName ||
-
-        item.personName ||
-
-        item.deathName ||
-
-        item.person ||
-
-        "ไม่ระบุชื่อ"
-
-    );
-
-}
+    }
 
 
-function getFuneralHouse(item){
+    const date =
+        new Date(value);
 
-    return (
 
-        item.house ||
+    if(
+        isNaN(
+            date.getTime()
+        )
+    ){
 
-        item.houseNo ||
+        return value;
 
-        item.houseNumber ||
+    }
 
-        item.house_number ||
 
-        item.address ||
+    return date.toLocaleDateString(
+        "th-TH",
+        {
+            day:
+                "numeric",
 
-        item.houseAddress ||
+            month:
+                "long",
 
-        item.home ||
-
-        "ไม่ระบุ"
-
+            year:
+                "numeric"
+        }
     );
 
 }
@@ -2764,6 +2679,12 @@ function showLatestFuneral(){
         );
 
 
+    const cremateElement =
+        document.getElementById(
+            "latestFuneralCremate"
+        );
+
+
     if(
         !funerals ||
         funerals.length === 0
@@ -2778,18 +2699,45 @@ function showLatestFuneral(){
         houseElement.innerText =
             "-";
 
+        cremateElement.innerText =
+            "-";
+
         return;
 
     }
 
 
-    /* เรียงจากล่าสุด */
+    /* ================================================
+       เรียงจากวันที่เสียชีวิตล่าสุด
+       ถ้าไม่มีวันที่เสียชีวิต
+       จะใช้วันที่ฌาปนกิจ
+    ================================================ */
 
     const sortedFunerals =
         [...funerals].sort(
-            (a,b) =>
-                getFuneralDate(b) -
-                getFuneralDate(a)
+            (a,b) => {
+
+                const dateA =
+                    parseFuneralDate(
+                        a.death
+                    ) ||
+                    parseFuneralDate(
+                        a.cremate
+                    );
+
+
+                const dateB =
+                    parseFuneralDate(
+                        b.death
+                    ) ||
+                    parseFuneralDate(
+                        b.cremate
+                    );
+
+
+                return dateB - dateA;
+
+            }
         );
 
 
@@ -2797,47 +2745,38 @@ function showLatestFuneral(){
         sortedFunerals[0];
 
 
-    /* ชื่อ */
-
-    const latestName =
-        getFuneralName(
-            latest
-        );
-
+    /* ================================================
+       ชื่อผู้เสียชีวิต
+    ================================================ */
 
     nameElement.innerText =
         "⚰️ " +
-        latestName;
+        (
+            latest.name ||
+            "ไม่ระบุชื่อ"
+        );
 
 
-    /* บ้านเลขที่ */
+    /* ================================================
+       บ้านเลขที่
+    ================================================ */
 
     houseElement.innerText =
-        getFuneralHouse(
-            latest
-        );
+        latest.house ||
+        "ไม่ระบุ";
 
 
-    /* วันที่ */
-
-    const latestDate =
-        getFuneralDate(
-            latest
-        );
-
+    /* ================================================
+       วันที่เสียชีวิต
+    ================================================ */
 
     if(
-        latestDate.getTime() > 0
+        latest.death
     ){
 
         dateElement.innerText =
-            latestDate.toLocaleDateString(
-                "th-TH",
-                {
-                    day:"numeric",
-                    month:"long",
-                    year:"numeric"
-                }
+            formatThaiDate(
+                latest.death
             );
 
     }
@@ -2848,13 +2787,34 @@ function showLatestFuneral(){
 
     }
 
+
+    /* ================================================
+       วันที่ฌาปนกิจ
+    ================================================ */
+
+    if(
+        latest.cremate
+    ){
+
+        cremateElement.innerText =
+            formatThaiDate(
+                latest.cremate
+            );
+
+    }
+    else{
+
+        cremateElement.innerText =
+            "-";
+
+    }
+
 }
 
 
-/* เรียกแสดงงานศพล่าสุด */
+/* เรียกใช้งาน */
 
 showLatestFuneral();
-
 
 </script>
 
