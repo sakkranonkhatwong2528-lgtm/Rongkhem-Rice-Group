@@ -117,6 +117,17 @@ body{
     color:#fff0ad;
 }
 
+.connection-note{
+    margin-top:15px;
+    padding:13px 15px;
+    border-radius:13px;
+    background:rgba(35,170,85,.12);
+    border:1px solid rgba(120,255,160,.16);
+    color:#c9efd3;
+    line-height:1.7;
+    font-size:13px;
+}
+
 .form-grid{
 
     display:grid;
@@ -466,6 +477,12 @@ tr:hover td{
         ➕ เพิ่มข้อมูลผู้เสียชีวิต
     </h2>
 
+    <div class="connection-note">
+        🔗 ข้อมูลหน้านี้เชื่อมกับหน้าแรกผ่าน
+        <strong>ข้อมูลรายการงานศพชุดเดียวกัน</strong>
+        เมื่อเพิ่มหรือแก้ไขข้อมูลแล้ว หน้าแรกจะอ่านข้อมูลชุดนี้ไปแสดงโดยอัตโนมัติ
+    </div>
+
 
     <div class="form-grid">
 
@@ -697,171 +714,222 @@ tr:hover td{
 
 <script>
 
-let funerals =
-    loadFunerals();
-
-let editingId =
-    null;
+"use strict";
 
 
-/* =====================================================
-   โหลดข้อมูล
-===================================================== */
+/*
+=====================================================
+ใช้ข้อมูลชุดเดียวกับ index.html
+=====================================================
+*/
+
+const STORAGE_KEY = "funerals";
+
+let funerals = loadFunerals();
+
+let editingId = null;
+
+
+/*
+=====================================================
+อ่านข้อมูลโดยไม่ทำข้อมูลเดิมหาย
+=====================================================
+*/
 
 function loadFunerals(){
 
     try{
 
-        const data =
-            JSON.parse(
-                localStorage.getItem(
-                    "funerals"
-                )
+        const raw =
+            localStorage.getItem(
+                STORAGE_KEY
             );
 
 
-        if(
-            Array.isArray(data)
-        ){
+        if(!raw){
 
-            return data.map(
-                (
-                    item,
-                    index
-                ) =>
-                    normalizeFuneral(
-                        item,
-                        index
-                    )
-            );
+            return [];
 
         }
+
+
+        const data =
+            JSON.parse(raw);
+
+
+        if(!Array.isArray(data)){
+
+            return [];
+
+        }
+
+
+        /*
+        สำคัญ:
+        ใช้ ...item เพื่อรักษาฟิลด์เดิม
+        ที่อาจมีอยู่ในข้อมูลเก่า
+        */
+
+        return data.map(
+            (item,index) => {
+
+                const original =
+                    (
+                        item &&
+                        typeof item === "object"
+                    )
+                    ? {...item}
+                    : {};
+
+
+                const id =
+                    String(
+                        original.id ??
+                        original.funeralId ??
+                        original.funeral_id ??
+                        (
+                            "funeral-" +
+                            Date.now() +
+                            "-" +
+                            index
+                        )
+                    );
+
+
+                return {
+
+                    ...original,
+
+                    id:id,
+
+                    name:
+                        String(
+                            original.name ??
+                            original.fullName ??
+                            original.fullname ??
+                            original.deceasedName ??
+                            original.deceased_name ??
+                            ""
+                        ).trim(),
+
+                    age:
+                        original.age ??
+                        original.deceasedAge ??
+                        original.deceased_age ??
+                        "",
+
+                    house:
+                        String(
+                            original.house ??
+                            original.houseNo ??
+                            original.houseNumber ??
+                            original.house_number ??
+                            ""
+                        ).trim(),
+
+                    reporter:
+                        String(
+                            original.reporter ??
+                            original.informer ??
+                            original.contact ??
+                            ""
+                        ).trim(),
+
+                    death:
+                        String(
+                            original.death ??
+                            original.deathDate ??
+                            original.death_date ??
+                            original.dateOfDeath ??
+                            original.date_of_death ??
+                            ""
+                        ),
+
+                    cremate:
+                        String(
+                            original.cremate ??
+                            original.cremateDate ??
+                            original.cremate_date ??
+                            original.ceremonyDate ??
+                            original.ceremony_date ??
+                            ""
+                        ),
+
+                    status:
+                        original.status ??
+                        "ยังไม่ดำเนินการ",
+
+                    timestamp:
+                        Number(
+                            original.timestamp ??
+                            original.createdAt ??
+                            Date.now()
+                        )
+
+                };
+
+            }
+        );
 
     }
     catch(error){
 
         console.error(
+            "อ่านข้อมูล funerals ไม่สำเร็จ:",
             error
+        );
+
+        return [];
+
+    }
+
+}
+
+
+/*
+=====================================================
+บันทึกกลับเข้า localStorage
+=====================================================
+*/
+
+function saveAll(){
+
+    try{
+
+        localStorage.setItem(
+
+            STORAGE_KEY,
+
+            JSON.stringify(
+                funerals
+            )
+
+        );
+
+    }
+    catch(error){
+
+        console.error(
+            "บันทึกข้อมูลไม่สำเร็จ:",
+            error
+        );
+
+        alert(
+            "ไม่สามารถบันทึกข้อมูลได้ กรุณาตรวจสอบพื้นที่จัดเก็บของเบราว์เซอร์"
         );
 
     }
 
-
-    return [];
-
 }
 
 
-/* =====================================================
-   จัดรูปข้อมูล
-===================================================== */
+/*
+=====================================================
+วันที่แสดงผล
+=====================================================
+*/
 
-function normalizeFuneral(
-    item,
-    index
-){
-
-    return {
-
-        id:
-
-            String(
-                item.id ??
-                item.funeralId ??
-                (
-                    "funeral-" +
-                    Date.now() +
-                    "-" +
-                    index
-                )
-            ),
-
-        name:
-
-            String(
-                item.name ??
-                ""
-            ).trim(),
-
-        age:
-
-            item.age ??
-            "",
-
-        house:
-
-            String(
-                item.house ??
-                ""
-            ).trim(),
-
-        reporter:
-
-            String(
-                item.reporter ??
-                item.informer ??
-                item.contact ??
-                ""
-            ).trim(),
-
-        death:
-
-            String(
-                item.death ??
-                ""
-            ),
-
-        cremate:
-
-            String(
-                item.cremate ??
-                ""
-            ),
-
-        status:
-
-            item.status ??
-            "ยังไม่ดำเนินการ",
-
-        timestamp:
-
-            Number(
-                item.timestamp ??
-                item.createdAt ??
-                Date.now()
-            )
-
-    };
-
-}
-
-
-/* =====================================================
-   บันทึกทั้งหมด
-===================================================== */
-
-function saveAll(){
-
-    localStorage.setItem(
-
-        "funerals",
-
-        JSON.stringify(
-            funerals
-        )
-
-    );
-
-}
-
-
-/* =====================================================
-   วันที่แสดงผล
-===================================================== */
-
-function displayDate(
-    value
-){
+function displayDate(value){
 
     if(!value){
 
@@ -878,28 +946,17 @@ function displayDate(
         const parts =
             value.split("-");
 
+
         return (
 
-            parts[2]
-            .padStart(
-                2,
-                "0"
-            )
-
+            parts[2].padStart(2,"0")
             +
-
-            "/" +
-
-            parts[1]
-            .padStart(
-                2,
-                "0"
-            )
-
+            "/"
             +
-
-            "/" +
-
+            parts[1].padStart(2,"0")
+            +
+            "/"
+            +
             parts[0]
 
         );
@@ -912,13 +969,13 @@ function displayDate(
 }
 
 
-/* =====================================================
-   ใช้เรียงงานศพ
-===================================================== */
+/*
+=====================================================
+ใช้เรียงงานศพ
+=====================================================
+*/
 
-function dateValue(
-    value
-){
+function dateValue(value){
 
     if(!value){
 
@@ -932,9 +989,13 @@ function dateValue(
         .test(value)
     ){
 
-        return new Date(
-            value
-        ).getTime();
+        const time =
+            new Date(value).getTime();
+
+
+        return Number.isNaN(time)
+            ? 0
+            : time;
 
     }
 
@@ -944,13 +1005,13 @@ function dateValue(
 }
 
 
-/* =====================================================
-   ป้องกัน HTML
-===================================================== */
+/*
+=====================================================
+ป้องกัน HTML
+=====================================================
+*/
 
-function escapeHTML(
-    value
-){
+function escapeHTML(value){
 
     const div =
         document.createElement(
@@ -959,8 +1020,7 @@ function escapeHTML(
 
     div.textContent =
         String(
-            value ??
-            ""
+            value ?? ""
         );
 
     return div.innerHTML;
@@ -968,9 +1028,11 @@ function escapeHTML(
 }
 
 
-/* =====================================================
-   แสดงรายการ
-===================================================== */
+/*
+=====================================================
+แสดงรายการ
+=====================================================
+*/
 
 function render(){
 
@@ -1011,8 +1073,7 @@ function render(){
 
 
                 if(
-                    dateCompare !==
-                    0
+                    dateCompare !== 0
                 ){
 
                     return dateCompare;
@@ -1021,8 +1082,13 @@ function render(){
 
 
                 return (
-                    b.timestamp -
-                    a.timestamp
+                    Number(
+                        b.timestamp || 0
+                    )
+                    -
+                    Number(
+                        a.timestamp || 0
+                    )
                 );
 
             }
@@ -1032,14 +1098,15 @@ function render(){
 
                 const text = (
 
-                    item.name +
+                    String(item.name || "")
+                    +
                     " " +
-                    item.house +
+                    String(item.house || "")
+                    +
                     " " +
-                    item.reporter
+                    String(item.reporter || "")
 
-                )
-                .toLowerCase();
+                ).toLowerCase();
 
 
                 return text.includes(
@@ -1086,10 +1153,17 @@ function render(){
             (
                 item,
                 index
-            ) => `
+            ) => {
+
+                const id =
+                    encodeURIComponent(
+                        String(item.id)
+                    );
+
+
+                return `
 
                 <tr>
-
 
                     <td>
                         ${index + 1}
@@ -1099,9 +1173,7 @@ function render(){
                     <td>
 
                         <div
-                            class="
-                                deceased-name
-                            "
+                            class="deceased-name"
                         >
 
                             ${escapeHTML(
@@ -1116,19 +1188,25 @@ function render(){
                     <td>
 
                         ${
-                            item.age
+                            item.age !== "" &&
+                            item.age !== null &&
+                            item.age !== undefined
+
                             ? `
+
                                 <span
-                                    class="
-                                        deceased-age
-                                    "
+                                    class="deceased-age"
                                 >
+
                                     ${escapeHTML(
                                         item.age
                                     )}
                                     ปี
+
                                 </span>
+
                               `
+
                             : "-"
                         }
 
@@ -1138,8 +1216,7 @@ function render(){
                     <td>
 
                         ${escapeHTML(
-                            item.house ||
-                            "-"
+                            item.house || "-"
                         )}
 
                     </td>
@@ -1148,8 +1225,7 @@ function render(){
                     <td>
 
                         ${escapeHTML(
-                            item.reporter ||
-                            "-"
+                            item.reporter || "-"
                         )}
 
                     </td>
@@ -1205,13 +1281,7 @@ function render(){
                             <button
                                 class="edit-btn"
                                 type="button"
-                                onclick="
-                                    editFuneral(
-                                        '${escapeHTML(
-                                            item.id
-                                        )}'
-                                    )
-                                "
+                                data-edit-id="${id}"
                             >
                                 ✏️
                             </button>
@@ -1220,13 +1290,7 @@ function render(){
                             <button
                                 class="delete-btn"
                                 type="button"
-                                onclick="
-                                    deleteFuneral(
-                                        '${escapeHTML(
-                                            item.id
-                                        )}'
-                                    )
-                                "
+                                data-delete-id="${id}"
                             >
                                 🗑️
                             </button>
@@ -1237,16 +1301,21 @@ function render(){
 
                 </tr>
 
-            `
+                `;
+
+            }
         )
         .join("");
+
 
 }
 
 
-/* =====================================================
-   ล้างฟอร์ม
-===================================================== */
+/*
+=====================================================
+ล้างฟอร์ม
+=====================================================
+*/
 
 function clearForm(){
 
@@ -1304,9 +1373,11 @@ function clearForm(){
 }
 
 
-/* =====================================================
-   บันทึก
-===================================================== */
+/*
+=====================================================
+บันทึก
+=====================================================
+*/
 
 function saveFuneral(){
 
@@ -1316,12 +1387,14 @@ function saveFuneral(){
         ).value.trim();
 
 
+    const ageRaw =
+        document.getElementById(
+            "age"
+        ).value.trim();
+
+
     const age =
-        Number(
-            document.getElementById(
-                "age"
-            ).value
-        );
+        Number(ageRaw);
 
 
     const house =
@@ -1366,6 +1439,7 @@ function saveFuneral(){
 
 
     if(
+        ageRaw === "" ||
         !Number.isFinite(age) ||
         age < 0 ||
         age > 120
@@ -1413,28 +1487,28 @@ function saveFuneral(){
     }
 
 
-    /* แก้ไข */
+    /*
+    ================================================
+    แก้ไขข้อมูลเดิม
+    ================================================
+    */
 
     if(
         editingId !== null
     ){
 
-        const item =
-            funerals.find(
+        const index =
+            funerals.findIndex(
                 row =>
-                    String(
-                        row.id
-                    ) ===
-                    String(
-                        editingId
-                    )
+                    String(row.id) ===
+                    String(editingId)
             );
 
 
-        if(!item){
+        if(index === -1){
 
             alert(
-                "ไม่พบข้อมูล"
+                "ไม่พบข้อมูลที่ต้องการแก้ไข"
             );
 
             return;
@@ -1442,26 +1516,45 @@ function saveFuneral(){
         }
 
 
-        item.name =
-            name;
+        /*
+        สำคัญ:
+        ใช้ ...เดิม เพื่อรักษาฟิลด์อื่น
+        ที่เราไม่ได้แก้ไขไว้ทั้งหมด
+        */
 
-        item.age =
-            age;
+        funerals[index] = {
 
-        item.house =
-            house;
+            ...funerals[index],
 
-        item.reporter =
-            reporter;
+            id:
+                funerals[index].id,
 
-        item.death =
-            death;
+            name:
+                name,
 
-        item.cremate =
-            cremate;
+            age:
+                age,
 
-        item.status =
-            status;
+            house:
+                house,
+
+            reporter:
+                reporter,
+
+            death:
+                death,
+
+            cremate:
+                cremate,
+
+            status:
+                status,
+
+            timestamp:
+                funerals[index].timestamp ||
+                Date.now()
+
+        };
 
 
         saveAll();
@@ -1475,26 +1568,35 @@ function saveFuneral(){
             "แก้ไขข้อมูลเรียบร้อยแล้ว"
         );
 
+
+        notifyOtherPages();
+
+
         return;
 
     }
 
 
-    /* เพิ่มใหม่ */
+    /*
+    ================================================
+    เพิ่มข้อมูลใหม่
+    ================================================
+    */
 
-    funerals.push({
+    const newId =
+
+        "funeral-" +
+        Date.now() +
+        "-" +
+        Math.random()
+        .toString(36)
+        .slice(2,8);
+
+
+    const newFuneral = {
 
         id:
-
-            "funeral-" +
-            Date.now() +
-            "-" +
-            Math.random()
-            .toString(36)
-            .slice(
-                2,
-                8
-            ),
+            newId,
 
         name:
             name,
@@ -1520,7 +1622,12 @@ function saveFuneral(){
         timestamp:
             Date.now()
 
-    });
+    };
+
+
+    funerals.push(
+        newFuneral
+    );
 
 
     saveAll();
@@ -1534,26 +1641,31 @@ function saveFuneral(){
         "บันทึกข้อมูลผู้เสียชีวิตเรียบร้อยแล้ว"
     );
 
+
+    notifyOtherPages();
+
 }
 
 
-/* =====================================================
-   แก้ไข
-===================================================== */
+/*
+=====================================================
+แก้ไข
+=====================================================
+*/
 
-function editFuneral(
-    id
-){
+function editFuneral(id){
+
+    const decodedId =
+        decodeURIComponent(
+            String(id)
+        );
+
 
     const item =
         funerals.find(
             row =>
-                String(
-                    row.id
-                ) ===
-                String(
-                    id
-                )
+                String(row.id) ===
+                decodedId
         );
 
 
@@ -1569,7 +1681,7 @@ function editFuneral(
 
 
     editingId =
-        id;
+        item.id;
 
 
     document.getElementById(
@@ -1581,7 +1693,7 @@ function editFuneral(
     document.getElementById(
         "age"
     ).value =
-        item.age || "";
+        item.age ?? "";
 
 
     document.getElementById(
@@ -1638,23 +1750,25 @@ function editFuneral(
 }
 
 
-/* =====================================================
-   ลบ
-===================================================== */
+/*
+=====================================================
+ลบ
+=====================================================
+*/
 
-function deleteFuneral(
-    id
-){
+function deleteFuneral(id){
+
+    const decodedId =
+        decodeURIComponent(
+            String(id)
+        );
+
 
     const item =
         funerals.find(
             row =>
-                String(
-                    row.id
-                ) ===
-                String(
-                    id
-                )
+                String(row.id) ===
+                decodedId
         );
 
 
@@ -1694,12 +1808,8 @@ function deleteFuneral(
     funerals =
         funerals.filter(
             row =>
-                String(
-                    row.id
-                ) !==
-                String(
-                    id
-                )
+                String(row.id) !==
+                decodedId
         );
 
 
@@ -1707,12 +1817,38 @@ function deleteFuneral(
 
     render();
 
+    notifyOtherPages();
+
 }
 
 
-/* =====================================================
-   EVENTS
-===================================================== */
+/*
+=====================================================
+แจ้งหน้าอื่นว่า localStorage มีการเปลี่ยนแปลง
+=====================================================
+*/
+
+function notifyOtherPages(){
+
+    /*
+    หน้า index.html จะเห็นการเปลี่ยนแปลง
+    ผ่าน storage event เมื่อเปิดคนละแท็บ
+    */
+
+    window.dispatchEvent(
+        new CustomEvent(
+            "funeralsUpdated"
+        )
+    );
+
+}
+
+
+/*
+=====================================================
+EVENTS
+=====================================================
+*/
 
 document
 .getElementById(
@@ -1744,9 +1880,82 @@ document
 );
 
 
-/* =====================================================
-   INIT
-===================================================== */
+/*
+ปุ่มแก้ไข/ลบ
+*/
+
+document
+.getElementById(
+    "funeralList"
+)
+.addEventListener(
+    "click",
+    function(event){
+
+        const editButton =
+            event.target.closest(
+                "[data-edit-id]"
+            );
+
+
+        if(editButton){
+
+            editFuneral(
+                editButton.dataset.editId
+            );
+
+            return;
+
+        }
+
+
+        const deleteButton =
+            event.target.closest(
+                "[data-delete-id]"
+            );
+
+
+        if(deleteButton){
+
+            deleteFuneral(
+                deleteButton.dataset.deleteId
+            );
+
+        }
+
+    }
+);
+
+
+/*
+ถ้ามีการเปลี่ยนข้อมูลจากหน้าอื่น
+*/
+
+window.addEventListener(
+    "storage",
+    function(event){
+
+        if(
+            event.key ===
+            STORAGE_KEY
+        ){
+
+            funerals =
+                loadFunerals();
+
+            render();
+
+        }
+
+    }
+);
+
+
+/*
+=====================================================
+INIT
+=====================================================
+*/
 
 render();
 
