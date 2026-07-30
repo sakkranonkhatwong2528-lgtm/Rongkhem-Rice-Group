@@ -5,8 +5,10 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
 <title>
 ⚰️ แจ้งเสียชีวิต / งานศพ
@@ -468,8 +470,6 @@ tr:hover td{
     <div class="form-grid">
 
 
-        <!-- ชื่อ -->
-
         <div class="field full">
 
             <label>
@@ -484,8 +484,6 @@ tr:hover td{
 
         </div>
 
-
-        <!-- อายุ -->
 
         <div class="field">
 
@@ -504,8 +502,6 @@ tr:hover td{
         </div>
 
 
-        <!-- บ้านเลขที่ -->
-
         <div class="field">
 
             <label>
@@ -520,8 +516,6 @@ tr:hover td{
 
         </div>
 
-
-        <!-- ผู้แจ้ง -->
 
         <div class="field full">
 
@@ -538,8 +532,6 @@ tr:hover td{
         </div>
 
 
-        <!-- วันที่เสียชีวิต -->
-
         <div class="field">
 
             <label>
@@ -554,8 +546,6 @@ tr:hover td{
         </div>
 
 
-        <!-- วันที่ฌาปนกิจ -->
-
         <div class="field">
 
             <label>
@@ -569,8 +559,6 @@ tr:hover td{
 
         </div>
 
-
-        <!-- สถานะ -->
 
         <div class="field full">
 
@@ -1425,9 +1413,7 @@ function saveFuneral(){
     }
 
 
-    /* =================================================
-       แก้ไขข้อมูลเดิม
-    ================================================= */
+    /* แก้ไข */
 
     if(
         editingId !== null
@@ -1494,26 +1480,21 @@ function saveFuneral(){
     }
 
 
-    /* =================================================
-       เพิ่มข้อมูลใหม่
-    ================================================= */
-
-    const funeralId =
-        "funeral-" +
-        Date.now() +
-        "-" +
-        Math.random()
-        .toString(36)
-        .slice(
-            2,
-            8
-        );
-
+    /* เพิ่มใหม่ */
 
     funerals.push({
 
         id:
-            funeralId,
+
+            "funeral-" +
+            Date.now() +
+            "-" +
+            Math.random()
+            .toString(36)
+            .slice(
+                2,
+                8
+            ),
 
         name:
             name,
