@@ -29,14 +29,14 @@ body{
 }
 
 .container{
-    max-width:850px;
+    max-width:900px;
     margin:auto;
     padding:15px;
 }
 
 .summary{
     display:grid;
-    grid-template-columns:repeat(3,1fr);
+    grid-template-columns:1fr 1fr 1fr;
     gap:10px;
 }
 
@@ -67,23 +67,62 @@ body{
 
 .member{
     background:white;
-    margin-top:10px;
-    padding:15px;
+    margin-top:12px;
+    padding:16px;
     border-radius:14px;
     box-shadow:0 2px 7px rgba(0,0,0,.08);
-}
-
-.member.warning{
     border-left:6px solid #b88600;
 }
 
 .member.danger{
-    border-left:6px solid #c62828;
+    border-left-color:#c62828;
+    background:#fff5f5;
+}
+
+.member.ok{
+    border-left-color:#228B22;
+    background:#f5fff5;
+}
+
+.status-warning{
+    color:#b88600;
+    font-weight:bold;
+}
+
+.status-danger{
+    color:#c62828;
+    font-weight:bold;
+}
+
+.status-ok{
+    color:#228B22;
+    font-weight:bold;
+}
+
+.notice{
+    padding:15px;
+    margin-top:15px;
+    border-radius:12px;
+}
+
+.notice-warning{
+    background:#fff3cd;
+    color:#856404;
+}
+
+.notice-danger{
+    background:#ffe5e5;
+    color:#c62828;
+}
+
+.notice-success{
+    background:#e8f7e8;
+    color:#1b7a1b;
 }
 
 button{
     width:100%;
-    padding:13px;
+    padding:14px;
     margin-top:10px;
     border:0;
     border-radius:10px;
@@ -100,6 +139,12 @@ button{
     text-decoration:none;
 }
 
+hr{
+    border:0;
+    border-top:1px solid #ddd;
+    margin:12px 0;
+}
+
 @media(max-width:600px){
 
     .summary{
@@ -111,6 +156,10 @@ button{
         font-size:13px;
     }
 
+    .number{
+        font-size:22px;
+    }
+
 }
 
 @media print{
@@ -118,6 +167,16 @@ button{
     button,
     .back{
         display:none;
+    }
+
+    body{
+        background:white;
+    }
+
+    .header{
+        background:white;
+        color:#333;
+        border-bottom:2px solid #333;
     }
 
 }
@@ -128,11 +187,12 @@ button{
 
 <body>
 
+
 <div class="header">
 
-    <h1>🔔 แจ้งเตือนสมาชิก</h1>
+<h1>🔔 แจ้งเตือนสมาชิก</h1>
 
-    <p>กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</p>
+<p>กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</p>
 
 </div>
 
@@ -140,77 +200,107 @@ button{
 <div class="container">
 
 
+<!-- สรุป -->
+
 <div class="summary">
 
-    <div class="card">
 
-        🟢 ปกติ
+<div class="card">
 
-        <div class="number green" id="normalCount">
-            0
-        </div>
+🟢 ปกติ
 
-        ครัวเรือน
+<div
+    class="number green"
+    id="normalCount"
+>
+0
+</div>
 
-    </div>
+ครัวเรือน
 
-
-    <div class="card">
-
-        🟡 ค้าง 1 ครั้ง
-
-        <div class="number yellow" id="warningCount">
-            0
-        </div>
-
-        ครัวเรือน
-
-    </div>
+</div>
 
 
-    <div class="card">
+<div class="card">
 
-        🔴 ค้าง 2 ครั้งขึ้นไป
+🟡 ค้าง 1 ครั้ง
 
-        <div class="number red" id="dangerCount">
-            0
-        </div>
+<div
+    class="number yellow"
+    id="warningCount"
+>
+0
+</div>
 
-        ครัวเรือน
+ครัวเรือน
 
-    </div>
+</div>
+
+
+<div class="card">
+
+🔴 ค้าง 2 ครั้งขึ้นไป
+
+<div
+    class="number red"
+    id="dangerCount"
+>
+0
+</div>
+
+ครัวเรือน
+
+</div>
+
 
 </div>
 
 
 <div class="card" style="margin-top:15px;">
 
-    <strong>
-        สมาชิกทั้งหมด
-    </strong>
+👥 สมาชิกทั้งหมด
 
-    <div class="number" id="totalCount">
-        0
-    </div>
+<div
+    class="number"
+    id="totalCount"
+>
+185
+</div>
 
-    ครัวเรือน
+ครัวเรือน
 
 </div>
 
 
+<div id="summaryNotice"></div>
+
+
+<!-- ค้างส่ง -->
+
+<div class="card" style="margin-top:15px;">
+
 <h2>
-⚠️ รายชื่อที่ต้องติดตาม
+⚠️ สมาชิกที่ต้องติดตาม
 </h2>
 
-<div id="warningList"></div>
+<div id="pendingList"></div>
 
+</div>
+
+
+<!-- ปุ่ม -->
 
 <button onclick="window.print()">
+
 🖨️ พิมพ์รายงานแจ้งเตือน
+
 </button>
 
 
-<a class="back" href="ดัชนี.html">
+<a
+    class="back"
+    href="index.html"
+>
 ← กลับหน้าหลัก
 </a>
 
@@ -220,77 +310,168 @@ button{
 
 <script>
 
-let members =
+/* =====================================================
+   โหลดข้อมูล
+===================================================== */
+
+const members =
     JSON.parse(
         localStorage.getItem("members")
     ) || [];
 
 
-/* นับสถานะ */
+/* =====================================================
+   จำนวนสถานะ
+===================================================== */
 
-let normal = 0;
+let normalCount = 0;
 
-let warning = 0;
+let warningCount = 0;
 
-let danger = 0;
+let dangerCount = 0;
 
 
-members.forEach(m => {
+members.forEach(member => {
 
     const pending =
-        Number(m.pending || 0);
+        Number(member.pending || 0);
 
 
     if(pending >= 2){
 
-        danger++;
+        dangerCount++;
 
     }else if(pending === 1){
 
-        warning++;
+        warningCount++;
 
     }else{
 
-        normal++;
+        normalCount++;
 
     }
 
 });
 
 
-/* แสดงตัวเลข */
+/* =====================================================
+   แสดงสรุป
+===================================================== */
 
-document.getElementById("normalCount").innerText =
-    normal;
-
-document.getElementById("warningCount").innerText =
-    warning;
-
-document.getElementById("dangerCount").innerText =
-    danger;
-
-document.getElementById("totalCount").innerText =
-    members.length || 185;
+document.getElementById("normalCount")
+    .innerText =
+    normalCount;
 
 
-/* รายชื่อที่ต้องติดตาม */
+document.getElementById("warningCount")
+    .innerText =
+    warningCount;
 
-let html = "";
 
+document.getElementById("dangerCount")
+    .innerText =
+    dangerCount;
+
+
+document.getElementById("totalCount")
+    .innerText =
+    members.length > 0
+    ? members.length
+    : 185;
+
+
+/* =====================================================
+   แจ้งเตือนด้านบน
+===================================================== */
+
+if(dangerCount > 0){
+
+    document.getElementById("summaryNotice")
+        .innerHTML = `
+
+        <div class="notice notice-danger">
+
+            🚨 มี
+            <strong>
+                ${dangerCount}
+            </strong>
+            ครัวเรือน
+
+            <br>
+
+            ค้างส่งข้าวสารช่วยงานศพ
+            2 ครั้งขึ้นไป
+
+            <br>
+
+            🔴 สถานะ:
+            <strong>
+                เสนอพิจารณาตัดสมาชิก
+            </strong>
+
+        </div>
+
+        `;
+
+}else if(warningCount > 0){
+
+    document.getElementById("summaryNotice")
+        .innerHTML = `
+
+        <div class="notice notice-warning">
+
+            ⚠️ มี
+            <strong>
+                ${warningCount}
+            </strong>
+            ครัวเรือน
+
+            <br>
+
+            ค้างส่งข้าวสารช่วยงานศพ
+            1 ครั้ง
+
+        </div>
+
+        `;
+
+}else{
+
+    document.getElementById("summaryNotice")
+        .innerHTML = `
+
+        <div class="notice notice-success">
+
+            ✅ ยังไม่มีสมาชิกค้างส่ง
+
+        </div>
+
+        `;
+
+}
+
+
+/* =====================================================
+   รายชื่อค้างส่ง
+===================================================== */
 
 const pendingMembers =
     members.filter(
-        m => Number(m.pending || 0) > 0
+        member =>
+        Number(member.pending || 0) > 0
     );
+
+
+let html = "";
 
 
 if(pendingMembers.length === 0){
 
     html = `
 
-        <div class="card">
+        <div class="notice notice-success">
 
-            ✅ ยังไม่มีสมาชิกค้างส่ง
+            ✅ สมาชิกทุกครัวเรือนปฏิบัติตามกติกาครบถ้วน
 
         </div>
 
@@ -298,91 +479,134 @@ if(pendingMembers.length === 0){
 
 }else{
 
-    pendingMembers.forEach((m,index)=>{
+
+    pendingMembers.forEach((member,index)=>{
 
         const pending =
-            Number(m.pending || 0);
+            Number(member.pending || 0);
 
 
-        if(pending >= 2){
+        const isDanger =
+            pending >= 2;
 
-            html += `
 
-                <div class="member danger">
+        const cardClass =
+            isDanger
+            ? "member danger"
+            : "member";
 
-                    <strong>
-                        ${index + 1}. ${m.name}
-                    </strong>
 
-                    <br>
+        const status =
+            isDanger
+            ? "🔴 เสนอพิจารณาตัดสมาชิก"
+            : "🟡 แจ้งเตือน 1 ครั้ง";
 
-                    🏠 บ้านเลขที่:
-                    ${m.house}
 
-                    <br>
+        const statusClass =
+            isDanger
+            ? "status-danger"
+            : "status-warning";
 
-                    📦 ค้างส่ง:
-                    ${pending} งาน
 
-                    <br>
+        html += `
 
-                    ⚰️ งานศพที่ค้าง:
-                    ${m.pendingFor || "-"}
+        <div class="${cardClass}">
 
-                    <br><br>
+            <strong>
 
-                    <strong class="red">
-                        🔴 เสนอพิจารณาตัดสมาชิก
-                    </strong>
+                ${index + 1}.
+                ${escapeHTML(member.name)}
 
-                </div>
+            </strong>
 
-            `;
+            <br>
 
-        }else{
+            🏠 บ้านเลขที่:
+            ${escapeHTML(member.house)}
 
-            html += `
+            <hr>
 
-                <div class="member warning">
+            📦 ค้างส่ง:
+            <strong>
+                ${pending}
+            </strong>
+            ครั้ง
 
-                    <strong>
-                        ${index + 1}. ${m.name}
-                    </strong>
+            <br><br>
 
-                    <br>
+            ${
+                member.pendingFor
+                ?
+                `
+                ⚰️ ค้างส่งงานศพ:
+                <strong>
+                    ${escapeHTML(
+                        member.pendingFor
+                    )}
+                </strong>
 
-                    🏠 บ้านเลขที่:
-                    ${m.house}
+                <br><br>
+                `
+                :
+                `
+                ⚰️ ค้างส่งงานศพ:
+                ไม่ระบุ
 
-                    <br>
+                <br><br>
+                `
+            }
 
-                    📦 ค้างส่ง:
-                    ${pending} งาน
+            <span class="${statusClass}">
 
-                    <br>
+                ${status}
 
-                    ⚰️ งานศพที่ค้าง:
-                    ${m.pendingFor || "-"}
+            </span>
 
-                    <br><br>
+        </div>
 
-                    <strong class="yellow">
-                        🟡 แจ้งเตือน 1 ครั้ง
-                    </strong>
-
-                </div>
-
-            `;
-
-        }
+        `;
 
     });
 
 }
 
 
-document.getElementById("warningList").innerHTML =
+document.getElementById("pendingList")
+    .innerHTML =
     html;
+
+
+/* =====================================================
+   ป้องกัน HTML
+===================================================== */
+
+function escapeHTML(value){
+
+    return String(
+        value || ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
 
 </script>
 
