@@ -5,10 +5,8 @@
 
 <meta charset="UTF-8">
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
 <title>
 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
@@ -51,12 +49,11 @@ body{
             #0b5a2d 70%,
             #0f7a3b 100%
         );
-
 }
 
 
 /* =====================================================
-   วงแสงพื้นหลัง
+   พื้นหลังวงแสง
 ===================================================== */
 
 .bg-orb{
@@ -72,7 +69,6 @@ body{
     filter:blur(10px);
 
     opacity:.55;
-
 }
 
 .orb1{
@@ -95,7 +91,6 @@ body{
         5s
         ease-in-out
         infinite;
-
 }
 
 .orb2{
@@ -118,7 +113,6 @@ body{
         6s
         ease-in-out
         infinite;
-
 }
 
 .orb3{
@@ -141,7 +135,6 @@ body{
         7s
         ease-in-out
         infinite;
-
 }
 
 @keyframes orbMove1{
@@ -157,7 +150,6 @@ body{
             translate(-80px,60px)
             scale(1.25);
     }
-
 }
 
 @keyframes orbMove2{
@@ -173,7 +165,6 @@ body{
             translate(80px,-70px)
             scale(1.2);
     }
-
 }
 
 @keyframes orbMove3{
@@ -189,7 +180,6 @@ body{
             translate(50px,-40px)
             scale(1.15);
     }
-
 }
 
 
@@ -217,7 +207,6 @@ body{
         particleMove
         linear
         infinite;
-
 }
 
 .p1{
@@ -264,7 +253,6 @@ body{
             scale(.5);
 
         opacity:0;
-
     }
 
     15%{
@@ -283,14 +271,12 @@ body{
             scale(1.5);
 
         opacity:0;
-
     }
-
 }
 
 
 /* =====================================================
-   หน้า
+   หน้าเว็บ
 ===================================================== */
 
 .page{
@@ -304,7 +290,6 @@ body{
     margin:auto;
 
     padding:20px;
-
 }
 
 
@@ -319,8 +304,7 @@ body{
     padding:
         40px
         10px
-        30px;
-
+        22px;
 }
 
 .logo{
@@ -367,7 +351,6 @@ body{
         2.5s
         ease-in-out
         infinite;
-
 }
 
 @keyframes logoAnimation{
@@ -383,7 +366,6 @@ body{
             translateY(-12px)
             rotate(3deg);
     }
-
 }
 
 .hero h1{
@@ -405,7 +387,6 @@ body{
         ease-in-out
         infinite
         alternate;
-
 }
 
 @keyframes titleGlow{
@@ -421,7 +402,6 @@ body{
             0 0 30px
             rgba(180,255,200,.35);
     }
-
 }
 
 .hero h2{
@@ -441,7 +421,6 @@ body{
     font-weight:500;
 
     color:#d8f7df;
-
 }
 
 .hero p{
@@ -449,7 +428,6 @@ body{
     margin-top:13px;
 
     color:#aee7bc;
-
 }
 
 .hero-line{
@@ -469,7 +447,6 @@ body{
 
     background:
         rgba(255,255,255,.12);
-
 }
 
 .hero-line::before{
@@ -495,7 +472,6 @@ body{
         1.4s
         linear
         infinite;
-
 }
 
 @keyframes lineMove{
@@ -509,941 +485,11 @@ body{
         transform:
             translateX(200px);
     }
-
 }
 
 
 /* =====================================================
-   3 การ์ดสรุปหลัก
-===================================================== */
-
-.main-summary{
-
-    display:grid;
-
-    grid-template-columns:
-        repeat(3,1fr);
-
-    gap:18px;
-
-    margin-bottom:22px;
-
-}
-
-.summary-main-card{
-
-    position:relative;
-
-    overflow:hidden;
-
-    min-height:185px;
-
-    padding:25px;
-
-    display:flex;
-
-    align-items:center;
-
-    gap:18px;
-
-    border-radius:28px;
-
-    border:
-        1px solid
-        rgba(255,255,255,.20);
-
-    backdrop-filter:
-        blur(18px);
-
-    box-shadow:
-        0 20px 55px
-        rgba(0,0,0,.22);
-
-    animation:
-        summaryEnter
-        .8s
-        ease
-        both;
-
-    transition:
-        transform .35s ease;
-
-}
-
-.summary-main-card:hover{
-
-    transform:
-        translateY(-8px)
-        scale(1.02);
-
-}
-
-.summary-main-card::before{
-
-    content:"";
-
-    position:absolute;
-
-    width:220px;
-    height:220px;
-
-    right:-100px;
-    top:-100px;
-
-    border-radius:50%;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(255,255,255,.18),
-            transparent 70%
-        );
-
-    animation:
-        summaryGlow
-        4s
-        ease-in-out
-        infinite;
-
-}
-
-.summary-main-card::after{
-
-    content:"";
-
-    position:absolute;
-
-    left:-100%;
-
-    bottom:0;
-
-    width:100%;
-
-    height:3px;
-
-    background:
-        linear-gradient(
-            90deg,
-            transparent,
-            rgba(255,255,255,.9),
-            transparent
-        );
-
-    animation:
-        summarySweep
-        3s
-        linear
-        infinite;
-
-}
-
-.members-card{
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(50,150,255,.24),
-            rgba(255,255,255,.06)
-        );
-
-}
-
-.normal-card{
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(50,200,120,.24),
-            rgba(255,255,255,.06)
-        );
-
-}
-
-.rice-card{
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,200,50,.26),
-            rgba(255,255,255,.06)
-        );
-
-}
-
-@keyframes summaryEnter{
-
-    from{
-
-        opacity:0;
-
-        transform:
-            translateY(25px)
-            scale(.96);
-
-    }
-
-    to{
-
-        opacity:1;
-
-        transform:
-            translateY(0)
-            scale(1);
-
-    }
-
-}
-
-@keyframes summaryGlow{
-
-    0%,100%{
-
-        transform:
-            scale(1);
-
-        opacity:.55;
-
-    }
-
-    50%{
-
-        transform:
-            scale(1.3);
-
-        opacity:.9;
-
-    }
-
-}
-
-@keyframes summarySweep{
-
-    0%{
-        left:-100%;
-    }
-
-    50%{
-        left:100%;
-    }
-
-    100%{
-        left:100%;
-    }
-
-}
-
-.summary-icon{
-
-    width:72px;
-    height:72px;
-
-    flex-shrink:0;
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    border-radius:22px;
-
-    font-size:38px;
-
-    background:
-        rgba(255,255,255,.12);
-
-    border:
-        1px solid
-        rgba(255,255,255,.20);
-
-    animation:
-        summaryIconFloat
-        2.5s
-        ease-in-out
-        infinite;
-
-}
-
-@keyframes summaryIconFloat{
-
-    0%,100%{
-        transform:
-            translateY(0);
-    }
-
-    50%{
-        transform:
-            translateY(-7px);
-    }
-
-}
-
-.summary-content{
-
-    position:relative;
-
-    z-index:2;
-
-}
-
-.summary-title{
-
-    font-size:15px;
-
-    color:#c9efd3;
-
-    font-weight:600;
-
-}
-
-.summary-number{
-
-    margin-top:6px;
-
-    font-size:46px;
-
-    line-height:1;
-
-    font-weight:900;
-
-}
-
-.summary-unit{
-
-    margin-top:8px;
-
-    font-size:13px;
-
-    color:#9ed6ad;
-
-}
-
-
-/* =====================================================
-   Dashboard
-===================================================== */
-
-.dashboard{
-
-    display:grid;
-
-    grid-template-columns:
-        repeat(4,1fr);
-
-    gap:16px;
-
-}
-
-.card{
-
-    position:relative;
-
-    overflow:hidden;
-
-    padding:24px;
-
-    min-height:170px;
-
-    border-radius:25px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255,255,255,.15),
-            rgba(255,255,255,.055)
-        );
-
-    border:
-        1px solid
-        rgba(255,255,255,.18);
-
-    backdrop-filter:
-        blur(16px);
-
-    box-shadow:
-        0 20px 50px
-        rgba(0,0,0,.20);
-
-    transform:
-        translateY(50px);
-
-    opacity:0;
-
-    animation:
-        cardEnter
-        .8s
-        cubic-bezier(.2,.8,.2,1)
-        forwards;
-
-}
-
-.card:nth-child(1){animation-delay:.10s;}
-.card:nth-child(2){animation-delay:.20s;}
-.card:nth-child(3){animation-delay:.30s;}
-.card:nth-child(4){animation-delay:.40s;}
-
-@keyframes cardEnter{
-
-    to{
-
-        transform:
-            translateY(0);
-
-        opacity:1;
-
-    }
-
-}
-
-.card::before{
-
-    content:"";
-
-    position:absolute;
-
-    width:220px;
-    height:220px;
-
-    right:-100px;
-    top:-100px;
-
-    border-radius:50%;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(255,255,255,.12),
-            transparent 70%
-        );
-
-}
-
-.card::after{
-
-    content:"";
-
-    position:absolute;
-
-    width:100%;
-
-    height:2px;
-
-    left:-100%;
-
-    bottom:0;
-
-    background:
-        linear-gradient(
-            90deg,
-            transparent,
-            rgba(255,255,255,.8),
-            transparent
-        );
-
-    animation:
-        lightSweep
-        3.5s
-        linear
-        infinite;
-
-}
-
-@keyframes lightSweep{
-
-    0%{
-        left:-100%;
-    }
-
-    50%{
-        left:100%;
-    }
-
-    100%{
-        left:100%;
-    }
-
-}
-
-.card:hover{
-
-    transform:
-        translateY(-10px)
-        scale(1.025);
-
-}
-
-.card-icon{
-
-    font-size:42px;
-
-    margin-bottom:10px;
-
-    animation:
-        iconFloat
-        2s
-        ease-in-out
-        infinite;
-
-}
-
-@keyframes iconFloat{
-
-    0%,100%{
-        transform:
-            translateY(0);
-    }
-
-    50%{
-        transform:
-            translateY(-6px);
-    }
-
-}
-
-.card-title{
-
-    color:#b9e9c7;
-
-    font-size:14px;
-
-}
-
-.card-number{
-
-    margin-top:5px;
-
-    font-size:38px;
-
-    font-weight:900;
-
-}
-
-.card-unit{
-
-    color:#9ed6ad;
-
-    font-size:13px;
-
-}
-
-
-/* =====================================================
-   งานศพล่าสุด
-===================================================== */
-
-.latest-funeral-card{
-
-    grid-column:
-        span 2;
-
-    min-height:
-        285px;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,215,70,.20),
-            rgba(255,255,255,.08)
-        );
-
-    border:
-        1px solid
-        rgba(255,230,120,.35);
-
-}
-
-.latest-funeral-glow{
-
-    position:absolute;
-
-    width:280px;
-    height:280px;
-
-    right:-120px;
-    top:-130px;
-
-    border-radius:50%;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(255,230,120,.25),
-            transparent 70%
-        );
-
-    animation:
-        funeralGlow
-        4s
-        ease-in-out
-        infinite;
-
-}
-
-@keyframes funeralGlow{
-
-    0%,100%{
-        transform:scale(1);
-        opacity:.55;
-    }
-
-    50%{
-        transform:scale(1.35);
-        opacity:.9;
-    }
-
-}
-
-.latest-funeral-top{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:14px;
-
-    position:relative;
-
-    z-index:2;
-
-}
-
-.latest-funeral-icon{
-
-    width:58px;
-    height:58px;
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    border-radius:18px;
-
-    font-size:32px;
-
-    background:
-        rgba(255,255,255,.12);
-
-    animation:
-        funeralIcon
-        2.5s
-        ease-in-out
-        infinite;
-
-}
-
-@keyframes funeralIcon{
-
-    0%,100%{
-        transform:
-            translateY(0);
-    }
-
-    50%{
-        transform:
-            translateY(-6px);
-    }
-
-}
-
-.latest-funeral-label{
-
-    font-size:20px;
-
-    font-weight:900;
-
-    color:#fff4b0;
-
-}
-
-.latest-funeral-sub{
-
-    margin-top:3px;
-
-    font-size:12px;
-
-    color:#b9e9c7;
-
-}
-
-.latest-funeral-name{
-
-    position:relative;
-
-    z-index:2;
-
-    margin-top:20px;
-
-    font-size:
-        clamp(
-            22px,
-            3vw,
-            32px
-        );
-
-    font-weight:900;
-
-}
-
-.latest-funeral-info{
-
-    position:relative;
-
-    z-index:2;
-
-    display:grid;
-
-    grid-template-columns:
-        repeat(3,1fr);
-
-    gap:12px;
-
-    margin-top:20px;
-
-}
-
-.funeral-info-item{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:10px;
-
-    padding:
-        12px 14px;
-
-    border-radius:16px;
-
-    background:
-        rgba(255,255,255,.07);
-
-}
-
-.info-icon{
-    font-size:22px;
-}
-
-.funeral-info-item small{
-
-    display:block;
-
-    color:#aee7bc;
-
-    font-size:11px;
-
-}
-
-.funeral-info-item strong{
-
-    display:block;
-
-    margin-top:3px;
-
-    font-size:15px;
-
-}
-
-.history-button{
-
-    margin-top:18px;
-
-    padding:
-        11px 20px;
-
-    border:0;
-
-    border-radius:15px;
-
-    color:#fff;
-
-    font-size:14px;
-
-    font-weight:800;
-
-    cursor:pointer;
-
-    background:
-        linear-gradient(
-            135deg,
-            #e0a800,
-            #b87500
-        );
-
-}
-
-.funeral-history{
-
-    display:none;
-
-    grid-column:
-        1 / -1;
-
-    margin-top:18px;
-
-}
-
-.funeral-history.show{
-    display:block;
-}
-
-.history-header{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    gap:10px;
-
-    margin-bottom:12px;
-
-}
-
-.history-title{
-
-    font-size:24px;
-
-    font-weight:900;
-
-    color:#fff4b0;
-
-}
-
-.history-count{
-
-    padding:
-        7px 12px;
-
-    border-radius:12px;
-
-    background:
-        rgba(255,255,255,.10);
-
-    color:#b9e9c7;
-
-}
-
-.history-item{
-
-    margin-bottom:12px;
-
-    padding:18px;
-
-    border-radius:20px;
-
-    background:
-        rgba(255,255,255,.08);
-
-    border:
-        1px solid
-        rgba(255,255,255,.15);
-
-    animation:
-        historyEnter
-        .5s
-        ease
-        both;
-
-}
-
-.history-name{
-
-    font-size:20px;
-
-    font-weight:900;
-
-}
-
-.history-number{
-
-    display:inline-flex;
-
-    width:32px;
-    height:32px;
-
-    align-items:center;
-    justify-content:center;
-
-    margin-right:8px;
-
-    border-radius:50%;
-
-    background:
-        rgba(255,214,75,.18);
-
-    color:#fff4b0;
-
-}
-
-.history-info{
-
-    display:grid;
-
-    grid-template-columns:
-        repeat(3,1fr);
-
-    gap:10px;
-
-    margin-top:13px;
-
-}
-
-.history-info-box{
-
-    padding:
-        11px 13px;
-
-    border-radius:14px;
-
-    background:
-        rgba(255,255,255,.06);
-
-}
-
-.history-info-box small{
-
-    display:block;
-
-    color:#aee7bc;
-
-    font-size:11px;
-
-}
-
-.history-info-box strong{
-
-    display:block;
-
-    margin-top:4px;
-
-}
-
-@keyframes historyEnter{
-
-    from{
-
-        opacity:0;
-
-        transform:
-            translateY(15px);
-
-    }
-
-    to{
-
-        opacity:1;
-
-        transform:
-            translateY(0);
-
-    }
-
-}
-
-
-/* =====================================================
-   การ์ดแสดงความเสียใจ
+   การ์ดแสดงความเสียใจ — ขึ้นบนสุด
 ===================================================== */
 
 .condolence-card{
@@ -1452,7 +498,10 @@ body{
 
     overflow:hidden;
 
-    margin-top:22px;
+    margin:
+        0
+        0
+        24px;
 
     padding:30px;
 
@@ -1487,7 +536,6 @@ body{
         1s
         ease
         both;
-
 }
 
 .condolence-card::before{
@@ -1516,7 +564,6 @@ body{
         5s
         ease-in-out
         infinite;
-
 }
 
 
@@ -1560,7 +607,6 @@ body{
         3s
         ease-in-out
         infinite;
-
 }
 
 .wreath-icon{
@@ -1570,7 +616,6 @@ body{
     z-index:2;
 
     font-size:55px;
-
 }
 
 .wreath-ring{
@@ -1590,25 +635,19 @@ body{
     font-size:24px;
 
     opacity:.8;
-
 }
 
 @keyframes wreathFloat{
 
     0%,100%{
-
         transform:
             translateY(0);
-
     }
 
     50%{
-
         transform:
             translateY(-7px);
-
     }
-
 }
 
 .condolence-content{
@@ -1618,7 +657,6 @@ body{
     z-index:2;
 
     flex:1;
-
 }
 
 .condolence-title{
@@ -1628,7 +666,6 @@ body{
     font-weight:900;
 
     color:#fff4b0;
-
 }
 
 .condolence-name{
@@ -1640,7 +677,6 @@ body{
     font-weight:900;
 
     color:#fff;
-
 }
 
 .condolence-message{
@@ -1652,7 +688,6 @@ body{
     color:#d8f7df;
 
     font-size:15px;
-
 }
 
 .condolence-footer{
@@ -1662,13 +697,11 @@ body{
     color:#b9e9c7;
 
     font-size:14px;
-
 }
 
 .condolence-footer strong{
 
     color:#fff;
-
 }
 
 @keyframes condolenceEnter{
@@ -1679,7 +712,6 @@ body{
 
         transform:
             translateY(25px);
-
     }
 
     to{
@@ -1688,9 +720,7 @@ body{
 
         transform:
             translateY(0);
-
     }
-
 }
 
 @keyframes condolenceGlow{
@@ -1700,7 +730,6 @@ body{
         transform:scale(1);
 
         opacity:.5;
-
     }
 
     50%{
@@ -1708,9 +737,869 @@ body{
         transform:scale(1.25);
 
         opacity:.9;
+    }
+}
 
+
+/* =====================================================
+   สรุป 3 การ์ดหลัก
+===================================================== */
+
+.main-summary{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:18px;
+
+    margin-bottom:22px;
+}
+
+.summary-main-card{
+
+    position:relative;
+
+    overflow:hidden;
+
+    min-height:185px;
+
+    padding:25px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+    border-radius:28px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.20);
+
+    backdrop-filter:
+        blur(18px);
+
+    box-shadow:
+        0 20px 55px
+        rgba(0,0,0,.22);
+
+    animation:
+        summaryEnter
+        .8s
+        ease
+        both;
+
+    transition:
+        transform .35s ease;
+}
+
+.summary-main-card:hover{
+
+    transform:
+        translateY(-8px)
+        scale(1.02);
+}
+
+.summary-main-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:220px;
+    height:220px;
+
+    right:-100px;
+    top:-100px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,255,255,.18),
+            transparent 70%
+        );
+
+    animation:
+        summaryGlow
+        4s
+        ease-in-out
+        infinite;
+}
+
+.summary-main-card::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:-100%;
+
+    bottom:0;
+
+    width:100%;
+
+    height:3px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,.9),
+            transparent
+        );
+
+    animation:
+        summarySweep
+        3s
+        linear
+        infinite;
+}
+
+.members-card{
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(50,150,255,.24),
+            rgba(255,255,255,.06)
+        );
+}
+
+.normal-card{
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(50,200,120,.24),
+            rgba(255,255,255,.06)
+        );
+}
+
+.rice-card{
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,200,50,.26),
+            rgba(255,255,255,.06)
+        );
+}
+
+@keyframes summaryEnter{
+
+    from{
+
+        opacity:0;
+
+        transform:
+            translateY(25px)
+            scale(.96);
     }
 
+    to{
+
+        opacity:1;
+
+        transform:
+            translateY(0)
+            scale(1);
+    }
+}
+
+@keyframes summaryGlow{
+
+    0%,100%{
+
+        transform:scale(1);
+
+        opacity:.55;
+    }
+
+    50%{
+
+        transform:scale(1.3);
+
+        opacity:.9;
+    }
+}
+
+@keyframes summarySweep{
+
+    0%{
+        left:-100%;
+    }
+
+    50%{
+        left:100%;
+    }
+
+    100%{
+        left:100%;
+    }
+}
+
+.summary-icon{
+
+    width:72px;
+    height:72px;
+
+    flex-shrink:0;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    border-radius:22px;
+
+    font-size:38px;
+
+    background:
+        rgba(255,255,255,.12);
+
+    border:
+        1px solid
+        rgba(255,255,255,.20);
+
+    animation:
+        summaryIconFloat
+        2.5s
+        ease-in-out
+        infinite;
+}
+
+@keyframes summaryIconFloat{
+
+    0%,100%{
+        transform:
+            translateY(0);
+    }
+
+    50%{
+        transform:
+            translateY(-7px);
+    }
+}
+
+.summary-content{
+
+    position:relative;
+
+    z-index:2;
+}
+
+.summary-title{
+
+    font-size:15px;
+
+    color:#c9efd3;
+
+    font-weight:600;
+}
+
+.summary-number{
+
+    margin-top:6px;
+
+    font-size:46px;
+
+    line-height:1;
+
+    font-weight:900;
+}
+
+.summary-unit{
+
+    margin-top:8px;
+
+    font-size:13px;
+
+    color:#9ed6ad;
+}
+
+
+/* =====================================================
+   Dashboard
+===================================================== */
+
+.dashboard{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:16px;
+}
+
+.card{
+
+    position:relative;
+
+    overflow:hidden;
+
+    padding:24px;
+
+    min-height:170px;
+
+    border-radius:25px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.15),
+            rgba(255,255,255,.055)
+        );
+
+    border:
+        1px solid
+        rgba(255,255,255,.18);
+
+    backdrop-filter:
+        blur(16px);
+
+    box-shadow:
+        0 20px 50px
+        rgba(0,0,0,.20);
+
+    transform:
+        translateY(50px);
+
+    opacity:0;
+
+    animation:
+        cardEnter
+        .8s
+        cubic-bezier(.2,.8,.2,1)
+        forwards;
+}
+
+.card:nth-child(1){animation-delay:.10s;}
+.card:nth-child(2){animation-delay:.20s;}
+.card:nth-child(3){animation-delay:.30s;}
+.card:nth-child(4){animation-delay:.40s;}
+
+@keyframes cardEnter{
+
+    to{
+
+        transform:
+            translateY(0);
+
+        opacity:1;
+    }
+}
+
+.card::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:220px;
+    height:220px;
+
+    right:-100px;
+    top:-100px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,255,255,.12),
+            transparent 70%
+        );
+}
+
+.card::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:100%;
+
+    height:2px;
+
+    left:-100%;
+
+    bottom:0;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,.8),
+            transparent
+        );
+
+    animation:
+        lightSweep
+        3.5s
+        linear
+        infinite;
+}
+
+@keyframes lightSweep{
+
+    0%{
+        left:-100%;
+    }
+
+    50%{
+        left:100%;
+    }
+
+    100%{
+        left:100%;
+    }
+}
+
+.card:hover{
+
+    transform:
+        translateY(-10px)
+        scale(1.025);
+}
+
+.card-icon{
+
+    font-size:42px;
+
+    margin-bottom:10px;
+
+    animation:
+        iconFloat
+        2s
+        ease-in-out
+        infinite;
+}
+
+@keyframes iconFloat{
+
+    0%,100%{
+        transform:
+            translateY(0);
+    }
+
+    50%{
+        transform:
+            translateY(-6px);
+    }
+}
+
+.card-title{
+
+    color:#b9e9c7;
+
+    font-size:14px;
+}
+
+.card-number{
+
+    margin-top:5px;
+
+    font-size:38px;
+
+    font-weight:900;
+}
+
+.card-unit{
+
+    color:#9ed6ad;
+
+    font-size:13px;
+}
+
+
+/* =====================================================
+   งานศพล่าสุด
+===================================================== */
+
+.latest-funeral-card{
+
+    grid-column:
+        span 2;
+
+    min-height:285px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,215,70,.20),
+            rgba(255,255,255,.08)
+        );
+
+    border:
+        1px solid
+        rgba(255,230,120,.35);
+}
+
+.latest-funeral-glow{
+
+    position:absolute;
+
+    width:280px;
+    height:280px;
+
+    right:-120px;
+    top:-130px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,230,120,.25),
+            transparent 70%
+        );
+
+    animation:
+        funeralGlow
+        4s
+        ease-in-out
+        infinite;
+}
+
+@keyframes funeralGlow{
+
+    0%,100%{
+        transform:scale(1);
+        opacity:.55;
+    }
+
+    50%{
+        transform:scale(1.35);
+        opacity:.9;
+    }
+}
+
+.latest-funeral-top{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    position:relative;
+
+    z-index:2;
+}
+
+.latest-funeral-icon{
+
+    width:58px;
+    height:58px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    border-radius:18px;
+
+    font-size:32px;
+
+    background:
+        rgba(255,255,255,.12);
+
+    animation:
+        funeralIcon
+        2.5s
+        ease-in-out
+        infinite;
+}
+
+@keyframes funeralIcon{
+
+    0%,100%{
+        transform:
+            translateY(0);
+    }
+
+    50%{
+        transform:
+            translateY(-6px);
+    }
+}
+
+.latest-funeral-label{
+
+    font-size:20px;
+
+    font-weight:900;
+
+    color:#fff4b0;
+}
+
+.latest-funeral-sub{
+
+    margin-top:3px;
+
+    font-size:12px;
+
+    color:#b9e9c7;
+}
+
+.latest-funeral-name{
+
+    position:relative;
+
+    z-index:2;
+
+    margin-top:20px;
+
+    font-size:
+        clamp(
+            22px,
+            3vw,
+            32px
+        );
+
+    font-weight:900;
+}
+
+.latest-funeral-info{
+
+    position:relative;
+
+    z-index:2;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:12px;
+
+    margin-top:20px;
+}
+
+.funeral-info-item{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:
+        12px 14px;
+
+    border-radius:16px;
+
+    background:
+        rgba(255,255,255,.07);
+}
+
+.info-icon{
+    font-size:22px;
+}
+
+.funeral-info-item small{
+
+    display:block;
+
+    color:#aee7bc;
+
+    font-size:11px;
+}
+
+.funeral-info-item strong{
+
+    display:block;
+
+    margin-top:3px;
+
+    font-size:15px;
+}
+
+.history-button{
+
+    margin-top:18px;
+
+    padding:
+        11px 20px;
+
+    border:0;
+
+    border-radius:15px;
+
+    color:#fff;
+
+    font-size:14px;
+
+    font-weight:800;
+
+    cursor:pointer;
+
+    background:
+        linear-gradient(
+            135deg,
+            #e0a800,
+            #b87500
+        );
+}
+
+.funeral-history{
+
+    display:none;
+
+    grid-column:
+        1 / -1;
+
+    margin-top:18px;
+}
+
+.funeral-history.show{
+    display:block;
+}
+
+.history-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:10px;
+
+    margin-bottom:12px;
+}
+
+.history-title{
+
+    font-size:24px;
+
+    font-weight:900;
+
+    color:#fff4b0;
+}
+
+.history-count{
+
+    padding:
+        7px 12px;
+
+    border-radius:12px;
+
+    background:
+        rgba(255,255,255,.10);
+
+    color:#b9e9c7;
+}
+
+.history-item{
+
+    margin-bottom:12px;
+
+    padding:18px;
+
+    border-radius:20px;
+
+    background:
+        rgba(255,255,255,.08);
+
+    border:
+        1px solid
+        rgba(255,255,255,.15);
+
+    animation:
+        historyEnter
+        .5s
+        ease
+        both;
+}
+
+.history-name{
+
+    font-size:20px;
+
+    font-weight:900;
+}
+
+.history-number{
+
+    display:inline-flex;
+
+    width:32px;
+    height:32px;
+
+    align-items:center;
+    justify-content:center;
+
+    margin-right:8px;
+
+    border-radius:50%;
+
+    background:
+        rgba(255,214,75,.18);
+
+    color:#fff4b0;
+}
+
+.history-info{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:10px;
+
+    margin-top:13px;
+}
+
+.history-info-box{
+
+    padding:
+        11px 13px;
+
+    border-radius:14px;
+
+    background:
+        rgba(255,255,255,.06);
+}
+
+.history-info-box small{
+
+    display:block;
+
+    color:#aee7bc;
+
+    font-size:11px;
+}
+
+.history-info-box strong{
+
+    display:block;
+
+    margin-top:4px;
+}
+
+@keyframes historyEnter{
+
+    from{
+        opacity:0;
+
+        transform:
+            translateY(15px);
+    }
+
+    to{
+        opacity:1;
+
+        transform:
+            translateY(0);
+    }
 }
 
 
@@ -1743,7 +1632,6 @@ body{
     box-shadow:
         0 20px 55px
         rgba(0,0,0,.22);
-
 }
 
 .followup-header{
@@ -1757,7 +1645,6 @@ body{
     gap:15px;
 
     margin-bottom:16px;
-
 }
 
 .followup-header h2{
@@ -1767,7 +1654,6 @@ body{
     color:#fff4b0;
 
     font-size:25px;
-
 }
 
 .followup-header p{
@@ -1779,7 +1665,6 @@ body{
     color:#b9e9c7;
 
     font-size:13px;
-
 }
 
 .followup-total{
@@ -1797,7 +1682,6 @@ body{
         rgba(255,255,255,.10);
 
     font-weight:900;
-
 }
 
 
@@ -1843,7 +1727,6 @@ body{
         2.5s
         ease-in-out
         infinite;
-
 }
 
 .followup-alert strong{
@@ -1851,38 +1734,31 @@ body{
     color:#fff;
 
     font-size:20px;
-
 }
 
 .followup-alert span{
 
     color:#ffd0d0;
-
 }
 
 @keyframes followupAlertPulse{
 
     0%,100%{
-
         box-shadow:
             0 0 15px
             rgba(255,50,50,.08);
-
     }
 
     50%{
-
         box-shadow:
             0 0 35px
             rgba(255,50,50,.20);
-
     }
-
 }
 
 
 /* =====================================================
-   รายการติดตาม
+   รายการสมาชิก
 ===================================================== */
 
 .followup-item{
@@ -1901,7 +1777,6 @@ body{
     border:
         1px solid
         rgba(255,255,255,.12);
-
 }
 
 .followup-item.warning{
@@ -1909,7 +1784,6 @@ body{
     border-left:
         5px solid
         #ffc107;
-
 }
 
 .followup-item.danger{
@@ -1917,7 +1791,6 @@ body{
     border-left:
         5px solid
         #ff5252;
-
 }
 
 .followup-name{
@@ -1925,7 +1798,6 @@ body{
     font-size:19px;
 
     font-weight:900;
-
 }
 
 .followup-house{
@@ -1935,7 +1807,6 @@ body{
     font-size:14px;
 
     color:#ccebd4;
-
 }
 
 .followup-pending{
@@ -1947,7 +1818,6 @@ body{
     font-weight:800;
 
     color:#ffd54f;
-
 }
 
 .followup-funeral{
@@ -1967,7 +1837,6 @@ body{
     font-size:14px;
 
     line-height:1.7;
-
 }
 
 .followup-status{
@@ -1975,19 +1844,16 @@ body{
     margin-top:10px;
 
     font-weight:900;
-
 }
 
 .followup-status.warning{
 
     color:#ffd54f;
-
 }
 
 .followup-status.danger{
 
     color:#ff6b6b;
-
 }
 
 .print-followup{
@@ -2016,7 +1882,6 @@ body{
     font-weight:900;
 
     cursor:pointer;
-
 }
 
 
@@ -2030,7 +1895,6 @@ body{
         35px 0 16px;
 
     font-size:25px;
-
 }
 
 .menu{
@@ -2041,7 +1905,6 @@ body{
         repeat(4,1fr);
 
     gap:16px;
-
 }
 
 .menu a{
@@ -2090,7 +1953,6 @@ body{
         .7s
         cubic-bezier(.2,.8,.2,1)
         forwards;
-
 }
 
 .menu a:nth-child(1){animation-delay:.10s;}
@@ -2111,9 +1973,7 @@ body{
         transform:
             scale(1)
             translateY(0);
-
     }
-
 }
 
 .menu a:hover{
@@ -2124,7 +1984,6 @@ body{
 
     background:
         rgba(255,255,255,.18);
-
 }
 
 .menu-icon{
@@ -2136,7 +1995,6 @@ body{
         2s
         ease-in-out
         infinite;
-
 }
 
 @keyframes menuIcon{
@@ -2150,7 +2008,6 @@ body{
         transform:
             translateY(-6px);
     }
-
 }
 
 
@@ -2168,7 +2025,6 @@ body{
     color:#9fd7ac;
 
     font-size:14px;
-
 }
 
 
@@ -2182,7 +2038,6 @@ body{
 
         grid-template-columns:
             1fr;
-
     }
 
     .dashboard,
@@ -2190,16 +2045,13 @@ body{
 
         grid-template-columns:
             repeat(2,1fr);
-
     }
 
     .latest-funeral-card{
 
         grid-column:
             span 2;
-
     }
-
 }
 
 @media(max-width:600px){
@@ -2209,8 +2061,11 @@ body{
     }
 
     .hero{
+
         padding:
-            25px 5px 25px;
+            25px
+            5px
+            22px;
     }
 
     .logo{
@@ -2219,14 +2074,12 @@ body{
         height:85px;
 
         font-size:48px;
-
     }
 
     .dashboard,
     .menu{
 
         gap:10px;
-
     }
 
     .card{
@@ -2237,7 +2090,6 @@ body{
             15px 10px;
 
         border-radius:20px;
-
     }
 
     .card-icon{
@@ -2254,7 +2106,6 @@ body{
             span 2;
 
         min-height:300px;
-
     }
 
     .latest-funeral-info,
@@ -2262,7 +2113,6 @@ body{
 
         grid-template-columns:
             1fr;
-
     }
 
     .latest-funeral-name{
@@ -2276,7 +2126,6 @@ body{
         padding:18px;
 
         border-radius:22px;
-
     }
 
     .summary-icon{
@@ -2287,7 +2136,6 @@ body{
         font-size:30px;
 
         border-radius:18px;
-
     }
 
     .summary-number{
@@ -2299,7 +2147,6 @@ body{
         align-items:flex-start;
 
         flex-direction:column;
-
     }
 
     .history-header{
@@ -2307,50 +2154,39 @@ body{
         align-items:flex-start;
 
         flex-direction:column;
-
     }
 
     .condolence-card{
 
-        padding:22px 18px;
+        padding:
+            22px 18px;
 
         flex-direction:column;
 
         text-align:center;
-
     }
 
     .condolence-wreath{
 
         width:115px;
         height:115px;
-
     }
 
     .wreath-icon{
-
         font-size:42px;
-
     }
 
     .wreath-ring{
-
         font-size:19px;
-
     }
 
     .condolence-title{
-
         font-size:21px;
-
     }
 
     .condolence-name{
-
         font-size:23px;
-
     }
-
 }
 
 </style>
@@ -2360,6 +2196,10 @@ body{
 
 <body>
 
+
+<!-- =====================================================
+   พื้นหลัง
+===================================================== -->
 
 <div class="bg-orb orb1"></div>
 <div class="bg-orb orb2"></div>
@@ -2403,7 +2243,82 @@ body{
 
 
 <!-- =====================================================
-   3 การ์ดหลัก
+   🕊️ การ์ดแสดงความเสียใจ — บนสุด
+===================================================== -->
+
+<section class="condolence-card">
+
+
+    <div class="condolence-wreath">
+
+        <div class="wreath-icon">
+            🪷
+        </div>
+
+        <div class="wreath-ring">
+            🌿 🌿 🌿
+        </div>
+
+    </div>
+
+
+    <div class="condolence-content">
+
+        <div class="condolence-title">
+            🕊️ ขอแสดงความเสียใจอย่างสุดซึ้ง
+        </div>
+
+
+        <div
+            id="condolenceName"
+            class="condolence-name"
+        >
+            นายเกษมสุข ใฝ่ใจ
+        </div>
+
+
+        <div class="condolence-message">
+
+            คณะกรรมการหมู่บ้าน
+            ทีมผู้นำชุมชน
+            กลุ่มแม่บ้าน
+            กลุ่มผู้สูงอายุ
+            และชาวบ้านบ้านร่องเข็ม หมู่ที่ 6
+
+            <br><br>
+
+            ขอร่วมไว้อาลัยต่อการจากไปของผู้วายชนม์
+            และขอเป็นกำลังใจแก่ครอบครัว
+            และญาติพี่น้องทุกท่าน
+
+            <br><br>
+
+            ขอให้ผ่านพ้นช่วงเวลาแห่งความสูญเสีย
+            ไปด้วยความเข้มแข็ง
+            และขอให้ดวงวิญญาณไปสู่สุคติ
+
+        </div>
+
+
+        <div class="condolence-footer">
+
+            ด้วยความอาลัยยิ่ง
+
+            <br>
+
+            <strong>
+                บ้านร่องเข็ม หมู่ที่ 6
+            </strong>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+   3 การ์ดสรุป
 ===================================================== -->
 
 <section class="main-summary">
@@ -2704,81 +2619,6 @@ body{
 
 
 <!-- =====================================================
-   การ์ดแสดงความเสียใจ
-===================================================== -->
-
-<section class="condolence-card">
-
-
-    <div class="condolence-wreath">
-
-        <div class="wreath-icon">
-            🪷
-        </div>
-
-        <div class="wreath-ring">
-            🌿 🌿 🌿
-        </div>
-
-    </div>
-
-
-    <div class="condolence-content">
-
-        <div class="condolence-title">
-            🕊️ ขอแสดงความเสียใจอย่างสุดซึ้ง
-        </div>
-
-
-        <div
-            id="condolenceName"
-            class="condolence-name"
-        >
-            นายเกษมสุข ใฝ่ใจ
-        </div>
-
-
-        <div class="condolence-message">
-
-            คณะกรรมการหมู่บ้าน
-            ทีมผู้นำชุมชน
-            กลุ่มแม่บ้าน
-            กลุ่มผู้สูงอายุ
-            และชาวบ้านบ้านร่องเข็ม หมู่ที่ 6
-
-            <br><br>
-
-            ขอร่วมไว้อาลัยต่อการจากไปของผู้วายชนม์
-            และขอเป็นกำลังใจแก่ครอบครัว
-            และญาติพี่น้องทุกท่าน
-
-            <br><br>
-
-            ขอให้ผ่านพ้นช่วงเวลาแห่งความสูญเสีย
-            ไปด้วยความเข้มแข็ง
-            และขอให้ดวงวิญญาณไปสู่สุคติ
-
-        </div>
-
-
-        <div class="condolence-footer">
-
-            ด้วยความอาลัยยิ่ง
-
-            <br>
-
-            <strong>
-                บ้านร่องเข็ม หมู่ที่ 6
-            </strong>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =====================================================
    สมาชิกที่ต้องติดตาม
 ===================================================== -->
 
@@ -3064,7 +2904,6 @@ function animateNumber(
     requestAnimationFrame(
         update
     );
-
 }
 
 
@@ -3161,8 +3000,7 @@ animateNumber(
    ข้าวสารช่วยงานศพ
 ===================================================== */
 
-const FUNERAL_RICE =
-    182;
+const FUNERAL_RICE = 182;
 
 
 animateNumber(
@@ -3174,24 +3012,20 @@ animateNumber(
 
 
 /* =====================================================
-   วันที่
+   วันที่งานศพ
 ===================================================== */
 
 function parseFuneralDate(value){
 
     if(!value){
-
         return 0;
-
     }
 
 
     if(
         typeof value === "number"
     ){
-
         return value;
-
     }
 
 
@@ -3217,12 +3051,8 @@ function parseFuneralDate(value){
             Number(match[3]);
 
 
-        if(
-            year > 2400
-        ){
-
+        if(year > 2400){
             year -= 543;
-
         }
 
 
@@ -3231,7 +3061,6 @@ function parseFuneralDate(value){
             month - 1,
             day
         ).getTime();
-
     }
 
 
@@ -3253,12 +3082,8 @@ function parseFuneralDate(value){
             Number(match[3]);
 
 
-        if(
-            year > 2400
-        ){
-
+        if(year > 2400){
             year -= 543;
-
         }
 
 
@@ -3267,7 +3092,6 @@ function parseFuneralDate(value){
             month - 1,
             day
         ).getTime();
-
     }
 
 
@@ -3289,12 +3113,8 @@ function parseFuneralDate(value){
             Number(match[3]);
 
 
-        if(
-            year > 2400
-        ){
-
+        if(year > 2400){
             year -= 543;
-
         }
 
 
@@ -3303,7 +3123,6 @@ function parseFuneralDate(value){
             month - 1,
             day
         ).getTime();
-
     }
 
 
@@ -3316,14 +3135,11 @@ function parseFuneralDate(value){
             date.getTime()
         )
     ){
-
         return date.getTime();
-
     }
 
 
     return 0;
-
 }
 
 
@@ -3334,17 +3150,11 @@ function parseFuneralDate(value){
 function formatThaiDate(value){
 
     const timestamp =
-        parseFuneralDate(
-            value
-        );
+        parseFuneralDate(value);
 
 
-    if(
-        !timestamp
-    ){
-
+    if(!timestamp){
         return "-";
-
     }
 
 
@@ -3358,7 +3168,6 @@ function formatThaiDate(value){
             year:"numeric"
         }
     );
-
 }
 
 
@@ -3390,10 +3199,8 @@ function getSortedFunerals(){
 
 
             return dateB - dateA;
-
         }
     );
-
 }
 
 
@@ -3408,18 +3215,15 @@ function showLatestFuneral(){
             "latestFuneralName"
         );
 
-
     const dateElement =
         document.getElementById(
             "latestFuneralDate"
         );
 
-
     const houseElement =
         document.getElementById(
             "latestFuneralHouse"
         );
-
 
     const cremateElement =
         document.getElementById(
@@ -3427,9 +3231,7 @@ function showLatestFuneral(){
         );
 
 
-    if(
-        funerals.length === 0
-    ){
+    if(funerals.length === 0){
 
         nameElement.innerText =
             "ยังไม่มีข้อมูลงานศพ";
@@ -3444,13 +3246,11 @@ function showLatestFuneral(){
             "-";
 
         return;
-
     }
 
 
     const sorted =
         getSortedFunerals();
-
 
     const latest =
         sorted[0];
@@ -3483,12 +3283,11 @@ function showLatestFuneral(){
                 latest.cremate
               )
             : "-";
-
 }
 
 
 /* =====================================================
-   ข้อความแสดงความเสียใจ
+   ชื่อในข้อความแสดงความเสียใจ
 ===================================================== */
 
 function showCondolence(){
@@ -3503,15 +3302,12 @@ function showCondolence(){
         !element ||
         funerals.length === 0
     ){
-
         return;
-
     }
 
 
     const sorted =
         getSortedFunerals();
-
 
     const latest =
         sorted[0];
@@ -3520,12 +3316,11 @@ function showCondolence(){
     element.innerText =
         latest.name ||
         "ผู้วายชนม์";
-
 }
 
 
 /* =====================================================
-   เปิด/ปิดประวัติ
+   งานศพย้อนหลัง
 ===================================================== */
 
 function toggleFuneralHistory(){
@@ -3546,16 +3341,13 @@ function toggleFuneralHistory(){
             "show"
         );
 
-        box.innerHTML =
-            "";
+        box.innerHTML = "";
 
         return;
-
     }
 
 
     showFuneralHistory();
-
 }
 
 
@@ -3567,9 +3359,7 @@ function showFuneralHistory(){
         );
 
 
-    if(
-        funerals.length === 0
-    ){
+    if(funerals.length === 0){
 
         box.innerHTML = `
 
@@ -3583,19 +3373,14 @@ function showFuneralHistory(){
                     text-align:center;
                 "
             >
-
                 ยังไม่มีประวัติงานศพ
-
             </div>
 
         `;
 
-        box.classList.add(
-            "show"
-        );
+        box.classList.add("show");
 
         return;
-
     }
 
 
@@ -3612,15 +3397,10 @@ function showFuneralHistory(){
             </div>
 
             <div class="history-count">
-
-                ทั้งหมด
-                ${sorted.length}
-                งาน
-
+                ทั้งหมด ${sorted.length} งาน
             </div>
 
         </div>
-
 
         ${
             sorted
@@ -3676,6 +3456,7 @@ function showFuneralHistory(){
 
                             <div class="history-info">
 
+
                                 <div class="history-info-box">
 
                                     <small>
@@ -3714,12 +3495,12 @@ function showFuneralHistory(){
 
                                 </div>
 
+
                             </div>
 
                         </div>
 
                     `;
-
                 }
             )
             .join("")
@@ -3728,9 +3509,7 @@ function showFuneralHistory(){
     `;
 
 
-    box.classList.add(
-        "show"
-    );
+    box.classList.add("show");
 
 
     setTimeout(
@@ -3744,12 +3523,11 @@ function showFuneralHistory(){
         },
         100
     );
-
 }
 
 
 /* =====================================================
-   สมาชิกติดตาม
+   สมาชิกที่ต้องติดตาม
 ===================================================== */
 
 const followupMembers = [
@@ -3866,9 +3644,7 @@ function showFollowupMembers(){
 
 
     if(!box){
-
         return;
-
     }
 
 
@@ -3965,11 +3741,9 @@ function showFollowupMembers(){
                     </div>
 
                 `;
-
             }
         )
         .join("");
-
 }
 
 
@@ -4029,9 +3803,7 @@ function printFollowupReport(){
                         </td>
 
                     </tr>
-
                 `;
-
             }
         )
         .join("");
@@ -4051,7 +3823,6 @@ function printFollowupReport(){
         );
 
         return;
-
     }
 
 
@@ -4080,20 +3851,16 @@ function printFollowupReport(){
                     padding:30px;
 
                     color:#222;
-
                 }
 
                 h1,
                 h2{
 
                     text-align:center;
-
                 }
 
                 h2{
-
                     font-weight:normal;
-
                 }
 
                 table{
@@ -4103,24 +3870,21 @@ function printFollowupReport(){
                     border-collapse:collapse;
 
                     margin-top:25px;
-
                 }
 
                 th,
                 td{
 
-                    border:1px solid #333;
+                    border:
+                        1px solid #333;
 
                     padding:8px;
 
                     vertical-align:top;
-
                 }
 
                 th{
-
                     background:#eee;
-
                 }
 
                 .footer{
@@ -4128,7 +3892,6 @@ function printFollowupReport(){
                     margin-top:30px;
 
                     text-align:right;
-
                 }
 
             </style>
@@ -4147,13 +3910,11 @@ function printFollowupReport(){
             </h2>
 
             <p>
-
                 จำนวนสมาชิกที่ต้องติดตาม:
                 <strong>
                     ${followupMembers.length}
                 </strong>
                 ราย
-
             </p>
 
 
@@ -4213,7 +3974,6 @@ function printFollowupReport(){
         },
         500
     );
-
 }
 
 
