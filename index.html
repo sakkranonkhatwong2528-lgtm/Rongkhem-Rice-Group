@@ -5,10 +5,8 @@
 
 <meta charset="UTF-8">
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
 <title>
 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
@@ -56,7 +54,7 @@ body{
 
 
 /* =====================================================
-   วงแสงพื้นหลัง
+   พื้นหลังวงแสง
 ===================================================== */
 
 .bg-orb{
@@ -144,6 +142,7 @@ body{
 
 }
 
+
 @keyframes orbMove1{
 
     0%,100%{
@@ -160,6 +159,7 @@ body{
 
 }
 
+
 @keyframes orbMove2{
 
     0%,100%{
@@ -175,6 +175,7 @@ body{
     }
 
 }
+
 
 @keyframes orbMove3{
 
@@ -194,7 +195,7 @@ body{
 
 
 /* =====================================================
-   จุดแสง
+   จุดแสงลอย
 ===================================================== */
 
 .particle{
@@ -254,6 +255,7 @@ body{
     animation-delay:3s;
 }
 
+
 @keyframes particleMove{
 
     from{
@@ -290,7 +292,7 @@ body{
 
 
 /* =====================================================
-   หน้า
+   หน้าเว็บ
 ===================================================== */
 
 .page{
@@ -322,6 +324,7 @@ body{
         30px;
 
 }
+
 
 .logo{
 
@@ -359,7 +362,8 @@ body{
         0 25px 60px
         rgba(0,0,0,.30);
 
-    backdrop-filter:blur(15px);
+    backdrop-filter:
+        blur(15px);
 
     animation:
         logoAnimation
@@ -368,6 +372,7 @@ body{
         infinite;
 
 }
+
 
 @keyframes logoAnimation{
 
@@ -384,6 +389,7 @@ body{
     }
 
 }
+
 
 .hero h1{
 
@@ -407,6 +413,7 @@ body{
 
 }
 
+
 @keyframes titleGlow{
 
     from{
@@ -422,6 +429,7 @@ body{
     }
 
 }
+
 
 .hero h2{
 
@@ -443,6 +451,7 @@ body{
 
 }
 
+
 .hero p{
 
     margin-top:13px;
@@ -450,6 +459,7 @@ body{
     color:#aee7bc;
 
 }
+
 
 .hero-line{
 
@@ -470,6 +480,7 @@ body{
         rgba(255,255,255,.12);
 
 }
+
 
 .hero-line::before{
 
@@ -497,6 +508,7 @@ body{
 
 }
 
+
 @keyframes lineMove{
 
     from{
@@ -513,7 +525,7 @@ body{
 
 
 /* =====================================================
-   สรุป 3 การ์ดหลัก
+   การ์ดสรุปหลัก 3 ใบ
 ===================================================== */
 
 .main-summary{
@@ -528,6 +540,7 @@ body{
     margin-bottom:22px;
 
 }
+
 
 .summary-main-card{
 
@@ -569,6 +582,7 @@ body{
 
 }
 
+
 .summary-main-card:hover{
 
     transform:
@@ -576,6 +590,7 @@ body{
         scale(1.02);
 
 }
+
 
 .summary-main-card::before{
 
@@ -605,6 +620,7 @@ body{
         infinite;
 
 }
+
 
 .summary-main-card::after{
 
@@ -636,6 +652,7 @@ body{
 
 }
 
+
 .members-card{
 
     background:
@@ -646,6 +663,7 @@ body{
         );
 
 }
+
 
 .normal-card{
 
@@ -658,6 +676,7 @@ body{
 
 }
 
+
 .rice-card{
 
     background:
@@ -669,39 +688,54 @@ body{
 
 }
 
+
 @keyframes summaryEnter{
 
     from{
+
         opacity:0;
 
         transform:
             translateY(25px)
             scale(.96);
+
     }
 
     to{
+
         opacity:1;
 
         transform:
             translateY(0)
             scale(1);
+
     }
 
 }
+
 
 @keyframes summaryGlow{
 
     0%,100%{
-        transform:scale(1);
+
+        transform:
+            scale(1);
+
         opacity:.55;
+
     }
 
     50%{
-        transform:scale(1.3);
+
+        transform:
+            scale(1.3);
+
         opacity:.9;
+
     }
 
 }
+
 
 @keyframes summarySweep{
 
@@ -718,6 +752,7 @@ body{
     }
 
 }
+
 
 .summary-icon{
 
@@ -750,6 +785,7 @@ body{
 
 }
 
+
 @keyframes summaryIconFloat{
 
     0%,100%{
@@ -764,6 +800,7 @@ body{
 
 }
 
+
 .summary-content{
 
     position:relative;
@@ -771,6 +808,7 @@ body{
     z-index:2;
 
 }
+
 
 .summary-title{
 
@@ -781,6 +819,7 @@ body{
     font-weight:600;
 
 }
+
 
 .summary-number{
 
@@ -794,6 +833,7 @@ body{
 
 }
 
+
 .summary-unit{
 
     margin-top:8px;
@@ -806,7 +846,7 @@ body{
 
 
 /* =====================================================
-   Dashboard
+   Dashboard รอง
 ===================================================== */
 
 .dashboard{
@@ -819,6 +859,7 @@ body{
     gap:16px;
 
 }
+
 
 .card{
 
@@ -863,22 +904,26 @@ body{
 
 }
 
+
 .card:nth-child(1){animation-delay:.10s;}
 .card:nth-child(2){animation-delay:.20s;}
 .card:nth-child(3){animation-delay:.30s;}
 .card:nth-child(4){animation-delay:.40s;}
-.card:nth-child(5){animation-delay:.50s;}
+
 
 @keyframes cardEnter{
 
     to{
+
         transform:
             translateY(0);
 
         opacity:1;
+
     }
 
 }
+
 
 .card::before{
 
@@ -902,6 +947,7 @@ body{
         );
 
 }
+
 
 .card::after{
 
@@ -933,6 +979,7 @@ body{
 
 }
 
+
 @keyframes lightSweep{
 
     0%{
@@ -949,6 +996,7 @@ body{
 
 }
 
+
 .card:hover{
 
     transform:
@@ -956,6 +1004,7 @@ body{
         scale(1.025);
 
 }
+
 
 .card-icon{
 
@@ -971,6 +1020,7 @@ body{
 
 }
 
+
 @keyframes iconFloat{
 
     0%,100%{
@@ -985,6 +1035,7 @@ body{
 
 }
 
+
 .card-title{
 
     color:#b9e9c7;
@@ -992,6 +1043,7 @@ body{
     font-size:14px;
 
 }
+
 
 .card-number{
 
@@ -1002,6 +1054,7 @@ body{
     font-weight:900;
 
 }
+
 
 .card-unit{
 
@@ -1037,6 +1090,7 @@ body{
 
 }
 
+
 .latest-funeral-glow{
 
     position:absolute;
@@ -1064,19 +1118,29 @@ body{
 
 }
 
+
 @keyframes funeralGlow{
 
     0%,100%{
-        transform:scale(1);
+
+        transform:
+            scale(1);
+
         opacity:.55;
+
     }
 
     50%{
-        transform:scale(1.35);
+
+        transform:
+            scale(1.35);
+
         opacity:.9;
+
     }
 
 }
+
 
 .latest-funeral-top{
 
@@ -1092,6 +1156,7 @@ body{
 
 }
 
+
 .latest-funeral-icon{
 
     width:58px;
@@ -1100,7 +1165,6 @@ body{
     display:flex;
 
     align-items:center;
-
     justify-content:center;
 
     border-radius:18px;
@@ -1118,6 +1182,7 @@ body{
 
 }
 
+
 @keyframes funeralIcon{
 
     0%,100%{
@@ -1132,6 +1197,7 @@ body{
 
 }
 
+
 .latest-funeral-label{
 
     font-size:20px;
@@ -1142,6 +1208,7 @@ body{
 
 }
 
+
 .latest-funeral-sub{
 
     margin-top:3px;
@@ -1151,6 +1218,7 @@ body{
     color:#b9e9c7;
 
 }
+
 
 .latest-funeral-name{
 
@@ -1171,6 +1239,7 @@ body{
 
 }
 
+
 .latest-funeral-info{
 
     position:relative;
@@ -1187,6 +1256,7 @@ body{
     margin-top:20px;
 
 }
+
 
 .funeral-info-item{
 
@@ -1206,9 +1276,11 @@ body{
 
 }
 
+
 .info-icon{
     font-size:22px;
 }
+
 
 .funeral-info-item small{
 
@@ -1220,6 +1292,7 @@ body{
 
 }
 
+
 .funeral-info-item strong{
 
     display:block;
@@ -1229,6 +1302,7 @@ body{
     font-size:15px;
 
 }
+
 
 .history-button{
 
@@ -1258,6 +1332,7 @@ body{
 
 }
 
+
 .funeral-history{
 
     display:none;
@@ -1269,11 +1344,11 @@ body{
 
 }
 
+
 .funeral-history.show{
-
     display:block;
-
 }
+
 
 .history-header{
 
@@ -1289,6 +1364,7 @@ body{
 
 }
 
+
 .history-title{
 
     font-size:24px;
@@ -1298,6 +1374,7 @@ body{
     color:#fff4b0;
 
 }
+
 
 .history-count{
 
@@ -1312,6 +1389,7 @@ body{
     color:#b9e9c7;
 
 }
+
 
 .history-item{
 
@@ -1336,6 +1414,7 @@ body{
 
 }
 
+
 .history-name{
 
     font-size:20px;
@@ -1343,6 +1422,7 @@ body{
     font-weight:900;
 
 }
+
 
 .history-number{
 
@@ -1365,6 +1445,7 @@ body{
 
 }
 
+
 .history-info{
 
     display:grid;
@@ -1378,6 +1459,7 @@ body{
 
 }
 
+
 .history-info-box{
 
     padding:
@@ -1390,6 +1472,7 @@ body{
 
 }
 
+
 .history-info-box small{
 
     display:block;
@@ -1400,6 +1483,7 @@ body{
 
 }
 
+
 .history-info-box strong{
 
     display:block;
@@ -1408,70 +1492,24 @@ body{
 
 }
 
+
 @keyframes historyEnter{
 
     from{
+
         opacity:0;
+
         transform:
             translateY(15px);
+
     }
 
     to{
+
         opacity:1;
+
         transform:
             translateY(0);
-    }
-
-}
-
-
-/* =====================================================
-   แจ้งเตือน
-===================================================== */
-
-.alert{
-
-    margin:
-        18px 0;
-
-    padding:20px;
-
-    border-radius:22px;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,50,50,.20),
-            rgba(180,0,0,.10)
-        );
-
-    border:
-        1px solid
-        rgba(255,120,120,.30);
-
-    animation:
-        alertPulse
-        2.5s
-        ease-in-out
-        infinite;
-
-}
-
-@keyframes alertPulse{
-
-    0%,100%{
-
-        box-shadow:
-            0 0 20px
-            rgba(255,50,50,.08);
-
-    }
-
-    50%{
-
-        box-shadow:
-            0 0 45px
-            rgba(255,50,50,.22);
 
     }
 
@@ -1510,6 +1548,7 @@ body{
 
 }
 
+
 .followup-header{
 
     display:flex;
@@ -1520,9 +1559,10 @@ body{
 
     gap:15px;
 
-    margin-bottom:18px;
+    margin-bottom:16px;
 
 }
+
 
 .followup-header h2{
 
@@ -1533,6 +1573,7 @@ body{
     font-size:25px;
 
 }
+
 
 .followup-header p{
 
@@ -1545,6 +1586,7 @@ body{
     font-size:13px;
 
 }
+
 
 .followup-total{
 
@@ -1563,6 +1605,94 @@ body{
     font-weight:900;
 
 }
+
+
+/* =====================================================
+   กล่องแจ้งเตือนในส่วนติดตาม
+===================================================== */
+
+.followup-alert{
+
+    margin:
+        0
+        0
+        18px;
+
+    padding:
+        16px 18px;
+
+    border-radius:18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,50,50,.22),
+            rgba(180,0,0,.10)
+        );
+
+    border:
+        1px solid
+        rgba(255,120,120,.32);
+
+    color:#ffe4e4;
+
+    font-size:14px;
+
+    line-height:1.8;
+
+    box-shadow:
+        0 10px 30px
+        rgba(0,0,0,.16);
+
+    animation:
+        followupAlertPulse
+        2.5s
+        ease-in-out
+        infinite;
+
+}
+
+
+.followup-alert strong{
+
+    color:#fff;
+
+    font-size:20px;
+
+}
+
+
+.followup-alert span{
+
+    color:#ffd0d0;
+
+}
+
+
+@keyframes followupAlertPulse{
+
+    0%,100%{
+
+        box-shadow:
+            0 0 15px
+            rgba(255,50,50,.08);
+
+    }
+
+    50%{
+
+        box-shadow:
+            0 0 35px
+            rgba(255,50,50,.20);
+
+    }
+
+}
+
+
+/* =====================================================
+   รายการสมาชิกติดตาม
+===================================================== */
 
 .followup-item{
 
@@ -1583,6 +1713,7 @@ body{
 
 }
 
+
 .followup-item.warning{
 
     border-left:
@@ -1590,6 +1721,7 @@ body{
         #ffc107;
 
 }
+
 
 .followup-item.danger{
 
@@ -1599,6 +1731,7 @@ body{
 
 }
 
+
 .followup-name{
 
     font-size:19px;
@@ -1606,6 +1739,7 @@ body{
     font-weight:900;
 
 }
+
 
 .followup-house{
 
@@ -1616,6 +1750,7 @@ body{
     color:#ccebd4;
 
 }
+
 
 .followup-pending{
 
@@ -1628,6 +1763,7 @@ body{
     color:#ffd54f;
 
 }
+
 
 .followup-funeral{
 
@@ -1649,6 +1785,7 @@ body{
 
 }
 
+
 .followup-status{
 
     margin-top:10px;
@@ -1657,17 +1794,20 @@ body{
 
 }
 
+
 .followup-status.warning{
 
     color:#ffd54f;
 
 }
 
+
 .followup-status.danger{
 
     color:#ff6b6b;
 
 }
+
 
 .print-followup{
 
@@ -1712,6 +1852,7 @@ body{
 
 }
 
+
 .menu{
 
     display:grid;
@@ -1722,6 +1863,7 @@ body{
     gap:16px;
 
 }
+
 
 .menu a{
 
@@ -1772,6 +1914,7 @@ body{
 
 }
 
+
 .menu a:nth-child(1){animation-delay:.10s;}
 .menu a:nth-child(2){animation-delay:.20s;}
 .menu a:nth-child(3){animation-delay:.30s;}
@@ -1780,6 +1923,7 @@ body{
 .menu a:nth-child(6){animation-delay:.60s;}
 .menu a:nth-child(7){animation-delay:.70s;}
 .menu a:nth-child(8){animation-delay:.80s;}
+
 
 @keyframes menuEnter{
 
@@ -1795,6 +1939,7 @@ body{
 
 }
 
+
 .menu a:hover{
 
     transform:
@@ -1805,6 +1950,7 @@ body{
         rgba(255,255,255,.18);
 
 }
+
 
 .menu-icon{
 
@@ -1817,6 +1963,7 @@ body{
         infinite;
 
 }
+
 
 @keyframes menuIcon{
 
@@ -1881,6 +2028,7 @@ body{
 
 }
 
+
 @media(max-width:600px){
 
     .page{
@@ -1893,21 +2041,30 @@ body{
     }
 
     .logo{
+
         width:85px;
         height:85px;
+
         font-size:48px;
+
     }
 
     .dashboard,
     .menu{
+
         gap:10px;
+
     }
 
     .card{
+
         min-height:145px;
+
         padding:
             15px 10px;
+
         border-radius:20px;
+
     }
 
     .card-icon{
@@ -1961,9 +2118,7 @@ body{
     }
 
     .summary-number{
-
         font-size:36px;
-
     }
 
     .followup-header{
@@ -2034,13 +2189,11 @@ body{
 
 
 <!-- =====================================================
-   3 การ์ดหลัก
+   สรุป 3 การ์ดหลัก
 ===================================================== -->
 
 <section class="main-summary">
 
-
-    <!-- สมาชิกทั้งหมด -->
 
     <div class="summary-main-card members-card">
 
@@ -2070,8 +2223,6 @@ body{
     </div>
 
 
-    <!-- สมาชิกปกติ -->
-
     <div class="summary-main-card normal-card">
 
         <div class="summary-icon">
@@ -2099,8 +2250,6 @@ body{
 
     </div>
 
-
-    <!-- ข้าวสารช่วยงานศพ -->
 
     <div class="summary-main-card rice-card">
 
@@ -2140,8 +2289,6 @@ body{
 <section class="dashboard">
 
 
-    <!-- งานศพ -->
-
     <div class="card">
 
         <div class="card-icon">
@@ -2165,8 +2312,6 @@ body{
 
     </div>
 
-
-    <!-- งานศพล่าสุด -->
 
     <div class="card latest-funeral-card">
 
@@ -2287,8 +2432,6 @@ body{
     </div>
 
 
-    <!-- สมาชิกค้าง -->
-
     <div class="card">
 
         <div class="card-icon">
@@ -2312,8 +2455,6 @@ body{
 
     </div>
 
-
-    <!-- ค้าง 2 ครั้ง -->
 
     <div class="card">
 
@@ -2339,8 +2480,6 @@ body{
     </div>
 
 
-    <!-- ประวัติงานศพ -->
-
     <div
         id="funeralHistory"
         class="funeral-history"
@@ -2356,6 +2495,7 @@ body{
 
 <section class="followup-section">
 
+
     <div class="followup-header">
 
         <div>
@@ -2370,9 +2510,31 @@ body{
 
         </div>
 
+
         <div class="followup-total">
             10 ราย
         </div>
+
+    </div>
+
+
+    <!-- แจ้งเตือนอยู่ตรงนี้ -->
+
+    <div class="followup-alert">
+
+        🚨 มี <strong>6 ครัวเรือน</strong>
+
+        <br>
+
+        ไม่ส่งข้าวสารช่วยงานศพ
+        ครบ 2 ครั้งขึ้นไป
+
+        <br>
+
+        <span>
+            โปรดตรวจสอบและพิจารณา
+            ตามกติกาของกลุ่ม
+        </span>
 
     </div>
 
@@ -2388,10 +2550,8 @@ body{
         🖨️ พิมพ์รายงานแจ้งเตือน
     </button>
 
+
 </section>
-
-
-<div id="notice"></div>
 
 
 <!-- =====================================================
@@ -2558,6 +2718,7 @@ function animateNumber(
     target =
         Number(target) || 0;
 
+
     const start =
         performance.now();
 
@@ -2712,7 +2873,6 @@ animateNumber(
 
 /* =====================================================
    ข้าวสารช่วยงานศพ
-   คงที่ 182 ถุง
 ===================================================== */
 
 const FUNERAL_RICE =
@@ -2728,79 +2888,15 @@ animateNumber(
 
 
 /* =====================================================
-   แจ้งเตือน
-===================================================== */
-
-const notice =
-    document.getElementById(
-        "notice"
-    );
-
-
-if(
-    dangerMembers.length > 0
-){
-
-    notice.innerHTML = `
-
-        <div class="alert">
-
-            🚨
-
-            <strong>
-                มี ${dangerMembers.length}
-                ครัวเรือน
-            </strong>
-
-            <br>
-
-            ไม่ส่งข้าวสารช่วยงานศพ
-            ครบ 2 ครั้งขึ้นไป
-
-            <br>
-
-            โปรดตรวจสอบและพิจารณา
-            ตามกติกาของกลุ่ม
-
-        </div>
-
-    `;
-
-}
-else if(
-    pendingMembers.length > 0
-){
-
-    notice.innerHTML = `
-
-        <div class="alert">
-
-            ⚠️
-
-            <strong>
-                มี ${pendingMembers.length}
-                ครัวเรือนค้างส่ง
-            </strong>
-
-            <br>
-
-            กรุณาตรวจสอบรายการสมาชิก
-
-        </div>
-
-    `;
-
-}
-
-
-/* =====================================================
-   วันที่งานศพ
+   ระบบวันที่
 ===================================================== */
 
 function parseFuneralDate(value){
 
     if(!value){
+
         return 0;
+
     }
 
 
@@ -2809,6 +2905,7 @@ function parseFuneralDate(value){
     ){
 
         return value;
+
     }
 
 
@@ -2839,6 +2936,7 @@ function parseFuneralDate(value){
         ){
 
             year -= 543;
+
         }
 
 
@@ -2874,6 +2972,7 @@ function parseFuneralDate(value){
         ){
 
             year -= 543;
+
         }
 
 
@@ -2909,6 +3008,7 @@ function parseFuneralDate(value){
         ){
 
             year -= 543;
+
         }
 
 
@@ -2948,9 +3048,7 @@ function parseFuneralDate(value){
 function formatThaiDate(value){
 
     const timestamp =
-        parseFuneralDate(
-            value
-        );
+        parseFuneralDate(value);
 
 
     if(
@@ -2977,7 +3075,7 @@ function formatThaiDate(value){
 
 
 /* =====================================================
-   เรียงงานศพ
+   เรียงงานศพล่าสุด
 ===================================================== */
 
 function getSortedFunerals(){
@@ -3102,7 +3200,7 @@ function showLatestFuneral(){
 
 
 /* =====================================================
-   งานศพย้อนหลัง
+   ประวัติงานศพ
 ===================================================== */
 
 function toggleFuneralHistory(){
@@ -3193,7 +3291,6 @@ function showFuneralHistory(){
             </div>
 
         </div>
-
 
         ${
             sorted
@@ -3336,6 +3433,7 @@ const followupMembers = [
         ]
     },
 
+
     {
         name:"นายต่วน ทาทอง",
         house:"114",
@@ -3344,6 +3442,7 @@ const followupMembers = [
             "นายเกษมสุข ใฝ่ใจ"
         ]
     },
+
 
     {
         name:"นายประหยัด ปิงเมือง",
@@ -3355,6 +3454,7 @@ const followupMembers = [
         ]
     },
 
+
     {
         name:"นายสมศีล งามจิต",
         house:"135",
@@ -3364,6 +3464,7 @@ const followupMembers = [
         ]
     },
 
+
     {
         name:"น.ส.ยุพา ใจดี",
         house:"160",
@@ -3372,6 +3473,7 @@ const followupMembers = [
             "นายเกษมสุข ใฝ่ใจ"
         ]
     },
+
 
     {
         name:"นายตื่น มิ่งขวัญ",
@@ -3383,6 +3485,7 @@ const followupMembers = [
         ]
     },
 
+
     {
         name:"น.ส.สำรอง มหาวรรณศรี",
         house:"200",
@@ -3392,6 +3495,7 @@ const followupMembers = [
             "นายบูรณพิภพ ผัดดี"
         ]
     },
+
 
     {
         name:"นายบรรพต อินวงค์",
@@ -3403,6 +3507,7 @@ const followupMembers = [
         ]
     },
 
+
     {
         name:"นางลวงทิพย์ ใฝ่จิต",
         house:"315",
@@ -3412,6 +3517,7 @@ const followupMembers = [
             "นายบูรณพิภพ ผัดดี"
         ]
     },
+
 
     {
         name:"นายประทุม ดาวกระจาย",
@@ -3425,6 +3531,10 @@ const followupMembers = [
 
 ];
 
+
+/* =====================================================
+   แสดงสมาชิกที่ต้องติดตาม
+===================================================== */
 
 function showFollowupMembers(){
 
@@ -3790,13 +3900,12 @@ function printFollowupReport(){
 
 
 /* =====================================================
-   เริ่มระบบ
+   เริ่มต้น
 ===================================================== */
 
 showLatestFuneral();
 
 </script>
-
 
 </body>
 
