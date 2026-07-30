@@ -1,73 +1,54 @@
+<script>
+
+let members = JSON.parse(localStorage.getItem("members")) || [];
+
 let list = members.filter(
-m=>m.status=="ยังไม่ส่ง"
+    m => m.status === "ยังไม่ส่ง"
 );
 
+let alertBox = "";
 
-let alert="";
+if (list.length === 0) {
 
+    alertBox = `
+        <div class="success">
+            ✅ ทุกครัวเรือนส่งข้าวสารครบแล้ว
+        </div>
+    `;
 
-if(list.length==0){
+} else {
 
+    alertBox = `
+        <div class="warning">
+            ❌ มีครัวเรือนยังไม่ส่ง ${list.length} ครัวเรือน
+            <br><br>
+    `;
 
-alert=`
+    list.forEach(m => {
 
-<div class="success">
+        alertBox += `
+            🏠 ${m.name || "-"}
+            <br>
+            📌 สถานะ : ${m.status || "ยังไม่ส่ง"}
+            <br>
+            📦 ค้างส่ง : ${m.pending || 0} งาน
+            <br>
+            ⚰️ ค้างส่งงานศพ : ${m.pendingFor || "-"}
+            <br><br>
+        `;
 
-✅ ทุกครัวเรือนส่งข้าวครบแล้ว
+    });
 
-</div>
-
-`;
-
-
-}else{
-
-
-alert=`
-
-<div class="warning">
-
-❌ มีครัวเรือนยังไม่ส่ง ${list.length} ครัวเรือน
-
-<br><br>
-
-`;
-
-
-list.forEach(m=>{
-
-
-alert += `
-
-🏠 ${m.name}
-
-<br>
-
-📌 สถานะ : ${m.status}
-
-<br>
-
-📦 ค้างส่ง : ${m.pending || 0} งาน
-
-<br>
-
-⚰️ ค้างส่งงานศพ : ${m.pendingFor || "-"}
-
-<br><br>
-
-`;
-
-});
-
-
-alert += `
-
-</div>
-
-`;
-
+    alertBox += `
+        </div>
+    `;
 }
 
 
+const alertElement = document.getElementById("alert");
 
-document.getElementById("alert").innerHTML = alert;
+if (alertElement) {
+    alertElement.innerHTML = alertBox;
+}
+
+</script>
