@@ -6,228 +6,752 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>
-รายงานกลุ่มข้าวสาร
-</title>
-
+<title>รายงานกลุ่มข้าวสาร บ้านร่องเข็ม</title>
 
 <style>
 
-body{
-
-margin:0;
-font-family:Tahoma,sans-serif;
-background:#f4f7f2;
-
+*{
+    box-sizing:border-box;
 }
 
+body{
+    margin:0;
+    font-family:Tahoma,sans-serif;
+    background:#f3f7f0;
+    color:#333;
+}
 
 .header{
-
-background:#0066cc;
-color:white;
-padding:20px;
-text-align:center;
-
+    background:linear-gradient(135deg,#176b2c,#4caf50);
+    color:white;
+    padding:22px 15px;
+    text-align:center;
 }
 
+.container{
+    max-width:950px;
+    margin:auto;
+    padding:15px;
+}
 
 .box{
-
-background:white;
-margin:15px;
-padding:20px;
-border-radius:15px;
-box-shadow:0 2px 6px #ccc;
-
+    background:white;
+    padding:18px;
+    margin-bottom:15px;
+    border-radius:16px;
+    box-shadow:0 3px 10px rgba(0,0,0,.08);
 }
 
+.summary{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+}
+
+.summary-card{
+    background:#f8fff8;
+    padding:18px;
+    border-radius:14px;
+    text-align:center;
+}
+
+.icon{
+    font-size:34px;
+}
 
 .number{
-
-font-size:30px;
-color:#228B22;
-text-align:center;
-
+    font-size:28px;
+    font-weight:bold;
+    color:#228B22;
 }
 
-
-.item{
-
-background:#f8fff8;
-padding:12px;
-margin-top:10px;
-border-radius:10px;
-
+.red{
+    color:#c62828;
 }
 
+.yellow{
+    color:#b88600;
+}
+
+.table-wrap{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:650px;
+}
+
+th,td{
+    border:1px solid #ddd;
+    padding:10px;
+    text-align:left;
+}
+
+th{
+    background:#e8f5e8;
+}
+
+.status-ok{
+    color:#1b7a1b;
+    font-weight:bold;
+}
+
+.status-warning{
+    color:#b88600;
+    font-weight:bold;
+}
+
+.status-danger{
+    color:#c62828;
+    font-weight:bold;
+}
 
 button{
+    width:100%;
+    padding:14px;
+    margin-top:8px;
+    border:0;
+    border-radius:10px;
+    background:#228B22;
+    color:white;
+    font-size:17px;
+}
 
-width:100%;
-padding:15px;
-background:#228B22;
-color:white;
-border:0;
-border-radius:10px;
-font-size:18px;
+.back{
+    display:block;
+    text-align:center;
+    padding:15px;
+    color:#228B22;
+    text-decoration:none;
+}
+
+@media(max-width:600px){
+
+    .summary{
+        grid-template-columns:1fr 1fr;
+    }
+
+    th,td{
+        font-size:14px;
+    }
+
+}
+
+@media print{
+
+    body{
+        background:white;
+    }
+
+    .header{
+        color:black;
+        background:white;
+        border-bottom:2px solid #333;
+    }
+
+    button,
+    .back{
+        display:none;
+    }
+
+    .box{
+        box-shadow:none;
+        border:1px solid #ddd;
+    }
 
 }
 
 </style>
 
-
 </head>
-
 
 <body>
 
-
 <div class="header">
 
-<h1>📊 รายงาน</h1>
+<h1>📊 รายงานกลุ่มข้าวสาร</h1>
 
-<p>
-กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
-</p>
+<p>บ้านร่องเข็ม หมู่ที่ 6</p>
+
+<p>สมาชิก 185 ครัวเรือน</p>
 
 </div>
 
 
+<div class="container">
 
+
+<!-- สรุปภาพรวม -->
 
 <div class="box">
 
-<h2>
-👥 สมาชิก
-</h2>
+<h2>📌 สรุปภาพรวม</h2>
 
-<div class="number" id="memberCount">
+<div class="summary">
+
+
+<div class="summary-card">
+
+<div class="icon">👥</div>
+
+<div>สมาชิก</div>
+
+<div class="number" id="memberTotal">
+185
+</div>
+
+<small>ครัวเรือน</small>
+
+</div>
+
+
+<div class="summary-card">
+
+<div class="icon">⚰️</div>
+
+<div>งานศพ</div>
+
+<div class="number" id="funeralTotal">
 0
 </div>
 
-คน
+<small>งาน</small>
 
 </div>
 
 
+<div class="summary-card">
 
+<div class="icon">📦</div>
+
+<div>ข้าวสารรับเข้า</div>
+
+<div class="number" id="riceIn">
+0
+</div>
+
+<small>ถุง</small>
+
+</div>
+
+
+<div class="summary-card">
+
+<div class="icon">🌾</div>
+
+<div>ข้าวสารคงเหลือ</div>
+
+<div class="number" id="riceBalance">
+0
+</div>
+
+<small>ถุง</small>
+
+</div>
+
+
+<div class="summary-card">
+
+<div class="icon">⚠️</div>
+
+<div>ค้างส่ง</div>
+
+<div class="number yellow" id="pendingTotal">
+0
+</div>
+
+<small>ครัวเรือน</small>
+
+</div>
+
+
+<div class="summary-card">
+
+<div class="icon">🚨</div>
+
+<div>ค้างส่ง 2 ครั้ง</div>
+
+<div class="number red" id="dangerTotal">
+0
+</div>
+
+<small>ครัวเรือน</small>
+
+</div>
+
+
+</div>
+
+</div>
+
+
+<!-- รายงานสมาชิก -->
 
 <div class="box">
 
-<h2>
-📦 การจ่ายข้าวสาร
-</h2>
+<h2>👥 รายงานสมาชิก</h2>
 
-<div class="number" id="receiveCount">
-0
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>ลำดับ</th>
+<th>ชื่อ-นามสกุล</th>
+<th>บ้านเลขที่</th>
+<th>ค้างส่ง</th>
+<th>สถานะ</th>
+
+</tr>
+
+</thead>
+
+<tbody id="memberTable">
+
+</tbody>
+
+</table>
+
 </div>
 
-รายการ
-
 </div>
 
 
-
+<!-- รายงานงานศพ -->
 
 <div class="box">
 
-<h2>
-🌾 ข้าวสารคงเหลือ
-</h2>
+<h2>⚰️ รายงานงานศพ</h2>
 
-<div class="number" id="stockCount">
-0
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>ลำดับ</th>
+<th>ผู้เสียชีวิต</th>
+<th>อายุ</th>
+<th>บ้านเลขที่</th>
+<th>วันที่เสียชีวิต</th>
+<th>ฌาปนกิจ</th>
+
+</tr>
+
+</thead>
+
+<tbody id="funeralTable">
+
+</tbody>
+
+</table>
+
 </div>
 
-ถุง
-
 </div>
 
 
-
+<!-- รายงานการช่วยงานศพ -->
 
 <div class="box">
 
-<h2>
-⚰️ งานศพ
-</h2>
+<h2>🌾 รายงานการนำข้าวสารช่วยงานศพ</h2>
 
-<div class="number">
-0
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>ลำดับ</th>
+<th>สมาชิก</th>
+<th>บ้านเลขที่</th>
+<th>งานศพ</th>
+<th>จำนวน</th>
+<th>วันที่ส่ง</th>
+
+</tr>
+
+</thead>
+
+<tbody id="sendTable">
+
+</tbody>
+
+</table>
+
 </div>
 
-ราย
-
 </div>
 
 
+<!-- ปุ่มพิมพ์ -->
+
+<div class="box">
 
 <button onclick="window.print()">
 
-🖨 พิมพ์รายงาน
+🖨️ พิมพ์รายงาน
 
 </button>
 
+</div>
 
+
+<a class="back" href="ดัชนี.html">
+← กลับหน้าหลัก
+</a>
+
+
+</div>
 
 
 <script>
 
+/* ----------------------------
+   โหลดข้อมูล
+---------------------------- */
 
-let members =
-JSON.parse(localStorage.getItem("members")) || [];
+const members =
+    JSON.parse(localStorage.getItem("members")) || [];
 
+const funerals =
+    JSON.parse(localStorage.getItem("funerals")) || [];
 
-let receive =
-JSON.parse(localStorage.getItem("receive")) || [];
+const rice =
+    JSON.parse(localStorage.getItem("rice")) || [];
 
-
-let stock =
-JSON.parse(localStorage.getItem("stock")) || [];
-
-
-
-document.getElementById("memberCount")
-.innerHTML = members.length;
-
+const funeralSends =
+    JSON.parse(localStorage.getItem("funeralSends")) || [];
 
 
-document.getElementById("receiveCount")
-.innerHTML = receive.length;
+/* ----------------------------
+   จำนวนสมาชิก
+---------------------------- */
+
+const memberTotal =
+    members.length > 0
+    ? members.length
+    : 185;
+
+document.getElementById("memberTotal").innerText =
+    memberTotal;
 
 
+/* ----------------------------
+   จำนวนงานศพ
+---------------------------- */
 
-let total=0;
+document.getElementById("funeralTotal").innerText =
+    funerals.length;
 
 
-stock.forEach(s=>{
+/* ----------------------------
+   คำนวณข้าวสาร
+---------------------------- */
+
+let riceIn = 0;
+
+let riceOut = 0;
 
 
-if(s.type=="in"){
+/* รับเข้าจากระบบรับข้าว */
 
-total += Number(s.amount);
+rice.forEach(item => {
 
-}
+    if(item.type === "รับ"){
 
-else{
+        riceIn += Number(item.amount || 0);
 
-total -= Number(s.amount);
+    }
 
-}
+    if(item.type === "จ่าย"){
 
+        riceOut += Number(item.amount || 0);
+
+    }
 
 });
 
 
+/* ช่วยงานศพ */
 
-document.getElementById("stockCount")
-.innerHTML = total;
+const funeralOut =
+    funeralSends.reduce(
+        (sum,item) =>
+            sum + Number(item.amount || 0),
+        0
+    );
 
 
+const totalOut =
+    riceOut + funeralOut;
+
+
+let balance =
+    riceIn - totalOut;
+
+
+if(balance < 0){
+    balance = 0;
+}
+
+
+document.getElementById("riceIn").innerText =
+    riceIn;
+
+document.getElementById("riceBalance").innerText =
+    balance;
+
+
+/* ----------------------------
+   สมาชิกค้างส่ง
+---------------------------- */
+
+const pendingMembers =
+    members.filter(
+        m => Number(m.pending || 0) > 0
+    );
+
+
+const dangerMembers =
+    members.filter(
+        m => Number(m.pending || 0) >= 2
+    );
+
+
+document.getElementById("pendingTotal").innerText =
+    pendingMembers.length;
+
+document.getElementById("dangerTotal").innerText =
+    dangerMembers.length;
+
+
+/* ----------------------------
+   ตารางสมาชิก
+---------------------------- */
+
+let memberHTML = "";
+
+
+if(members.length === 0){
+
+    memberHTML = `
+        <tr>
+            <td colspan="5">
+                ยังไม่มีรายชื่อสมาชิก
+            </td>
+        </tr>
+    `;
+
+}else{
+
+    members.forEach((m,index)=>{
+
+        const pending =
+            Number(m.pending || 0);
+
+        let status = "ปกติ";
+
+        let className = "status-ok";
+
+
+        if(pending === 1){
+
+            status = "แจ้งเตือน 1 ครั้ง";
+            className = "status-warning";
+
+        }
+
+
+        if(pending >= 2){
+
+            status = "เสนอพิจารณาตัดสมาชิก";
+            className = "status-danger";
+
+        }
+
+
+        memberHTML += `
+
+            <tr>
+
+                <td>${index + 1}</td>
+
+                <td>${m.name || "-"}</td>
+
+                <td>${m.house || "-"}</td>
+
+                <td>${pending}</td>
+
+                <td class="${className}">
+                    ${status}
+                </td>
+
+            </tr>
+
+        `;
+
+    });
+
+}
+
+
+document.getElementById("memberTable").innerHTML =
+    memberHTML;
+
+
+/* ----------------------------
+   ตารางงานศพ
+---------------------------- */
+
+let funeralHTML = "";
+
+
+if(funerals.length === 0){
+
+    funeralHTML = `
+        <tr>
+            <td colspan="6">
+                ยังไม่มีข้อมูลงานศพ
+            </td>
+        </tr>
+    `;
+
+}else{
+
+    funerals.forEach((f,index)=>{
+
+        funeralHTML += `
+
+            <tr>
+
+                <td>${index + 1}</td>
+
+                <td>${f.name || "-"}</td>
+
+                <td>${f.age || "-"}</td>
+
+                <td>${f.house || "-"}</td>
+
+                <td>${formatDate(f.deadDate || f.dead)}</td>
+
+                <td>${formatDate(f.burnDate || f.burn)}</td>
+
+            </tr>
+
+        `;
+
+    });
+
+}
+
+
+document.getElementById("funeralTable").innerHTML =
+    funeralHTML;
+
+
+/* ----------------------------
+   ตารางช่วยงานศพ
+---------------------------- */
+
+let sendHTML = "";
+
+
+if(funeralSends.length === 0){
+
+    sendHTML = `
+        <tr>
+            <td colspan="6">
+                ยังไม่มีรายการนำข้าวสารช่วยงานศพ
+            </td>
+        </tr>
+    `;
+
+}else{
+
+    funeralSends.forEach((s,index)=>{
+
+        const funeral =
+            funerals.find(
+                f =>
+                    String(f.id) ===
+                    String(s.funeralId)
+            );
+
+
+        sendHTML += `
+
+            <tr>
+
+                <td>${index + 1}</td>
+
+                <td>${s.memberName || "-"}</td>
+
+                <td>${s.memberHouse || "-"}</td>
+
+                <td>
+                    ${funeral
+                        ? funeral.name
+                        : "-"}
+                </td>
+
+                <td>
+                    ${s.amount || 1} ถุง
+                </td>
+
+                <td>
+                    ${s.date || "-"}
+                </td>
+
+            </tr>
+
+        `;
+
+    });
+
+}
+
+
+document.getElementById("sendTable").innerHTML =
+    sendHTML;
+
+
+/* ----------------------------
+   วันที่
+---------------------------- */
+
+function formatDate(value){
+
+    if(!value){
+        return "-";
+    }
+
+    const parts =
+        String(value).split("-");
+
+
+    if(parts.length !== 3){
+        return value;
+    }
+
+
+    return `
+        ${parts[2]}/${parts[1]}/${parts[0]}
+    `;
+
+}
 
 </script>
-
 
 
 </body>
