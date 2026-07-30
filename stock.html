@@ -29,7 +29,7 @@ body{
 }
 
 .container{
-    max-width:800px;
+    max-width:850px;
     margin:auto;
     padding:15px;
 }
@@ -49,23 +49,23 @@ body{
 }
 
 .summary-card{
-    background:#f7fff7;
+    background:#f8fff8;
     padding:18px;
     border-radius:14px;
     text-align:center;
 }
 
-.summary-icon{
+.icon{
     font-size:35px;
 }
 
 .number{
-    font-size:28px;
+    font-size:30px;
     font-weight:bold;
     color:#228B22;
 }
 
-.out{
+.red{
     color:#c62828;
 }
 
@@ -82,8 +82,23 @@ body{
     border-left:5px solid #228B22;
 }
 
-.item.out-item{
+.out-item{
     border-left-color:#c62828;
+    background:#fff8f8;
+}
+
+.empty{
+    text-align:center;
+    color:#777;
+    padding:15px;
+}
+
+.back{
+    display:block;
+    text-align:center;
+    padding:15px;
+    color:#228B22;
+    text-decoration:none;
 }
 
 button{
@@ -96,23 +111,28 @@ button{
     font-size:16px;
 }
 
-.back{
-    display:block;
-    text-align:center;
-    padding:15px;
-    color:#228B22;
-    text-decoration:none;
-}
-
-.empty{
-    text-align:center;
-    color:#777;
-}
-
 @media(max-width:600px){
 
     .summary{
         grid-template-columns:1fr 1fr;
+    }
+
+}
+
+@media print{
+
+    button,
+    .back{
+        display:none;
+    }
+
+    body{
+        background:white;
+    }
+
+    .header{
+        background:white;
+        color:#333;
     }
 
 }
@@ -123,11 +143,12 @@ button{
 
 <body>
 
+
 <div class="header">
 
-    <h1>🌾 คลังข้าวสาร</h1>
+<h1>🌾 คลังข้าวสาร</h1>
 
-    <p>กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</p>
+<p>กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</p>
 
 </div>
 
@@ -137,77 +158,107 @@ button{
 
 <div class="box">
 
-    <div class="summary">
-
-        <div class="summary-card">
-
-            <div class="summary-icon">📥</div>
-
-            <div>รับเข้าทั้งหมด</div>
-
-            <div class="number" id="totalIn">
-                0
-            </div>
-
-            <small>ถุง</small>
-
-        </div>
+<div class="summary">
 
 
-        <div class="summary-card">
+<div class="summary-card">
 
-            <div class="summary-icon">📤</div>
+<div class="icon">📥</div>
 
-            <div>นำออกช่วยงาน</div>
+รับเข้าทั้งหมด
 
-            <div class="number out" id="totalOut">
-                0
-            </div>
+<div
+    class="number"
+    id="riceIn"
+>
+0
+</div>
 
-            <small>ถุง</small>
+ถุง
 
-        </div>
+</div>
 
 
-        <div class="summary-card balance">
+<div class="summary-card">
 
-            <div class="summary-icon">🌾</div>
+<div class="icon">📤</div>
 
-            <div>ข้าวสารคงเหลือ</div>
+นำออกทั้งหมด
 
-            <div class="number" id="balance">
-                0
-            </div>
+<div
+    class="number red"
+    id="riceOut"
+>
+0
+</div>
 
-            <small>ถุง</small>
+ถุง
 
-        </div>
+</div>
 
-    </div>
+
+<div class="summary-card balance">
+
+<div class="icon">🌾</div>
+
+ข้าวสารคงเหลือ
+
+<div
+    class="number"
+    id="riceBalance"
+>
+0
+</div>
+
+ถุง
+
+</div>
+
+
+</div>
 
 </div>
 
 
 <div class="box">
 
-    <h2>📋 ประวัติรับข้าวสาร</h2>
+<h2>📋 รายการรับข้าวสาร</h2>
 
-    <div id="receiveList"></div>
+<div id="receiveList"></div>
 
 </div>
 
 
 <div class="box">
 
-    <h2>⚰️ ประวัติข้าวสารช่วยงานศพ</h2>
+<h2>⚰️ รายการนำข้าวสารช่วยงานศพ</h2>
 
-    <div id="funeralList"></div>
+<div id="funeralList"></div>
 
 </div>
 
 
-<a class="back" href="ดัชนี.html">
-    ← กลับหน้าหลัก
+<div class="box">
+
+<h2>📤 รายการจ่ายข้าวสารอื่น ๆ</h2>
+
+<div id="outList"></div>
+
+</div>
+
+
+<button onclick="window.print()">
+
+🖨️ พิมพ์รายงานคลังข้าวสาร
+
+</button>
+
+
+<a
+    class="back"
+    href="index.html"
+>
+← กลับหน้าหลัก
 </a>
 
 
@@ -216,192 +267,328 @@ button{
 
 <script>
 
-/* -----------------------------
-   ข้อมูลรับข้าวสาร
------------------------------ */
+/* =====================================================
+   โหลดข้อมูล
+===================================================== */
 
 const rice =
-    JSON.parse(localStorage.getItem("rice")) || [];
+    JSON.parse(
+        localStorage.getItem("rice")
+    ) || [];
 
-
-/* -----------------------------
-   ข้อมูลช่วยงานศพ
------------------------------ */
 
 const funeralSends =
-    JSON.parse(localStorage.getItem("funeralSends")) || [];
+    JSON.parse(
+        localStorage.getItem("funeralSends")
+    ) || [];
 
-
-/* -----------------------------
-   ข้อมูลงานศพ
------------------------------ */
 
 const funerals =
-    JSON.parse(localStorage.getItem("funerals")) || [];
+    JSON.parse(
+        localStorage.getItem("funerals")
+    ) || [];
 
 
-/* -----------------------------
-   คำนวณคลัง
------------------------------ */
+/* =====================================================
+   คำนวณยอดรับ
+===================================================== */
 
 let totalIn = 0;
 
-let totalOut = 0;
+let normalOut = 0;
 
-
-/* รับเข้าจากระบบรับข้าวสาร */
 
 rice.forEach(item => {
 
     if(item.type === "รับ"){
 
-        totalIn += Number(item.amount || 0);
+        totalIn +=
+            Number(item.amount || 0);
 
     }
 
     if(item.type === "จ่าย"){
 
-        totalOut += Number(item.amount || 0);
+        normalOut +=
+            Number(item.amount || 0);
 
     }
 
 });
 
 
-/* ข้าวสารที่นำไปช่วยงานศพ */
+/* =====================================================
+   คำนวณยอดช่วยงานศพ
+===================================================== */
 
-totalOut += funeralSends.reduce(
-    (sum,item) => sum + Number(item.amount || 0),
-    0
-);
+let funeralOut = 0;
 
+funeralSends.forEach(item => {
+
+    funeralOut +=
+        Number(item.amount || 0);
+
+});
+
+
+/* =====================================================
+   รวมยอดนำออก
+===================================================== */
+
+const totalOut =
+    normalOut +
+    funeralOut;
+
+
+/* =====================================================
+   คงเหลือ
+===================================================== */
 
 let balance =
-    totalIn - totalOut;
+    totalIn -
+    totalOut;
 
 
 if(balance < 0){
+
     balance = 0;
+
 }
 
 
-/* แสดงยอด */
+/* =====================================================
+   แสดงยอด
+===================================================== */
 
-document.getElementById("totalIn").innerText =
+document.getElementById("riceIn")
+    .innerText =
     totalIn;
 
-document.getElementById("totalOut").innerText =
+
+document.getElementById("riceOut")
+    .innerText =
     totalOut;
 
-document.getElementById("balance").innerText =
+
+document.getElementById("riceBalance")
+    .innerText =
     balance;
 
 
-/* -----------------------------
-   ประวัติรับข้าวสาร
------------------------------ */
+/* =====================================================
+   รายการรับ
+===================================================== */
 
 let receiveHTML = "";
 
-const received =
-    rice.filter(item => item.type === "รับ");
+const receives =
+    rice.filter(
+        item =>
+        item.type === "รับ"
+    );
 
 
-received.forEach((item,index) => {
+receives.forEach((item,index)=>{
 
     receiveHTML += `
 
-        <div class="item">
+    <div class="item">
 
-            <strong>
-                ${index + 1}. ${item.name || "-"}
-            </strong>
+        <strong>
+            ${index + 1}. ${escapeHTML(item.name)}
+        </strong>
 
-            <br>
+        <br>
 
-            🏠 บ้านเลขที่:
-            ${item.house || "-"}
+        🏠 บ้านเลขที่:
+        ${escapeHTML(item.house)}
 
-            <br>
+        <br>
 
-            📦 รับเข้า:
-            ${item.amount || 0} ถุง
+        📦 รับเข้า:
+        ${Number(item.amount || 0)}
+        ถุง
 
-            <br>
+        <br>
 
-            📅 วันที่:
-            ${item.date || "-"}
+        📅 วันที่:
+        ${escapeHTML(item.date)}
 
-            <br>
+        <br>
 
-            📝 หมายเหตุ:
-            ${item.note || "-"}
+        📝 หมายเหตุ:
+        ${escapeHTML(item.note || "-")}
 
-        </div>
+    </div>
 
     `;
 
 });
 
 
-document.getElementById("receiveList").innerHTML =
+document.getElementById("receiveList")
+    .innerHTML =
     receiveHTML ||
-    `<div class="empty">ยังไม่มีรายการรับข้าวสาร</div>`;
+    `<div class="empty">
+        ยังไม่มีรายการรับข้าวสาร
+    </div>`;
 
 
-/* -----------------------------
-   ประวัติช่วยงานศพ
------------------------------ */
+/* =====================================================
+   รายการช่วยงานศพ
+===================================================== */
 
 let funeralHTML = "";
 
 
-funeralSends.forEach((item,index) => {
+funeralSends.forEach((item,index)=>{
 
     const funeral =
         funerals.find(
-            f => String(f.id) === String(item.funeralId)
+            f =>
+            String(f.id) ===
+            String(item.funeralId)
         );
 
 
     funeralHTML += `
 
-        <div class="item out-item">
+    <div class="item out-item">
 
-            <strong>
-                ${index + 1}. ${item.memberName || "-"}
-            </strong>
+        <strong>
+            ${index + 1}.
+            ${escapeHTML(
+                item.memberName || "-"
+            )}
+        </strong>
 
-            <br>
+        <br>
 
-            🏠 บ้านเลขที่:
-            ${item.memberHouse || "-"}
+        🏠 บ้านเลขที่:
+        ${escapeHTML(
+            item.memberHouse || "-"
+        )}
 
-            <br>
+        <br>
 
-            ⚰️ งานศพ:
-            ${funeral ? funeral.name : "ไม่พบข้อมูลงานศพ"}
+        ⚰️ งานศพ:
+        ${
+            funeral
+            ?
+            escapeHTML(funeral.name)
+            :
+            "-"
+        }
 
-            <br>
+        <br>
 
-            🌾 ช่วยงาน:
-            ${item.amount || 1} ถุง
+        🌾 จำนวน:
+        ${Number(item.amount || 1)}
+        ถุง
 
-            <br>
+        <br>
 
-            📅 วันที่:
-            ${item.date || "-"}
+        📅 วันที่:
+        ${escapeHTML(item.date || "-")}
 
-        </div>
+    </div>
 
     `;
 
 });
 
 
-document.getElementById("funeralList").innerHTML =
+document.getElementById("funeralList")
+    .innerHTML =
     funeralHTML ||
-    `<div class="empty">ยังไม่มีการนำข้าวสารช่วยงานศพ</div>`;
+    `<div class="empty">
+        ยังไม่มีรายการช่วยงานศพ
+    </div>`;
+
+
+/* =====================================================
+   รายการจ่ายอื่น
+===================================================== */
+
+let outHTML = "";
+
+
+const outs =
+    rice.filter(
+        item =>
+        item.type === "จ่าย"
+    );
+
+
+outs.forEach((item,index)=>{
+
+    outHTML += `
+
+    <div class="item out-item">
+
+        <strong>
+            ${index + 1}.
+            ${escapeHTML(
+                item.name || "-"
+            )}
+        </strong>
+
+        <br>
+
+        🏠 บ้านเลขที่:
+        ${escapeHTML(
+            item.house || "-"
+        )}
+
+        <br>
+
+        📤 จ่ายออก:
+        ${Number(item.amount || 0)}
+        ถุง
+
+        <br>
+
+        📅 วันที่:
+        ${escapeHTML(
+            item.date || "-"
+        )}
+
+        <br>
+
+        📝 หมายเหตุ:
+        ${escapeHTML(
+            item.note || "-"
+        )}
+
+    </div>
+
+    `;
+
+});
+
+
+document.getElementById("outList")
+    .innerHTML =
+    outHTML ||
+    `<div class="empty">
+        ยังไม่มีรายการจ่ายข้าวสารอื่น
+    </div>`;
+
+
+/* =====================================================
+   ป้องกัน HTML
+===================================================== */
+
+function escapeHTML(value){
+
+    return String(value || "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
 
 </script>
 
