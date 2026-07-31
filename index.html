@@ -19,7 +19,8 @@ body{
 body:before,body:after{
   content:"";
   position:fixed;
-  width:280px;height:280px;
+  width:280px;
+  height:280px;
   border-radius:50%;
   filter:blur(14px);
   opacity:.18;
@@ -27,16 +28,31 @@ body:before,body:after{
   z-index:-1;
   animation:float 11s ease-in-out infinite
 }
-body:before{left:-80px;top:15%;background:#39d675}
-body:after{right:-80px;bottom:10%;background:#ffd54f;animation-delay:-5s}
+body:before{
+  left:-80px;
+  top:15%;
+  background:#39d675
+}
+body:after{
+  right:-80px;
+  bottom:10%;
+  background:#ffd54f;
+  animation-delay:-5s
+}
 
 @keyframes float{
   0%,100%{transform:translate(0,0)}
   50%{transform:translate(20px,-35px)}
 }
 @keyframes rise{
-  from{opacity:0;transform:translateY(15px)}
-  to{opacity:1;transform:translateY(0)}
+  from{
+    opacity:0;
+    transform:translateY(15px)
+  }
+  to{
+    opacity:1;
+    transform:translateY(0)
+  }
 }
 @keyframes pulse{
   0%,100%{transform:scale(1)}
@@ -661,6 +677,7 @@ th{
         id="loginButton"
         class="login-btn"
         type="button"
+        onclick="doLogin()"
       >
         🔐 เข้าสู่ระบบ
       </button>
@@ -685,6 +702,104 @@ th{
   </div>
 
 </div>
+
+
+<!-- =====================================================
+     LOGIN SCRIPT แยกเพื่อให้ล็อกอินทำงานได้
+===================================================== -->
+
+<script>
+function doLogin(){
+
+  const username =
+    document.getElementById(
+      "loginUsername"
+    ).value.trim();
+
+  const password =
+    document.getElementById(
+      "loginPassword"
+    ).value;
+
+  const errorBox =
+    document.getElementById(
+      "loginError"
+    );
+
+  if(
+    username === "admin" &&
+    password === "123456"
+  ){
+
+    sessionStorage.setItem(
+      "riceGroupLoggedIn",
+      "true"
+    );
+
+    errorBox.textContent = "";
+
+    document.getElementById(
+      "loginScreen"
+    ).style.display = "none";
+
+    document.getElementById(
+      "mainSystem"
+    ).style.display = "block";
+
+    /*
+      init จะมีอยู่ใน script หลัก
+      เรียกเมื่อพร้อมใช้งานเท่านั้น
+    */
+    if(
+      typeof window.init === "function"
+    ){
+
+      window.init();
+
+    }
+
+  }else{
+
+    errorBox.textContent =
+      "❌ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง";
+
+  }
+
+}
+
+
+/* กด Enter เพื่อเข้าสู่ระบบ */
+document.addEventListener(
+  "DOMContentLoaded",
+  function(){
+
+    const password =
+      document.getElementById(
+        "loginPassword"
+      );
+
+    if(password){
+
+      password.addEventListener(
+        "keydown",
+        function(event){
+
+          if(
+            event.key === "Enter"
+          ){
+
+            doLogin();
+
+          }
+
+        }
+      );
+
+    }
+
+  }
+);
+</script>
 
 
 <!-- =====================================================
@@ -1187,7 +1302,7 @@ th{
 
 
 <!-- =====================================================
-     ✏️ STATUS MODAL
+     STATUS MODAL
 ===================================================== -->
 
 <div id="editStatusModal">
@@ -1258,7 +1373,7 @@ th{
 
 
 /* =====================================================
-   LOGIN
+   DATABASE
 ===================================================== */
 
 const LOGIN_USER =
@@ -1266,11 +1381,6 @@ const LOGIN_USER =
 
 const LOGIN_PASSWORD =
   "123456";
-
-
-/* =====================================================
-   DATABASE
-===================================================== */
 
 const MEMBERS_KEY =
   "members";
@@ -1334,24 +1444,16 @@ function readArray(key){
 
     }
 
-
     const value =
       JSON.parse(
         raw
       );
 
+    return Array.isArray(value)
+      ? value
+      : [];
 
-    return Array.isArray(
-      value
-    )
-    ?
-    value
-    :
-    [];
-
-  }
-
-  catch(error){
+  }catch(error){
 
     console.error(
       "Storage error:",
@@ -1373,48 +1475,34 @@ function writeArray(
 
   localStorage.setItem(
     key,
-    JSON.stringify(
-      value
-    )
+    JSON.stringify(value)
   );
 
 }
 
 
-function escapeHTML(
-  value
-){
+function escapeHTML(value){
 
   const div =
     document.createElement(
       "div"
     );
 
-
   div.textContent =
-    String(
-      value ??
-      ""
-    );
-
+    String(value ?? "");
 
   return div.innerHTML;
 
 }
 
 
-function normalize(
-  value
-){
+function normalize(value){
 
-  return String(
-    value ??
-    ""
-  )
-  .trim()
-  .toLowerCase()
-  .split(" ")
-  .join("");
+  return String(value ?? "")
+    .trim()
+    .toLowerCase()
+    .split(" ")
+    .join("");
 
 }
 
@@ -1430,59 +1518,45 @@ function getMembers(){
       MEMBERS_KEY
     );
 
-
   return data
-
     .map(
       (
         item,
         index
       ) => ({
 
-        id:
+        id:String(
+          item.id ??
+          item.memberId ??
+          item.member_id ??
+          item.code ??
+          ("member-" + index)
+        ),
 
-          String(
-            item.id ??
-            item.memberId ??
-            item.member_id ??
-            item.code ??
-            (
-              "member-" +
-              index
-            )
-          ),
+        name:String(
+          item.name ??
+          item.fullName ??
+          item.fullname ??
+          item.memberName ??
+          item.member_name ??
+          item["ชื่อ-นามสกุล"] ??
+          item["ชื่อ"] ??
+          ""
+        ).trim(),
 
-        name:
-
-          String(
-            item.name ??
-            item.fullName ??
-            item.fullname ??
-            item.memberName ??
-            item.member_name ??
-            item["ชื่อ-นามสกุล"] ??
-            item["ชื่อ"] ??
-            ""
-          )
-          .trim(),
-
-        house:
-
-          String(
-            item.house ??
-            item.houseNo ??
-            item.houseNumber ??
-            item.house_number ??
-            item.address ??
-            item.household ??
-            item["บ้านเลขที่"] ??
-            ""
-          )
-          .trim()
+        house:String(
+          item.house ??
+          item.houseNo ??
+          item.houseNumber ??
+          item.house_number ??
+          item.address ??
+          item.household ??
+          item["บ้านเลขที่"] ??
+          ""
+        ).trim()
 
       })
     )
-
     .filter(
       item =>
         item.name ||
@@ -1501,94 +1575,71 @@ function getFunerals(){
   return readArray(
     FUNERALS_KEY
   )
-
   .map(
     (
       item,
       index
     ) => ({
 
-      id:
+      id:String(
+        item.id ??
+        item.funeralId ??
+        item.funeral_id ??
+        ("funeral-" + index)
+      ),
 
-        String(
-          item.id ??
-          item.funeralId ??
-          item.funeral_id ??
-          (
-            "funeral-" +
-            index
-          )
-        ),
-
-      name:
-
-        String(
-          item.name ??
-          item.fullName ??
-          item.fullname ??
-          item.deceasedName ??
-          item.deceased_name ??
-          ""
-        )
-        .trim(),
+      name:String(
+        item.name ??
+        item.fullName ??
+        item.fullname ??
+        item.deceasedName ??
+        item.deceased_name ??
+        ""
+      ).trim(),
 
       age:
-
         item.age ??
         item.deceasedAge ??
         "",
 
-      house:
+      house:String(
+        item.house ??
+        item.houseNo ??
+        item.houseNumber ??
+        item.house_number ??
+        ""
+      ).trim(),
 
-        String(
-          item.house ??
-          item.houseNo ??
-          item.houseNumber ??
-          item.house_number ??
-          ""
-        )
-        .trim(),
+      reporter:String(
+        item.reporter ??
+        item.informer ??
+        item.contact ??
+        ""
+      ).trim(),
 
-      reporter:
+      death:String(
+        item.death ??
+        item.deathDate ??
+        item.death_date ??
+        item.dateOfDeath ??
+        ""
+      ),
 
-        String(
-          item.reporter ??
-          item.informer ??
-          item.contact ??
-          ""
-        )
-        .trim(),
+      cremate:String(
+        item.cremate ??
+        item.cremateDate ??
+        item.cremate_date ??
+        item.ceremonyDate ??
+        ""
+      ),
 
-      death:
-
-        String(
-          item.death ??
-          item.deathDate ??
-          item.death_date ??
-          item.dateOfDeath ??
-          ""
-        ),
-
-      cremate:
-
-        String(
-          item.cremate ??
-          item.cremateDate ??
-          item.cremate_date ??
-          item.ceremonyDate ??
-          ""
-        ),
-
-      status:
-
-        String(
-          item.status ??
-          "ยังไม่ดำเนินการ"
-        )
+      status:String(
+        item.status ??
+        "ยังไม่ดำเนินการ"
+      )
 
     })
   )
-
   .filter(
     item =>
       item.name ||
@@ -1602,16 +1653,10 @@ function getFunerals(){
    DATE
 ===================================================== */
 
-function dateValue(
-  value
-){
+function dateValue(value){
 
   const text =
-    String(
-      value ??
-      ""
-    );
-
+    String(value ?? "");
 
   if(
     text.length === 10 &&
@@ -1622,41 +1667,23 @@ function dateValue(
     const p =
       text.split("-");
 
-
     return new Date(
-
-      Number(
-        p[0]
-      ),
-
-      Number(
-        p[1]
-      ) - 1,
-
-      Number(
-        p[2]
-      )
-
+      Number(p[0]),
+      Number(p[1]) - 1,
+      Number(p[2])
     ).getTime();
 
   }
-
 
   return 0;
 
 }
 
 
-function displayDate(
-  value
-){
+function displayDate(value){
 
   const text =
-    String(
-      value ??
-      ""
-    );
-
+    String(value ?? "");
 
   if(
     text.length === 10 &&
@@ -1667,19 +1694,15 @@ function displayDate(
     const p =
       text.split("-");
 
-
     return (
-
       p[2] +
       "/" +
       p[1] +
       "/" +
       p[0]
-
     );
 
   }
-
 
   return text || "-";
 
@@ -1689,24 +1712,11 @@ function displayDate(
 function sortedFunerals(){
 
   return getFunerals()
-
     .slice()
-
     .sort(
-      (
-        a,
-        b
-      ) =>
-
-        dateValue(
-          b.death
-        )
-
-        -
-
-        dateValue(
-          a.death
-        )
+      (a,b) =>
+        dateValue(b.death) -
+        dateValue(a.death)
     );
 
 }
@@ -1723,15 +1733,9 @@ function getDeliveries(){
       DELIVERY_KEY
     );
 
-
-  if(
-    primary.length
-  ){
-
+  if(primary.length){
     return primary;
-
   }
-
 
   for(
     const key of [
@@ -1742,132 +1746,100 @@ function getDeliveries(){
   ){
 
     const data =
-      readArray(
-        key
-      );
+      readArray(key);
 
-
-    if(
-      data.length
-    ){
-
+    if(data.length){
       return data;
-
     }
 
   }
-
 
   return [];
 
 }
 
 
-function deliveryFuneralId(
-  record
-){
+function deliveryFuneralId(record){
 
   return String(
-
     record.funeralId ??
     record.funeral_id ??
     record.funeralID ??
     record.funeral ??
     ""
-
   );
 
 }
 
 
-function deliveryMemberId(
-  record
-){
+function deliveryMemberId(record){
 
   return String(
-
     record.memberId ??
     record.member_id ??
     record.memberID ??
     record.userId ??
     record.user_id ??
     ""
-
   );
 
 }
 
 
-function deliveryName(
-  record
-){
+function deliveryName(record){
 
   return String(
-
     record.name ??
     record.memberName ??
     record.member_name ??
     ""
-
   ).trim();
 
 }
 
 
-function deliveryHouse(
-  record
-){
+function deliveryHouse(record){
 
   return String(
-
     record.house ??
     record.houseNo ??
     record.houseNumber ??
     record.house_number ??
     ""
-
   ).trim();
 
 }
 
 
-function deliveryAmount(
-  record
-){
+function deliveryAmount(record){
 
   return Number(
-
     record.amount ??
     record.qty ??
     record.quantity ??
     record.bags ??
     record.riceAmount ??
     0
-
   ) || 0;
 
 }
 
 
-function deliveryDate(
-  record
-){
+function deliveryDate(record){
 
   return String(
-
     record.date ??
     record.deliveryDate ??
     record.delivery_date ??
     record.createdDate ??
     "-"
-
   );
 
 }
 
 
 /* =====================================================
-   MEMBER MATCH
+   MATCH
 ===================================================== */
 
 function sameMember(
@@ -1876,60 +1848,31 @@ function sameMember(
 ){
 
   const recordId =
-    deliveryMemberId(
-      record
-    );
-
+    deliveryMemberId(record);
 
   if(
     recordId &&
-    recordId ===
-    String(
-      member.id
-    )
+    recordId === String(member.id)
   ){
 
     return true;
 
   }
 
-
   return (
-
     normalize(
-      deliveryName(
-        record
-      )
-    )
-
-    ===
-
-    normalize(
-      member.name
-    )
+      deliveryName(record)
+    ) === normalize(member.name)
 
     &&
 
     normalize(
-      deliveryHouse(
-        record
-      )
-    )
-
-    ===
-
-    normalize(
-      member.house
-    )
-
+      deliveryHouse(record)
+    ) === normalize(member.house)
   );
 
 }
 
-
-/* =====================================================
-   SEND STATUS
-===================================================== */
 
 function sentForFuneral(
   member,
@@ -1939,16 +1882,8 @@ function sentForFuneral(
 
   return records.some(
     record =>
-
-      deliveryFuneralId(
-        record
-      )
-
-      ===
-
-      String(
-        funeral.id
-      )
+      deliveryFuneralId(record) ===
+      String(funeral.id)
 
       &&
 
@@ -1956,14 +1891,13 @@ function sentForFuneral(
         member,
         record
       )
-
   );
 
 }
 
 
 /* =====================================================
-   SELECT DATA
+   SELECT
 ===================================================== */
 
 function populateFunerals(){
@@ -1971,68 +1905,41 @@ function populateFunerals(){
   const list =
     sortedFunerals();
 
-
   const options =
-
     '<option value="">-- เลือกงานศพ --</option>' +
 
     list.map(
-
       funeral =>
-
         '<option value="' +
-        escapeHTML(
-          funeral.id
-        ) +
+        escapeHTML(funeral.id) +
         '">' +
-
         '⚰️ ' +
-
-        escapeHTML(
-          funeral.name
-        ) +
-
+        escapeHTML(funeral.name) +
         ' | บ้าน ' +
-
-        escapeHTML(
-          funeral.house ||
-          "-"
-        ) +
-
+        escapeHTML(funeral.house || "-") +
         '</option>'
-
     ).join("");
-
 
   $("deliveryFuneral")
     .innerHTML =
     options;
 
-
   $("reportFuneral")
     .innerHTML =
     options;
 
+  if(selectedReportFuneral){
 
-  if(
-    selectedReportFuneral
-  ){
-
-    $("reportFuneral")
-      .value =
+    $("reportFuneral").value =
       String(
         selectedReportFuneral.id
       );
 
   }
 
+  if(selectedDeliveryFuneral){
 
-  if(
-    selectedDeliveryFuneral
-  ){
-
-    $("deliveryFuneral")
-      .value =
+    $("deliveryFuneral").value =
       String(
         selectedDeliveryFuneral.id
       );
@@ -2043,44 +1950,31 @@ function populateFunerals(){
 
 
 /* =====================================================
-   DASHBOARD
+   SUMMARY
 ===================================================== */
 
 function updateSummary(){
 
-  const members =
-    getMembers();
-
-
-  $("memberTotal")
-    .textContent =
+  $("memberTotal").textContent =
     DISPLAY_TOTAL;
 
-
-  $("total")
-    .textContent =
+  $("total").textContent =
     DISPLAY_TOTAL;
 
-
-  $("sentTop")
-    .textContent =
+  $("sentTop").textContent =
     DISPLAY_SENT;
 
-
-  $("pendingTop")
-    .textContent =
+  $("pendingTop").textContent =
     DISPLAY_PENDING;
 
-
-  $("riceTop")
-    .textContent =
+  $("riceTop").textContent =
     DISPLAY_RICE;
 
 }
 
 
 /* =====================================================
-   LATEST FUNERAL
+   LATEST
 ===================================================== */
 
 function renderLatest(){
@@ -2088,459 +1982,305 @@ function renderLatest(){
   const latest =
     sortedFunerals()[0];
 
+  if(!latest){
 
-  if(
-    !latest
-  ){
-
-    $("latest")
-      .innerHTML =
+    $("latest").innerHTML =
       "<div>ยังไม่มีข้อมูลงานศพ</div>";
 
     return;
 
   }
 
+  $("latest").innerHTML = `
 
-  $("latest")
-    .innerHTML = `
+    <div>
 
-      <div>
+      <strong
+        style="font-size:22px"
+      >
+        ⚰️
+        ${escapeHTML(latest.name)}
+      </strong>
 
-        <strong
-          style="
-            font-size:22px
-          "
-        >
-
-          ⚰️
-          ${escapeHTML(
-            latest.name
-          )}
-
-        </strong>
-
-
-        ${
-          latest.age
-          ?
-
-          `
-          <small
-            style="
-              display:block;
-              color:#f0ccd8;
-              margin-top:5px;
-            "
-          >
-
-            อายุ
-            ${escapeHTML(
-              latest.age
-            )}
-            ปี
-
-          </small>
-          `
-
-          :
-
-          ""
-        }
-
-
+      ${
+        latest.age
+        ?
+        `
         <small
           style="
             display:block;
-            color:#bfe2c9;
-            margin-top:7px;
+            color:#f0ccd8;
+            margin-top:5px;
           "
         >
-
-          🏠 บ้าน
-          ${escapeHTML(
-            latest.house ||
-            "-"
-          )}
-
-          &nbsp;
-
-          📅
-          ${escapeHTML(
-            displayDate(
-              latest.death
-            )
-          )}
-
-          &nbsp;
-
-          🔥
-          ${escapeHTML(
-            displayDate(
-              latest.cremate
-            )
-          )}
-
+          อายุ
+          ${escapeHTML(latest.age)}
+          ปี
         </small>
+        `
+        :
+        ""
+      }
 
-      </div>
+      <small
+        style="
+          display:block;
+          color:#bfe2c9;
+          margin-top:7px;
+        "
+      >
+        🏠 บ้าน
+        ${escapeHTML(latest.house || "-")}
 
-    `;
+        &nbsp;
+
+        📅
+        ${escapeHTML(
+          displayDate(latest.death)
+        )}
+
+        &nbsp;
+
+        🔥
+        ${escapeHTML(
+          displayDate(latest.cremate)
+        )}
+
+      </small>
+
+    </div>
+
+  `;
 
 }
 
 
 /* =====================================================
-   OPEN DELIVERY
+   DELIVERY
 ===================================================== */
 
 function openDelivery(){
 
   const id =
-    $("deliveryFuneral")
-      .value;
-
+    $("deliveryFuneral").value;
 
   selectedDeliveryFuneral =
     getFunerals().find(
       funeral =>
+        String(funeral.id) ===
+        String(id)
+    ) || null;
 
-        String(
-          funeral.id
-        )
-
-        ===
-
-        String(
-          id
-        )
-
-    )
-
-    ||
-
-    null;
-
-
-  if(
-    !selectedDeliveryFuneral
-  ){
+  if(!selectedDeliveryFuneral){
 
     $("deliverySearch")
       .style.display =
       "none";
 
-
     $("deliveryInfo")
-      .innerHTML = `
-
-        <div class="empty">
-
-          ⚰️
-          กรุณาเลือกงานศพก่อน
-
-        </div>
-
+      .innerHTML =
+      `
+      <div class="empty">
+        ⚰️ กรุณาเลือกงานศพก่อน
+      </div>
       `;
 
     return;
 
   }
-
 
   $("deliverySearch")
     .style.display =
     "block";
 
-
   $("memberSearch")
-    .value =
-    "";
-
+    .value = "";
 
   updateDeliveryInfo();
 
-
   $("deliveryResults")
-    .innerHTML = `
-
-      <div class="empty">
-
-        🔎
-        พิมพ์ชื่อสมาชิก
-        หรือบ้านเลขที่เพื่อค้นหา
-
-      </div>
-
+    .innerHTML =
+    `
+    <div class="empty">
+      🔎 พิมพ์ชื่อสมาชิก
+      หรือบ้านเลขที่เพื่อค้นหา
+    </div>
     `;
 
 }
 
 
-/* =====================================================
-   DELIVERY INFO
-===================================================== */
-
 function updateDeliveryInfo(){
 
-  if(
-    !selectedDeliveryFuneral
-  ){
-
+  if(!selectedDeliveryFuneral){
     return;
-
   }
-
 
   const members =
     getMembers();
 
-
   const records =
     getDeliveries();
 
-
   const funeralRecords =
     records.filter(
-
       record =>
-
-        deliveryFuneralId(
-          record
-        )
-
-        ===
-
+        deliveryFuneralId(record) ===
         String(
           selectedDeliveryFuneral.id
         )
-
     );
-
 
   const sent =
     members.filter(
-
       member =>
-
         funeralRecords.some(
-
           record =>
-
             sameMember(
               member,
               record
             )
-
         )
-
     ).length;
-
 
   const pending =
     Math.max(
-      members.length -
-      sent,
+      members.length - sent,
       0
     );
 
-
   const rice =
     funeralRecords.reduce(
-
       (
         sum,
         record
       ) =>
-
         sum +
-        deliveryAmount(
-          record
-        ),
-
+        deliveryAmount(record),
       0
     );
 
-
   $("deliveryInfo")
-    .innerHTML = `
+    .innerHTML =
+    `
+    <div class="info">
 
-      <div class="info">
-
-        ⚰️
-        <strong>
-          ${escapeHTML(
-            selectedDeliveryFuneral.name
-          )}
-        </strong>
-
-        <br>
-
-        🏠 บ้านเลขที่
+      ⚰️
+      <strong>
         ${escapeHTML(
-          selectedDeliveryFuneral.house ||
-          "-"
+          selectedDeliveryFuneral.name
         )}
+      </strong>
 
-        <br>
+      <br>
 
-        ✅ ส่งแล้ว
-        <strong>
-          ${sent}
-        </strong>
+      🏠 บ้านเลขที่
+      ${escapeHTML(
+        selectedDeliveryFuneral.house || "-"
+      )}
 
-        &nbsp;
+      <br>
 
-        ⚠️ ยังไม่ส่ง
-        <strong>
-          ${pending}
-        </strong>
+      ✅ ส่งแล้ว
+      <strong>${sent}</strong>
 
-        &nbsp;
+      &nbsp;
 
-        🌾 ข้าวสาร
-        <strong>
-          ${rice}
-        </strong>
-        ถุง
+      ⚠️ ยังไม่ส่ง
+      <strong>${pending}</strong>
 
-      </div>
+      &nbsp;
 
+      🌾 ข้าวสาร
+      <strong>${rice}</strong>
+      ถุง
+
+    </div>
     `;
 
 }
 
 
-/* =====================================================
-   SEARCH MEMBERS
-===================================================== */
-
 function searchMembers(){
 
-  if(
-    !selectedDeliveryFuneral
-  ){
+  if(!selectedDeliveryFuneral){
 
     $("deliveryResults")
-      .innerHTML = `
-
-        <div class="empty">
-
-          ⚰️
-          กรุณาเลือกงานศพก่อน
-
-        </div>
-
+      .innerHTML =
+      `
+      <div class="empty">
+        ⚰️ กรุณาเลือกงานศพก่อน
+      </div>
       `;
 
     return;
 
   }
-
 
   const keyword =
     normalize(
-      $("memberSearch")
-        .value
+      $("memberSearch").value
     );
 
-
-  if(
-    !keyword
-  ){
+  if(!keyword){
 
     $("deliveryResults")
-      .innerHTML = `
-
-        <div class="empty">
-
-          🔎
-          พิมพ์ชื่อสมาชิก
-          หรือบ้านเลขที่เพื่อค้นหา
-
-        </div>
-
+      .innerHTML =
+      `
+      <div class="empty">
+        🔎 พิมพ์ชื่อสมาชิก
+        หรือบ้านเลขที่เพื่อค้นหา
+      </div>
       `;
 
     return;
 
   }
-
 
   const members =
     getMembers();
 
-
   const records =
     getDeliveries();
 
-
   const found =
     members
+      .filter(
+        member =>
+          normalize(member.name)
+            .includes(keyword)
 
-    .filter(
+          ||
 
-      member =>
+          normalize(member.house)
+            .includes(keyword)
+      )
+      .slice(0,30);
 
-        normalize(
-          member.name
-        )
-        .includes(
-          keyword
-        )
-
-        ||
-
-        normalize(
-          member.house
-        )
-        .includes(
-          keyword
-        )
-
-    )
-
-    .slice(
-      0,
-      30
-    );
-
-
-  if(
-    !found.length
-  ){
+  if(!found.length){
 
     $("deliveryResults")
-      .innerHTML = `
-
-        <div class="empty">
-
-          ❌ ไม่พบสมาชิก
-
-          <br><br>
-
-          ระบบพบสมาชิก
-          <strong>
-            ${members.length}
-          </strong>
-          ราย
-
-        </div>
-
+      .innerHTML =
+      `
+      <div class="empty">
+        ❌ ไม่พบสมาชิก
+        <br><br>
+        ระบบพบสมาชิก
+        <strong>
+          ${members.length}
+        </strong>
+        ราย
+      </div>
       `;
 
     return;
 
   }
 
-
   $("deliveryResults")
-    .innerHTML =
-    "";
-
+    .innerHTML = "";
 
   found.forEach(
-
     member => {
 
       const sent =
@@ -2550,16 +2290,11 @@ function searchMembers(){
           records
         );
 
-
       const row =
-        document.createElement(
-          "div"
-        );
-
+        document.createElement("div");
 
       row.className =
         "row";
-
 
       row.innerHTML = `
 
@@ -2571,25 +2306,19 @@ function searchMembers(){
             )}
           </strong>
 
-
           <small>
-
             🏠 บ้านเลขที่
             ${escapeHTML(
-              member.house ||
-              "-"
+              member.house || "-"
             )}
-
           </small>
-
 
           <span
             class="
               tag
-              ${sent ? "ok":"wait"}
+              ${sent ? "ok" : "wait"}
             "
           >
-
             ${
               sent
               ?
@@ -2597,32 +2326,17 @@ function searchMembers(){
               :
               "⏳ ยังไม่ส่ง"
             }
-
           </span>
 
         </div>
 
-
         <button
           class="
-            ${
-              sent
-              ?
-              "gray"
-              :
-              "green"
-            }
+            ${sent ? "gray" : "green"}
           "
           type="button"
-          ${
-            sent
-            ?
-            "disabled"
-            :
-            ""
-          }
+          ${sent ? "disabled" : ""}
         >
-
           ${
             sent
             ?
@@ -2630,53 +2344,34 @@ function searchMembers(){
             :
             "✅ บันทึก 1 ถุง"
           }
-
         </button>
 
       `;
 
+      if(!sent){
 
-      if(
-        !sent
-      ){
-
-        row.querySelector(
-          "button"
-        )
-        .addEventListener(
-          "click",
-          () =>
-            saveRice(
-              member
-            )
-        );
+        row
+          .querySelector("button")
+          .addEventListener(
+            "click",
+            () =>
+              saveRice(member)
+          );
 
       }
 
-
       $("deliveryResults")
-        .appendChild(
-          row
-        );
+        .appendChild(row);
 
     }
-
   );
 
 }
 
 
-/* =====================================================
-   SAVE RICE
-===================================================== */
+function saveRice(member){
 
-function saveRice(
-  member
-){
-
-  if(
-    !selectedDeliveryFuneral
-  ){
+  if(!selectedDeliveryFuneral){
 
     alert(
       "กรุณาเลือกงานศพก่อน"
@@ -2686,10 +2381,8 @@ function saveRice(
 
   }
 
-
   const records =
     getDeliveries();
-
 
   if(
     sentForFuneral(
@@ -2707,7 +2400,6 @@ function saveRice(
 
   }
 
-
   records.push({
 
     id:
@@ -2723,9 +2415,7 @@ function saveRice(
       selectedDeliveryFuneral.name,
 
     memberId:
-      String(
-        member.id
-      ),
+      String(member.id),
 
     name:
       member.name,
@@ -2747,21 +2437,15 @@ function saveRice(
 
   });
 
-
   writeArray(
     DELIVERY_KEY,
     records
   );
 
-
   updateSummary();
-
   updateDeliveryInfo();
-
   searchMembers();
-
   renderReport();
-
   renderFollow();
 
 }
@@ -2774,142 +2458,87 @@ function saveRice(
 function renderReport(){
 
   const id =
-    $("reportFuneral")
-      .value;
+    $("reportFuneral").value;
 
-
-  if(
-    !id
-  ){
+  if(!id){
 
     $("reportArea")
-      .innerHTML = `
-
-        <div class="empty">
-
-          เลือกงานศพ
-          เพื่อดูรายงาน
-
-        </div>
-
+      .innerHTML =
+      `
+      <div class="empty">
+        เลือกงานศพ
+        เพื่อดูรายงาน
+      </div>
       `;
+
+    selectedReportFuneral =
+      null;
 
     return;
 
   }
-
 
   const funeral =
     getFunerals().find(
-
       item =>
-        String(
-          item.id
-        )
-
-        ===
-
-        String(
-          id
-        )
-
+        String(item.id) ===
+        String(id)
     );
 
-
-  if(
-    !funeral
-  ){
-
+  if(!funeral){
     return;
-
   }
-
 
   selectedReportFuneral =
     funeral;
 
-
   const members =
     getMembers();
 
-
   const records =
     getDeliveries().filter(
-
       record =>
-
-        deliveryFuneralId(
-          record
-        )
-
-        ===
-
-        String(
-          funeral.id
-        )
-
+        deliveryFuneralId(record) ===
+        String(funeral.id)
     );
-
 
   const sent =
     members.filter(
-
       member =>
-
         records.some(
-
           record =>
-
             sameMember(
               member,
               record
             )
-
         )
-
     );
-
 
   const pending =
     members.filter(
-
       member =>
-
         !records.some(
-
           record =>
-
             sameMember(
               member,
               record
             )
-
         )
-
     );
-
 
   const rice =
     records.reduce(
-
       (
         sum,
         record
       ) =>
-
         sum +
-        deliveryAmount(
-          record
-        ),
-
+        deliveryAmount(record),
       0
-
     );
-
 
   const sentRows =
     sent.map(
-
       (
         member,
         index
@@ -2917,42 +2546,30 @@ function renderReport(){
 
         const memberRecords =
           records.filter(
-
             record =>
               sameMember(
                 member,
                 record
               )
-
           );
-
 
         const amount =
           memberRecords.reduce(
-
             (
               sum,
               record
             ) =>
-
               sum +
-              deliveryAmount(
-                record
-              ),
-
+              deliveryAmount(record),
             0
-
           );
-
 
         const last =
           memberRecords[
             memberRecords.length - 1
           ];
 
-
         return `
-
           <tr>
 
             <td>
@@ -2981,9 +2598,7 @@ function renderReport(){
                 last
                 ?
                 escapeHTML(
-                  deliveryDate(
-                    last
-                  )
+                  deliveryDate(last)
                 )
                 :
                 "-"
@@ -2991,22 +2606,17 @@ function renderReport(){
             </td>
 
           </tr>
-
         `;
 
       }
-
     ).join("");
-
 
   const pendingRows =
     pending.map(
-
       (
         member,
         index
       ) => `
-
         <tr>
 
           <td>
@@ -3026,327 +2636,234 @@ function renderReport(){
           </td>
 
           <td>
-
-            <span
-              class="tag wait"
-            >
+            <span class="tag wait">
               ⚠️ ยังไม่ส่ง
             </span>
-
           </td>
 
         </tr>
-
       `
-
     ).join("");
 
-
   $("reportArea")
-    .innerHTML = `
-
-      <div class="info">
-
-        <strong
-          style="
-            font-size:22px
-          "
-        >
-
-          ⚰️
-          ${escapeHTML(
-            funeral.name
-          )}
-
-        </strong>
-
-
-        ${
-          funeral.age
-          ?
-
-          `
-          <br>
-          👤 อายุ:
-          ${escapeHTML(
-            funeral.age
-          )}
-          ปี
-          `
-
-          :
-
-          ""
-        }
-
-
-        <br>
-
-        🏠 บ้านเลขที่:
-        ${escapeHTML(
-          funeral.house ||
-          "-"
-        )}
-
-
-        <br>
-
-        👨‍👩‍👧 ผู้แจ้ง:
-        ${escapeHTML(
-          funeral.reporter ||
-          "-"
-        )}
-
-
-        <br>
-
-        📅 วันที่เสียชีวิต:
-        ${escapeHTML(
-          displayDate(
-            funeral.death
-          )
-        )}
-
-
-        <br>
-
-        🔥 วันที่ฌาปนกิจ:
-        ${escapeHTML(
-          displayDate(
-            funeral.cremate
-          )
-        )}
-
-
-        <br>
-
-        📌 สถานะ:
-        ${escapeHTML(
-          funeral.status ||
-          "-"
-        )}
-
-      </div>
-
-
-      <div class="report-grid">
-
-
-        <div class="reportbox">
-
-          👥
-
-          <div class="reportnum">
-            ${DISPLAY_TOTAL}
-          </div>
-
-          <small>
-            สมาชิกทั้งหมด
-          </small>
-
-        </div>
-
-
-        <div class="reportbox">
-
-          ✅
-
-          <div class="reportnum">
-            ${DISPLAY_SENT}
-          </div>
-
-          <small>
-            ส่งแล้ว
-          </small>
-
-        </div>
-
-
-        <div class="reportbox">
-
-          ⚠️
-
-          <div class="reportnum">
-            ${DISPLAY_PENDING}
-          </div>
-
-          <small>
-            ยังไม่ส่ง
-          </small>
-
-        </div>
-
-
-        <div class="reportbox">
-
-          🌾
-
-          <div class="reportnum">
-            ${DISPLAY_RICE}
-          </div>
-
-          <small>
-            ข้าวสาร (ถุง)
-          </small>
-
-        </div>
-
-
-      </div>
-
-
-      <h3>
-        ✅ สมาชิกที่ส่งแล้ว
-        (${DISPLAY_SENT} ราย)
-      </h3>
-
-
-      <div class="tablewrap">
-
-        <table>
-
-          <thead>
-
-            <tr>
-
-              <th>
-                ลำดับ
-              </th>
-
-              <th>
-                ชื่อ-นามสกุล
-              </th>
-
-              <th>
-                บ้านเลขที่
-              </th>
-
-              <th>
-                จำนวน
-              </th>
-
-              <th>
-                วันที่ส่ง
-              </th>
-
-            </tr>
-
-          </thead>
-
-
-          <tbody>
-
-            ${
-              sentRows ||
-
-              `
-              <tr>
-
-                <td
-                  colspan="5"
-                >
-                  ยังไม่มีรายละเอียดการส่ง
-                </td>
-
-              </tr>
-              `
-            }
-
-          </tbody>
-
-        </table>
-
-      </div>
-
-
-      <h3>
-
-        ⚠️ สมาชิกที่ยังไม่ส่ง
-        (${DISPLAY_PENDING} ราย)
-
-      </h3>
-
-
-      <div class="tablewrap">
-
-        <table>
-
-          <thead>
-
-            <tr>
-
-              <th>
-                ลำดับ
-              </th>
-
-              <th>
-                ชื่อ-นามสกุล
-              </th>
-
-              <th>
-                บ้านเลขที่
-              </th>
-
-              <th>
-                สถานะ
-              </th>
-
-            </tr>
-
-          </thead>
-
-
-          <tbody>
-
-            ${
-              pendingRows ||
-
-              `
-              <tr>
-
-                <td
-                  colspan="4"
-                >
-                  ✅
-                  ไม่มีรายการค้าง
-                </td>
-
-              </tr>
-              `
-            }
-
-          </tbody>
-
-        </table>
-
-      </div>
-
-
-      <button
-        class="blue print-btn"
-        type="button"
-        onclick="window.print()"
+    .innerHTML =
+    `
+    <div class="info">
+
+      <strong
+        style="font-size:22px"
       >
+        ⚰️
+        ${escapeHTML(
+          funeral.name
+        )}
+      </strong>
 
-        🖨️
-        พิมพ์รายงานงานศพนี้
+      ${
+        funeral.age
+        ?
+        `
+        <br>
+        👤 อายุ:
+        ${escapeHTML(
+          funeral.age
+        )}
+        ปี
+        `
+        :
+        ""
+      }
 
-      </button>
+      <br>
 
+      🏠 บ้านเลขที่:
+      ${escapeHTML(
+        funeral.house || "-"
+      )}
+
+      <br>
+
+      👨‍👩‍👧 ผู้แจ้ง:
+      ${escapeHTML(
+        funeral.reporter || "-"
+      )}
+
+      <br>
+
+      📅 วันที่เสียชีวิต:
+      ${escapeHTML(
+        displayDate(
+          funeral.death
+        )
+      )}
+
+      <br>
+
+      🔥 วันที่ฌาปนกิจ:
+      ${escapeHTML(
+        displayDate(
+          funeral.cremate
+        )
+      )}
+
+      <br>
+
+      📌 สถานะ:
+      <strong>
+        ${escapeHTML(
+          funeral.status || "-"
+        )}
+      </strong>
+
+    </div>
+
+
+    <div class="report-grid">
+
+      <div class="reportbox">
+        👥
+        <div class="reportnum">
+          ${DISPLAY_TOTAL}
+        </div>
+        <small>
+          สมาชิกทั้งหมด
+        </small>
+      </div>
+
+      <div class="reportbox">
+        ✅
+        <div class="reportnum">
+          ${DISPLAY_SENT}
+        </div>
+        <small>
+          ส่งแล้ว
+        </small>
+      </div>
+
+      <div class="reportbox">
+        ⚠️
+        <div class="reportnum">
+          ${DISPLAY_PENDING}
+        </div>
+        <small>
+          ยังไม่ส่ง
+        </small>
+      </div>
+
+      <div class="reportbox">
+        🌾
+        <div class="reportnum">
+          ${DISPLAY_RICE}
+        </div>
+        <small>
+          ข้าวสาร (ถุง)
+        </small>
+      </div>
+
+    </div>
+
+
+    <h3>
+      ✅ สมาชิกที่ส่งแล้ว
+      (${DISPLAY_SENT} ราย)
+    </h3>
+
+    <div class="tablewrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>ลำดับ</th>
+            <th>ชื่อ-นามสกุล</th>
+            <th>บ้านเลขที่</th>
+            <th>จำนวน</th>
+            <th>วันที่ส่ง</th>
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          ${
+            sentRows ||
+            `
+            <tr>
+              <td colspan="5">
+                ยังไม่มีรายละเอียดการส่ง
+              </td>
+            </tr>
+            `
+          }
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+
+    <h3>
+      ⚠️ สมาชิกที่ยังไม่ส่ง
+      (${DISPLAY_PENDING} ราย)
+    </h3>
+
+    <div class="tablewrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>ลำดับ</th>
+            <th>ชื่อ-นามสกุล</th>
+            <th>บ้านเลขที่</th>
+            <th>สถานะ</th>
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          ${
+            pendingRows ||
+            `
+            <tr>
+              <td colspan="4">
+                ไม่มีรายการค้าง
+              </td>
+            </tr>
+            `
+          }
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+
+    <button
+      class="blue print-btn"
+      type="button"
+      onclick="window.print()"
+    >
+      🖨️
+      พิมพ์รายงานงานศพนี้
+    </button>
     `;
 
 }
 
 
 /* =====================================================
-   ✏️ EDIT STATUS
+   EDIT STATUS
 ===================================================== */
 
 function openEditStatus(){
 
-  if(
-    !selectedReportFuneral
-  ){
+  if(!selectedReportFuneral){
 
     alert(
       "กรุณาเลือกงานศพก่อน แล้วกด ดูรายงาน"
@@ -3356,36 +2873,26 @@ function openEditStatus(){
 
   }
 
-
   const funerals =
     readArray(
       FUNERALS_KEY
     );
 
-
   const index =
     funerals.findIndex(
-
       item =>
-
         String(
           item.id ??
           item.funeralId ??
           item.funeral_id
         )
-
         ===
-
         String(
           selectedReportFuneral.id
         )
-
     );
 
-
-  if(
-    index === -1
-  ){
+  if(index === -1){
 
     alert(
       "ไม่พบข้อมูลงานศพ"
@@ -3395,10 +2902,8 @@ function openEditStatus(){
 
   }
 
-
   const funeral =
     funerals[index];
-
 
   $("editStatusFuneralName")
     .textContent =
@@ -3408,16 +2913,14 @@ function openEditStatus(){
         "ไม่ระบุชื่อ"
       );
 
-
   $("editStatusSelect")
     .value =
       funeral.status ||
       "ยังไม่ดำเนินการ";
 
-
   $("editStatusModal")
     .style.display =
-      "flex";
+    "flex";
 
 }
 
@@ -3426,51 +2929,37 @@ function closeEditStatus(){
 
   $("editStatusModal")
     .style.display =
-      "none";
+    "none";
 
 }
 
 
 function saveEditStatus(){
 
-  if(
-    !selectedReportFuneral
-  ){
-
+  if(!selectedReportFuneral){
     return;
-
   }
-
 
   const funerals =
     readArray(
       FUNERALS_KEY
     );
 
-
   const index =
     funerals.findIndex(
-
       item =>
-
         String(
           item.id ??
           item.funeralId ??
           item.funeral_id
         )
-
         ===
-
         String(
           selectedReportFuneral.id
         )
-
     );
 
-
-  if(
-    index === -1
-  ){
+  if(index === -1){
 
     alert(
       "ไม่พบข้อมูลงานศพ"
@@ -3480,43 +2969,33 @@ function saveEditStatus(){
 
   }
 
-
   funerals[index] = {
 
     ...funerals[index],
 
     status:
-      $("editStatusSelect")
-        .value
+      $("editStatusSelect").value
 
   };
-
 
   writeArray(
     FUNERALS_KEY,
     funerals
   );
 
-
   selectedReportFuneral =
     funerals[index];
 
-
   closeEditStatus();
-
 
   refresh();
 
-
-  $("reportFuneral")
-    .value =
+  $("reportFuneral").value =
     String(
       selectedReportFuneral.id
     );
 
-
   renderReport();
-
 
   alert(
     "✅ บันทึกสถานะเรียบร้อยแล้ว"
@@ -3534,57 +3013,49 @@ function renderFollow(){
   const funerals =
     sortedFunerals();
 
-
   const members =
     getMembers();
-
 
   const records =
     getDeliveries();
 
-
   const list =
     $("followList");
 
+  if(!funerals.length){
 
-  if(
-    !funerals.length
-  ){
-
-    list.innerHTML = `
-
+    list.innerHTML =
+      `
       <div class="empty">
         ยังไม่มีข้อมูลงานศพ
       </div>
-
-    `;
+      `;
 
     return;
 
   }
 
-
   const latest =
     funerals[0];
 
-
-  const pending =
+  const actualPending =
     members.filter(
-
       member =>
         !sentForFuneral(
           member,
           latest,
           records
         )
-
     );
 
+  const pending =
+    actualPending.slice(
+      0,
+      DISPLAY_PENDING
+    );
 
   list.innerHTML =
-
     pending.map(
-
       (
         member,
         index
@@ -3592,24 +3063,18 @@ function renderFollow(){
 
         const missed =
           funerals.filter(
-
             funeral =>
-
               !sentForFuneral(
                 member,
                 funeral,
                 records
               )
-
           ).length;
-
 
         const danger =
           missed >= 2;
 
-
         return `
-
           <div
             class="
               follow
@@ -3624,21 +3089,17 @@ function renderFollow(){
           >
 
             <strong>
-
               ${index + 1}.
               ${escapeHTML(
                 member.name
               )}
-
             </strong>
-
 
             <small>
 
               🏠 บ้านเลขที่
               ${escapeHTML(
-                member.house ||
-                "-"
+                member.house || "-"
               )}
 
               <br>
@@ -3656,7 +3117,6 @@ function renderFollow(){
 
             </small>
 
-
             <span
               class="
                 tag
@@ -3669,7 +3129,6 @@ function renderFollow(){
                 }
               "
             >
-
               ${
                 danger
                 ?
@@ -3677,35 +3136,27 @@ function renderFollow(){
                 :
                 "🟡 แจ้งเตือน"
               }
-
             </span>
 
           </div>
-
         `;
 
       }
-
     ).join("")
 
     ||
 
     `
-
     <div class="empty">
-
-      ✅
-      สมาชิกทุกคนส่งงานศพล่าสุดแล้ว
-
+      ✅ สมาชิกทุกคนส่งงานศพล่าสุดแล้ว
     </div>
-
     `;
 
 }
 
 
 /* =====================================================
-   LOGIN FUNCTIONS
+   MAIN LOGIN STATE
 ===================================================== */
 
 function showMain(){
@@ -3713,7 +3164,6 @@ function showMain(){
   $("loginScreen")
     .style.display =
     "none";
-
 
   $("mainSystem")
     .style.display =
@@ -3728,7 +3178,6 @@ function showLogin(){
     .style.display =
     "none";
 
-
   $("loginScreen")
     .style.display =
     "flex";
@@ -3736,57 +3185,10 @@ function showLogin(){
 }
 
 
-function login(){
-
-  const username =
-    $("loginUsername")
-      .value
-      .trim();
-
-
-  const password =
-    $("loginPassword")
-      .value;
-
-
-  if(
-    username ===
-    LOGIN_USER
-
-    &&
-
-    password ===
-    LOGIN_PASSWORD
-  ){
-
-    sessionStorage.setItem(
-      "riceGroupLoggedIn",
-      "true"
-    );
-
-
-    $("loginError")
-      .textContent =
-      "";
-
-
-    showMain();
-
-    init();
-
-    speakWelcome();
-
-  }
-
-  else{
-
-    $("loginError")
-      .textContent =
-      "❌ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง";
-
-  }
-
-}
+/* สำคัญ:
+   ไม่สร้าง doLogin ซ้ำ
+   แต่ใช้ฟังก์ชันด้านบนเป็นตัวล็อกอินหลัก
+*/
 
 
 function logout(){
@@ -3795,23 +3197,16 @@ function logout(){
     "riceGroupLoggedIn"
   );
 
-
   showLogin();
 
-
   $("loginUsername")
-    .value =
-    "";
-
+    .value = "";
 
   $("loginPassword")
-    .value =
-    "";
-
+    .value = "";
 
   $("loginError")
-    .textContent =
-    "";
+    .textContent = "";
 
 }
 
@@ -3823,45 +3218,31 @@ function logout(){
 function speakWelcome(){
 
   if(
-    !(
-      "speechSynthesis"
-      in window
-    )
+    !("speechSynthesis" in window)
   ){
 
     return;
 
   }
 
-
-  window.speechSynthesis
-    .cancel();
-
+  window.speechSynthesis.cancel();
 
   const voice =
     new SpeechSynthesisUtterance(
-
       "ยินดีต้อนรับสู่ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6"
-
     );
-
 
   voice.lang =
     "th-TH";
 
-
   voice.rate =
     .9;
-
 
   voice.volume =
     1;
 
-
   window.speechSynthesis
-    .speak(
-      voice
-    );
+    .speak(voice);
 
 }
 
@@ -3880,37 +3261,24 @@ function refresh(){
 
   renderFollow();
 
-
   if(
     selectedDeliveryFuneral
   ){
 
     const current =
       getFunerals()
-      .find(
+        .find(
+          funeral =>
+            String(funeral.id) ===
+            String(
+              selectedDeliveryFuneral.id
+            )
+        );
 
-        funeral =>
-
-          String(
-            funeral.id
-          )
-
-          ===
-
-          String(
-            selectedDeliveryFuneral.id
-          )
-
-      );
-
-
-    if(
-      current
-    ){
+    if(current){
 
       selectedDeliveryFuneral =
         current;
-
 
       updateDeliveryInfo();
 
@@ -3918,33 +3286,21 @@ function refresh(){
 
   }
 
-
   if(
     selectedReportFuneral
   ){
 
     const current =
       getFunerals()
-      .find(
+        .find(
+          funeral =>
+            String(funeral.id) ===
+            String(
+              selectedReportFuneral.id
+            )
+        );
 
-        funeral =>
-
-          String(
-            funeral.id
-          )
-
-          ===
-
-          String(
-            selectedReportFuneral.id
-          )
-
-      );
-
-
-    if(
-      current
-    ){
+    if(current){
 
       selectedReportFuneral =
         current;
@@ -3967,124 +3323,88 @@ function init(){
 }
 
 
+/* ทำให้ doLogin เรียก init ได้ */
+window.doLogin = doLogin;
+window.init = init;
+
+
 /* =====================================================
    EVENTS
 ===================================================== */
 
-$("loginButton")
-.addEventListener(
-  "click",
-  login
-);
-
-
-$("loginPassword")
-.addEventListener(
-  "keydown",
-  event => {
-
-    if(
-      event.key ===
-      "Enter"
-    ){
-
-      login();
-
-    }
-
-  }
-);
-
-
 $("logoutButton")
-.addEventListener(
-  "click",
-  logout
-);
-
+  .addEventListener(
+    "click",
+    logout
+  );
 
 $("openDelivery")
-.addEventListener(
-  "click",
-  openDelivery
-);
-
+  .addEventListener(
+    "click",
+    openDelivery
+  );
 
 $("deliveryFuneral")
-.addEventListener(
-  "change",
-  openDelivery
-);
-
+  .addEventListener(
+    "change",
+    openDelivery
+  );
 
 $("searchMember")
-.addEventListener(
-  "click",
-  searchMembers
-);
-
-
-$("memberSearch")
-.addEventListener(
-  "input",
-  searchMembers
-);
-
+  .addEventListener(
+    "click",
+    searchMembers
+  );
 
 $("memberSearch")
-.addEventListener(
-  "keydown",
-  event => {
+  .addEventListener(
+    "input",
+    searchMembers
+  );
 
-    if(
-      event.key ===
-      "Enter"
-    ){
+$("memberSearch")
+  .addEventListener(
+    "keydown",
+    event => {
 
-      searchMembers();
+      if(event.key === "Enter"){
+
+        searchMembers();
+
+      }
 
     }
-
-  }
-);
-
+  );
 
 $("openReport")
-.addEventListener(
-  "click",
-  renderReport
-);
-
+  .addEventListener(
+    "click",
+    renderReport
+  );
 
 $("reportFuneral")
-.addEventListener(
-  "change",
-  renderReport
-);
-
-
-/* แก้ไขสถานะ */
+  .addEventListener(
+    "change",
+    renderReport
+  );
 
 $("editStatusButton")
-.addEventListener(
-  "click",
-  openEditStatus
-);
-
+  .addEventListener(
+    "click",
+    openEditStatus
+  );
 
 $("cancelStatusButton")
-.addEventListener(
-  "click",
-  closeEditStatus
-);
-
+  .addEventListener(
+    "click",
+    closeEditStatus
+  );
 
 $("saveStatusButton")
-.addEventListener(
-  "click",
-  saveEditStatus
-);
-
+  .addEventListener(
+    "click",
+    saveEditStatus
+  );
 
 window.addEventListener(
   "storage",
@@ -4097,7 +3417,6 @@ window.addEventListener(
 ===================================================== */
 
 setInterval(
-
   () => {
 
     if(
@@ -4109,9 +3428,7 @@ setInterval(
 
       sessionStorage.getItem(
         "riceGroupLoggedIn"
-      )
-      ===
-      "true"
+      ) === "true"
 
     ){
 
@@ -4120,9 +3437,7 @@ setInterval(
     }
 
   },
-
   2000
-
 );
 
 
@@ -4131,24 +3446,16 @@ setInterval(
 ===================================================== */
 
 if(
-
   sessionStorage.getItem(
     "riceGroupLoggedIn"
-  )
-
-  ===
-
-  "true"
-
+  ) === "true"
 ){
 
   showMain();
 
   init();
 
-}
-
-else{
+}else{
 
   showLogin();
 
