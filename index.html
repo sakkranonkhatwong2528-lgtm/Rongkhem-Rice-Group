@@ -869,7 +869,133 @@ th{
     id="deliverySearch"
     style="display:none"
   >
+/* ================= CARD ไว้อาลัยใหม่ ================= */
 
+.funeral-card{
+  position:relative;
+  overflow:hidden;
+  margin-top:20px;
+  padding:25px;
+  border-radius:30px;
+  background:
+  linear-gradient(
+    145deg,
+    rgba(0,0,0,.45),
+    rgba(80,0,0,.25)
+  );
+
+  border:1px solid rgba(255,255,255,.25);
+
+  box-shadow:
+  0 20px 60px rgba(0,0,0,.5);
+
+  animation: funeralShow 1s ease;
+}
+
+
+@keyframes funeralShow{
+
+from{
+opacity:0;
+transform:translateY(40px) scale(.9);
+}
+
+to{
+opacity:1;
+transform:none;
+}
+
+}
+
+
+.funeral-card:before{
+
+content:"";
+
+position:absolute;
+
+width:180px;
+height:180px;
+
+background:
+radial-gradient(
+circle,
+#ffd54f,
+transparent 70%
+);
+
+right:-60px;
+top:-60px;
+
+animation:lightMove 5s infinite;
+
+}
+
+
+@keyframes lightMove{
+
+50%{
+transform:scale(1.5);
+opacity:.4;
+}
+
+}
+
+
+
+.wreath{
+
+font-size:70px;
+
+animation:
+wreathMove 3s infinite;
+
+}
+
+
+@keyframes wreathMove{
+
+0%,100%{
+transform:rotate(-5deg);
+}
+
+50%{
+transform:rotate(5deg);
+}
+
+}
+
+
+.dead-name{
+
+font-size:32px;
+font-weight:900;
+
+margin-top:10px;
+
+}
+
+
+.dead-age{
+
+font-size:22px;
+
+color:#ffd54f;
+
+}
+
+
+.condolence{
+
+margin-top:15px;
+
+font-size:18px;
+
+line-height:1.8;
+
+color:#eee;
+
+}
     <div class="search">
 
       <input
