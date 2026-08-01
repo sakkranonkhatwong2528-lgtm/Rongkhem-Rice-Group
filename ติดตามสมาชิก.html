@@ -1,74 +1,268 @@
-<h2>⚠️ สมาชิกที่ต้องติดตาม</h2>
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ติดตามสมาชิกค้างส่ง</title>
+
+<style>
+
+body{
+    font-family:Tahoma,sans-serif;
+    background:#f3f7f0;
+    margin:0;
+}
+
+.header{
+    background:linear-gradient(135deg,#176b2c,#4caf50);
+    color:white;
+    padding:25px;
+    text-align:center;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+    padding:15px;
+}
+
+.box,.card{
+
+    background:white;
+    padding:15px;
+    margin-bottom:15px;
+    border-radius:15px;
+    box-shadow:0 3px 10px rgba(0,0,0,.1);
+
+}
+
+.card h3{
+    margin-top:0;
+}
+
+button{
+
+    width:100%;
+    padding:12px;
+    border:0;
+    border-radius:10px;
+    background:#228B22;
+    color:white;
+    font-size:16px;
+    margin-top:10px;
+}
+
+.red{
+    background:#c62828;
+}
+
+.blue{
+    background:#1976d2;
+}
+
+.success{
+
+    background:#e8f7e8;
+    padding:15px;
+    border-radius:10px;
+    color:#176b2c;
+
+}
+
+.warning{
+
+    background:#fff3cd;
+    padding:15px;
+    border-radius:10px;
+
+}
+
+
+@media print{
+
+button{
+    display:none;
+}
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="header">
+
+<h1>
+⚠️ สมาชิกที่ต้องติดตาม
+</h1>
+
+<p>
+กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
+</p>
+
+</div>
+
+
+<div class="container">
+
+
+<div class="box">
+
+<h2>
+📊 สรุป
+</h2>
+
+<p>
+👥 สมาชิกทั้งหมด :
+<span id="total">
+0
+</span>
+ครัวเรือน
+</p>
+
+
+<p>
+⚠️ ค้างส่ง :
+<span id="followTotal">
+0
+</span>
+ครัวเรือน
+</p>
+
+
+<button
+class="blue"
+onclick="printFollow()"
+>
+🖨️ พิมพ์รายงาน
+</button>
+
+
+</div>
+
+
 
 <div id="followList"></div>
 
+
+
+<a href="index.html">
+← กลับหน้าหลัก
+</a>
+
+
+</div>
+
+
+
 <script>
+
 
 function loadFollow(){
 
+
 let members =
-JSON.parse(localStorage.getItem("members")) || [];
+JSON.parse(
+localStorage.getItem("members")
+) || [];
+
+
+
+document.getElementById(
+"total"
+).innerHTML =
+members.length;
+
 
 
 let follow =
 members.filter(
-m => Number(m.pending) > 0
+m =>
+Number(m.pending)>0
 );
 
 
-let html = "";
 
-if(follow.length === 0){
+document.getElementById(
+"followTotal"
+).innerHTML =
+follow.length;
 
-html = `
+
+
+let html="";
+
+
+
+if(follow.length===0){
+
+
+html=`
+
 <div class="success">
+
 ✅ ไม่มีสมาชิกค้างส่ง
+
 </div>
+
 `;
+
 
 }else{
 
 
-html += `
-<div class="box">
-
-<h3>
-⚠️ พบสมาชิกต้องติดตาม ${follow.length} ครัวเรือน
-</h3>
-
-<button onclick="printFollow()">
-🖨️ พิมพ์รายงาน
-</button>
-
-</div>
-`;
+follow.forEach(
+(m,i)=>{
 
 
-follow.forEach((m,i)=>{
-
-
-html += `
+html+=`
 
 <div class="card">
 
+
 <h3>
+
 ${i+1}. ${m.name}
+
 </h3>
 
+
 <p>
-🏠 บ้านเลขที่ : ${m.house || "-"}
+🏠 บ้านเลขที่ :
+${m.house || "-"}
 </p>
 
+
 <p>
-📦 ค้างส่ง : ${m.pending} ครั้ง
+
+📦 ค้างส่ง :
+<b>${m.pending}</b>
+ครั้ง
+
 </p>
 
 
 <p>
+
 ${m.funeral 
-? "⚰️ งานศพ : "+m.funeral 
-: ""}
+? "⚰️ งานศพ : "+m.funeral
+:""}
+
 </p>
+
+
+
+<button
+onclick="receiveMember(${i})"
+>
+✅ รับแล้ว 1 ครั้ง
+</button>
+
 
 
 </div>
@@ -81,12 +275,93 @@ ${m.funeral
 }
 
 
+
 document.getElementById(
 "followList"
-).innerHTML = html;
+).innerHTML=html;
 
 
 }
+
+
+
+
+function receiveMember(index){
+
+
+let members =
+JSON.parse(
+localStorage.getItem("members")
+)||[];
+
+
+
+let follow =
+members.filter(
+m=>Number(m.pending)>0
+);
+
+
+
+let target =
+follow[index];
+
+
+
+let realIndex =
+members.findIndex(
+m=>
+m.name===target.name &&
+m.house===target.house
+);
+
+
+
+if(realIndex<0){
+
+alert("ไม่พบสมาชิก");
+
+return;
+
+}
+
+
+
+members[realIndex].pending--;
+
+
+
+if(
+members[realIndex].pending<=0
+){
+
+members[realIndex].pending=0;
+
+members[realIndex].status=
+"ปกติ";
+
+}
+
+
+
+localStorage.setItem(
+"members",
+JSON.stringify(members)
+);
+
+
+
+alert(
+"✅ บันทึกการรับเรียบร้อย"
+);
+
+
+
+loadFollow();
+
+
+}
+
 
 
 
@@ -97,7 +372,12 @@ window.print();
 }
 
 
+
 loadFollow();
 
 
 </script>
+
+
+</body>
+</html>
