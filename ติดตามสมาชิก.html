@@ -4,1385 +4,276 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>ติดตามสมาชิกค้างส่ง</title>
+<title>ติดตามสมาชิก - กลุ่มข้าวสารบ้านร่องเข็ม</title>
 
 <style>
-
 body{
-    font-family:Tahoma,sans-serif;
-    background:#f3f7f0;
+    font-family:"Tahoma",sans-serif;
+    background:#f1f8e9;
     margin:0;
-}
-
-.header{
-    background:linear-gradient(135deg,#176b2c,#4caf50);
-    color:white;
-    padding:25px;
-    text-align:center;
+    padding:15px;
 }
 
 .container{
     max-width:900px;
     margin:auto;
-    padding:15px;
 }
 
-.box,.card{
-
-    background:white;
-    padding:15px;
-    margin-bottom:15px;
+.header{
+    background:#2e7d32;
+    color:white;
+    padding:20px;
     border-radius:15px;
-    box-shadow:0 3px 10px rgba(0,0,0,.1);
-
+    text-align:center;
 }
 
-.card h3{
-    margin-top:0;
+.card{
+    background:white;
+    margin-top:15px;
+    padding:15px;
+    border-radius:15px;
+    box-shadow:0 3px 8px #ccc;
 }
 
-button{
+.warning{
+    border-left:8px solid #ffc107;
+}
 
+.danger{
+    border-left:8px solid #d32f2f;
+}
+
+input{
     width:100%;
     padding:12px;
-    border:0;
     border-radius:10px;
-    background:#228B22;
-    color:white;
-    font-size:16px;
+    border:1px solid #ccc;
     margin-top:10px;
 }
 
-.red{
-    background:#c62828;
-}
-
-.blue{
-    background:#1976d2;
-}
-
-.success{
-
-    background:#e8f7e8;
-    padding:15px;
+button{
+    background:#2e7d32;
+    color:white;
+    border:none;
+    padding:10px 15px;
     border-radius:10px;
-    color:#176b2c;
-
+    margin-top:10px;
 }
-
-.warning{
-
-    background:#fff3cd;
-    padding:15px;
-    border-radius:10px;
-
-}
-
-
-@media print{
-
-button{
-    display:none;
-}
-
-}
-
-</style>
-
-</head>
-
-
-<body>
-
-
-<div class="header">
-
-<h1>
-⚠️ สมาชิกที่ต้องติดตาม
-</h1>
-
-<p>
-กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
-</p>
-
-</div>
-
-
-<div class="container">
-
-
-<div class="box">
-
-<h2>
-📊 สรุป
-</h2>
-
-<p>
-👥 สมาชิกทั้งหมด :
-<span id="total">
-0
-</span>
-ครัวเรือน
-</p>
-
-
-<p>
-⚠️ ค้างส่ง :
-<span id="followTotal">
-0
-</span>
-ครัวเรือน
-</p>
-
-
-<button
-class="blue"
-onclick="printFollow()"
->
-🖨️ พิมพ์รายงาน
-</button>
-
-
-</div>
-
-
-
-<div id="followList"></div>
-
-
-
-<a href="index.html">
-← กลับหน้าหลัก
-</a>
-
-
-</div>
-
-
-
-<script>
-
-
-function loadFollow(){
-
-
-let members =
-JSON.parse(
-localStorage.getItem("members")
-) || [];
-
-
-
-document.getElementById(
-"total"
-).innerHTML =
-members.length;
-
-
-
-let follow =
-members.filter(
-m =>
-Number(m.pending)>0
-);
-
-
-
-document.getElementById(
-"followTotal"
-).innerHTML =
-follow.length;
-
-
-
-let html="";
-
-
-
-if(follow.length===0){
-
-
-html=`
-
-<div class="success">
-
-✅ ไม่มีสมาชิกค้างส่ง
-
-</div>
-
-`;
-
-
-}else{
-
-
-follow.forEach(
-(m,i)=>{
-
-
-html+=`
-
-<div class="card">
-
-
-<h3>
-
-${i+1}. ${m.name}
-
-</h3>
-
-
-<p>
-🏠 บ้านเลขที่ :
-${m.house || "-"}
-</p>
-
-
-<p>
-
-📦 ค้างส่ง :
-<b>${m.pending}</b>
-ครั้ง
-
-</p>
-
-
-<p>
-
-${m.funeral 
-? "⚰️ งานศพ : "+m.funeral
-:""}
-
-</p>
-
-
-
-<button
-onclick="receiveMember(${i})"
->
-✅ รับแล้ว 1 ครั้ง
-</button>
-
-
-
-</div>
-
-`;
-
-});
-
-
-}
-
-
-
-document.getElementById(
-"followList"
-).innerHTML=html;
-
-
-}
-
-
-
-
-function receiveMember(index){
-
-
-let members =
-JSON.parse(
-localStorage.getItem("members")
-)||[];
-
-
-
-let follow =
-members.filter(
-m=>Number(m.pending)>0
-);
-
-
-
-let target =
-follow[index];
-
-
-
-let realIndex =
-members.findIndex(
-m=>
-m.name===target.name &&
-m.house===target.house
-);
-
-
-
-if(realIndex<0){
-
-alert("ไม่พบสมาชิก");
-
-return;
-
-}
-
-
-
-members[realIndex].pending--;
-
-
-
-if(
-members[realIndex].pending<=0
-){
-
-members[realIndex].pending=0;
-
-members[realIndex].status=
-"ปกติ";
-
-}
-
-
-
-localStorage.setItem(
-"members",
-JSON.stringify(members)
-);
-
-
-
-alert(
-"✅ บันทึกการรับเรียบร้อย"
-);
-
-
-
-loadFollow();
-
-
-}
-
-
-
-
-function printFollow(){
-
-window.print();
-
-}
-
-
-
-loadFollow();
-
-
-</script>
-
-
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="th">
-
-<head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>
-ติดตามสมาชิกค้างส่ง
-</title>
-
-
-<style>
-
-*{
-box-sizing:border-box;
-}
-
-
-body{
-
-margin:0;
-font-family:Tahoma,sans-serif;
-background:#f3f7f0;
-color:#333;
-
-}
-
-
-.header{
-
-background:linear-gradient(
-135deg,
-#176b2c,
-#4caf50
-);
-
-color:white;
-
-padding:25px;
-
-text-align:center;
-
-}
-
-
-.container{
-
-max-width:900px;
-
-margin:auto;
-
-padding:15px;
-
-}
-
-
-.box,
-.card{
-
-background:white;
-
-padding:18px;
-
-margin-bottom:15px;
-
-border-radius:15px;
-
-box-shadow:
-0 3px 10px rgba(0,0,0,.1);
-
-}
-
-
-.summary{
-
-display:grid;
-
-grid-template-columns:
-repeat(2,1fr);
-
-gap:10px;
-
-}
-
-
-.number{
-
-font-size:28px;
-
-font-weight:bold;
-
-color:#228B22;
-
-}
-
-
-button{
-
-width:100%;
-
-padding:12px;
-
-border:0;
-
-border-radius:10px;
-
-background:#228B22;
-
-color:white;
-
-font-size:16px;
-
-margin-top:10px;
-
-cursor:pointer;
-
-}
-
-
-button.blue{
-
-background:#1976d2;
-
-}
-
-
-button.red{
-
-background:#c62828;
-
-}
-
-
-input{
-
-width:100%;
-
-padding:12px;
-
-border-radius:10px;
-
-border:1px solid #ccc;
-
-font-size:16px;
-
-}
-
-
-.warning{
-
-background:#fff3cd;
-
-padding:15px;
-
-border-radius:10px;
-
-color:#856404;
-
-}
-
-
-.success{
-
-background:#e8f7e8;
-
-padding:15px;
-
-border-radius:10px;
-
-color:#176b2c;
-
-}
-
-
-.member-name{
-
-font-size:20px;
-
-font-weight:bold;
-
-color:#176b2c;
-
-}
-
-
-.tag{
-
-display:inline-block;
-
-background:#ffe0e0;
-
-color:#c62828;
-
-padding:5px 10px;
-
-border-radius:20px;
-
-}
-
-
-a{
-
-text-decoration:none;
-
-color:#176b2c;
-
-}
-
-
-@media(max-width:600px){
-
-.summary{
-
-grid-template-columns:1fr;
-
-}
-
-}
-
-
-@media print{
-
-button,
-input,
-a{
-
-display:none;
-
-}
-
-body{
-
-background:white;
-
-}
-
-}
-
-
-</style>
-
-
-</head>
-
-
-<body>
-
-
-<div class="header">
-
-<h1>
-⚠️ สมาชิกที่ต้องติดตาม
-</h1>
-
-<p>
-กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
-</p>
-
-</div>
-
-
-
-<div class="container">
-
-
-
-<div class="box">
-
-
-<h2>
-📊 สรุปข้อมูล
-</h2>
-
-
-<div class="summary">
-
-
-<div class="card">
-
-👥 สมาชิกทั้งหมด
-
-<div class="number" id="totalMember">
-0
-</div>
-
-ครัวเรือน
-
-</div>
-
-
-
-<div class="card">
-
-⚠️ ต้องติดตาม
-
-<div class="number" id="followMember">
-0
-</div>
-
-ครัวเรือน
-
-</div>
-
-
-</div>
-
-
-<button
-class="blue"
-onclick="printReport()"
->
-
-🖨️ พิมพ์รายงาน
-
-</button>
-
-
-<button
-onclick="exportCSV()"
->
-
-📄 ส่งออก Excel
-
-</button>
-
-
-</div>
-
-
-
-<div class="box">
-
-
-<h2>
-🔎 ค้นหาสมาชิก
-</h2>
-
-
-<input
-id="search"
-placeholder="ค้นหาชื่อ หรือ บ้านเลขที่"
-onkeyup="loadFollow()"
->
-
-
-</div>
-
-
-
-<div id="followList">
-
-
-</div>
-
-
-
-<a href="index.html">
-
-← กลับหน้าหลัก
-
-</a>
-
-
-
-</div>
-<!DOCTYPE html>
-<html lang="th">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>ติดตามสมาชิกกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
-
-<style>
-
-body{
-font-family:"Sarabun",Arial,sans-serif;
-background:#f4f7f2;
-margin:0;
-padding:15px;
-color:#333;
-}
-
-.container{
-max-width:900px;
-margin:auto;
-}
-
-.header{
-background:linear-gradient(135deg,#2e7d32,#66bb6a);
-color:white;
-padding:20px;
-border-radius:15px;
-text-align:center;
-box-shadow:0 5px 15px #aaa;
-}
-
-.header h1{
-margin:0;
-font-size:26px;
-}
-
-.card{
-background:white;
-padding:15px;
-margin-top:15px;
-border-radius:15px;
-box-shadow:0 3px 10px #ddd;
-}
-
-
-.stats{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:10px;
-}
-
-.stat{
-padding:15px;
-border-radius:12px;
-text-align:center;
-background:#f1f8e9;
-}
-
-.stat b{
-font-size:28px;
-display:block;
-color:#2e7d32;
-}
-
-
-input,button{
-font-size:16px;
-padding:10px;
-border-radius:10px;
-border:1px solid #ccc;
-}
-
-
-input{
-width:100%;
-box-sizing:border-box;
-margin-bottom:10px;
-}
-
-
-button{
-cursor:pointer;
-border:none;
-background:#2e7d32;
-color:white;
-}
-
-
-button:hover{
-opacity:.85;
-}
-
-
-.member{
-background:#fff;
-border-left:6px solid #4caf50;
-padding:15px;
-margin-top:10px;
-border-radius:12px;
-box-shadow:0 2px 8px #ddd;
-}
-
-
-.member.pending{
-border-left-color:#ff9800;
-}
-
-
-.member.danger{
-border-left-color:#e53935;
-}
-
-
-.name{
-font-size:20px;
-font-weight:bold;
-}
-
-
-.status{
-margin-top:8px;
-}
-
-
-.green{
-color:green;
-font-weight:bold;
-}
-
-
-.yellow{
-color:#ef6c00;
-font-weight:bold;
-}
-
-
-.red{
-color:red;
-font-weight:bold;
-}
-
-
-.btn-danger{
-background:#d32f2f;
-}
-
-
-.btn-edit{
-background:#1565c0;
-}
-
 
 .back{
-display:block;
-margin-top:20px;
-text-align:center;
-background:#555;
-padding:12px;
-border-radius:10px;
-color:white;
-text-decoration:none;
+    display:block;
+    text-align:center;
+    margin-top:20px;
+    text-decoration:none;
+    background:#555;
+    color:white;
+    padding:12px;
+    border-radius:10px;
 }
 
-
-@media(max-width:600px){
-
-.stats{
-grid-template-columns:1fr;
+.badge{
+    padding:5px 10px;
+    border-radius:20px;
+    font-weight:bold;
 }
 
-.header h1{
-font-size:20px;
+.yellow{
+    background:#fff3cd;
 }
 
+.red{
+    background:#ffcdd2;
 }
-
 
 </style>
-
 </head>
-
 
 <body>
 
-
 <div class="container">
 
-
 <div class="header">
-
-<h1>👥 ติดตามสมาชิก</h1>
-
+<h2>⚠️ ติดตามสมาชิก</h2>
 <p>กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</p>
-
+<p>สมาชิกที่ยังต้องติดตาม 10 ครัวเรือน</p>
 </div>
 
 
-<div class="card">
-
-
-<div class="stats">
-
-<div class="stat">
-สมาชิกทั้งหมด
-<b id="total">0</b>
-ครัวเรือน
-</div>
-
-
-<div class="stat">
-ค้างส่ง
-<b id="pending">0</b>
-ครัวเรือน
-</div>
-
-
-<div class="stat">
-แจ้งเตือน
-<b id="alert">0</b>
-ครั้ง
-</div>
-
-
-</div>
-
-
-</div>
-
-
-
-<div class="card">
-
-
-<h3>🔎 ค้นหาสมาชิก</h3>
-
-
-<input 
-id="search"
-placeholder="ค้นหาชื่อ หรือ บ้านเลขที่"
-onkeyup="showMembers()"
->
-
-
-</div>
+<input id="search" 
+placeholder="🔎 ค้นหาชื่อ หรือ บ้านเลขที่"
+onkeyup="searchMember()">
 
 
 <div id="list"></div>
-
 
 
 <a class="back" href="index.html">
 ← กลับหน้าหลัก
 </a>
 
-
-
 </div>
 
 
-
 <script>
 
-
-let members = JSON.parse(localStorage.getItem("members")) || [];
-<script>
-
-
-// ถ้าไม่มีข้อมูล ให้สร้างโครงข้อมูลเริ่มต้น
-if(members.length===0){
-
-members = [
+const members=[
 
 {
-name:"นายปิ๊ก ขัติย์วงศ์",
-house:"12",
-pending:0,
-status:"ปกติ"
+name:"นายวุฒิภัทร เตชะวงค์",
+house:"91/1",
+count:1,
+job:"นายเกษมสุข ใฝ่ใจ"
 },
 
 {
-name:"นางแสงเพียร วงค์ขัติย์",
-house:"6",
-pending:0,
-status:"ปกติ"
+name:"นายต่วน ทาทอง",
+house:"114",
+count:1,
+job:"นายเกษมสุข ใฝ่ใจ"
 },
 
 {
-name:"นายจักร์กวัส ประพลรัตนัง",
-house:"2",
-pending:0,
-status:"ปกติ"
+name:"นายประหยัด ปิงเมือง",
+house:"120",
+count:2,
+job:"นายเกษมสุข ใฝ่ใจ"
 },
 
 {
-name:"น.ส. ปวีณา มิ่งขวัญ",
-house:"44",
-pending:0,
-status:"ปกติ"
+name:"นายสมศีล งามจิต",
+house:"135",
+count:1,
+job:"นายบูรณิพิภพ ผัดดี"
 },
 
 {
-name:"นายเกษมสุข ใฝ่ใจ",
-house:"123",
-pending:0,
-status:"ปกติ"
+name:"น.ส.ยุพา ใจดี",
+house:"160",
+count:1,
+job:"นายเกษมสุข ใฝ่ใจ"
+},
+
+{
+name:"นายตื่น มิ่งขวัญ",
+house:"176",
+count:2,
+job:"นายเกษมสุข ใฝ่ใจ"
+},
+
+{
+name:"น.ส.สำรอง มหาวรรณศรี",
+house:"200",
+count:2,
+job:"นายเกษมสุข ใฝ่ใจ"
+},
+
+{
+name:"นายบรรพต อินวงค์",
+house:"212",
+count:2,
+job:"นายเกษมสุข ใฝ่ใจ"
+},
+
+{
+name:"นางลวงทิพย์ ใฝ่จิต",
+house:"315",
+count:2,
+job:"นายเกษมสุข ใฝ่ใจ"
+},
+
+{
+name:"นายประทุม ดาวกระจาย",
+house:"328",
+count:2,
+job:"นายเกษมสุข ใฝ่ใจ"
 }
 
 ];
 
 
-localStorage.setItem(
-"members",
-JSON.stringify(members)
-);
-
-}
-
-
-
-// แสดงข้อมูลสมาชิก
-
-function showMembers(){
-
-
-let search =
-document.getElementById("search").value
-.toLowerCase();
-
+function show(data){
 
 let html="";
 
+data.forEach((m,i)=>{
 
-let pendingCount=0;
-
-let alertCount=0;
-
-
-
-members.forEach((m,index)=>{
-
-
-if(m.pending>0){
-
-pendingCount++;
-
-alertCount += m.pending;
-
-}
+let status =
+m.count>=2
+?
+`<span class="badge red">
+🔴 เสนอพิจารณาตัดสมาชิก
+</span>`
+:
+`<span class="badge yellow">
+🟡 แจ้งเตือน
+</span>`;
 
 
+html+=`
 
-let text =
-(m.name+m.house).toLowerCase();
+<div class="card ${m.count>=2?'danger':'warning'}">
 
+<h3>${i+1}. ${m.name}</h3>
 
+<p>🏠 บ้านเลขที่ : ${m.house}</p>
 
-if(text.includes(search)){
+<p>📦 ค้างส่ง : ${m.count} ครั้ง</p>
 
+<p>⚰️ งานศพ : ${m.job}</p>
 
-
-let box="member";
-
-let status="🟢 ปกติ";
-
-let color="green";
+<p>${status}</p>
 
 
-
-if(m.pending==1){
-
-box+=" pending";
-
-status=
-"🟡 แจ้งเตือน "+m.pending+" ครั้ง";
-
-color="yellow";
-
-}
-
-
-
-if(m.pending>=2){
-
-box+=" danger";
-
-status=
-"🔴 เสนอพิจารณาตัดสมาชิก";
-
-color="red";
-
-}
-
-
-
-html += `
-
-
-<div class="${box}">
-
-
-<div class="name">
-${index+1}. ${m.name}
-</div>
-
-
-<div>
-🏠 บ้านเลขที่ : ${m.house}
-</div>
-
-
-
-<div class="status ${color}">
-
-📦 ค้างส่ง : ${m.pending || 0} ครั้ง
-
-<br>
-
-${status}
-
-</div>
-
-
-
-<div style="margin-top:10px">
-
-
-<button 
-class="btn-edit"
-onclick="editMember(${index})">
-
-✏️ แก้ไข
-
+<button onclick="follow('${m.name}')">
+✅ บันทึกติดตาม
 </button>
 
 
-
-<button 
-class="btn-danger"
-onclick="deleteMember(${index})">
-
-🗑 ลบสมาชิก
-
-</button>
-
-
-
 </div>
-
-
-</div>
-
 
 `;
 
-}
-
-
 });
-
 
 
 document.getElementById("list").innerHTML=html;
 
-
-document.getElementById("total").innerHTML=
-members.length;
+}
 
 
-document.getElementById("pending").innerHTML=
-pendingCount;
+
+function searchMember(){
+
+let text=
+document.getElementById("search").value;
 
 
-document.getElementById("alert").innerHTML=
-alertCount;
+let result=
+members.filter(m=>
+m.name.includes(text)||
+m.house.includes(text)
+);
 
 
+show(result);
 
 }
 
 
 
-showMembers();
+function follow(name){
 
+alert(
+"บันทึกการติดตามสมาชิก : "+name
+);
+
+}
+
+
+show(members);
 
 
 </script>
-<script>
-
-
-// เพิ่มสมาชิกใหม่
-
-function addMember(){
-
-let name =
-prompt("กรอกชื่อสมาชิก");
-
-if(!name) return;
-
-
-let house =
-prompt("กรอกบ้านเลขที่");
-
-
-members.push({
-
-name:name,
-
-house:house || "",
-
-pending:0,
-
-status:"ปกติ"
-
-});
-
-
-saveData();
-
-
-}
-
-
-
-// แก้ไขสมาชิก
-
-function editMember(index){
-
-
-let m = members[index];
-
-
-let name =
-prompt(
-"แก้ไขชื่อสมาชิก",
-m.name
-);
-
-
-if(name){
-
-m.name=name;
-
-}
-
-
-
-let house =
-prompt(
-"แก้ไขบ้านเลขที่",
-m.house
-);
-
-
-if(house){
-
-m.house=house;
-
-}
-
-
-
-let pending =
-prompt(
-"จำนวนครั้งค้างส่ง",
-m.pending
-);
-
-
-
-if(pending!==null){
-
-m.pending=parseInt(pending) || 0;
-
-}
-
-
-
-saveData();
-
-
-}
-
-
-
-// ลบสมาชิก
-
-function deleteMember(index){
-
-
-let ok =
-confirm(
-"ต้องการลบสมาชิกนี้หรือไม่?"
-);
-
-
-
-if(ok){
-
-members.splice(index,1);
-
-saveData();
-
-}
-
-
-}
-
-
-
-// บันทึกข้อมูล
-
-function saveData(){
-
-
-localStorage.setItem(
-"members",
-JSON.stringify(members)
-);
-
-
-showMembers();
-
-
-alert("บันทึกข้อมูลเรียบร้อย");
-
-
-}
-
-
-
-
-</script>
-
 
 
 </body>
