@@ -622,9 +622,27 @@ th{
 
 </style>
 </head>
+<!-- 1. ดึงฟอนต์ภาษาไทย Sarabun และไอคอน -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+<!-- 2. ดึงไลบรารี AOS (สำหรับอนิเมชันตอนเลื่อนหน้าจอ) -->
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+<!-- 3. เชื่อมไฟล์ style.css ที่เราสร้างในขั้นตอนที่ 1 -->
+<link rel="stylesheet" href="style.css">
 <body>
-
+<!-- ไลบรารี AOS JS -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+  // คำสั่งเริ่มทำงานอนิเมชัน
+  AOS.init({
+    duration: 800, // ความเร็วอนิเมชัน (0.8 วินาที)
+    once: true     // เล่นอนิเมชันครั้งเดียวตอนเลื่อนมาเจอ
+  });
+</script>
 
 <!-- =====================================================
      LOGIN
