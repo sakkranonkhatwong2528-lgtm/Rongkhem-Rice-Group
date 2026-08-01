@@ -1,0 +1,51 @@
+/* --- โทนสีหลักของกลุ่มข้าวรงเขม --- */
+:root {
+  --primary-color: #2e7d32;   /* สีเขียว */
+  --secondary-color: #fbc02d; /* สีทองรวงข้าว */
+  --bg-color: #f8f9fa;        /* สีพื้นหลัง */
+  --text-color: #2c3e50;      /* สีตัวอักษร */
+}
+
+/* --- ตั้งค่าฟอนต์และพื้นหลัง + อนิเมชันตอนเปิดหน้า --- */
+body {
+  font-family: 'Sarabun', sans-serif !important;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  margin: 0;
+  animation: fadeInPage 0.6s ease-in-out;
+}
+
+@keyframes fadeInPage {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- ปรับแต่ง การ์ด/กล่องข้อมูล ให้มีมิติ + ขยับได้เวลาชี้เมาส์ --- */
+.card, .box, div[class*="container"] {
+  border-radius: 12px;
+  transition: all 0.3s ease-in-out;
+}
+
+.card:hover, .box:hover {
+  transform: translateY(-5px); /* ลอยขึ้น 5px */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* --- ปรับแต่ง ปุ่มกด ให้ลอยและขยายเล็กน้อย --- */
+button, .btn {
+  border-radius: 20px !important;
+  transition: all 0.2s ease-in-out !important;
+}
+
+button:hover, .btn:hover {
+  transform: scale(1.03); /* ขยายขึ้น 3% */
+  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+}
+
+/* --- ไฮไลต์แถวในตารางเมื่อเมาส์ชี้ --- */
+tr {
+  transition: background-color 0.2s ease;
+}
+tr:hover {
+  background-color: #e8f5e9 !important; /* เปลี่ยนเป็นสีเขียวอ่อน */
+}
