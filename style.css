@@ -49,3 +49,25 @@ tr {
 tr:hover {
   background-color: #e8f5e9 !important; /* เปลี่ยนเป็นสีเขียวอ่อน */
 }
+/* --- ปรับแต่ง Badge สถานะในตาราง --- */
+.badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.badge-success { background-color: #e8f5e9; color: #2e7d32; } /* สีเขียว:สำเร็จ/ปกติ */
+.badge-warning { background-color: #fffde7; color: #f57f17; } /* สีเหลือง: รอดำเนินการ */
+.badge-danger  { background-color: #ffebee; color: #c62828; } /* สีแดง: ยกเลิก/ขาด */
+
+/* เอฟเฟกต์ Fade In ทีละแถวตาราง */
+tbody tr {
+  animation: fadeInRow 0.5s ease-in-out forwards;
+}
+
+@keyframes fadeInRow {
+  from { opacity: 0; transform: translateX(-10px); }
+  to { opacity: 1; transform: translateX(0); }
+}
