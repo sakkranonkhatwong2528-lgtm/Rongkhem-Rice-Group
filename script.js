@@ -1,203 +1,89 @@
+// ==========================
+// Rongkhem Rice Group v1.0
+// ==========================
 
-// =====================
-// ระบบเพลงเปิด/ปิด
-// =====================
+// โหลดข้อมูล
+function loadData(key){
+    return JSON.parse(localStorage.getItem(key)) || [];
+}
 
-const music = document.getElementById("bgMusic");
-const musicBtn = document.querySelector(".music-btn");
+// บันทึกข้อมูล
+function saveData(key,data){
+    localStorage.setItem(key,JSON.stringify(data));
+}
 
+// ลบข้อมูล
+function clearData(key){
+    localStorage.removeItem(key);
+}
 
-function playMusic(){
+// Export JSON
+function exportJSON(key,fileName){
 
-if(music.paused){
+    const data = loadData(key);
 
-music.play();
+    const blob = new Blob(
+        [JSON.stringify(data,null,2)],
+        {type:"application/json"}
+    );
 
-musicBtn.innerHTML="🔊 ปิดเพลง";
+    const a=document.createElement("a");
 
-localStorage.setItem("music","on");
+    a.href=URL.createObjectURL(blob);
+
+    a.download=fileName+".json";
+
+    a.click();
 
 }
 
-else{
+// Import JSON
+function importJSON(key,file,callback){
 
-music.pause();
+    const reader=new FileReader();
 
-musicBtn.innerHTML="🎵 เปิดเพลง";
+    reader.onload=function(e){
 
-localStorage.setItem("music","off");
+        try{
 
-}
+            const data=JSON.parse(e.target.result);
 
-}
+            saveData(key,data);
 
+            alert("นำเข้าข้อมูลสำเร็จ");
 
+            if(callback) callback();
 
-// จำสถานะเพลง
+        }catch{
 
-window.onload=function(){
+            alert("ไฟล์ไม่ถูกต้อง");
 
-if(localStorage.getItem("music")=="on"){
+        }
 
-music.play()
-.catch(()=>{});
+    }
 
-musicBtn.innerHTML="🔊 ปิดเพลง";
-
-}
-
-};
-
-
-
-
-
-// =====================
-// ตัวเลข Dashboard วิ่งขึ้น
-// =====================
-
-
-function countUp(element,target){
-
-let number=0;
-
-let speed=20;
-
-
-let timer=setInterval(()=>{
-
-
-number+=1;
-
-
-element.innerHTML=number;
-
-
-if(number>=target){
-
-clearInterval(timer);
+    reader.readAsText(file);
 
 }
 
+// สร้างรหัสสมาชิก
+function createID(){
 
-},speed);
-
-
-}
-
-
-
-document.addEventListener("DOMContentLoaded",()=>{
-
-
-document.querySelectorAll(".box strong")
-
-.forEach((item)=>{
-
-
-let value=parseInt(item.innerText);
-
-
-item.innerText="0";
-
-
-countUp(item,value);
-
-
-});
-
-
-});
-
-
-
-
-
-
-// =====================
-// กลีบดอกไม้ลอย
-// =====================
-
-
-function createFlower(){
-
-
-const flower=document.createElement("div");
-
-
-flower.innerHTML="🌸";
-
-
-flower.className="fall-flower";
-
-
-flower.style.left=
-
-Math.random()*100+"vw";
-
-
-flower.style.animationDuration=
-
-(5+Math.random()*5)+"s";
-
-
-document.body.appendChild(flower);
-
-
-
-setTimeout(()=>{
-
-flower.remove();
-
-},10000);
-
+    return Date.now();
 
 }
 
+// ค้นหา
+function searchData(data,keyword){
 
+    keyword=keyword.toLowerCase();
 
-setInterval(createFlower,1200);
+    return data.filter(item=>
 
+        JSON.stringify(item)
+        .toLowerCase()
+        .includes(keyword)
 
-
-
-
-// =====================
-// Scroll Animation
-// =====================
-
-
-const cards=document.querySelectorAll(
-
-".menu a,.box,.memorial-card"
-
-);
-
-
-
-window.addEventListener("scroll",()=>{
-
-
-cards.forEach(card=>{
-
-
-let top=
-
-card.getBoundingClientRect().top;
-
-
-if(top < window.innerHeight-80){
-
-
-card.style.opacity="1";
-
-card.style.transform="translateY(0)";
-
+    );
 
 }
-
-
-});
-
-
-});
