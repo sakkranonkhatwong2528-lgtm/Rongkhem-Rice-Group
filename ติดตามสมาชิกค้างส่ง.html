@@ -2,26 +2,22 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>ติดตามสมาชิกค้างส่ง - กลุ่มข้าวสารบ้านร่องเข็ม</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ติดตามสมาชิกค้างส่ง กลุ่มข้าวสารบ้านร่องเข็ม</title>
 
 <style>
 body{
 font-family:Tahoma,sans-serif;
-background:#f3f8ef;
-margin:0;
+background:#f1f8e9;
 padding:15px;
 }
-
-header{
+.header{
 background:#2e7d32;
 color:white;
 padding:20px;
 border-radius:15px;
 text-align:center;
 }
-
 .card{
 background:white;
 margin-top:15px;
@@ -29,45 +25,23 @@ padding:15px;
 border-radius:15px;
 box-shadow:0 2px 8px #ccc;
 }
-
-.stat{
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-}
-
-.box{
-flex:1;
+.item{
 padding:15px;
-border-radius:12px;
-text-align:center;
-font-size:20px;
-}
-
-.green{background:#c8e6c9;}
-.yellow{background:#fff59d;}
-.red{background:#ffcdd2;}
-
-.member{
-background:#fafafa;
 margin:10px 0;
-padding:12px;
-border-radius:10px;
-border-left:5px solid orange;
+border-radius:12px;
+background:#fafafa;
+border-left:6px solid #ff9800;
 }
-
-.member.red{
-border-color:red;
+.cut{
+border-left-color:red;
 }
-
 button{
-background:#388e3c;
+background:#2e7d32;
 color:white;
 border:0;
-padding:8px 15px;
+padding:10px;
 border-radius:8px;
 }
-
 .modal{
 display:none;
 position:fixed;
@@ -77,109 +51,70 @@ width:100%;
 height:100%;
 background:#0008;
 }
-
-.modal-box{
+.box{
 background:white;
 width:90%;
-max-width:400px;
 margin:80px auto;
 padding:20px;
 border-radius:15px;
 }
-
 input,select,textarea{
 width:100%;
 padding:10px;
-margin:5px 0;
+margin:5px;
 }
-
 </style>
+
 </head>
 
 <body>
 
-<header>
-<h2>🌾 กลุ่มข้าวสาร</h2>
-<h3>บ้านร่องเข็ม หมู่ที่ 6</h3>
-<p>ระบบติดตามสมาชิกค้างส่ง</p>
-</header>
-
-
-<div class="card stat">
-
-<div class="box green">
-👥<br>
-192<br>
-สมาชิก
-</div>
-
-<div class="box yellow">
-⚠️<br>
-10<br>
-ค้างส่ง
-</div>
-
-<div class="box red">
-🔴<br>
-6<br>
-พิจารณาตัดสิทธิ์
-</div>
-
+<div class="header">
+<h2>🌾 ระบบติดตามสมาชิกค้างส่ง</h2>
+<h3>กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</h3>
+<p>สมาชิกทั้งหมด 192 ครัวเรือน</p>
 </div>
 
 
 <div class="card">
 
-<h2>⚠️ สมาชิกติดตาม</h2>
+<h2>🟡 สมาชิกติดตาม</h2>
 
-
-<div class="member">
-
+<div class="item">
 <b>นายวุฒิภัทร เตชะวงค์</b><br>
-🏠 บ้านเลขที่ 91/1<br>
-📦 ค้างส่ง 1 ครั้ง<br>
-⚰️ งานศพ นายเกษมสุข ใฝ่ใจ
-
+บ้านเลขที่ 91/1<br>
+ค้างส่ง 1 ครั้ง<br>
+งานศพ: นายเกษมสุข ใฝ่ใจ
 <br><br>
-
-<button onclick="openFollow('นายวุฒิภัทร เตชะวงค์')">
-📞 บันทึกติดตาม
+<button onclick="openForm('นายวุฒิภัทร เตชะวงค์')">
+📞 ติดตาม
 </button>
-
 </div>
 
 
-
-<div class="member">
-
+<div class="item">
 <b>นายต่วน ทาทอง</b><br>
-🏠 บ้านเลขที่ 114<br>
-📦 ค้างส่ง 1 ครั้ง<br>
-⚰️ งานศพ นายเกษมสุข ใฝ่ใจ
-
+บ้านเลขที่ 114<br>
+ค้างส่ง 1 ครั้ง<br>
+งานศพ: นายเกษมสุข ใฝ่ใจ
 <br><br>
-
-<button onclick="openFollow('นายต่วน ทาทอง')">
-📞 บันทึกติดตาม
+<button onclick="openForm('นายต่วน ทาทอง')">
+📞 ติดตาม
 </button>
-
 </div>
 
 
-<div class="member">
-
+<div class="item">
 <b>นายสมศีล งามจิต</b><br>
-🏠 บ้านเลขที่ 135<br>
-📦 ค้างส่ง 1 ครั้ง<br>
-⚰️ งานศพ นายบูรณพิภพ ผัดดี
-
+บ้านเลขที่ 135<br>
+ค้างส่ง 1 ครั้ง<br>
+งานศพ: นายบูรณพิภพ ผัดดี
 <br><br>
-
-<button onclick="openFollow('นายสมศีล งามจิต')">
-📞 บันทึกติดตาม
+<button onclick="openForm('นายสมศีล งามจิต')">
+📞 ติดตาม
 </button>
-
 </div>
+
 
 </div>
 
@@ -190,158 +125,140 @@ margin:5px 0;
 <h2>🔴 เสนอพิจารณาตัดสิทธิ์</h2>
 
 
-<div class="member red">
-
+<div class="item cut">
 <b>นายประหยัด ปิงเมือง</b><br>
-🏠 บ้านเลขที่ 120<br>
-📦 ค้างส่ง 2 ครั้ง<br>
-⚰️ นายเกษมสุข ใฝ่ใจ
-
+บ้านเลขที่ 120<br>
+ค้างส่ง 2 ครั้ง
 </div>
 
 
-<div class="member red">
-
+<div class="item cut">
 <b>นายตื่น มิ่งขวัญ</b><br>
-🏠 บ้านเลขที่ 176<br>
-📦 ค้างส่ง 2 ครั้ง
+บ้านเลขที่ 176<br>
+ค้างส่ง 2 ครั้ง
+</div>
 
+
+<div class="item cut">
+<b>น.ส.สำรอง มหาวรรณศรี</b><br>
+บ้านเลขที่ 200<br>
+ค้างส่ง 2 ครั้ง
+</div>
+
+
+<div class="item cut">
+<b>นายบรรพต อินวงค์</b><br>
+บ้านเลขที่ 212<br>
+ค้างส่ง 2 ครั้ง
+</div>
+
+
+<div class="item cut">
+<b>นางลวงทิพย์ ใฝ่จิต</b><br>
+บ้านเลขที่ 315<br>
+ค้างส่ง 2 ครั้ง
+</div>
+
+
+<div class="item cut">
+<b>นายประทุม ดาวกระจาย</b><br>
+บ้านเลขที่ 328<br>
+ค้างส่ง 2 ครั้ง
 </div>
 
 
 </div>
-
 
 
 <div class="card">
-
 <h2>📋 ประวัติการติดตาม</h2>
-
-<div id="history">
-ยังไม่มีข้อมูล
+<div id="history"></div>
 </div>
-
-</div>
-
 
 
 <div class="modal" id="modal">
 
-<div class="modal-box">
+<div class="box">
 
-<h3>📞 บันทึกติดตาม</h3>
+<h3>📞 บันทึกการติดตาม</h3>
 
 <input id="name" readonly>
 
 <input id="date" type="date">
 
-
 <select id="result">
-
 <option>รับทราบ</option>
 <option>ขอผ่อนผัน</option>
 <option>ชำระแล้ว</option>
 <option>เสนอที่ประชุม</option>
-
 </select>
 
 
-<textarea id="note"
-placeholder="หมายเหตุ"></textarea>
+<textarea id="note" placeholder="หมายเหตุ"></textarea>
 
-
-<button onclick="save()">
-💾 บันทึก
-</button>
-
-<button onclick="closeBox()">
-ปิด
-</button>
-
+<button onclick="save()">💾 บันทึก</button>
+<button onclick="closeForm()">ปิด</button>
 
 </div>
-
 </div>
-
 
 
 <script>
 
-function openFollow(n){
-
+function openForm(n){
 modal.style.display="block";
 name.value=n;
-
 }
 
 
-function closeBox(){
-
+function closeForm(){
 modal.style.display="none";
-
 }
-
 
 
 function save(){
 
 let data={
-
 name:name.value,
 date:date.value,
 result:result.value,
 note:note.value
-
 };
 
 
-let old=
-JSON.parse(localStorage.follow||"[]");
+let list=JSON.parse(localStorage.getItem("follow")||"[]");
 
+list.push(data);
 
-old.push(data);
-
-
-localStorage.follow=
-JSON.stringify(old);
-
+localStorage.setItem("follow",JSON.stringify(list));
 
 show();
 
-
-closeBox();
+closeForm();
 
 }
 
 
-
 function show(){
 
-let d=
-JSON.parse(localStorage.follow||"[]");
+let list=JSON.parse(localStorage.getItem("follow")||"[]");
 
 history.innerHTML="";
 
-
-d.forEach((x,i)=>{
+list.forEach((x,i)=>{
 
 history.innerHTML+=`
-
-<div class="member">
-
+<div class="item">
 ${i+1}. ${x.name}<br>
-📅 ${x.date}<br>
-📌 ${x.result}<br>
-📝 ${x.note}
-
+วันที่ ${x.date}<br>
+ผล ${x.result}<br>
+${x.note}
 </div>
-
 `;
 
 });
 
 }
-
 
 show();
 
