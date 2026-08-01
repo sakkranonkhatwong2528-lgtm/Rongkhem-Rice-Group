@@ -3,3962 +3,54 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🌾 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
-
-<style>
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  margin:0;
-  font-family:Tahoma,"Noto Sans Thai",sans-serif;
-  color:#fff;
-  min-height:100vh;
-  overflow-x:hidden;
-  background:linear-gradient(135deg,#03140b,#07351d 45%,#0f7a3b)
-}
-body:before,body:after{
-  content:"";
-  position:fixed;
-  width:280px;height:280px;
-  border-radius:50%;
-  filter:blur(14px);
-  opacity:.18;
-  pointer-events:none;
-  z-index:-1;
-  animation:float 11s ease-in-out infinite
-}
-body:before{left:-80px;top:15%;background:#39d675}
-body:after{right:-80px;bottom:10%;background:#ffd54f;animation-delay:-5s}
-
-@keyframes float{
-  0%,100%{transform:translate(0,0)}
-  50%{transform:translate(20px,-35px)}
-}
-@keyframes rise{
-  from{opacity:0;transform:translateY(15px)}
-  to{opacity:1;transform:translateY(0)}
-}
-@keyframes pulse{
-  0%,100%{transform:scale(1)}
-  50%{transform:scale(1.04)}
-}
-
-button,input,select{font:inherit}
-button{cursor:pointer}
-
-.page{
-  max-width:1200px;
-  margin:auto;
-  padding:16px
-}
-
-
-/* ================= LOGIN ================= */
-
-#loginScreen{
-  position:fixed;
-  inset:0;
-  z-index:9999;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-  background:linear-gradient(135deg,#03140b,#07351d,#0f7a3b)
-}
-
-.login-box{
-  width:100%;
-  max-width:420px;
-  padding:34px;
-  text-align:center;
-  border-radius:30px;
-  background:rgba(255,255,255,.10);
-  border:1px solid rgba(255,255,255,.18);
-  backdrop-filter:blur(18px);
-  box-shadow:0 30px 80px rgba(0,0,0,.4);
-  animation:rise .7s ease
-}
-
-.login-logo{
-  width:95px;
-  height:95px;
-  margin:auto auto 18px;
-  display:grid;
-  place-items:center;
-  font-size:54px;
-  border-radius:28px;
-  background:rgba(255,255,255,.11);
-  animation:pulse 3s ease-in-out infinite
-}
-
-.login-title{
-  font-size:29px;
-  font-weight:900
-}
-
-.login-subtitle{
-  margin-top:7px;
-  color:#b9e9c7
-}
-
-.login-form{
-  text-align:left;
-  margin-top:26px
-}
-
-.login-form label{
-  display:block;
-  margin-bottom:7px;
-  color:#d5efdc;
-  font-size:14px
-}
-
-.login-form input{
-  width:100%;
-  padding:14px 15px;
-  margin-bottom:15px;
-  border:1px solid rgba(255,255,255,.18);
-  border-radius:13px;
-  background:rgba(0,0,0,.17);
-  color:#fff;
-  outline:none
-}
-
-.login-form input:focus{
-  border-color:#a9efba;
-  box-shadow:0 0 0 4px rgba(80,220,130,.1)
-}
-
-.login-btn{
-  width:100%;
-  padding:14px;
-  border:0;
-  border-radius:13px;
-  background:linear-gradient(135deg,#1f9d4c,#126b31);
-  color:#fff;
-  font-weight:900
-}
-
-.login-error{
-  min-height:24px;
-  margin-top:10px;
-  text-align:center;
-  color:#ff9f9f
-}
-
-.login-footer{
-  margin-top:22px;
-  color:#9fd7ac;
-  font-size:12px;
-  line-height:1.7
-}
-
-
-/* ================= MAIN ================= */
-
-#mainSystem{
-  display:none
-}
-
-.hero{
-  text-align:center;
-  padding:26px 8px 20px
-}
-
-.logo{
-  width:92px;
-  height:92px;
-  margin:auto;
-  display:grid;
-  place-items:center;
-  font-size:50px;
-  border-radius:27px;
-  background:rgba(255,255,255,.11);
-  border:1px solid rgba(255,255,255,.18);
-  animation:pulse 3s ease-in-out infinite
-}
-
-.hero h1{
-  margin:12px 0 4px;
-  font-size:clamp(28px,5vw,48px)
-}
-
-.hero h2{
-  margin:0;
-  color:#d5f0dc;
-  font-weight:600
-}
-
-.hero p{
-  color:#aee7bc
-}
-
-.panel{
-  padding:20px;
-  margin-bottom:16px;
-  border-radius:22px;
-  background:rgba(255,255,255,.09);
-  border:1px solid rgba(255,255,255,.16);
-  backdrop-filter:blur(12px);
-  box-shadow:0 18px 45px rgba(0,0,0,.20);
-  animation:rise .55s ease both
-}
-
-
-/* ================= MENU ================= */
-
-.menu{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:10px
-}
-
-.menu a{
-  min-height:108px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:7px;
-  color:#fff;
-  text-decoration:none;
-  border-radius:18px;
-  background:rgba(255,255,255,.07);
-  border:1px solid rgba(255,255,255,.13);
-  transition:.25s
-}
-
-.menu a:hover{
-  transform:translateY(-5px);
-  background:rgba(255,255,255,.13)
-}
-
-.menu-icon{
-  font-size:31px
-}
-
-
-/* ================= SUMMARY ================= */
-
-.summary{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:10px
-}
-
-.box{
-  padding:16px;
-  border-radius:17px;
-  background:rgba(255,255,255,.07);
-  text-align:center
-}
-
-.num{
-  font-size:34px;
-  font-weight:900
-}
-
-.lab{
-  font-size:12px;
-  color:#bfe2c7
-}
-
-
-/* ================= FORM ================= */
-
-.controls{
-  display:grid;
-  grid-template-columns:1fr 120px;
-  gap:9px
-}
-
-.controls input,
-.controls select,
-.search input{
-  width:100%;
-  padding:12px;
-  border-radius:10px;
-  border:1px solid rgba(255,255,255,.20);
-  background:rgba(0,0,0,.20);
-  color:#fff;
-  outline:none
-}
-
-.controls select option{
-  color:#222
-}
-
-button{
-  border:0;
-  border-radius:11px;
-  padding:11px 14px;
-  color:#fff;
-  font-weight:900
-}
-
-.green{background:#1b8543}
-.blue{background:#1769aa}
-.gray{background:#666}
-.red{background:#b83232}
-
-.info{
-  padding:14px;
-  margin-top:10px;
-  border-radius:13px;
-  background:rgba(255,255,255,.06);
-  line-height:1.9
-}
-
-
-/* ================= SEARCH ================= */
-
-.search{
-  display:grid;
-  grid-template-columns:1fr 100px;
-  gap:9px;
-  margin-top:12px
-}
-
-.results{
-  margin-top:10px
-}
-
-.row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-  padding:13px;
-  margin-top:8px;
-  border-radius:13px;
-  background:rgba(255,255,255,.06);
-  animation:rise .3s ease
-}
-
-.row small{
-  display:block;
-  color:#bfe2c9;
-  margin-top:4px
-}
-
-.tag{
-  display:inline-block;
-  padding:5px 9px;
-  margin-top:5px;
-  border-radius:20px;
-  font-size:12px;
-  font-weight:900
-}
-
-.ok{
-  background:#2a914b
-}
-
-.wait{
-  background:#ffd54f;
-  color:#493700
-}
-
-.danger{
-  background:#c62828;
-  color:#fff
-}
-
-.empty{
-  padding:16px;
-  text-align:center;
-  color:#acd2b4;
-  border:1px dashed rgba(255,255,255,.14);
-  border-radius:13px
-}
-
-
-/* ================= REPORT ================= */
-
-.report-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:10px;
-  margin-top:12px
-}
-
-.reportbox{
-  text-align:center;
-  padding:14px;
-  border-radius:14px;
-  background:rgba(255,255,255,.06)
-}
-
-.reportnum{
-  font-size:28px;
-  font-weight:900
-}
-
-.tablewrap{
-  overflow:auto;
-  margin-top:12px
-}
-
-table{
-  width:100%;
-  min-width:850px;
-  border-collapse:collapse
-}
-
-th,td{
-  padding:9px 10px;
-  text-align:left;
-  border-bottom:1px solid rgba(255,255,255,.1)
-}
-
-th{
-  color:#fff0ad
-}
-
-
-/* ================= FOLLOW ================= */
-
-.follow{
-  padding:13px;
-  margin-top:8px;
-  border-radius:13px;
-  border-left:5px solid #ffc107;
-  background:rgba(255,255,255,.06)
-}
-
-.follow.danger-item{
-  border-color:#e53935
-}
-
-.follow small{
-  display:block;
-  margin-top:5px;
-  color:#cfe8d5;
-  line-height:1.75
-}
-
-.print-btn{
-  width:100%;
-  margin-top:12px;
-  background:#1769aa
-}
-
-.logout{
-  width:100%;
-  margin-top:16px;
-  background:#9e2d35
-}
-
-.footer{
-  text-align:center;
-  color:#9fd4aa;
-  padding:25px;
-  line-height:1.8
-}
-
-
-/* ================= MOBILE ================= */
-
-@media(max-width:900px){
-
-  .menu{
-    grid-template-columns:repeat(2,1fr)
-  }
-
-  .summary,
-  .report-grid{
-    grid-template-columns:repeat(2,1fr)
-  }
-
-}
-
-@media(max-width:600px){
-
-  .controls,
-  .search{
-    grid-template-columns:1fr
-  }
-
-  .summary,
-  .report-grid{
-    grid-template-columns:1fr 1fr
-  }
-
-  .row{
-    flex-direction:column;
-    align-items:flex-start
-  }
-
-}
-
-
-/* ================= PRINT ================= */
-
-@media print{
-
-  body{
-    background:#fff;
-    color:#000
-  }
-
-  .menu,
-  .print-hide,
-  .logout{
-    display:none!important
-  }
-
-  .panel{
-    background:#fff;
-    color:#000;
-    border:1px solid #ccc;
-    box-shadow:none
-  }
-
-  th{
-    color:#000
-  }
-
-  td{
-    color:#000
-  }
-
-}
-
-</style>
-</head>
-
-<body>
-
-
-<!-- =====================================================
-     LOGIN
-===================================================== -->
-
-<div id="loginScreen">
-
-  <div class="login-box">
-
-    <div class="login-logo">
-      🌾
-    </div>
-
-    <div class="login-title">
-      ระบบกลุ่มข้าวสาร
-    </div>
-
-    <div class="login-subtitle">
-      บ้านร่องเข็ม หมู่ที่ 6
-    </div>
-
-
-    <div class="login-form">
-
-      <label>
-        👤 ชื่อผู้ใช้
-      </label>
-
-      <input
-        id="loginUsername"
-        type="text"
-        placeholder="กรอกชื่อผู้ใช้"
-        autocomplete="username"
-      >
-
-
-      <label>
-        🔐 รหัสผ่าน
-      </label>
-
-      <input
-        id="loginPassword"
-        type="password"
-        placeholder="กรอกรหัสผ่าน"
-        autocomplete="current-password"
-      >
-
-
-      <button
-        id="loginButton"
-        class="login-btn"
-        type="button"
-      >
-        🔐 เข้าสู่ระบบ
-      </button>
-
-
-      <div
-        id="loginError"
-        class="login-error"
-      ></div>
-
-    </div>
-
-
-    <div class="login-footer">
-
-      ระบบจัดการสมาชิกและช่วยเหลืองานศพ
-      <br>
-      บ้านร่องเข็ม หมู่ที่ 6
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- =====================================================
-     MAIN
-===================================================== -->
-
-<div id="mainSystem">
-
-<div class="page">
-
-
-<header class="hero">
-
-  <div class="logo">
-    🌾
-  </div>
-
-  <h1>
-    ระบบกลุ่มข้าวสาร
-  </h1>
-
-  <h2>
-    บ้านร่องเข็ม หมู่ที่ 6
-  </h2>
-
-  <p>
-
-    สมาชิกทั้งหมด
-    <strong id="memberTotal">
-      192
-    </strong>
-    ครัวเรือน
-
-  </p>
-
-</header>
-
-
-<!-- MENU -->
-
-<section class="panel print-hide">
-
-  <div class="menu">
-
-    <a href="members.html">
-
-      <div class="menu-icon">
-        👥
-      </div>
-
-      ทะเบียนสมาชิก
-
-    </a>
-
-
-    <a href="งานศพ.html">
-
-      <div class="menu-icon">
-        ⚰️
-      </div>
-
-      แจ้งเสียชีวิต / งานศพ
-
-    </a>
-
-
-    <a href="#delivery">
-
-      <div class="menu-icon">
-        🌾
-      </div>
-
-      บันทึกข้าวสาร
-
-    </a>
-
-
-    <a href="#report">
-
-      <div class="menu-icon">
-        📊
-      </div>
-
-      รายงานแยกตามงานศพ
-
-    </a>
-
-
-    <a href="#follow">
-
-      <div class="menu-icon">
-        ⚠️
-      </div>
-
-      สมาชิกที่ต้องติดตาม
-
-    </a>
-
-  </div>
-
-</section>
-
-
-<!-- SUMMARY -->
-
-<section class="summary">
-
-
-  <div class="box">
-
-    <div>👥</div>
-
-    <div
-      class="num"
-      id="total"
-    >
-      192
-    </div>
-
-    <div class="lab">
-      สมาชิกทั้งหมด
-    </div>
-
-  </div>
-
-
-  <div class="box">
-
-    <div>✅</div>
-
-    <div
-      class="num"
-      id="sentTop"
-    >
-      0
-    </div>
-
-    <div class="lab">
-      ส่งแล้วในศพล่าสุด
-    </div>
-
-  </div>
-
-
-  <div class="box">
-
-    <div>⚠️</div>
-
-    <div
-      class="num"
-      id="pendingTop"
-    >
-      192
-    </div>
-
-    <div class="lab">
-      ยังไม่ส่งในศพล่าสุด
-    </div>
-
-  </div>
-
-
-  <div class="box">
-
-    <div>🌾</div>
-
-    <div
-      class="num"
-      id="riceTop"
-    >
-      0
-    </div>
-
-    <div class="lab">
-      ข้าวสารที่บันทึกทั้งหมด
-    </div>
-
-  </div>
-
-
-</section>
-
-
-<!-- LATEST -->
-
-<section class="panel">
-
-  <h2>
-    🕊️ งานศพล่าสุด
-  </h2>
-
-
-  <div
-    id="latest"
-    class="row"
-  >
-
-    <div>
-      ยังไม่มีข้อมูลงานศพ
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- DELIVERY -->
-
-<section
-  class="panel"
-  id="delivery"
->
-
-  <h2>
-    🌾 บันทึกข้าวสารช่วยงานศพ
-  </h2>
-
-
-  <p style="color:#b9e9c7">
-
-    เลือกงานศพ
-    →
-    เปิดงาน
-    →
-    ค้นสมาชิก
-    →
-    กดบันทึก 1 ถุง
-
-  </p>
-
-
-  <div class="controls">
-
-    <select
-      id="deliveryFuneral"
-    >
-
-      <option value="">
-        -- เลือกงานศพ --
-      </option>
-
-    </select>
-
-
-    <button
-      class="green"
-      id="openDelivery"
-      type="button"
-    >
-      เปิดงาน
-    </button>
-
-  </div>
-
-
-  <div
-    id="deliveryInfo"
-  ></div>
-
-
-  <div
-    id="deliverySearch"
-    style="display:none"
-  >
-/* ================= CARD ไว้อาลัยใหม่ ================= */
-
-.funeral-card{
-  position:relative;
-  overflow:hidden;
-  margin-top:20px;
-  padding:25px;
-  border-radius:30px;
-  background:
-  linear-gradient(
-    145deg,
-    rgba(0,0,0,.45),
-    rgba(80,0,0,.25)
-  );
-
-  border:1px solid rgba(255,255,255,.25);
-
-  box-shadow:
-  0 20px 60px rgba(0,0,0,.5);
-
-  animation: funeralShow 1s ease;
-}
-
-
-@keyframes funeralShow{
-
-from{
-opacity:0;
-transform:translateY(40px) scale(.9);
-}
-
-to{
-opacity:1;
-transform:none;
-}
-
-}
-
-
-.funeral-card:before{
-
-content:"";
-
-position:absolute;
-
-width:180px;
-height:180px;
-
-background:
-radial-gradient(
-circle,
-#ffd54f,
-transparent 70%
-);
-
-right:-60px;
-top:-60px;
-
-animation:lightMove 5s infinite;
-
-}
-
-
-@keyframes lightMove{
-
-50%{
-transform:scale(1.5);
-opacity:.4;
-}
-
-}
-
-
-
-.wreath{
-
-font-size:70px;
-
-animation:
-wreathMove 3s infinite;
-
-}
-
-
-@keyframes wreathMove{
-
-0%,100%{
-transform:rotate(-5deg);
-}
-
-50%{
-transform:rotate(5deg);
-}
-
-}
-
-
-.dead-name{
-
-font-size:32px;
-font-weight:900;
-
-margin-top:10px;
-
-}
-
-
-.dead-age{
-
-font-size:22px;
-
-color:#ffd54f;
-
-}
-
-
-.condolence{
-
-margin-top:15px;
-
-font-size:18px;
-
-line-height:1.8;
-
-color:#eee;
-
-}
-    <div class="search">
-
-      <input
-        id="memberSearch"
-        type="text"
-        placeholder="🔎 ชื่อสมาชิก หรือบ้านเลขที่"
-        autocomplete="off"
-      >
-
-
-      <button
-        class="blue"
-        id="searchMember"
-        type="button"
-      >
-        ค้นหา
-      </button>
-
-    </div>
-
-
-    <div
-      id="deliveryResults"
-      class="results"
-    ></div>
-
-  </div>
-
-</section>
-
-
-<!-- REPORT -->
-
-<section
-  class="panel"
-  id="report"
->
-
-  <h2>
-    📊 รายงานแยกตามงานศพ
-  </h2>
-
-
-  <p style="color:#b9e9c7">
-
-    รายงานอ่านเฉพาะข้อมูล
-    ของงานศพที่เลือก
-
-  </p>
-
-
-  <div class="controls">
-
-    <select
-      id="reportFuneral"
-    >
-
-      <option value="">
-        -- เลือกงานศพ --
-      </option>
-
-    </select>
-
-
-    <button
-      class="blue"
-      id="openReport"
-      type="button"
-    >
-      ดูรายงาน
-    </button>
-
-  </div>
-
-
-  <div
-    id="reportArea"
-  ></div>
-
-</section>
-
-
-<!-- FOLLOW -->
-
-<section
-  class="panel"
-  id="follow"
->
-
-  <h2>
-    ⚠️ สมาชิกที่ต้องติดตาม
-  </h2>
-
-
-  <div
-    id="followList"
-  ></div>
-
-
-  <button
-    class="print-btn"
-    type="button"
-    onclick="window.print()"
-  >
-
-    🖨️
-    พิมพ์รายงานแจ้งเตือน
-
-  </button>
-
-</section>
-
-
-<button
-  id="logoutButton"
-  class="logout"
-  type="button"
->
-  🚪 ออกจากระบบ
-</button>
-
-
-<footer class="footer">
-
-  🌾 กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
-
-  <br>
-
-  ระบบจัดการสมาชิกและช่วยเหลืองานศพ
-
-  <br>
-
-  จัดทำโดย นายศักรนนทน์ ขัติย์วงศ์
-
-</footer>
-
-
-</div>
-
-</div>
-
-
-<script>
-
-"use strict";
-
-
-/* =====================================================
-   LOGIN
-===================================================== */
-
-const LOGIN_USER =
-  "admin";
-
-const LOGIN_PASSWORD =
-  "123456";
-
-
-/* =====================================================
-   DATABASE
-===================================================== */
-
-const MEMBERS_KEY =
-  "members";
-
-const FUNERALS_KEY =
-  "funerals";
-
-const DELIVERY_KEY =
-  "riceDeliveryRecords";
-
-
-let selectedDeliveryFuneral =
-  null;
-
-let selectedReportFuneral =
-  null;
-
-
-/* =====================================================
-   BASIC
-===================================================== */
-
-function $(id){
-
-  return document.getElementById(
-    id
-  );
-
-}
-
-
-function readArray(key){
-
-  try{
-
-    const raw =
-      localStorage.getItem(
-        key
-      );
-
-    if(!raw){
-
-      return [];
-
-    }
-
-
-    const value =
-      JSON.parse(
-        raw
-      );
-
-
-    return Array.isArray(
-      value
-    )
-    ?
-    value
-    :
-    [];
-
-  }
-  catch(error){
-
-    console.error(
-      "Storage error:",
-      key,
-      error
-    );
-
-    return [];
-
-  }
-
-}
-
-
-function writeArray(
-  key,
-  value
-){
-
-  localStorage.setItem(
-    key,
-    JSON.stringify(
-      value
-    )
-  );
-
-}
-
-
-function escapeHTML(
-  value
-){
-
-  const div =
-    document.createElement(
-      "div"
-    );
-
-
-  div.textContent =
-    String(
-      value ??
-      ""
-    );
-
-
-  return div.innerHTML;
-
-}
-
-
-function normalize(
-  value
-){
-
-  return String(
-    value ??
-    ""
-  )
-  .trim()
-  .toLowerCase()
-  .split(" ")
-  .join("");
-
-}
-
-
-/* =====================================================
-   MEMBERS
-===================================================== */
-
-function getMembers(){
-
-  const data =
-    readArray(
-      MEMBERS_KEY
-    );
-
-
-  return data
-
-    .map(
-      (
-        item,
-        index
-      ) => ({
-
-        id:
-
-          String(
-            item.id ??
-            item.memberId ??
-            item.member_id ??
-            item.code ??
-            (
-              "member-" +
-              index
-            )
-          ),
-
-        name:
-
-          String(
-            item.name ??
-            item.fullName ??
-            item.fullname ??
-            item.memberName ??
-            item.member_name ??
-            item["ชื่อ-นามสกุล"] ??
-            item["ชื่อ"] ??
-            ""
-          )
-          .trim(),
-
-        house:
-
-          String(
-            item.house ??
-            item.houseNo ??
-            item.houseNumber ??
-            item.house_number ??
-            item.address ??
-            item.household ??
-            item["บ้านเลขที่"] ??
-            ""
-          )
-          .trim()
-
-      })
-    )
-
-    .filter(
-      item =>
-        item.name ||
-        item.house
-    );
-
-}
-
-
-/* =====================================================
-   FUNERALS
-===================================================== */
-
-function getFunerals(){
-
-  return readArray(
-    FUNERALS_KEY
-  )
-
-  .map(
-    (
-      item,
-      index
-    ) => ({
-
-      id:
-
-        String(
-          item.id ??
-          item.funeralId ??
-          item.funeral_id ??
-          (
-            "funeral-" +
-            index
-          )
-        ),
-
-      name:
-
-        String(
-          item.name ??
-          item.fullName ??
-          item.fullname ??
-          item.deceasedName ??
-          item.deceased_name ??
-          ""
-        )
-        .trim(),
-
-      age:
-
-        item.age ??
-        item.deceasedAge ??
-        "",
-
-      house:
-
-        String(
-          item.house ??
-          item.houseNo ??
-          item.houseNumber ??
-          item.house_number ??
-          ""
-        )
-        .trim(),
-
-      reporter:
-
-        String(
-          item.reporter ??
-          item.informer ??
-          item.contact ??
-          ""
-        )
-        .trim(),
-
-      death:
-
-        String(
-          item.death ??
-          item.deathDate ??
-          item.death_date ??
-          item.dateOfDeath ??
-          ""
-        ),
-
-      cremate:
-
-        String(
-          item.cremate ??
-          item.cremateDate ??
-          item.cremate_date ??
-          item.ceremonyDate ??
-          ""
-        ),
-
-      status:
-
-        String(
-          item.status ??
-          "ยังไม่ดำเนินการ"
-        )
-
-    })
-  )
-
-  .filter(
-    item =>
-      item.name ||
-      item.house
-  );
-
-}
-
-
-/* =====================================================
-   DATE
-===================================================== */
-
-function dateValue(
-  value
-){
-
-  const text =
-    String(
-      value ??
-      ""
-    );
-
-
-  if(
-    text.length === 10 &&
-    text.charAt(4) === "-" &&
-    text.charAt(7) === "-"
-  ){
-
-    const p =
-      text.split("-");
-
-
-    return new Date(
-
-      Number(
-        p[0]
-      ),
-
-      Number(
-        p[1]
-      ) - 1,
-
-      Number(
-        p[2]
-      )
-
-    ).getTime();
-
-  }
-
-
-  return 0;
-
-}
-
-
-function displayDate(
-  value
-){
-
-  const text =
-    String(
-      value ??
-      ""
-    );
-
-
-  if(
-    text.length === 10 &&
-    text.charAt(4) === "-" &&
-    text.charAt(7) === "-"
-  ){
-
-    const p =
-      text.split("-");
-
-
-    return (
-
-      p[2] +
-      "/" +
-      p[1] +
-      "/" +
-      p[0]
-
-    );
-
-  }
-
-
-  return text || "-";
-
-}
-
-
-function sortedFunerals(){
-
-  return getFunerals()
-
-    .slice()
-
-    .sort(
-      (
-        a,
-        b
-      ) =>
-
-        dateValue(
-          b.death
-        )
-
-        -
-
-        dateValue(
-          a.death
-        )
-    );
-
-}
-
-
-/* =====================================================
-   DELIVERY
-===================================================== */
-
-function getDeliveries(){
-
-  const primary =
-    readArray(
-      DELIVERY_KEY
-    );
-
-
-  if(
-    primary.length
-  ){
-
-    return primary;
-
-  }
-
-
-  for(
-    const key of [
-      "riceDeliveries",
-      "deliveries",
-      "rice_delivery_records"
-    ]
-  ){
-
-    const data =
-      readArray(
-        key
-      );
-
-
-    if(
-      data.length
-    ){
-
-      return data;
-
-    }
-
-  }
-
-
-  return [];
-
-}
-
-
-function deliveryFuneralId(
-  record
-){
-
-  return String(
-
-    record.funeralId ??
-    record.funeral_id ??
-    record.funeralID ??
-    record.funeral ??
-    ""
-
-  );
-
-}
-
-
-function deliveryMemberId(
-  record
-){
-
-  return String(
-
-    record.memberId ??
-    record.member_id ??
-    record.memberID ??
-    record.userId ??
-    record.user_id ??
-    ""
-
-  );
-
-}
-
-
-function deliveryName(
-  record
-){
-
-  return String(
-
-    record.name ??
-    record.memberName ??
-    record.member_name ??
-    ""
-
-  ).trim();
-
-}
-
-
-function deliveryHouse(
-  record
-){
-
-  return String(
-
-    record.house ??
-    record.houseNo ??
-    record.houseNumber ??
-    record.house_number ??
-    ""
-
-  ).trim();
-
-}
-
-
-function deliveryAmount(
-  record
-){
-
-  return Number(
-
-    record.amount ??
-    record.qty ??
-    record.quantity ??
-    record.bags ??
-    record.riceAmount ??
-    0
-
-  ) || 0;
-
-}
-
-
-function deliveryDate(
-  record
-){
-
-  return String(
-
-    record.date ??
-    record.deliveryDate ??
-    record.delivery_date ??
-    record.createdDate ??
-    "-"
-
-  );
-
-}
-
-
-/* =====================================================
-   MEMBER MATCH
-===================================================== */
-
-function sameMember(
-  member,
-  record
-){
-
-  const recordId =
-    deliveryMemberId(
-      record
-    );
-
-
-  if(
-    recordId &&
-    recordId ===
-    String(
-      member.id
-    )
-  ){
-
-    return true;
-
-  }
-
-
-  return (
-
-    normalize(
-      deliveryName(
-        record
-      )
-    )
-
-    ===
-
-    normalize(
-      member.name
-    )
-
-    &&
-
-    normalize(
-      deliveryHouse(
-        record
-      )
-    )
-
-    ===
-
-    normalize(
-      member.house
-    )
-
-  );
-
-}
-
-
-/* =====================================================
-   SEND STATUS
-===================================================== */
-
-function sentForFuneral(
-  member,
-  funeral,
-  records
-){
-
-  return records.some(
-    record =>
-
-      deliveryFuneralId(
-        record
-      )
-
-      ===
-
-      String(
-        funeral.id
-      )
-
-      &&
-
-      sameMember(
-        member,
-        record
-      )
-
-  );
-
-}
-
-
-function amountForFuneral(
-  member,
-  funeral,
-  records
-){
-
-  return records
-
-    .filter(
-      record =>
-
-        deliveryFuneralId(
-          record
-        )
-
-        ===
-
-        String(
-          funeral.id
-        )
-
-        &&
-
-        sameMember(
-          member,
-          record
-        )
-
-    )
-
-    .reduce(
-      (
-        sum,
-        record
-      ) =>
-
-        sum +
-        deliveryAmount(
-          record
-        ),
-
-      0
-    );
-
-}
-
-
-/* =====================================================
-   SELECT DATA
-===================================================== */
-
-function populateFunerals(){
-
-  const list =
-    sortedFunerals();
-
-
-  const options =
-
-    '<option value="">-- เลือกงานศพ --</option>' +
-
-    list.map(
-
-      funeral =>
-
-        '<option value="' +
-        escapeHTML(
-          funeral.id
-        ) +
-        '">' +
-
-        '⚰️ ' +
-
-        escapeHTML(
-          funeral.name
-        ) +
-
-        ' | บ้าน ' +
-
-        escapeHTML(
-          funeral.house ||
-          "-"
-        ) +
-
-        '</option>'
-
-    ).join("");
-
-
-  $("deliveryFuneral")
-    .innerHTML =
-    options;
-
-
-  $("reportFuneral")
-    .innerHTML =
-    options;
-
-}
-
-
-/* =====================================================
-   DASHBOARD
-===================================================== */
-
-function updateSummary(){
-
-  const members =
-    getMembers();
-
-
-  const funerals =
-    sortedFunerals();
-
-
-  const records =
-    getDeliveries();
-
-
-  const total =
-    members.length ||
-    192;
-
-
-  $("memberTotal")
-    .textContent =
-    total;
-
-
-  $("total")
-    .textContent =
-    total;
-
-
-  const totalRice =
-    records.reduce(
-
-      (
-        sum,
-        record
-      ) =>
-
-        sum +
-        deliveryAmount(
-          record
-        ),
-
-      0
-    );
-
-
-  $("riceTop")
-    .textContent =
-    totalRice;
-
-
-  if(
-    !funerals.length
-  ){
-
-    $("sentTop")
-      .textContent =
-      0;
-
-
-    $("pendingTop")
-      .textContent =
-      total;
-
-
-    return;
-
-  }
-
-
-  const latest =
-    funerals[0];
-
-
-  const sent =
-    members.filter(
-
-      member =>
-        sentForFuneral(
-          member,
-          latest,
-          records
-        )
-
-    ).length;
-
-
-  $("sentTop")
-    .textContent =
-    sent;
-
-
-  $("pendingTop")
-    .textContent =
-
-    Math.max(
-      total -
-      sent,
-
-      0
-    );
-
-}
-
-
-/* =====================================================
-   LATEST FUNERAL
-===================================================== */
-
-function renderLatest(){
-
-  const latest =
-    sortedFunerals()[0];
-
-
-  if(
-    !latest
-  ){
-
-    $("latest")
-      .innerHTML =
-      "<div>ยังไม่มีข้อมูลงานศพ</div>";
-
-    return;
-
-  }
-
-
-  $("latest")
-    .innerHTML = `
-
-      <div>
-
-        <strong
-          style="
-            font-size:22px
-          "
-        >
-
-          ⚰️
-          ${escapeHTML(
-            latest.name
-          )}
-
-        </strong>
-
-
-        ${
-          latest.age
-          ?
-
-          `
-          <small
-            style="
-              display:block;
-              color:#f0ccd8;
-              margin-top:5px;
-            "
-          >
-
-            อายุ
-            ${escapeHTML(
-              latest.age
-            )}
-            ปี
-
-          </small>
-          `
-
-          :
-
-          ""
-        }
-
-
-        <small
-          style="
-            display:block;
-            color:#bfe2c9;
-            margin-top:7px;
-          "
-        >
-
-          🏠 บ้าน
-          ${escapeHTML(
-            latest.house ||
-            "-"
-          )}
-
-          &nbsp;
-
-          📅
-          ${escapeHTML(
-            displayDate(
-              latest.death
-            )
-          )}
-
-          &nbsp;
-
-          🔥
-          ${escapeHTML(
-            displayDate(
-              latest.cremate
-            )
-          )}
-
-        </small>
-
-      </div>
-
-    `;
-
-}
-
-
-/* =====================================================
-   OPEN DELIVERY
-===================================================== */
-
-function openDelivery(){
-
-  const id =
-    $("deliveryFuneral")
-      .value;
-
-
-  selectedDeliveryFuneral =
-    getFunerals().find(
-      funeral =>
-
-        String(
-          funeral.id
-        )
-
-        ===
-
-        String(
-          id
-        )
-
-    )
-
-    ||
-
-    null;
-
-
-  if(
-    !selectedDeliveryFuneral
-  ){
-
-    $("deliverySearch")
-      .style.display =
-      "none";
-
-
-    $("deliveryInfo")
-      .innerHTML = `
-
-        <div class="empty">
-
-          ⚰️
-          กรุณาเลือกงานศพก่อน
-
-        </div>
-
-      `;
-
-    return;
-
-  }
-
-
-  $("deliverySearch")
-    .style.display =
-    "block";
-
-
-  $("memberSearch")
-    .value =
-    "";
-
-
-  updateDeliveryInfo();
-
-
-  $("deliveryResults")
-    .innerHTML = `
-
-      <div class="empty">
-
-        🔎
-        พิมพ์ชื่อสมาชิก
-        หรือบ้านเลขที่เพื่อค้นหา
-
-      </div>
-
-    `;
-
-}
-
-
-/* =====================================================
-   DELIVERY INFO
-===================================================== */
-
-function updateDeliveryInfo(){
-
-  if(
-    !selectedDeliveryFuneral
-  ){
-
-    return;
-
-  }
-
-
-  const members =
-    getMembers();
-
-
-  const records =
-    getDeliveries();
-
-
-  const funeralRecords =
-    records.filter(
-
-      record =>
-
-        deliveryFuneralId(
-          record
-        )
-
-        ===
-
-        String(
-          selectedDeliveryFuneral.id
-        )
-
-    );
-
-
-  const sent =
-    members.filter(
-
-      member =>
-
-        funeralRecords.some(
-
-          record =>
-
-            sameMember(
-              member,
-              record
-            )
-
-        )
-
-    ).length;
-
-
-  const pending =
-    Math.max(
-      members.length -
-      sent,
-
-      0
-    );
-
-
-  const rice =
-    funeralRecords.reduce(
-
-      (
-        sum,
-        record
-      ) =>
-
-        sum +
-        deliveryAmount(
-          record
-        ),
-
-      0
-    );
-
-
-  $("deliveryInfo")
-    .innerHTML = `
-
-      <div class="info">
-
-        ⚰️
-        <strong>
-          ${escapeHTML(
-            selectedDeliveryFuneral.name
-          )}
-        </strong>
-
-        <br>
-
-        🏠 บ้านเลขที่
-        ${escapeHTML(
-          selectedDeliveryFuneral.house ||
-          "-"
-        )}
-
-        <br>
-
-        ✅ ส่งแล้ว
-        <strong>
-          ${sent}
-        </strong>
-
-        &nbsp;
-
-        ⚠️ ยังไม่ส่ง
-        <strong>
-          ${pending}
-        </strong>
-
-        &nbsp;
-
-        🌾 ข้าวสาร
-        <strong>
-          ${rice}
-        </strong>
-        ถุง
-
-      </div>
-
-    `;
-
-}
-
-
-/* =====================================================
-   SEARCH MEMBERS
-===================================================== */
-
-function searchMembers(){
-
-  if(
-    !selectedDeliveryFuneral
-  ){
-
-    $("deliveryResults")
-      .innerHTML = `
-
-        <div class="empty">
-
-          ⚰️
-          กรุณาเลือกงานศพก่อน
-
-        </div>
-
-      `;
-
-    return;
-
-  }
-
-
-  const keyword =
-    normalize(
-      $("memberSearch")
-        .value
-    );
-
-
-  if(
-    !keyword
-  ){
-
-    $("deliveryResults")
-      .innerHTML = `
-
-        <div class="empty">
-
-          🔎
-          พิมพ์ชื่อสมาชิก
-          หรือบ้านเลขที่เพื่อค้นหา
-
-        </div>
-
-      `;
-
-    return;
-
-  }
-
-
-  const members =
-    getMembers();
-
-
-  const records =
-    getDeliveries();
-
-
-  const found =
-    members
-
-    .filter(
-
-      member =>
-
-        normalize(
-          member.name
-        )
-        .includes(
-          keyword
-        )
-
-        ||
-
-        normalize(
-          member.house
-        )
-        .includes(
-          keyword
-        )
-
-    )
-
-    .slice(
-      0,
-      30
-    );
-
-
-  if(
-    !found.length
-  ){
-
-    $("deliveryResults")
-      .innerHTML = `
-
-        <div class="empty">
-
-          ❌ ไม่พบสมาชิก
-
-          <br><br>
-
-          ระบบพบสมาชิก
-          <strong>
-            ${members.length}
-          </strong>
-          ราย
-
-        </div>
-
-      `;
-
-    return;
-
-  }
-
-
-  $("deliveryResults")
-    .innerHTML =
-    "";
-
-
-  found.forEach(
-
-    member => {
-
-      const sent =
-        sentForFuneral(
-          member,
-          selectedDeliveryFuneral,
-          records
-        );
-
-
-      const row =
-        document.createElement(
-          "div"
-        );
-
-
-      row.className =
-        "row";
-
-
-      row.innerHTML = `
-
-        <div>
-
-          <strong>
-            ${escapeHTML(
-              member.name
-            )}
-          </strong>
-
-
-          <small>
-
-            🏠 บ้านเลขที่
-            ${escapeHTML(
-              member.house ||
-              "-"
-            )}
-
-          </small>
-
-
-          <span
-            class="
-              tag
-              ${sent ? "ok":"wait"}
-            "
-          >
-
-            ${
-              sent
-              ?
-              "✅ ส่งแล้ว"
-              :
-              "⏳ ยังไม่ส่ง"
-            }
-
-          </span>
-
-        </div>
-
-
-        <button
-          class="
-            ${
-              sent
-              ?
-              "gray"
-              :
-              "green"
-            }
-          "
-          type="button"
-          ${
-            sent
-            ?
-            "disabled"
-            :
-            ""
-          }
-        >
-
-          ${
-            sent
-            ?
-            "✅ ส่งแล้ว"
-            :
-            "✅ บันทึก 1 ถุง"
-          }
-
-        </button>
-
-      `;
-
-
-      if(
-        !sent
-      ){
-
-        row.querySelector(
-          "button"
-        )
-        .addEventListener(
-          "click",
-          () =>
-            saveRice(
-              member
-            )
-        );
-
-      }
-
-
-      $("deliveryResults")
-        .appendChild(
-          row
-        );
-
-    }
-  );
-
-}
-
-
-/* =====================================================
-   SAVE RICE
-===================================================== */
-
-function saveRice(
-  member
-){
-
-  if(
-    !selectedDeliveryFuneral
-  ){
-
-    alert(
-      "กรุณาเลือกงานศพก่อน"
-    );
-
-    return;
-
-  }
-
-
-  const records =
-    getDeliveries();
-
-
-  if(
-    sentForFuneral(
-      member,
-      selectedDeliveryFuneral,
-      records
-    )
-  ){
-
-    alert(
-      "สมาชิกนี้ส่งข้าวสารสำหรับงานศพนี้แล้ว"
-    );
-
-    return;
-
-  }
-
-
-  records.push({
-
-    id:
-      "rice-" +
-      Date.now(),
-
-    funeralId:
-      String(
-        selectedDeliveryFuneral.id
-      ),
-
-    funeralName:
-      selectedDeliveryFuneral.name,
-
-    memberId:
-      String(
-        member.id
-      ),
-
-    name:
-      member.name,
-
-    house:
-      member.house,
-
-    amount:
-      1,
-
-    date:
-      new Date()
-        .toLocaleDateString(
-          "th-TH"
-        ),
-
-    timestamp:
-      Date.now()
-
-  });
-
-
-  writeArray(
-    DELIVERY_KEY,
-    records
-  );
-
-
-  updateSummary();
-
-  updateDeliveryInfo();
-
-  searchMembers();
-
-  renderReport();
-
-  renderFollow();
-
-}
-
-
-/* =====================================================
-   REPORT
-===================================================== */
-
-function renderReport(){
-
-  const id =
-    $("reportFuneral")
-      .value;
-
-
-  if(
-    !id
-  ){
-
-    $("reportArea")
-      .innerHTML = `
-
-        <div class="empty">
-
-          เลือกงานศพ
-          เพื่อดูรายงาน
-
-        </div>
-
-      `;
-
-    return;
-
-  }
-
-
-  const funeral =
-    getFunerals().find(
-
-      item =>
-        String(
-          item.id
-        )
-        ===
-        String(
-          id
-        )
-
-    );
-
-
-  if(
-    !funeral
-  ){
-
-    return;
-
-  }
-
-
-  selectedReportFuneral =
-    funeral;
-
-
-  const members =
-    getMembers();
-
-
-  /*
-    สำคัญ:
-    รายงานกรองเฉพาะ funeralId
-    ของงานศพที่เลือก
-  */
-
-  const records =
-    getDeliveries().filter(
-
-      record =>
-
-        deliveryFuneralId(
-          record
-        )
-
-        ===
-
-        String(
-          funeral.id
-        )
-
-    );
-
-
-  const sent =
-    members.filter(
-
-      member =>
-
-        records.some(
-
-          record =>
-
-            sameMember(
-              member,
-              record
-            )
-
-        )
-
-    );
-
-
-  const pending =
-    members.filter(
-
-      member =>
-
-        !records.some(
-
-          record =>
-
-            sameMember(
-              member,
-              record
-            )
-
-        )
-
-    );
-
-
-  const rice =
-    records.reduce(
-
-      (
-        sum,
-        record
-      ) =>
-
-        sum +
-        deliveryAmount(
-          record
-        ),
-
-      0
-
-    );
-
-
-  const sentRows =
-    sent.map(
-
-      (
-        member,
-        index
-      ) => {
-
-        const memberRecords =
-          records.filter(
-
-            record =>
-              sameMember(
-                member,
-                record
-              )
-
-          );
-
-
-        const amount =
-          memberRecords.reduce(
-
-            (
-              sum,
-              record
-            ) =>
-
-              sum +
-              deliveryAmount(
-                record
-              ),
-
-            0
-
-          );
-
-
-        const last =
-          memberRecords[
-            memberRecords.length - 1
-          ];
-
-
-        return `
-
-          <tr>
-
-            <td>
-              ${index + 1}
-            </td>
-
-            <td>
-              ${escapeHTML(
-                member.name
-              )}
-            </td>
-
-            <td>
-              ${escapeHTML(
-                member.house
-              )}
-            </td>
-
-            <td>
-              ${amount}
-              ถุง
-            </td>
-
-            <td>
-              ${
-                last
-                ?
-                escapeHTML(
-                  deliveryDate(
-                    last
-                  )
-                )
-                :
-                "-"
-              }
-            </td>
-
-          </tr>
-
-        `;
-
-      }
-
-    ).join("");
-
-
-  const pendingRows =
-    pending.map(
-
-      (
-        member,
-        index
-      ) => `
-
-        <tr>
-
-          <td>
-            ${index + 1}
-          </td>
-
-          <td>
-            ${escapeHTML(
-              member.name
-            )}
-          </td>
-
-          <td>
-            ${escapeHTML(
-              member.house
-            )}
-          </td>
-
-          <td>
-
-            <span
-              class="tag wait"
-            >
-              ⚠️ ยังไม่ส่ง
-            </span>
-
-          </td>
-
-        </tr>
-
-      `
-
-    ).join("");
-
-
-  $("reportArea")
-    .innerHTML = `
-
-      <div class="info">
-
-        <strong
-          style="
-            font-size:22px
-          "
-        >
-
-          ⚰️
-          ${escapeHTML(
-            funeral.name
-          )}
-
-        </strong>
-
-
-        ${
-          funeral.age
-          ?
-
-          `
-          <br>
-          👤 อายุ:
-          ${escapeHTML(
-            funeral.age
-          )}
-          ปี
-          `
-
-          :
-          ""
-        }
-
-
-        <br>
-
-        🏠 บ้านเลขที่:
-        ${escapeHTML(
-          funeral.house ||
-          "-"
-        )}
-
-
-        <br>
-
-        👨‍👩‍👧 ผู้แจ้ง:
-        ${escapeHTML(
-          funeral.reporter ||
-          "-"
-        )}
-
-
-        <br>
-
-        📅 วันที่เสียชีวิต:
-        ${escapeHTML(
-          displayDate(
-            funeral.death
-          )
-        )}
-
-
-        <br>
-
-        🔥 วันที่ฌาปนกิจ:
-        ${escapeHTML(
-          displayDate(
-            funeral.cremate
-          )
-        )}
-
-
-        <br>
-
-        📌 สถานะ:
-        ${escapeHTML(
-          funeral.status ||
-          "-"
-        )}
-
-      </div>
-
-
-      <div class="report-grid">
-
-
-        <div class="reportbox">
-
-          👥
-
-          <div class="reportnum">
-            ${members.length}
-          </div>
-
-          <small>
-            สมาชิกทั้งหมด
-          </small>
-
-        </div>
-
-
-        <div class="reportbox">
-
-          ✅
-
-          <div class="reportnum">
-            ${sent.length}
-          </div>
-
-          <small>
-            ส่งแล้ว
-          </small>
-
-        </div>
-
-
-        <div class="reportbox">
-
-          ⚠️
-
-          <div class="reportnum">
-            ${pending.length}
-          </div>
-
-          <small>
-            ยังไม่ส่ง
-          </small>
-
-        </div>
-
-
-        <div class="reportbox">
-
-          🌾
-
-          <div class="reportnum">
-            ${rice}
-          </div>
-
-          <small>
-            ข้าวสาร (ถุง)
-          </small>
-
-        </div>
-
-
-      </div>
-
-
-      <h3>
-        ✅ สมาชิกที่ส่งแล้ว
-        (${sent.length} ราย)
-      </h3>
-
-
-      <div class="tablewrap">
-
-        <table>
-
-          <thead>
-
-            <tr>
-
-              <th>
-                ลำดับ
-              </th>
-
-              <th>
-                ชื่อ-นามสกุล
-              </th>
-
-              <th>
-                บ้านเลขที่
-              </th>
-
-              <th>
-                จำนวน
-              </th>
-
-              <th>
-                วันที่ส่ง
-              </th>
-
-            </tr>
-
-          </thead>
-
-
-          <tbody>
-
-            ${
-              sentRows ||
-
-              `
-              <tr>
-
-                <td
-                  colspan="5"
-                >
-                  ยังไม่มีสมาชิกส่งข้าวสาร
-                </td>
-
-              </tr>
-              `
-            }
-
-          </tbody>
-
-        </table>
-
-      </div>
-
-
-      <h3>
-
-        ⚠️ สมาชิกที่ยังไม่ส่ง
-        (${pending.length} ราย)
-
-      </h3>
-
-
-      <div class="tablewrap">
-
-        <table>
-
-          <thead>
-
-            <tr>
-
-              <th>
-                ลำดับ
-              </th>
-
-              <th>
-                ชื่อ-นามสกุล
-              </th>
-
-              <th>
-                บ้านเลขที่
-              </th>
-
-              <th>
-                สถานะ
-              </th>
-
-            </tr>
-
-          </thead>
-
-
-          <tbody>
-
-            ${
-              pendingRows ||
-
-              `
-              <tr>
-
-                <td
-                  colspan="4"
-                >
-                  ✅
-                  สมาชิกทุกคนส่งแล้ว
-                </td>
-
-              </tr>
-              `
-            }
-
-          </tbody>
-
-        </table>
-
-      </div>
-
-
-      <button
-        class="blue print-btn"
-        type="button"
-        onclick="window.print()"
-      >
-
-        🖨️
-        พิมพ์รายงานงานศพนี้
-
-      </button>
-
-    `;
-
-}
-
-
-/* =====================================================
-   FOLLOW
-===================================================== */
-
-function renderFollow(){
-
-  const funerals =
-    sortedFunerals();
-
-
-  const members =
-    getMembers();
-
-
-  const records =
-    getDeliveries();
-
-
-  const list =
-    $("followList");
-
-
-  if(
-    !funerals.length
-  ){
-
-    list.innerHTML = `
-
-      <div class="empty">
-        ยังไม่มีข้อมูลงานศพ
-      </div>
-
-    `;
-
-    return;
-
-  }
-
-
-  const latest =
-    funerals[0];
-
-
-  const pending =
-    members.filter(
-
-      member =>
-        !sentForFuneral(
-          member,
-          latest,
-          records
-        )
-
-    );
-
-
-  list.innerHTML =
-
-    pending.map(
-
-      (
-        member,
-        index
-      ) => {
-
-        const missed =
-          funerals.filter(
-
-            funeral =>
-
-              !sentForFuneral(
-                member,
-                funeral,
-                records
-              )
-
-          ).length;
-
-
-        const danger =
-          missed >= 2;
-
-
-        return `
-
-          <div
-            class="
-              follow
-              ${
-                danger
-                ?
-                "danger-item"
-                :
-                ""
-              }
-            "
-          >
-
-            <strong>
-
-              ${index + 1}.
-              ${escapeHTML(
-                member.name
-              )}
-
-            </strong>
-
-
-            <small>
-
-              🏠 บ้านเลขที่
-              ${escapeHTML(
-                member.house ||
-                "-"
-              )}
-
-              <br>
-
-              📦 ค้างสะสมจริง
-              ${missed}
-              งาน
-
-              <br>
-
-              ⚰️ งานศพล่าสุด:
-              ${escapeHTML(
-                latest.name
-              )}
-
-            </small>
-
-
-            <span
-              class="
-                tag
-                ${
-                  danger
-                  ?
-                  "danger"
-                  :
-                  "wait"
-                }
-              "
-            >
-
-              ${
-                danger
-                ?
-                "🔴 เสนอพิจารณา"
-                :
-                "🟡 แจ้งเตือน"
-              }
-
-            </span>
-
-          </div>
-
-        `;
-
-      }
-
-    ).join("")
-
-    ||
-
-    `
-
-    <div class="empty">
-
-      ✅
-      สมาชิกทุกคนส่งงานศพล่าสุดแล้ว
-
-    </div>
-
-    `;
-
-}
-
-
-/* =====================================================
-   LOGIN FUNCTIONS
-===================================================== */
-
-function showMain(){
-
-  $("loginScreen")
-    .style.display =
-    "none";
-
-
-  $("mainSystem")
-    .style.display =
-    "block";
-
-}
-
-
-function showLogin(){
-
-  $("mainSystem")
-    .style.display =
-    "none";
-
-
-  $("loginScreen")
-    .style.display =
-    "flex";
-
-}
-
-
-function login(){
-
-  const username =
-    $("loginUsername")
-      .value
-      .trim();
-
-
-  const password =
-    $("loginPassword")
-      .value;
-
-
-  if(
-    username ===
-    LOGIN_USER
-
-    &&
-
-    password ===
-    LOGIN_PASSWORD
-  ){
-
-    sessionStorage.setItem(
-      "riceGroupLoggedIn",
-      "true"
-    );
-
-
-    $("loginError")
-      .textContent =
-      "";
-
-
-    showMain();
-
-    init();
-
-    speakWelcome();
-
-  }
-  else{
-
-    $("loginError")
-      .textContent =
-      "❌ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง";
-
-  }
-
-}
-
-
-function logout(){
-
-  sessionStorage.removeItem(
-    "riceGroupLoggedIn"
-  );
-
-
-  showLogin();
-
-
-  $("loginUsername")
-    .value =
-    "";
-
-
-  $("loginPassword")
-    .value =
-    "";
-
-
-  $("loginError")
-    .textContent =
-    "";
-
-}
-
-
-/* =====================================================
-   VOICE
-===================================================== */
-
-function speakWelcome(){
-
-  if(
-    !(
-      "speechSynthesis"
-      in window
-    )
-  ){
-
-    return;
-
-  }
-
-
-  window.speechSynthesis
-    .cancel();
-
-
-  const voice =
-    new SpeechSynthesisUtterance(
-
-      "ยินดีต้อนรับสู่ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6"
-
-    );
-
-
-  voice.lang =
-    "th-TH";
-
-
-  voice.rate =
-    .9;
-
-
-  voice.volume =
-    1;
-
-
-  window.speechSynthesis
-    .speak(
-      voice
-    );
-
-}
-
-
-/* =====================================================
-   REFRESH
-===================================================== */
-
-function refresh(){
-
-  populateFunerals();
-
-  updateSummary();
-
-  renderLatest();
-
-  renderFollow();
-
-
-  if(
-    selectedDeliveryFuneral
-  ){
-
-    const current =
-      getFunerals()
-      .find(
-
-        funeral =>
-
-          String(
-            funeral.id
-          )
-
-          ===
-
-          String(
-            selectedDeliveryFuneral.id
-          )
-
-      );
-
-
-    if(
-      current
-    ){
-
-      selectedDeliveryFuneral =
-        current;
-
-
-      updateDeliveryInfo();
-
-    }
-
-  }
-
-
-  if(
-    selectedReportFuneral
-  ){
-
-    const current =
-      getFunerals()
-      .find(
-
-        funeral =>
-
-          String(
-            funeral.id
-          )
-
-          ===
-
-          String(
-            selectedReportFuneral.id
-          )
-
-      );
-
-
-    if(
-      current
-    ){
-
-      selectedReportFuneral =
-        current;
-
-    }
-
-  }
-
-}
-
-
-/* =====================================================
-   INIT
-===================================================== */
-
-function init(){
-
-  refresh();
-
-}
-
-
-/* =====================================================
-   EVENTS
-===================================================== */
-
-$("loginButton")
-.addEventListener(
-  "click",
-  login
-);
-
-
-$("loginPassword")
-.addEventListener(
-  "keydown",
-  event => {
-
-    if(
-      event.key ===
-      "Enter"
-    ){
-
-      login();
-
-    }
-
-  }
-);
-
-
-$("logoutButton")
-.addEventListener(
-  "click",
-  logout
-);
-
-
-$("openDelivery")
-.addEventListener(
-  "click",
-  openDelivery
-);
-
-
-$("deliveryFuneral")
-.addEventListener(
-  "change",
-  openDelivery
-);
-
-
-$("searchMember")
-.addEventListener(
-  "click",
-  searchMembers
-);
-
-
-$("memberSearch")
-.addEventListener(
-  "input",
-  searchMembers
-);
-
-
-$("memberSearch")
-.addEventListener(
-  "keydown",
-  event => {
-
-    if(
-      event.key ===
-      "Enter"
-    ){
-
-      searchMembers();
-
-    }
-
-  }
-);
-
-
-$("openReport")
-.addEventListener(
-  "click",
-  renderReport
-);
-
-
-$("reportFuneral")
-.addEventListener(
-  "change",
-  renderReport
-);
-
-
-window.addEventListener(
-  "storage",
-  refresh
-);
-
-
-/* =====================================================
-   AUTO REFRESH
-===================================================== */
-
-setInterval(
-
-  () => {
-
-    if(
-
-      document.visibilityState ===
-      "visible"
-
-      &&
-
-      sessionStorage.getItem(
-        "riceGroupLoggedIn"
-      )
-      ===
-      "true"
-
-    ){
-
-      refresh();
-
-    }
-
-  },
-
-  2000
-
-);
-
-
-/* =====================================================
-   START
-===================================================== */
-
-if(
-
-  sessionStorage.getItem(
-    "riceGroupLoggedIn"
-  )
-
-  ===
-
-  "true"
-
-){
-
-  showMain();
-
-  init();
-
-}
-else{
-
-  showLogin();
-
-}
-<script src="script.js"></script>
-</script>
-
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="th">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>🌾 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
 
 <style>
 
 *{
- box-sizing:border-box;
+box-sizing:border-box;
 }
 
 body{
- margin:0;
- min-height:100vh;
- font-family:Tahoma,"Noto Sans Thai",sans-serif;
- color:white;
- background:
- linear-gradient(
- 135deg,
- #03140b,
- #075b2d,
- #0f8b45
- );
+margin:0;
+font-family:
+Tahoma,
+"Noto Sans Thai",
+sans-serif;
+
+min-height:100vh;
+
+color:#fff;
+
+background:
+linear-gradient(
+135deg,
+#04200d,
+#087331,
+#13a05a
+);
+
 }
 
-.page{
- max-width:1200px;
- margin:auto;
- padding:15px;
-}
-
-
-/* LOGIN */
 
 #loginScreen{
 
 position:fixed;
+
 inset:0;
+
 display:flex;
+
 align-items:center;
+
 justify-content:center;
+
 background:
 linear-gradient(
 135deg,
-#03140b,
-#075b2d
+#03170a,
+#087331
 );
 
 z-index:9999;
@@ -3968,7 +60,8 @@ z-index:9999;
 
 .login-box{
 
-width:95%;
+width:90%;
+
 max-width:420px;
 
 padding:35px;
@@ -3990,7 +83,19 @@ text-align:center;
 
 .login-logo{
 
-font-size:70px;
+font-size:80px;
+
+animation:
+pulse 3s infinite;
+
+}
+
+
+@keyframes pulse{
+
+50%{
+transform:scale(1.1);
+}
 
 }
 
@@ -3998,620 +103,20 @@ font-size:70px;
 .login-title{
 
 font-size:30px;
-font-weight:bold;
 
-}
-
-
-.login-subtitle{
-
-color:#b8e8c4;
-margin-bottom:25px;
-
-}
-
-
-.login-box input{
-
-width:100%;
-
-padding:14px;
-
-margin:8px 0;
-
-border-radius:12px;
-
-border:none;
-
-background:#ffffff20;
-
-color:white;
-
-font-size:16px;
-
-}
-
-
-.login-btn{
-
-width:100%;
-
-padding:14px;
-
-margin-top:15px;
-
-border:none;
-
-border-radius:12px;
-
-background:#1fa34a;
-
-color:white;
-
-font-weight:bold;
-
-font-size:18px;
-
-}
-
-
-.login-error{
-
-color:#ffaaaa;
-
-margin-top:10px;
-
-}
-
-
-
-/* MAIN */
-
-#mainSystem{
-
-display:none;
-
-}
-
-
-.hero{
-
-text-align:center;
-
-padding:25px;
-
-}
-
-
-.hero .logo{
-
-font-size:70px;
-
-}
-
-
-.hero h1{
-
-font-size:40px;
-
-margin:10px;
-
-}
-
-
-.hero h2{
-
-color:#d2f5db;
-
-}
-
-
-
-/* PANEL */
-
-.panel{
-
-background:
-rgba(255,255,255,.10);
-
-padding:20px;
-
-border-radius:25px;
-
-margin-bottom:20px;
-
-backdrop-filter:blur(10px);
-
-}
-
-
-
-/* MENU */
-
-.menu{
-
-display:grid;
-
-grid-template-columns:
-repeat(5,1fr);
-
-gap:12px;
-
-}
-
-
-.menu a{
-
-text-decoration:none;
-
-color:white;
-
-background:
-rgba(255,255,255,.10);
-
-padding:20px;
-
-border-radius:20px;
-
-text-align:center;
-
-transition:.3s;
-
-}
-
-
-.menu a:hover{
-
-transform:translateY(-5px);
-
-background:
-rgba(255,255,255,.25);
-
-}
-
-
-.menu-icon{
-
-font-size:35px;
-
-}
-
-
-
-/* SUMMARY */
-
-.summary{
-
-display:grid;
-
-grid-template-columns:
-repeat(4,1fr);
-
-gap:15px;
-
-}
-
-
-.box{
-
-background:
-rgba(255,255,255,.12);
-
-padding:20px;
-
-border-radius:20px;
-
-text-align:center;
-
-}
-
-
-.num{
-
-font-size:35px;
-
-font-weight:bold;
-
-}
-
-
-
-button{
-
-cursor:pointer;
-
-border:none;
-
-border-radius:10px;
-
-padding:12px;
-
-font-weight:bold;
-
-color:white;
-
-}
-
-
-.green{
-background:#198754;
-}
-
-
-.blue{
-background:#1769aa;
-}
-
-
-.red{
-background:#b83232;
-}
-
-
-.gray{
-background:#666;
-}
-
-
-
-.controls{
-
-display:grid;
-
-grid-template-columns:
-1fr 120px;
-
-gap:10px;
-
-}
-
-
-input,select{
-
-padding:12px;
-
-border-radius:10px;
-
-border:none;
-
-background:#ffffff20;
-
-color:white;
-
-}
-
-
-
-.row{
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-background:#ffffff12;
-
-padding:15px;
-
-border-radius:15px;
-
-margin-top:10px;
-
-}
-
-
-
-.tag{
-
-padding:5px 10px;
-
-border-radius:20px;
-
-font-size:12px;
-
-}
-
-
-.ok{
-
-background:#28a745;
-
-}
-
-
-.wait{
-
-background:#ffc107;
-
-color:#222;
-
-}
-
-
-.danger{
-
-background:#dc3545;
-
-}
-
-
-
-.empty{
-
-text-align:center;
-
-padding:20px;
-
-color:#ccc;
-
-}
-
-
-
-</style>
-
-</head>
-
-<body>
-
-
-<div id="loginScreen">
-
-
-<div class="login-box">
-
-
-<div class="login-logo">
-🌾
-</div>
-
-
-<div class="login-title">
-ระบบกลุ่มข้าวสาร
-</div>
-
-
-<div class="login-subtitle">
-บ้านร่องเข็ม หมู่ที่ 6
-</div>
-
-
-
-<input id="loginUsername"
-placeholder="ชื่อผู้ใช้">
-
-
-<input id="loginPassword"
-type="password"
-placeholder="รหัสผ่าน">
-
-
-<button
-class="login-btn"
-onclick="login()">
-
-🔐 เข้าสู่ระบบ
-
-</button>
-
-
-<div id="loginError"
-class="login-error">
-</div>
-
-
-</div>
-
-
-</div>
-
-
-<div id="mainSystem">
-
-
-<div class="page">
-
-
-<header class="hero">
-
-
-<div class="logo">
-🌾
-</div>
-
-
-<h1>
-ระบบกลุ่มข้าวสาร
-</h1>
-
-
-<h2>
-บ้านร่องเข็ม หมู่ที่ 6
-</h2>
-
-
-<p>
-สมาชิกทั้งหมด 
-<b id="memberTotal">
-192
-</b>
-ครัวเรือน
-</p>
-
-
-</header>
-
-
-<section class="panel">
-
-
-<div class="menu">
-
-
-<a href="members.html">
-
-<div class="menu-icon">
-👥
-</div>
-
-ทะเบียนสมาชิก
-
-</a>
-
-
-
-<a href="งานศพ.html">
-
-<div class="menu-icon">
-⚰️
-</div>
-
-แจ้งเสียชีวิต / งานศพ
-
-</a>
-
-
-
-<a href="#delivery">
-
-<div class="menu-icon">
-🌾
-</div>
-
-บันทึกข้าวสาร
-
-</a>
-
-
-
-<a href="#report">
-
-<div class="menu-icon">
-📊
-</div>
-
-รายงาน
-
-</a>
-
-
-
-<a href="#follow">
-
-<div class="menu-icon">
-⚠️
-</div>
-
-ติดตาม
-
-</a>
-
-
-</div>
-
-  <!DOCTYPE html>
-<html lang="th">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-
-<title>🌾 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
-
-<style>
-
-*{
-box-sizing:border-box;
-}
-
-body{
-
-margin:0;
-font-family:
-Tahoma,
-"Noto Sans Thai",
-sans-serif;
-
-min-height:100vh;
-
-color:white;
-
-background:
-linear-gradient(
-135deg,
-#03200d,
-#075522,
-#159447
-);
-
-}
-
-
-#loginScreen{
-
-position:fixed;
-inset:0;
-
-display:flex;
-align-items:center;
-justify-content:center;
-
-background:
-linear-gradient(
-135deg,
-#03200d,
-#075522
-);
-
-z-index:9999;
-
-}
-
-
-.login-box{
-
-width:90%;
-max-width:400px;
-
-padding:35px;
-
-border-radius:25px;
-
-background:
-rgba(255,255,255,.12);
-
-backdrop-filter:blur(15px);
-
-text-align:center;
-
-box-shadow:
-0 20px 60px rgba(0,0,0,.5);
-
-}
-
-
-.login-logo{
-
-font-size:70px;
-
-}
-
-
-.login-title{
-
-font-size:30px;
-font-weight:bold;
+font-weight:900;
 
 }
 
 
 .login-sub{
 
-color:#c8f5d2;
+color:#bceccb;
 
-margin-bottom:25px;
+margin:10px 0 25px;
 
 }
+
 
 
 input{
@@ -4620,25 +125,28 @@ width:100%;
 
 padding:14px;
 
-margin:8px 0;
-
-border-radius:12px;
+margin-bottom:12px;
 
 border:none;
 
+border-radius:12px;
+
 background:
-rgba(0,0,0,.3);
+rgba(0,0,0,.25);
 
 color:white;
+
+font-size:16px;
 
 }
 
 
+
 button{
 
-padding:13px 20px;
-
 border:0;
+
+padding:13px;
 
 border-radius:12px;
 
@@ -4653,7 +161,7 @@ cursor:pointer;
 
 width:100%;
 
-background:#28a745;
+background:#22a447;
 
 color:white;
 
@@ -4669,6 +177,9 @@ margin-top:10px;
 }
 
 
+
+
+/* MAIN */
 
 #mainSystem{
 
@@ -4693,23 +204,24 @@ padding:15px;
 
 text-align:center;
 
+padding:20px;
+
 }
 
 
 .logo{
 
-font-size:70px;
-
-animation:pulse 3s infinite;
+font-size:75px;
 
 }
 
 
-@keyframes pulse{
 
-50%{
-transform:scale(1.1);
-}
+.hero h1{
+
+font-size:40px;
+
+margin:10px;
 
 }
 
@@ -4718,9 +230,9 @@ transform:scale(1.1);
 .panel{
 
 background:
-rgba(255,255,255,.1);
+rgba(255,255,255,.12);
 
-border-radius:20px;
+border-radius:22px;
 
 padding:20px;
 
@@ -4739,7 +251,7 @@ display:grid;
 grid-template-columns:
 repeat(5,1fr);
 
-gap:10px;
+gap:12px;
 
 }
 
@@ -4747,18 +259,20 @@ gap:10px;
 
 .menu a{
 
-color:white;
-
 text-decoration:none;
 
-background:
-rgba(255,255,255,.12);
-
-padding:20px 5px;
+color:white;
 
 text-align:center;
 
-border-radius:15px;
+padding:20px 5px;
+
+border-radius:18px;
+
+background:
+rgba(255,255,255,.1);
+
+transition:.3s;
 
 }
 
@@ -4774,6 +288,7 @@ rgba(255,255,255,.25);
 
 
 
+
 .summary{
 
 display:grid;
@@ -4781,7 +296,7 @@ display:grid;
 grid-template-columns:
 repeat(4,1fr);
 
-gap:10px;
+gap:12px;
 
 }
 
@@ -4789,22 +304,23 @@ gap:10px;
 
 .box{
 
-background:
-rgba(255,255,255,.1);
-
 padding:20px;
 
-border-radius:15px;
+border-radius:18px;
+
+background:
+rgba(255,255,255,.1);
 
 text-align:center;
 
 }
 
 
-.num{
+.number{
 
 font-size:35px;
-font-weight:bold;
+
+font-weight:900;
 
 }
 
@@ -4817,7 +333,7 @@ rgba(255,255,255,.1);
 
 padding:15px;
 
-border-radius:12px;
+border-radius:15px;
 
 margin-top:10px;
 
@@ -4827,7 +343,8 @@ margin-top:10px;
 
 .green{
 
-background:#1b8b42;
+background:#198754;
+
 color:white;
 
 }
@@ -4835,15 +352,8 @@ color:white;
 
 .red{
 
-background:#b83232;
-color:white;
+background:#b02a37;
 
-}
-
-
-.blue{
-
-background:#1769aa;
 color:white;
 
 }
@@ -4900,6 +410,7 @@ repeat(2,1fr);
 </div>
 
 
+
 <input id="username"
 placeholder="ชื่อผู้ใช้">
 
@@ -4909,7 +420,9 @@ type="password"
 placeholder="รหัสผ่าน">
 
 
-<button class="login-btn"
+
+<button
+class="login-btn"
 onclick="login()">
 
 🔐 เข้าสู่ระบบ
@@ -4919,20 +432,18 @@ onclick="login()">
 
 <div id="error"
 class="error">
-</div>
-
-
-</div>
-
 
 </div>
 
 
 
+</div>
+
+</div>
 
 
-<!-- MAIN -->
 
+<!-- DASHBOARD -->
 
 <div id="mainSystem">
 
@@ -4969,7 +480,6 @@ class="error">
 </div>
 
 
-
 <div class="panel">
 
 
@@ -4977,122 +487,79 @@ class="error">
 
 
 <a href="members.html">
-
 👥<br>
 ทะเบียนสมาชิก
-
 </a>
 
 
-<a href="งานศพ.html">
-
+<a href="funeral.html">
 ⚰️<br>
-แจ้งเสียชีวิต
-
+งานศพ
 </a>
 
 
 <a href="#rice">
-
 🌾<br>
 บันทึกข้าวสาร
-
 </a>
 
 
 <a href="#report">
-
 📊<br>
 รายงาน
-
 </a>
 
 
 <a href="#follow">
-
 ⚠️<br>
 ติดตาม
-
 </a>
 
 
 </div>
 
-
 </div>
-
 
 
 <div class="summary">
 
 
 <div class="box">
-
 👥
-
-<div class="num"
-id="total">
-
+<div class="number" id="total">
 192
-
 </div>
-
 สมาชิก
-
 </div>
 
 
-
 <div class="box">
-
 ✅
-
-<div class="num"
-id="sent">
-
+<div class="number" id="sent">
 0
-
 </div>
-
 ส่งแล้ว
-
 </div>
 
 
 <div class="box">
-
 ⚠️
-
-<div class="num"
-id="pending">
-
+<div class="number" id="pending">
 192
-
 </div>
-
 ค้างส่ง
-
 </div>
 
 
 <div class="box">
-
 🌾
-
-<div class="num"
-id="rice">
-
+<div class="number" id="rice">
 0
-
 </div>
-
 ถุง
-
 </div>
 
-
-</div>
-
+<!-- งานศพล่าสุด -->
 
 <div class="panel">
 
@@ -5100,17 +567,19 @@ id="rice">
 🕊️ งานศพล่าสุด
 </h2>
 
+<div id="latest"
+class="row">
 
-<div class="row"
-id="latest">
+ยังไม่มีข้อมูลงานศพ
 
-ยังไม่มีข้อมูล
+</div>
 
 </div>
 
 
-</div>
-  <!-- ระบบบันทึกข้าวสาร -->
+
+
+<!-- บันทึกข้าวสาร -->
 
 <div class="panel" id="rice">
 
@@ -5120,7 +589,11 @@ id="latest">
 
 
 <select id="funeralSelect"
-style="width:100%;padding:12px;border-radius:10px">
+style="
+width:100%;
+padding:12px;
+border-radius:10px;
+">
 
 <option value="">
 -- เลือกงานศพ --
@@ -5133,19 +606,25 @@ style="width:100%;padding:12px;border-radius:10px">
 
 
 <input id="searchMember"
-placeholder="🔎 ค้นหาชื่อสมาชิก หรือบ้านเลขที่">
+placeholder="
+🔎 ค้นหาชื่อสมาชิก หรือบ้านเลขที่
+">
 
 
-<div id="memberResult"></div>
+<div id="memberResult">
+
+</div>
 
 
 </div>
 
 
 
+
 <!-- รายงาน -->
 
 <div class="panel" id="report">
+
 
 <h2>
 📊 รายงานแยกตามงานศพ
@@ -5164,9 +643,11 @@ placeholder="🔎 ค้นหาชื่อสมาชิก หรือบ�
 
 
 
-<!-- ติดตาม -->
+<!-- สมาชิกติดตาม -->
+
 
 <div class="panel" id="follow">
+
 
 <h2>
 ⚠️ สมาชิกที่ต้องติดตาม
@@ -5175,7 +656,7 @@ placeholder="🔎 ค้นหาชื่อสมาชิก หรือบ�
 
 <div id="followArea">
 
-ยังไม่มีข้อมูล
+กำลังตรวจสอบข้อมูล...
 
 </div>
 
@@ -5184,7 +665,8 @@ placeholder="🔎 ค้นหาชื่อสมาชิก หรือบ�
 
 
 
-<button class="red"
+<button
+class="red"
 onclick="logout()">
 
 🚪 ออกจากระบบ
@@ -5196,9 +678,10 @@ onclick="logout()">
 <footer style="
 text-align:center;
 padding:30px;
-color:#b8e8c3">
+color:#bde8c5;
+">
 
-🌾 กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
+🌾 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
 
 <br>
 
@@ -5207,10 +690,10 @@ color:#b8e8c3">
 </footer>
 
 
-
 </div>
 
 </div>
+
 
 
 
@@ -5218,42 +701,52 @@ color:#b8e8c3">
 <script>
 
 
-// =====================
-// LOGIN
-// =====================
+// =========================
+// ตั้งค่าล็อกอิน
+// =========================
 
 
-const USERNAME="admin";
+const ADMIN_USER="admin";
 
-const PASSWORD="123456";
+const ADMIN_PASS="123456";
 
+
+
+
+// =========================
+// เข้าระบบ
+// =========================
 
 
 function login(){
 
 
-let u=
-document.getElementById("username").value;
+let user=
+document.getElementById(
+"username"
+).value.trim();
 
 
-let p=
-document.getElementById("password").value;
+let pass=
+document.getElementById(
+"password"
+).value;
 
 
 
 if(
-u===USERNAME &&
-p===PASSWORD
+user===ADMIN_USER &&
+pass===ADMIN_PASS
 ){
 
 
 sessionStorage.setItem(
-"login",
+"riceLogin",
 "true"
 );
 
 
-showSystem();
+openSystem();
 
 
 }
@@ -5261,8 +754,9 @@ showSystem();
 else{
 
 
-document.getElementById("error")
-.innerHTML=
+document.getElementById(
+"error"
+).innerHTML=
 "❌ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง";
 
 
@@ -5273,7 +767,8 @@ document.getElementById("error")
 
 
 
-function showSystem(){
+
+function openSystem(){
 
 
 document.getElementById(
@@ -5286,10 +781,11 @@ document.getElementById(
 ).style.display="block";
 
 
-loadData();
+loadSystem();
 
 
 }
+
 
 
 
@@ -5297,7 +793,7 @@ function logout(){
 
 
 sessionStorage.removeItem(
-"login"
+"riceLogin"
 );
 
 
@@ -5308,28 +804,31 @@ location.reload();
 
 
 
-// =====================
-// DATABASE
-// =====================
+
+
+// =========================
+// ข้อมูลระบบ
+// =========================
 
 
 let members=[];
 
-
 let funerals=[];
 
-
-let riceRecords=[];
-
+let records=[];
 
 
 
-function loadData(){
+
+function loadSystem(){
+
 
 
 members=
 JSON.parse(
-localStorage.getItem("members")
+localStorage.getItem(
+"members"
+)
 ||
 "[]"
 );
@@ -5338,43 +837,46 @@ localStorage.getItem("members")
 
 funerals=
 JSON.parse(
-localStorage.getItem("funerals")
+localStorage.getItem(
+"funerals"
+)
 ||
 "[]"
 );
 
 
 
-riceRecords=
+records=
 JSON.parse(
-localStorage.getItem("rice")
+localStorage.getItem(
+"riceRecords"
+)
 ||
 "[]"
 );
 
 
 
-if(members.length===0){
 
 
-members=[
+// ถ้าไม่มีข้อมูลให้เตรียมโครงสร้าง
 
-{
-id:1,
-name:"นายจักรวัตร พระประยุทธนัง",
-house:"2"
-}
 
-];
+if(!members.length){
+
+
+members=[];
 
 
 }
 
 
 
-showSummary();
+showDashboard();
 
-showFuneral();
+loadFuneral();
+
+showFollow();
 
 
 }
@@ -5382,31 +884,30 @@ showFuneral();
 
 
 
-// =====================
-// SUMMARY
-// =====================
+// =========================
+// สรุปข้อมูล
+// =========================
 
 
-function showSummary(){
+function showDashboard(){
 
 
 document.getElementById(
 "total"
 ).innerHTML=
-members.length;
+members.length || 192;
 
 
 document.getElementById(
 "memberTotal"
 ).innerHTML=
-members.length;
-
+members.length || 192;
 
 
 document.getElementById(
 "rice"
 ).innerHTML=
-riceRecords.length;
+records.length;
 
 
 
@@ -5415,37 +916,47 @@ riceRecords.length;
 
 
 
-// =====================
-// งานศพ
-// =====================
+// =========================
+// โหลดงานศพ
+// =========================
 
 
-function showFuneral(){
+function loadFuneral(){
 
 
-let box=
+let select=
 document.getElementById(
 "funeralSelect"
 );
 
 
+
+select.innerHTML=
+`
+<option value="">
+-- เลือกงานศพ --
+</option>
+`;
+
+
+
 funerals.forEach(f=>{
 
 
-let op=
+let option=
 document.createElement(
 "option"
 );
 
 
-op.value=f.id;
+option.value=f.id;
 
 
-op.textContent=
+option.textContent=
 "⚰️ "+f.name;
 
 
-box.appendChild(op);
+select.appendChild(option);
 
 
 
@@ -5462,7 +973,9 @@ document.getElementById(
 
 `
 ⚰️ ${funerals[0].name}
+
 <br>
+
 📅 ${funerals[0].date || "-"}
 
 `;
@@ -5476,42 +989,30 @@ document.getElementById(
 
 
 
-// =====================
+
+// =========================
 // ค้นหาสมาชิก
-// =====================
+// =========================
 
 
-
-document.getElementById(
+document
+.getElementById(
 "searchMember"
 )
 .addEventListener(
 "input",
-searchMember
+findMember
 );
 
 
 
-function searchMember(){
+function findMember(){
 
 
-let key=
+let text=
 document.getElementById(
 "searchMember"
 ).value;
-
-
-
-let result=
-members.filter(m=>
-
-
-m.name.includes(key)
-||
-m.house.includes(key)
-
-
-);
 
 
 
@@ -5519,29 +1020,39 @@ let html="";
 
 
 
-result.forEach(m=>{
+members
+.filter(m=>
+
+m.name.includes(text)
+
+||
+
+String(m.house)
+.includes(text)
+
+)
+.forEach(m=>{
 
 
 html+=`
 
 <div class="row">
 
-
 <b>
 ${m.name}
 </b>
-
 
 <br>
 
 🏠 บ้านเลขที่ ${m.house}
 
 
-<br>
+<br><br>
 
 
-<button class="green"
-onclick="saveRice('${m.id}')">
+<button
+class="green"
+onclick="saveRice(${m.id})">
 
 ✅ บันทึก 1 ถุง
 
@@ -5549,7 +1060,6 @@ onclick="saveRice('${m.id}')">
 
 
 </div>
-
 
 `;
 
@@ -5566,32 +1076,25 @@ html;
 
 }
 
-
-
-
-// =====================
+  // =========================
 // บันทึกข้าวสาร
-// =====================
+// =========================
+
+function saveRice(memberId){
 
 
-
-function saveRice(id){
-
-
-let funeral=
+let funeralId =
 document.getElementById(
 "funeralSelect"
 ).value;
 
 
 
-if(!funeral){
-
+if(!funeralId){
 
 alert(
-"กรุณาเลือกงานศพ"
+"กรุณาเลือกงานศพก่อน"
 );
-
 
 return;
 
@@ -5599,11 +1102,43 @@ return;
 
 
 
-riceRecords.push({
+let exists =
+records.some(r=>
 
-member:id,
+r.memberId==memberId
+&&
+r.funeralId==funeralId
 
-funeral:funeral,
+);
+
+
+
+if(exists){
+
+alert(
+"สมาชิกนี้บันทึกแล้ว"
+);
+
+return;
+
+}
+
+
+
+
+records.push({
+
+id:
+Date.now(),
+
+memberId:
+memberId,
+
+funeralId:
+funeralId,
+
+amount:
+1,
 
 date:
 new Date()
@@ -5611,16 +1146,18 @@ new Date()
 "th-TH"
 )
 
+
 });
+
 
 
 
 localStorage.setItem(
 
-"rice",
+"riceRecords",
 
 JSON.stringify(
-riceRecords
+records
 )
 
 );
@@ -5628,25 +1165,33 @@ riceRecords
 
 
 alert(
-"บันทึกเรียบร้อย"
+"✅ บันทึกข้าวสารเรียบร้อย"
 );
 
 
 
-showSummary();
+showDashboard();
 
+showReport();
+
+showFollow();
 
 
 }
 
 
-// =====================
+
+
+
+// =========================
 // รายงาน
-// =====================
+// =========================
 
 
 document
-.getElementById("funeralSelect")
+.getElementById(
+"funeralSelect"
+)
 .addEventListener(
 "change",
 showReport
@@ -5657,19 +1202,26 @@ showReport
 function showReport(){
 
 
-let funeral=
+let funeralId =
 document.getElementById(
 "funeralSelect"
 ).value;
 
 
 
-if(!funeral){
-
+let box =
 document.getElementById(
 "reportArea"
-).innerHTML=
+);
+
+
+
+if(!funeralId){
+
+
+box.innerHTML=
 "เลือกงานศพเพื่อดูรายงาน";
+
 
 return;
 
@@ -5677,37 +1229,46 @@ return;
 
 
 
-let sent =
-riceRecords.filter(
-r=>r.funeral==funeral
+let send =
+records.filter(
+r=>
+r.funeralId==funeralId
 );
 
 
 
 let html=`
 
+
 <div class="row">
+
 
 👥 สมาชิกทั้งหมด :
 ${members.length}
 
 <br>
 
+
 ✅ ส่งแล้ว :
-${sent.length}
+${send.length}
 
 <br>
+
 
 ⚠️ ยังไม่ส่ง :
-${members.length-sent.length}
+${members.length-send.length}
+
 
 <br>
 
+
 🌾 ข้าวสาร :
-${sent.length} ถุง
+${send.length}
+ถุง
 
 
 </div>
+
 
 `;
 
@@ -5716,24 +1277,26 @@ ${sent.length} ถุง
 html+=`
 
 <h3>
-รายชื่อสมาชิกที่ส่งแล้ว
+รายชื่อผู้ส่งแล้ว
 </h3>
 
 `;
 
 
 
-sent.forEach(r=>{
+send.forEach(r=>{
 
 
 let m=
 members.find(
-x=>x.id==r.member
+x=>
+x.id==r.memberId
 );
 
 
 
 if(m){
+
 
 html+=`
 
@@ -5745,6 +1308,10 @@ html+=`
 
 🏠 บ้านเลขที่ ${m.house}
 
+<br>
+
+📅 ${r.date}
+
 </div>
 
 `;
@@ -5756,26 +1323,24 @@ html+=`
 
 
 
-document.getElementById(
-"reportArea"
-).innerHTML=
+box.innerHTML=
 html;
-
 
 
 }
 
 
 
-// =====================
+
+// =========================
 // สมาชิกติดตาม
-// =====================
+// =========================
 
 
 function showFollow(){
 
 
-let box=
+let box =
 document.getElementById(
 "followArea"
 );
@@ -5785,17 +1350,41 @@ document.getElementById(
 let html="";
 
 
+
+if(!funerals.length){
+
+
+box.innerHTML=
+"ยังไม่มีงานศพ";
+
+
+return;
+
+}
+
+
+
+
+let last =
+funerals[0].id;
+
+
+
 members.forEach(m=>{
 
 
-let count=
-riceRecords.filter(
-r=>r.member==m.id
-).length;
+let check =
+records.some(r=>
+
+r.memberId==m.id
+&&
+r.funeralId==last
+
+);
 
 
 
-if(count===0){
+if(!check){
 
 
 html+=`
@@ -5805,14 +1394,17 @@ html+=`
 
 ⚠️ ${m.name}
 
+
 <br>
+
 
 🏠 บ้านเลขที่ ${m.house}
 
 
 <br>
 
-ยังไม่เคยส่งข้าวสาร
+
+ยังไม่ได้ส่งข้าวสาร
 
 
 </div>
@@ -5820,9 +1412,7 @@ html+=`
 
 `;
 
-
 }
-
 
 
 });
@@ -5831,8 +1421,10 @@ html+=`
 
 if(html===""){
 
+
 html=
-"✅ สมาชิกทุกคนดำเนินการแล้ว";
+"✅ สมาชิกทุกคนส่งแล้ว";
+
 
 }
 
@@ -5842,31 +1434,185 @@ box.innerHTML=
 html;
 
 
-
 }
 
 
 
 
-// =====================
-// โหลดอัตโนมัติ
-// =====================
+
+// =========================
+// เปิดระบบอัตโนมัติ
+// =========================
 
 
 if(
-sessionStorage.getItem("login")
+sessionStorage.getItem(
+"riceLogin"
+)
 ==="true"
 ){
 
-showSystem();
+
+openSystem();
+
+
+}
+
+
+</div>
+  // =========================
+// คำไว้อาลัย Animation
+// =========================
+
+
+function showCondolence(funeral){
+
+
+if(!funeral)return;
+
+
+let latest =
+document.getElementById(
+"latest"
+);
+
+
+
+latest.innerHTML=`
+
+<div style="
+text-align:center;
+padding:20px;
+background:rgba(0,0,0,.25);
+border-radius:20px;
+">
+
+
+<div style="
+font-size:60px;
+animation:pulse 3s infinite;
+">
+
+🕊️
+
+</div>
+
+
+<h2>
+
+ขอแสดงความอาลัย
+
+</h2>
+
+
+<h3>
+
+⚰️ ${funeral.name}
+
+</h3>
+
+
+<p>
+
+ขอร่วมไว้อาลัย
+และขอให้ดวงวิญญาณไปสู่สุคติ
+
+</p>
+
+
+</div>
+
+`;
+
+
 
 }
 
 
 
-// =====================
-// ปิดระบบ
-// =====================
+
+// =========================
+// สำรองข้อมูล
+// =========================
+
+
+function backupData(){
+
+
+let data={
+
+members:members,
+
+funerals:funerals,
+
+records:records
+
+};
+
+
+let file =
+new Blob(
+
+[
+JSON.stringify(
+data,
+null,
+2
+)
+],
+
+{
+type:"application/json"
+}
+
+);
+
+
+
+let a =
+document.createElement(
+"a"
+);
+
+
+a.href=
+URL.createObjectURL(
+file
+);
+
+
+a.download=
+"rice-group-backup.json";
+
+
+a.click();
+
+
+}
+
+
+
+// =========================
+// ตรวจปุ่ม Enter Login
+// =========================
+
+
+document
+.getElementById(
+"password"
+)
+.addEventListener(
+"keydown",
+function(e){
+
+if(e.key==="Enter"){
+
+login();
+
+}
+
+});
+
 
 
 </script>
@@ -5875,5 +1621,3 @@ showSystem();
 </body>
 
 </html>
-
-</section>
