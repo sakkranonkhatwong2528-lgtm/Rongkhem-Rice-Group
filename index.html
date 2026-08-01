@@ -3910,3 +3910,1970 @@ else{
 
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>🌾 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
+
+<style>
+
+*{
+ box-sizing:border-box;
+}
+
+body{
+ margin:0;
+ min-height:100vh;
+ font-family:Tahoma,"Noto Sans Thai",sans-serif;
+ color:white;
+ background:
+ linear-gradient(
+ 135deg,
+ #03140b,
+ #075b2d,
+ #0f8b45
+ );
+}
+
+.page{
+ max-width:1200px;
+ margin:auto;
+ padding:15px;
+}
+
+
+/* LOGIN */
+
+#loginScreen{
+
+position:fixed;
+inset:0;
+display:flex;
+align-items:center;
+justify-content:center;
+background:
+linear-gradient(
+135deg,
+#03140b,
+#075b2d
+);
+
+z-index:9999;
+
+}
+
+
+.login-box{
+
+width:95%;
+max-width:420px;
+
+padding:35px;
+
+border-radius:30px;
+
+background:
+rgba(255,255,255,.12);
+
+backdrop-filter:blur(15px);
+
+box-shadow:
+0 20px 60px rgba(0,0,0,.5);
+
+text-align:center;
+
+}
+
+
+.login-logo{
+
+font-size:70px;
+
+}
+
+
+.login-title{
+
+font-size:30px;
+font-weight:bold;
+
+}
+
+
+.login-subtitle{
+
+color:#b8e8c4;
+margin-bottom:25px;
+
+}
+
+
+.login-box input{
+
+width:100%;
+
+padding:14px;
+
+margin:8px 0;
+
+border-radius:12px;
+
+border:none;
+
+background:#ffffff20;
+
+color:white;
+
+font-size:16px;
+
+}
+
+
+.login-btn{
+
+width:100%;
+
+padding:14px;
+
+margin-top:15px;
+
+border:none;
+
+border-radius:12px;
+
+background:#1fa34a;
+
+color:white;
+
+font-weight:bold;
+
+font-size:18px;
+
+}
+
+
+.login-error{
+
+color:#ffaaaa;
+
+margin-top:10px;
+
+}
+
+
+
+/* MAIN */
+
+#mainSystem{
+
+display:none;
+
+}
+
+
+.hero{
+
+text-align:center;
+
+padding:25px;
+
+}
+
+
+.hero .logo{
+
+font-size:70px;
+
+}
+
+
+.hero h1{
+
+font-size:40px;
+
+margin:10px;
+
+}
+
+
+.hero h2{
+
+color:#d2f5db;
+
+}
+
+
+
+/* PANEL */
+
+.panel{
+
+background:
+rgba(255,255,255,.10);
+
+padding:20px;
+
+border-radius:25px;
+
+margin-bottom:20px;
+
+backdrop-filter:blur(10px);
+
+}
+
+
+
+/* MENU */
+
+.menu{
+
+display:grid;
+
+grid-template-columns:
+repeat(5,1fr);
+
+gap:12px;
+
+}
+
+
+.menu a{
+
+text-decoration:none;
+
+color:white;
+
+background:
+rgba(255,255,255,.10);
+
+padding:20px;
+
+border-radius:20px;
+
+text-align:center;
+
+transition:.3s;
+
+}
+
+
+.menu a:hover{
+
+transform:translateY(-5px);
+
+background:
+rgba(255,255,255,.25);
+
+}
+
+
+.menu-icon{
+
+font-size:35px;
+
+}
+
+
+
+/* SUMMARY */
+
+.summary{
+
+display:grid;
+
+grid-template-columns:
+repeat(4,1fr);
+
+gap:15px;
+
+}
+
+
+.box{
+
+background:
+rgba(255,255,255,.12);
+
+padding:20px;
+
+border-radius:20px;
+
+text-align:center;
+
+}
+
+
+.num{
+
+font-size:35px;
+
+font-weight:bold;
+
+}
+
+
+
+button{
+
+cursor:pointer;
+
+border:none;
+
+border-radius:10px;
+
+padding:12px;
+
+font-weight:bold;
+
+color:white;
+
+}
+
+
+.green{
+background:#198754;
+}
+
+
+.blue{
+background:#1769aa;
+}
+
+
+.red{
+background:#b83232;
+}
+
+
+.gray{
+background:#666;
+}
+
+
+
+.controls{
+
+display:grid;
+
+grid-template-columns:
+1fr 120px;
+
+gap:10px;
+
+}
+
+
+input,select{
+
+padding:12px;
+
+border-radius:10px;
+
+border:none;
+
+background:#ffffff20;
+
+color:white;
+
+}
+
+
+
+.row{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+background:#ffffff12;
+
+padding:15px;
+
+border-radius:15px;
+
+margin-top:10px;
+
+}
+
+
+
+.tag{
+
+padding:5px 10px;
+
+border-radius:20px;
+
+font-size:12px;
+
+}
+
+
+.ok{
+
+background:#28a745;
+
+}
+
+
+.wait{
+
+background:#ffc107;
+
+color:#222;
+
+}
+
+
+.danger{
+
+background:#dc3545;
+
+}
+
+
+
+.empty{
+
+text-align:center;
+
+padding:20px;
+
+color:#ccc;
+
+}
+
+
+
+</style>
+
+</head>
+
+<body>
+
+
+<div id="loginScreen">
+
+
+<div class="login-box">
+
+
+<div class="login-logo">
+🌾
+</div>
+
+
+<div class="login-title">
+ระบบกลุ่มข้าวสาร
+</div>
+
+
+<div class="login-subtitle">
+บ้านร่องเข็ม หมู่ที่ 6
+</div>
+
+
+
+<input id="loginUsername"
+placeholder="ชื่อผู้ใช้">
+
+
+<input id="loginPassword"
+type="password"
+placeholder="รหัสผ่าน">
+
+
+<button
+class="login-btn"
+onclick="login()">
+
+🔐 เข้าสู่ระบบ
+
+</button>
+
+
+<div id="loginError"
+class="login-error">
+</div>
+
+
+</div>
+
+
+</div>
+
+
+<div id="mainSystem">
+
+
+<div class="page">
+
+
+<header class="hero">
+
+
+<div class="logo">
+🌾
+</div>
+
+
+<h1>
+ระบบกลุ่มข้าวสาร
+</h1>
+
+
+<h2>
+บ้านร่องเข็ม หมู่ที่ 6
+</h2>
+
+
+<p>
+สมาชิกทั้งหมด 
+<b id="memberTotal">
+192
+</b>
+ครัวเรือน
+</p>
+
+
+</header>
+
+
+<section class="panel">
+
+
+<div class="menu">
+
+
+<a href="members.html">
+
+<div class="menu-icon">
+👥
+</div>
+
+ทะเบียนสมาชิก
+
+</a>
+
+
+
+<a href="งานศพ.html">
+
+<div class="menu-icon">
+⚰️
+</div>
+
+แจ้งเสียชีวิต / งานศพ
+
+</a>
+
+
+
+<a href="#delivery">
+
+<div class="menu-icon">
+🌾
+</div>
+
+บันทึกข้าวสาร
+
+</a>
+
+
+
+<a href="#report">
+
+<div class="menu-icon">
+📊
+</div>
+
+รายงาน
+
+</a>
+
+
+
+<a href="#follow">
+
+<div class="menu-icon">
+⚠️
+</div>
+
+ติดตาม
+
+</a>
+
+
+</div>
+
+  <!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>🌾 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+body{
+
+margin:0;
+font-family:
+Tahoma,
+"Noto Sans Thai",
+sans-serif;
+
+min-height:100vh;
+
+color:white;
+
+background:
+linear-gradient(
+135deg,
+#03200d,
+#075522,
+#159447
+);
+
+}
+
+
+#loginScreen{
+
+position:fixed;
+inset:0;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+background:
+linear-gradient(
+135deg,
+#03200d,
+#075522
+);
+
+z-index:9999;
+
+}
+
+
+.login-box{
+
+width:90%;
+max-width:400px;
+
+padding:35px;
+
+border-radius:25px;
+
+background:
+rgba(255,255,255,.12);
+
+backdrop-filter:blur(15px);
+
+text-align:center;
+
+box-shadow:
+0 20px 60px rgba(0,0,0,.5);
+
+}
+
+
+.login-logo{
+
+font-size:70px;
+
+}
+
+
+.login-title{
+
+font-size:30px;
+font-weight:bold;
+
+}
+
+
+.login-sub{
+
+color:#c8f5d2;
+
+margin-bottom:25px;
+
+}
+
+
+input{
+
+width:100%;
+
+padding:14px;
+
+margin:8px 0;
+
+border-radius:12px;
+
+border:none;
+
+background:
+rgba(0,0,0,.3);
+
+color:white;
+
+}
+
+
+button{
+
+padding:13px 20px;
+
+border:0;
+
+border-radius:12px;
+
+font-weight:bold;
+
+cursor:pointer;
+
+}
+
+
+.login-btn{
+
+width:100%;
+
+background:#28a745;
+
+color:white;
+
+}
+
+
+.error{
+
+color:#ffaaaa;
+
+margin-top:10px;
+
+}
+
+
+
+#mainSystem{
+
+display:none;
+
+}
+
+
+.page{
+
+max-width:1200px;
+
+margin:auto;
+
+padding:15px;
+
+}
+
+
+
+.hero{
+
+text-align:center;
+
+}
+
+
+.logo{
+
+font-size:70px;
+
+animation:pulse 3s infinite;
+
+}
+
+
+@keyframes pulse{
+
+50%{
+transform:scale(1.1);
+}
+
+}
+
+
+
+.panel{
+
+background:
+rgba(255,255,255,.1);
+
+border-radius:20px;
+
+padding:20px;
+
+margin:15px 0;
+
+backdrop-filter:blur(10px);
+
+}
+
+
+
+.menu{
+
+display:grid;
+
+grid-template-columns:
+repeat(5,1fr);
+
+gap:10px;
+
+}
+
+
+
+.menu a{
+
+color:white;
+
+text-decoration:none;
+
+background:
+rgba(255,255,255,.12);
+
+padding:20px 5px;
+
+text-align:center;
+
+border-radius:15px;
+
+}
+
+
+.menu a:hover{
+
+transform:translateY(-5px);
+
+background:
+rgba(255,255,255,.25);
+
+}
+
+
+
+.summary{
+
+display:grid;
+
+grid-template-columns:
+repeat(4,1fr);
+
+gap:10px;
+
+}
+
+
+
+.box{
+
+background:
+rgba(255,255,255,.1);
+
+padding:20px;
+
+border-radius:15px;
+
+text-align:center;
+
+}
+
+
+.num{
+
+font-size:35px;
+font-weight:bold;
+
+}
+
+
+
+.row{
+
+background:
+rgba(255,255,255,.1);
+
+padding:15px;
+
+border-radius:12px;
+
+margin-top:10px;
+
+}
+
+
+
+.green{
+
+background:#1b8b42;
+color:white;
+
+}
+
+
+.red{
+
+background:#b83232;
+color:white;
+
+}
+
+
+.blue{
+
+background:#1769aa;
+color:white;
+
+}
+
+
+@media(max-width:800px){
+
+.menu{
+
+grid-template-columns:
+repeat(2,1fr);
+
+}
+
+
+.summary{
+
+grid-template-columns:
+repeat(2,1fr);
+
+}
+
+}
+
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- LOGIN -->
+
+<div id="loginScreen">
+
+
+<div class="login-box">
+
+
+<div class="login-logo">
+🌾
+</div>
+
+
+<div class="login-title">
+ระบบกลุ่มข้าวสาร
+</div>
+
+
+<div class="login-sub">
+บ้านร่องเข็ม หมู่ที่ 6
+</div>
+
+
+<input id="username"
+placeholder="ชื่อผู้ใช้">
+
+
+<input id="password"
+type="password"
+placeholder="รหัสผ่าน">
+
+
+<button class="login-btn"
+onclick="login()">
+
+🔐 เข้าสู่ระบบ
+
+</button>
+
+
+<div id="error"
+class="error">
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<!-- MAIN -->
+
+
+<div id="mainSystem">
+
+
+<div class="page">
+
+
+<div class="hero">
+
+<div class="logo">
+🌾
+</div>
+
+
+<h1>
+ระบบกลุ่มข้าวสาร
+</h1>
+
+
+<h2>
+บ้านร่องเข็ม หมู่ที่ 6
+</h2>
+
+
+<p>
+สมาชิกทั้งหมด
+<b id="memberTotal">
+192
+</b>
+ครัวเรือน
+</p>
+
+
+</div>
+
+
+
+<div class="panel">
+
+
+<div class="menu">
+
+
+<a href="members.html">
+
+👥<br>
+ทะเบียนสมาชิก
+
+</a>
+
+
+<a href="งานศพ.html">
+
+⚰️<br>
+แจ้งเสียชีวิต
+
+</a>
+
+
+<a href="#rice">
+
+🌾<br>
+บันทึกข้าวสาร
+
+</a>
+
+
+<a href="#report">
+
+📊<br>
+รายงาน
+
+</a>
+
+
+<a href="#follow">
+
+⚠️<br>
+ติดตาม
+
+</a>
+
+
+</div>
+
+
+</div>
+
+
+
+<div class="summary">
+
+
+<div class="box">
+
+👥
+
+<div class="num"
+id="total">
+
+192
+
+</div>
+
+สมาชิก
+
+</div>
+
+
+
+<div class="box">
+
+✅
+
+<div class="num"
+id="sent">
+
+0
+
+</div>
+
+ส่งแล้ว
+
+</div>
+
+
+<div class="box">
+
+⚠️
+
+<div class="num"
+id="pending">
+
+192
+
+</div>
+
+ค้างส่ง
+
+</div>
+
+
+<div class="box">
+
+🌾
+
+<div class="num"
+id="rice">
+
+0
+
+</div>
+
+ถุง
+
+</div>
+
+
+</div>
+
+
+<div class="panel">
+
+<h2>
+🕊️ งานศพล่าสุด
+</h2>
+
+
+<div class="row"
+id="latest">
+
+ยังไม่มีข้อมูล
+
+</div>
+
+
+</div>
+  <!-- ระบบบันทึกข้าวสาร -->
+
+<div class="panel" id="rice">
+
+<h2>
+🌾 บันทึกข้าวสารช่วยงานศพ
+</h2>
+
+
+<select id="funeralSelect"
+style="width:100%;padding:12px;border-radius:10px">
+
+<option value="">
+-- เลือกงานศพ --
+</option>
+
+</select>
+
+
+<br><br>
+
+
+<input id="searchMember"
+placeholder="🔎 ค้นหาชื่อสมาชิก หรือบ้านเลขที่">
+
+
+<div id="memberResult"></div>
+
+
+</div>
+
+
+
+<!-- รายงาน -->
+
+<div class="panel" id="report">
+
+<h2>
+📊 รายงานแยกตามงานศพ
+</h2>
+
+
+<div id="reportArea">
+
+เลือกงานศพเพื่อดูรายงาน
+
+</div>
+
+
+</div>
+
+
+
+
+<!-- ติดตาม -->
+
+<div class="panel" id="follow">
+
+<h2>
+⚠️ สมาชิกที่ต้องติดตาม
+</h2>
+
+
+<div id="followArea">
+
+ยังไม่มีข้อมูล
+
+</div>
+
+
+</div>
+
+
+
+<button class="red"
+onclick="logout()">
+
+🚪 ออกจากระบบ
+
+</button>
+
+
+
+<footer style="
+text-align:center;
+padding:30px;
+color:#b8e8c3">
+
+🌾 กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
+
+<br>
+
+จัดทำโดย นายศักรนนทน์ ขัติย์วงศ์
+
+</footer>
+
+
+
+</div>
+
+</div>
+
+
+
+
+<script>
+
+
+// =====================
+// LOGIN
+// =====================
+
+
+const USERNAME="admin";
+
+const PASSWORD="123456";
+
+
+
+function login(){
+
+
+let u=
+document.getElementById("username").value;
+
+
+let p=
+document.getElementById("password").value;
+
+
+
+if(
+u===USERNAME &&
+p===PASSWORD
+){
+
+
+sessionStorage.setItem(
+"login",
+"true"
+);
+
+
+showSystem();
+
+
+}
+
+else{
+
+
+document.getElementById("error")
+.innerHTML=
+"❌ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง";
+
+
+}
+
+
+}
+
+
+
+function showSystem(){
+
+
+document.getElementById(
+"loginScreen"
+).style.display="none";
+
+
+document.getElementById(
+"mainSystem"
+).style.display="block";
+
+
+loadData();
+
+
+}
+
+
+
+function logout(){
+
+
+sessionStorage.removeItem(
+"login"
+);
+
+
+location.reload();
+
+
+}
+
+
+
+// =====================
+// DATABASE
+// =====================
+
+
+let members=[];
+
+
+let funerals=[];
+
+
+let riceRecords=[];
+
+
+
+
+function loadData(){
+
+
+members=
+JSON.parse(
+localStorage.getItem("members")
+||
+"[]"
+);
+
+
+
+funerals=
+JSON.parse(
+localStorage.getItem("funerals")
+||
+"[]"
+);
+
+
+
+riceRecords=
+JSON.parse(
+localStorage.getItem("rice")
+||
+"[]"
+);
+
+
+
+if(members.length===0){
+
+
+members=[
+
+{
+id:1,
+name:"นายจักรวัตร พระประยุทธนัง",
+house:"2"
+}
+
+];
+
+
+}
+
+
+
+showSummary();
+
+showFuneral();
+
+
+}
+
+
+
+
+// =====================
+// SUMMARY
+// =====================
+
+
+function showSummary(){
+
+
+document.getElementById(
+"total"
+).innerHTML=
+members.length;
+
+
+document.getElementById(
+"memberTotal"
+).innerHTML=
+members.length;
+
+
+
+document.getElementById(
+"rice"
+).innerHTML=
+riceRecords.length;
+
+
+
+}
+
+
+
+
+// =====================
+// งานศพ
+// =====================
+
+
+function showFuneral(){
+
+
+let box=
+document.getElementById(
+"funeralSelect"
+);
+
+
+funerals.forEach(f=>{
+
+
+let op=
+document.createElement(
+"option"
+);
+
+
+op.value=f.id;
+
+
+op.textContent=
+"⚰️ "+f.name;
+
+
+box.appendChild(op);
+
+
+
+});
+
+
+
+if(funerals.length){
+
+
+document.getElementById(
+"latest"
+).innerHTML=
+
+`
+⚰️ ${funerals[0].name}
+<br>
+📅 ${funerals[0].date || "-"}
+
+`;
+
+
+}
+
+
+
+}
+
+
+
+// =====================
+// ค้นหาสมาชิก
+// =====================
+
+
+
+document.getElementById(
+"searchMember"
+)
+.addEventListener(
+"input",
+searchMember
+);
+
+
+
+function searchMember(){
+
+
+let key=
+document.getElementById(
+"searchMember"
+).value;
+
+
+
+let result=
+members.filter(m=>
+
+
+m.name.includes(key)
+||
+m.house.includes(key)
+
+
+);
+
+
+
+let html="";
+
+
+
+result.forEach(m=>{
+
+
+html+=`
+
+<div class="row">
+
+
+<b>
+${m.name}
+</b>
+
+
+<br>
+
+🏠 บ้านเลขที่ ${m.house}
+
+
+<br>
+
+
+<button class="green"
+onclick="saveRice('${m.id}')">
+
+✅ บันทึก 1 ถุง
+
+</button>
+
+
+</div>
+
+
+`;
+
+
+});
+
+
+
+document.getElementById(
+"memberResult"
+).innerHTML=
+html;
+
+
+}
+
+
+
+
+// =====================
+// บันทึกข้าวสาร
+// =====================
+
+
+
+function saveRice(id){
+
+
+let funeral=
+document.getElementById(
+"funeralSelect"
+).value;
+
+
+
+if(!funeral){
+
+
+alert(
+"กรุณาเลือกงานศพ"
+);
+
+
+return;
+
+}
+
+
+
+riceRecords.push({
+
+member:id,
+
+funeral:funeral,
+
+date:
+new Date()
+.toLocaleDateString(
+"th-TH"
+)
+
+});
+
+
+
+localStorage.setItem(
+
+"rice",
+
+JSON.stringify(
+riceRecords
+)
+
+);
+
+
+
+alert(
+"บันทึกเรียบร้อย"
+);
+
+
+
+showSummary();
+
+
+
+}
+
+
+// =====================
+// รายงาน
+// =====================
+
+
+document
+.getElementById("funeralSelect")
+.addEventListener(
+"change",
+showReport
+);
+
+
+
+function showReport(){
+
+
+let funeral=
+document.getElementById(
+"funeralSelect"
+).value;
+
+
+
+if(!funeral){
+
+document.getElementById(
+"reportArea"
+).innerHTML=
+"เลือกงานศพเพื่อดูรายงาน";
+
+return;
+
+}
+
+
+
+let sent =
+riceRecords.filter(
+r=>r.funeral==funeral
+);
+
+
+
+let html=`
+
+<div class="row">
+
+👥 สมาชิกทั้งหมด :
+${members.length}
+
+<br>
+
+✅ ส่งแล้ว :
+${sent.length}
+
+<br>
+
+⚠️ ยังไม่ส่ง :
+${members.length-sent.length}
+
+<br>
+
+🌾 ข้าวสาร :
+${sent.length} ถุง
+
+
+</div>
+
+`;
+
+
+
+html+=`
+
+<h3>
+รายชื่อสมาชิกที่ส่งแล้ว
+</h3>
+
+`;
+
+
+
+sent.forEach(r=>{
+
+
+let m=
+members.find(
+x=>x.id==r.member
+);
+
+
+
+if(m){
+
+html+=`
+
+<div class="row">
+
+✅ ${m.name}
+
+<br>
+
+🏠 บ้านเลขที่ ${m.house}
+
+</div>
+
+`;
+
+}
+
+
+});
+
+
+
+document.getElementById(
+"reportArea"
+).innerHTML=
+html;
+
+
+
+}
+
+
+
+// =====================
+// สมาชิกติดตาม
+// =====================
+
+
+function showFollow(){
+
+
+let box=
+document.getElementById(
+"followArea"
+);
+
+
+
+let html="";
+
+
+members.forEach(m=>{
+
+
+let count=
+riceRecords.filter(
+r=>r.member==m.id
+).length;
+
+
+
+if(count===0){
+
+
+html+=`
+
+<div class="row">
+
+
+⚠️ ${m.name}
+
+<br>
+
+🏠 บ้านเลขที่ ${m.house}
+
+
+<br>
+
+ยังไม่เคยส่งข้าวสาร
+
+
+</div>
+
+
+`;
+
+
+}
+
+
+
+});
+
+
+
+if(html===""){
+
+html=
+"✅ สมาชิกทุกคนดำเนินการแล้ว";
+
+}
+
+
+
+box.innerHTML=
+html;
+
+
+
+}
+
+
+
+
+// =====================
+// โหลดอัตโนมัติ
+// =====================
+
+
+if(
+sessionStorage.getItem("login")
+==="true"
+){
+
+showSystem();
+
+}
+
+
+
+// =====================
+// ปิดระบบ
+// =====================
+
+
+</script>
+
+
+</body>
+
+</html>
+
+</section>
