@@ -2,16 +2,16 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ติดตามสมาชิกค้างส่ง กลุ่มข้าวสารบ้านร่องเข็ม</title>
 
 <style>
 body{
-font-family:Tahoma,sans-serif;
+font-family:Tahoma;
 background:#f1f8e9;
 padding:15px;
 }
-.header{
+header{
 background:#2e7d32;
 color:white;
 padding:20px;
@@ -20,48 +20,31 @@ text-align:center;
 }
 .card{
 background:white;
+padding:15px;
 margin-top:15px;
-padding:15px;
 border-radius:15px;
-box-shadow:0 2px 8px #ccc;
+box-shadow:0 2px 8px #bbb;
 }
-.item{
-padding:15px;
+.member{
+padding:12px;
 margin:10px 0;
-border-radius:12px;
 background:#fafafa;
-border-left:6px solid #ff9800;
+border-radius:10px;
+border-left:5px solid orange;
 }
 .cut{
 border-left-color:red;
+}
+input,textarea,button{
+width:100%;
+padding:10px;
+margin-top:8px;
+border-radius:8px;
 }
 button{
 background:#2e7d32;
 color:white;
 border:0;
-padding:10px;
-border-radius:8px;
-}
-.modal{
-display:none;
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:#0008;
-}
-.box{
-background:white;
-width:90%;
-margin:80px auto;
-padding:20px;
-border-radius:15px;
-}
-input,select,textarea{
-width:100%;
-padding:10px;
-margin:5px;
 }
 </style>
 
@@ -69,201 +52,241 @@ margin:5px;
 
 <body>
 
-<div class="header">
+<header>
 <h2>🌾 ระบบติดตามสมาชิกค้างส่ง</h2>
 <h3>กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</h3>
 <p>สมาชิกทั้งหมด 192 ครัวเรือน</p>
+</header>
+
+
+<div class="card">
+
+<h2>🔎 ค้นหาสมาชิก</h2>
+
+<input id="search"
+placeholder="ค้นหาชื่อ หรือ บ้านเลขที่"
+onkeyup="show()">
+
 </div>
 
 
 <div class="card">
 
-<h2>🟡 สมาชิกติดตาม</h2>
+<h2>⚠️ รายชื่อค้างส่ง</h2>
 
-<div class="item">
-<b>นายวุฒิภัทร เตชะวงค์</b><br>
-บ้านเลขที่ 91/1<br>
-ค้างส่ง 1 ครั้ง<br>
-งานศพ: นายเกษมสุข ใฝ่ใจ
-<br><br>
-<button onclick="openForm('นายวุฒิภัทร เตชะวงค์')">
-📞 ติดตาม
-</button>
-</div>
-
-
-<div class="item">
-<b>นายต่วน ทาทอง</b><br>
-บ้านเลขที่ 114<br>
-ค้างส่ง 1 ครั้ง<br>
-งานศพ: นายเกษมสุข ใฝ่ใจ
-<br><br>
-<button onclick="openForm('นายต่วน ทาทอง')">
-📞 ติดตาม
-</button>
-</div>
-
-
-<div class="item">
-<b>นายสมศีล งามจิต</b><br>
-บ้านเลขที่ 135<br>
-ค้างส่ง 1 ครั้ง<br>
-งานศพ: นายบูรณพิภพ ผัดดี
-<br><br>
-<button onclick="openForm('นายสมศีล งามจิต')">
-📞 ติดตาม
-</button>
-</div>
-
-
-</div>
-
-
-
-<div class="card">
-
-<h2>🔴 เสนอพิจารณาตัดสิทธิ์</h2>
-
-
-<div class="item cut">
-<b>นายประหยัด ปิงเมือง</b><br>
-บ้านเลขที่ 120<br>
-ค้างส่ง 2 ครั้ง
-</div>
-
-
-<div class="item cut">
-<b>นายตื่น มิ่งขวัญ</b><br>
-บ้านเลขที่ 176<br>
-ค้างส่ง 2 ครั้ง
-</div>
-
-
-<div class="item cut">
-<b>น.ส.สำรอง มหาวรรณศรี</b><br>
-บ้านเลขที่ 200<br>
-ค้างส่ง 2 ครั้ง
-</div>
-
-
-<div class="item cut">
-<b>นายบรรพต อินวงค์</b><br>
-บ้านเลขที่ 212<br>
-ค้างส่ง 2 ครั้ง
-</div>
-
-
-<div class="item cut">
-<b>นางลวงทิพย์ ใฝ่จิต</b><br>
-บ้านเลขที่ 315<br>
-ค้างส่ง 2 ครั้ง
-</div>
-
-
-<div class="item cut">
-<b>นายประทุม ดาวกระจาย</b><br>
-บ้านเลขที่ 328<br>
-ค้างส่ง 2 ครั้ง
-</div>
-
+<div id="list"></div>
 
 </div>
 
 
 <div class="card">
+
+<h2>🔴 พิจารณาตัดสิทธิ์</h2>
+
+<div id="cut"></div>
+
+</div>
+
+
+<div class="card">
+
 <h2>📋 ประวัติการติดตาม</h2>
+
 <div id="history"></div>
-</div>
-
-
-<div class="modal" id="modal">
-
-<div class="box">
-
-<h3>📞 บันทึกการติดตาม</h3>
-
-<input id="name" readonly>
-
-<input id="date" type="date">
-
-<select id="result">
-<option>รับทราบ</option>
-<option>ขอผ่อนผัน</option>
-<option>ชำระแล้ว</option>
-<option>เสนอที่ประชุม</option>
-</select>
-
-
-<textarea id="note" placeholder="หมายเหตุ"></textarea>
-
-<button onclick="save()">💾 บันทึก</button>
-<button onclick="closeForm()">ปิด</button>
 
 </div>
-</div>
+
 
 
 <script>
 
-function openForm(n){
-modal.style.display="block";
-name.value=n;
+let members=[
+
+{
+name:"นายวุฒิภัทร เตชะวงค์",
+house:"91/1",
+debt:1,
+funeral:"นายเกษมสุข ใฝ่ใจ",
+status:"ติดตาม"
+},
+
+{
+name:"นายต่วน ทาทอง",
+house:"114",
+debt:1,
+funeral:"นายเกษมสุข ใฝ่ใจ",
+status:"ติดตาม"
+},
+
+{
+name:"นายสมศีล งามจิต",
+house:"135",
+debt:1,
+funeral:"นายบูรณพิภพ ผัดดี",
+status:"ติดตาม"
+},
+
+{
+name:"น.ส.ยุพา ใจดี",
+house:"160",
+debt:1,
+funeral:"นายเกษมสุข ใฝ่ใจ",
+status:"ติดตาม"
+},
+
+
+{
+name:"นายประหยัด ปิงเมือง",
+house:"120",
+debt:2,
+funeral:"นายเกษมสุข ใฝ่ใจ",
+status:"ตัดสิทธิ์"
+},
+
+{
+name:"นายตื่น มิ่งขวัญ",
+house:"176",
+debt:2,
+funeral:"นายเกษมสุข ใฝ่ใจ",
+status:"ตัดสิทธิ์"
+},
+
+{
+name:"น.ส.สำรอง มหาวรรณศรี",
+house:"200",
+debt:2,
+funeral:"นายเกษมสุข ใฝ่ใจ",
+status:"ตัดสิทธิ์"
+},
+
+{
+name:"นายบรรพต อินวงค์",
+house:"212",
+debt:2,
+funeral:"นายเกษมสุข ใฝ่ใจ",
+status:"ตัดสิทธิ์"
+},
+
+{
+name:"นางลวงทิพย์ ใฝ่จิต",
+house:"315",
+debt:2,
+funeral:"นายเกษมสุข ใฝ่ใจ",
+status:"ตัดสิทธิ์"
+},
+
+{
+name:"นายประทุม ดาวกระจาย",
+house:"328",
+debt:2,
+funeral:"นายเกษมสุข ใฝ่ใจ",
+status:"ตัดสิทธิ์"
 }
 
-
-function closeForm(){
-modal.style.display="none";
-}
-
-
-function save(){
-
-let data={
-name:name.value,
-date:date.value,
-result:result.value,
-note:note.value
-};
-
-
-let list=JSON.parse(localStorage.getItem("follow")||"[]");
-
-list.push(data);
-
-localStorage.setItem("follow",JSON.stringify(list));
-
-show();
-
-closeForm();
-
-}
+];
 
 
 function show(){
 
-let list=JSON.parse(localStorage.getItem("follow")||"[]");
+let key=document.getElementById("search").value;
+
+let normal="";
+let cut="";
+
+members
+.filter(x=>x.name.includes(key)||x.house.includes(key))
+.forEach(x=>{
+
+
+let html=`
+
+<div class="member">
+
+<b>${x.name}</b><br>
+🏠 บ้านเลขที่ ${x.house}<br>
+📦 ค้างส่ง ${x.debt} ครั้ง<br>
+⚰️ ${x.funeral}<br>
+สถานะ : ${x.status}
+
+<br>
+
+<button onclick="follow('${x.name}')">
+📞 บันทึกติดตาม
+</button>
+
+</div>
+
+`;
+
+if(x.status=="ตัดสิทธิ์")
+cut+=html;
+else
+normal+=html;
+
+
+});
+
+
+document.getElementById("list").innerHTML=normal;
+document.getElementById("cut").innerHTML=cut;
+
+loadHistory();
+
+}
+
+
+
+function follow(name){
+
+let note=prompt("บันทึกผลการติดตาม");
+
+let data=JSON.parse(localStorage.follow||"[]");
+
+data.push({
+
+name:name,
+date:new Date().toLocaleDateString("th-TH"),
+note:note
+
+});
+
+
+localStorage.follow=JSON.stringify(data);
+
+loadHistory();
+
+}
+
+
+
+function loadHistory(){
+
+let data=JSON.parse(localStorage.follow||"[]");
 
 history.innerHTML="";
 
-list.forEach((x,i)=>{
+data.forEach((x,i)=>{
 
 history.innerHTML+=`
-<div class="item">
+
+<div class="member">
+
 ${i+1}. ${x.name}<br>
 วันที่ ${x.date}<br>
-ผล ${x.result}<br>
 ${x.note}
+
 </div>
+
 `;
 
 });
 
 }
 
+
 show();
 
 </script>
-
 
 </body>
 </html>
