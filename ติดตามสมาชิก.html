@@ -1,213 +1,98 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<h2>⚠️ สมาชิกที่ต้องติดตาม</h2>
 
-<title>ติดตามสมาชิกค้างส่ง</title>
+<p>
+กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6<br>
+สมาชิกทั้งหมด 192 ครัวเรือน<br>
+ต้องติดตาม 10 ครัวเรือน
+</p>
 
-<style>
-body{
-    font-family:"Sarabun",sans-serif;
-    background:#f4f7f2;
-    margin:0;
-    padding:20px;
-}
+<table border="1" width="100%" cellpadding="8">
+<tr>
+<th>ลำดับ</th>
+<th>ชื่อสมาชิก</th>
+<th>บ้านเลขที่</th>
+<th>ค้างส่ง</th>
+<th>งานศพ</th>
+</tr>
 
-.header{
-    background:#2e7d32;
-    color:white;
-    padding:20px;
-    border-radius:15px;
-    text-align:center;
-}
+<tr>
+<td>1</td>
+<td>นายวุฒิภัทร เตชะวงค์</td>
+<td>91/1</td>
+<td>1 ครั้ง</td>
+<td>นายเกษมสุข ใฝ่ใจ</td>
+</tr>
 
-.card{
-    background:white;
-    margin-top:20px;
-    padding:20px;
-    border-radius:15px;
-    box-shadow:0 3px 10px #ddd;
-}
+<tr>
+<td>2</td>
+<td>นายต่วน ทาทอง</td>
+<td>114</td>
+<td>1 ครั้ง</td>
+<td>นายเกษมสุข ใฝ่ใจ</td>
+</tr>
 
-.summary{
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-}
+<tr>
+<td>3</td>
+<td>นายประหยัด ปิงเมือง</td>
+<td>120</td>
+<td>2 ครั้ง</td>
+<td>นายเกษมสุข ใฝ่ใจ</td>
+</tr>
 
-.box{
-    flex:1;
-    min-width:150px;
-    padding:15px;
-    border-radius:12px;
-    text-align:center;
-    font-size:20px;
-}
+<tr>
+<td>4</td>
+<td>นายสมศีล งามจิต</td>
+<td>135</td>
+<td>1 ครั้ง</td>
+<td>นายบูรณิพิภพ ผัดดี</td>
+</tr>
 
-.green{background:#c8e6c9;}
-.yellow{background:#fff59d;}
-.red{background:#ffcdd2;}
+<tr>
+<td>5</td>
+<td>น.ส.ยุพา ใจดี</td>
+<td>160</td>
+<td>1 ครั้ง</td>
+<td>นายเกษมสุข ใฝ่ใจ</td>
+</tr>
 
-.member{
-    background:#fff;
-    padding:15px;
-    margin:12px 0;
-    border-radius:12px;
-    border-left:6px solid #ff9800;
-}
+<tr>
+<td>6</td>
+<td>นายตื่น มิ่งขวัญ</td>
+<td>176</td>
+<td>2 ครั้ง</td>
+<td>นายเกษมสุข ใฝ่ใจ</td>
+</tr>
 
-.member.redline{
-    border-left-color:#d32f2f;
-}
+<tr>
+<td>7</td>
+<td>น.ส.สำรอง มหาวรรณศรี</td>
+<td>200</td>
+<td>2 ครั้ง</td>
+<td>นายเกษมสุข ใฝ่ใจ</td>
+</tr>
 
-button{
-    background:#2e7d32;
-    color:white;
-    border:0;
-    padding:8px 15px;
-    border-radius:8px;
-}
+<tr>
+<td>8</td>
+<td>นายบรรพต อินวงค์</td>
+<td>212</td>
+<td>2 ครั้ง</td>
+<td>นายเกษมสุข ใฝ่ใจ</td>
+</tr>
 
-</style>
-</head>
+<tr>
+<td>9</td>
+<td>นางลวงทิพย์ ใฝ่จิต</td>
+<td>315</td>
+<td>2 ครั้ง</td>
+<td>นายเกษมสุข ใฝ่ใจ</td>
+</tr>
 
-<body>
+<tr>
+<td>10</td>
+<td>นายประทุม ดาวกระจาย</td>
+<td>328</td>
+<td>2 ครั้ง</td>
+<td>นายเกษมสุข ใฝ่ใจ</td>
+</tr>
 
-<div class="header">
-<h2>⚠️ ติดตามสมาชิกค้างส่ง</h2>
-<p>กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</p>
-</div>
-
-
-<div class="card summary">
-
-<div class="box green">
-👥<br>
-192<br>
-สมาชิก
-</div>
-
-<div class="box yellow">
-🟡<br>
-4<br>
-ติดตาม
-</div>
-
-<div class="box red">
-🔴<br>
-6<br>
-พิจารณาตัดสิทธิ์
-</div>
-
-</div>
-
-
-
-<div class="card">
-
-<h3>🟡 สมาชิกค้างส่ง (ติดตาม)</h3>
-
-
-<div class="member">
-<b>1. นายวุฒิภัทร เตชะวงค์</b><br>
-🏠 บ้านเลขที่ 91/1<br>
-📦 ค้างส่ง 1 ครั้ง<br>
-⚰️ งานศพ นายเกษมสุข ใฝ่ใจ
-<br><br>
-<button>📞 บันทึกติดตาม</button>
-</div>
-
-
-<div class="member">
-<b>2. นายต่วน ทาทอง</b><br>
-🏠 บ้านเลขที่ 114<br>
-📦 ค้างส่ง 1 ครั้ง<br>
-⚰️ งานศพ นายเกษมสุข ใฝ่ใจ
-<br><br>
-<button>📞 บันทึกติดตาม</button>
-</div>
-
-
-<div class="member">
-<b>3. นายสมศีล งามจิต</b><br>
-🏠 บ้านเลขที่ 135<br>
-📦 ค้างส่ง 1 ครั้ง<br>
-⚰️ งานศพ นายบูรณพิภพ ผัดดี
-<br><br>
-<button>📞 บันทึกติดตาม</button>
-</div>
-
-
-<div class="member">
-<b>4. น.ส.ยุพา ใจดี</b><br>
-🏠 บ้านเลขที่ 160<br>
-📦 ค้างส่ง 1 ครั้ง<br>
-⚰️ งานศพ นายเกษมสุข ใฝ่ใจ
-<br><br>
-<button>📞 บันทึกติดตาม</button>
-</div>
-
-
-</div>
-
-
-
-
-<div class="card">
-
-<h3>🔴 เสนอพิจารณาตัดสิทธิ์</h3>
-
-
-<div class="member redline">
-<b>1. นายประหยัด ปิงเมือง</b><br>
-🏠 บ้านเลขที่ 120<br>
-📦 ค้างส่ง 2 ครั้ง<br>
-⚰️ งานศพ นายเกษมสุข ใฝ่ใจ
-</div>
-
-
-<div class="member redline">
-<b>2. นายตื่น มิ่งขวัญ</b><br>
-🏠 บ้านเลขที่ 176<br>
-📦 ค้างส่ง 2 ครั้ง<br>
-⚰️ งานศพ นายเกษมสุข ใฝ่ใจ
-</div>
-
-
-<div class="member redline">
-<b>3. น.ส.สำรอง มหาวรรณศรี</b><br>
-🏠 บ้านเลขที่ 200<br>
-📦 ค้างส่ง 2 ครั้ง<br>
-⚰️ งานศพ นายเกษมสุข ใฝ่ใจ
-</div>
-
-
-<div class="member redline">
-<b>4. นายบรรพต อินวงค์</b><br>
-🏠 บ้านเลขที่ 212<br>
-📦 ค้างส่ง 2 ครั้ง<br>
-⚰️ งานศพ นายเกษมสุข ใฝ่ใจ
-</div>
-
-
-<div class="member redline">
-<b>5. นางลวงทิพย์ ใฝ่จิต</b><br>
-🏠 บ้านเลขที่ 315<br>
-📦 ค้างส่ง 2 ครั้ง<br>
-⚰️ งานศพ นายเกษมสุข ใฝ่ใจ
-</div>
-
-
-<div class="member redline">
-<b>6. นายประทุม ดาวกระจาย</b><br>
-🏠 บ้านเลขที่ 328<br>
-📦 ค้างส่ง 2 ครั้ง<br>
-⚰️ งานศพ นายเกษมสุข ใฝ่ใจ
-</div>
-
-
-</div>
-
-</body>
-</html>
+</table>
