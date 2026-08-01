@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Dashboard | ระบบกลุ่มข้าวสาร</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Tahoma,sans-serif;
+}
+
+body{
+background:#eef5ef;
+}
+
+header{
+background:#198754;
+color:white;
+padding:20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+box-shadow:0 2px 10px rgba(0,0,0,.2);
+}
+
+header h2{
+font-size:24px;
+}
+
+.logout{
+background:#dc3545;
+color:white;
+border:none;
+padding:10px 18px;
+border-radius:8px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.logout:hover{
+background:#bb2d3b;
+}
+
+.container{
+max-width:1200px;
+margin:auto;
+padding:20px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+}
+
+.card{
+background:white;
+border-radius:15px;
+padding:25px;
+text-align:center;
+box-shadow:0 5px 20px rgba(0,0,0,.08);
+transition:.3s;
+cursor:pointer;
+}
+
+.card:hover{
+transform:translateY(-5px);
+}
+
+.card h1{
+font-size:55px;
+margin-bottom:15px;
+}
+
+.card h3{
+color:#198754;
+margin-bottom:10px;
+}
+
+footer{
+margin-top:40px;
+padding:20px;
+text-align:center;
+color:#666;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<script>
+
+if(sessionStorage.getItem("loggedIn")!="true"){
+location.href="index.html";
+}
+
+</script>
+
+<header>
+
+<h2>🌾 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</h2>
+
+<button class="logout" onclick="logout()">
+🚪 ออกจากระบบ
+</button>
+
+</header>
+
+<div class="container">
+
+<div class="grid">
+
+<div class="card" onclick="location.href='members.html'">
+<h1>👥</h1>
+<h3>ทะเบียนสมาชิก</h3>
+<p>จัดการสมาชิกทั้งหมด</p>
+</div>
+
+<div class="card" onclick="location.href='funeral.html'">
+<h1>⚰️</h1>
+<h3>งานศพ</h3>
+<p>จัดการข้อมูลงานศพ</p>
+</div>
+
+<div class="card" onclick="location.href='receive.html'">
+<h1>🌾</h1>
+<h3>รับข้าวสาร</h3>
+<p>บันทึกการส่งข้าวสาร</p>
+</div>
+
+<div class="card" onclick="location.href='stock.html'">
+<h1>📦</h1>
+<h3>สต็อกข้าวสาร</h3>
+<p>ตรวจสอบจำนวนคงเหลือ</p>
+</div>
+
+<div class="card" onclick="location.href='report.html'">
+<h1>📊</h1>
+<h3>รายงาน</h3>
+<p>สรุปรายงานทั้งหมด</p>
+</div>
+
+<div class="card" onclick="location.href='follow.html'">
+<h1>⚠️</h1>
+<h3>สมาชิกค้างส่ง</h3>
+<p>ติดตามสมาชิกที่ยังไม่ส่ง</p>
+</div>
+
+<div class="card" onclick="location.href='backup.html'">
+<h1>💾</h1>
+<h3>สำรองข้อมูล</h3>
+<p>Backup / Restore</p>
+</div>
+
+<div class="card" onclick="location.href='setting.html'">
+<h1>⚙️</h1>
+<h3>ตั้งค่าระบบ</h3>
+<p>ผู้ดูแลและข้อมูลระบบ</p>
+</div>
+
+</div>
+
+</div>
+
+<footer>
+
+ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6<br>
+Version 2.0
+
+</footer>
+
+<script>
+
+function logout(){
+
+if(confirm("ต้องการออกจากระบบหรือไม่?")){
+
+sessionStorage.removeItem("loggedIn");
+
+location.href="index.html";
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
