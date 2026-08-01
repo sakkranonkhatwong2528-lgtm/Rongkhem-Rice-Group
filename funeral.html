@@ -1,1966 +1,343 @@
 <!DOCTYPE html>
 <html lang="th">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
-
-<title>
-⚰️ แจ้งเสียชีวิต / งานศพ
-</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>จัดการงานศพ</title>
 
 <style>
 
-*{
-    box-sizing:border-box;
-}
-
 body{
-    margin:0;
-    padding:20px;
-
-    font-family:
-        Tahoma,
-        "Noto Sans Thai",
-        sans-serif;
-
-    color:#fff;
-
-    min-height:100vh;
-
-    background:
-        linear-gradient(
-            135deg,
-            #06150c,
-            #0b4825,
-            #0d6733
-        );
-}
-
-.container{
-    max-width:1100px;
-    margin:auto;
+margin:0;
+font-family:Tahoma,sans-serif;
+background:#f4f7f4;
 }
 
 .header{
-    text-align:center;
-    padding:30px 20px;
-    margin-bottom:20px;
-
-    border-radius:25px;
-
-    background:
-        rgba(255,255,255,.10);
-
-    border:
-        1px solid
-        rgba(255,255,255,.18);
-
-    backdrop-filter:blur(15px);
-
-    box-shadow:
-        0 20px 50px
-        rgba(0,0,0,.25);
+background:#198754;
+color:#fff;
+padding:20px;
+text-align:center;
 }
 
-.header-icon{
-    font-size:60px;
-    margin-bottom:10px;
-}
-
-.header h1{
-    margin:0;
-
-    font-size:
-        clamp(
-            27px,
-            5vw,
-            42px
-        );
-}
-
-.header p{
-    margin:10px 0 0;
-    color:#c8edd2;
+.container{
+max-width:900px;
+margin:auto;
+padding:20px;
 }
 
 .card{
-
-    background:
-        rgba(255,255,255,.09);
-
-    border:
-        1px solid
-        rgba(255,255,255,.17);
-
-    border-radius:25px;
-
-    padding:25px;
-
-    margin-bottom:20px;
-
-    backdrop-filter:
-        blur(15px);
-
-    box-shadow:
-        0 20px 50px
-        rgba(0,0,0,.22);
+background:#fff;
+padding:20px;
+margin-bottom:15px;
+border-radius:15px;
+box-shadow:0 3px 10px rgba(0,0,0,.1);
 }
 
-.card h2{
-    margin-top:0;
-    color:#fff0ad;
-}
-
-.connection-note{
-    margin-top:15px;
-    padding:13px 15px;
-    border-radius:13px;
-    background:rgba(35,170,85,.12);
-    border:1px solid rgba(120,255,160,.16);
-    color:#c9efd3;
-    line-height:1.7;
-    font-size:13px;
-}
-
-.form-grid{
-
-    display:grid;
-
-    grid-template-columns:
-        1fr 1fr;
-
-    gap:15px;
-}
-
-.field{
-    display:flex;
-    flex-direction:column;
-}
-
-.field.full{
-    grid-column:
-        1 / -1;
-}
-
-label{
-
-    margin-bottom:7px;
-
-    color:#d5efdc;
-
-    font-size:14px;
-
-    font-weight:700;
-}
-
-input,
-select{
-
-    width:100%;
-
-    padding:14px;
-
-    border:
-        1px solid
-        rgba(255,255,255,.20);
-
-    border-radius:12px;
-
-    background:
-        rgba(0,0,0,.16);
-
-    color:#fff;
-
-    outline:none;
-
-    font-size:16px;
-}
-
-input::placeholder{
-    color:
-        rgba(255,255,255,.55);
-}
-
-input:focus,
-select:focus{
-
-    border-color:#fff0a8;
-
-    box-shadow:
-        0 0 15px
-        rgba(255,230,120,.15);
-}
-
-select option{
-    color:#222;
-}
-
-.buttons{
-
-    display:grid;
-
-    grid-template-columns:
-        1fr 1fr;
-
-    gap:12px;
-
-    margin-top:20px;
+input{
+width:100%;
+padding:12px;
+margin:8px 0;
+border:1px solid #ccc;
+border-radius:10px;
 }
 
 button{
-
-    padding:14px;
-
-    border:0;
-
-    border-radius:13px;
-
-    font-size:16px;
-
-    font-weight:900;
-
-    cursor:pointer;
+width:100%;
+padding:12px;
+margin-top:10px;
+background:#198754;
+color:white;
+border:none;
+border-radius:10px;
+cursor:pointer;
+font-size:16px;
 }
 
-.save-btn{
-
-    color:#fff;
-
-    background:
-        linear-gradient(
-            135deg,
-            #1f9d4c,
-            #126b31
-        );
+button:hover{
+background:#157347;
 }
 
-.cancel-btn{
-
-    color:#fff;
-
-    background:#666;
-
-    display:none;
+.funeral{
+padding:15px;
+margin-top:15px;
+border-left:6px solid #198754;
+background:#f8fff8;
+border-radius:10px;
 }
 
-.search{
-
-    width:100%;
-
-    margin-bottom:15px;
+.summary{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+margin-top:15px;
 }
 
-.table-wrap{
-    width:100%;
-    overflow-x:auto;
+.box{
+background:#ffffff;
+padding:15px;
+border-radius:12px;
+text-align:center;
+box-shadow:0 2px 8px rgba(0,0,0,.08);
 }
 
-table{
-
-    width:100%;
-
-    min-width:1050px;
-
-    border-collapse:
-        collapse;
-}
-
-th{
-
-    padding:13px;
-
-    text-align:left;
-
-    background:
-        rgba(255,255,255,.10);
-
-    color:#fff0ad;
-
-    border-bottom:
-        1px solid
-        rgba(255,255,255,.16);
-}
-
-td{
-
-    padding:13px;
-
-    border-bottom:
-        1px solid
-        rgba(255,255,255,.10);
-
-    color:#dff4e4;
-
-    vertical-align:middle;
-}
-
-tr:hover td{
-
-    background:
-        rgba(255,255,255,.04);
-}
-
-.deceased-name{
-
-    font-weight:900;
-
-    color:#fff;
-}
-
-.deceased-age{
-
-    display:block;
-
-    margin-top:4px;
-
-    color:#f0ccd8;
-
-    font-size:13px;
-
-    font-weight:700;
-}
-
-.status{
-
-    display:inline-block;
-
-    padding:
-        6px 10px;
-
-    border-radius:18px;
-
-    font-size:12px;
-
-    font-weight:800;
-}
-
-.status.pending{
-
-    color:#483800;
-
-    background:#ffd95a;
-}
-
-.status.done{
-
-    color:#fff;
-
-    background:#269b54;
-}
-
-.action-buttons{
-
-    display:flex;
-
-    gap:7px;
-}
-
-.edit-btn{
-
-    width:auto;
-
-    padding:
-        8px 12px;
-
-    color:#fff;
-
-    background:#1976d2;
-
-    font-size:13px;
-}
-
-.delete-btn{
-
-    width:auto;
-
-    padding:
-        8px 12px;
-
-    color:#fff;
-
-    background:#c62828;
-
-    font-size:13px;
-}
-
-.empty{
-
-    padding:30px;
-
-    text-align:center;
-
-    color:#b8d6bf;
-}
-
-.back{
-
-    display:block;
-
-    text-align:center;
-
-    color:#d5f0dc;
-
-    text-decoration:none;
-
-    padding:15px;
-}
-
-@media(max-width:650px){
-
-    body{
-        padding:10px;
-    }
-
-    .form-grid{
-
-        grid-template-columns:
-            1fr;
-    }
-
-    .field.full{
-        grid-column:auto;
-    }
-
-    .buttons{
-
-        grid-template-columns:
-            1fr;
-    }
-
+.number{
+font-size:30px;
+font-weight:bold;
+color:#198754;
 }
 
 </style>
 
 </head>
 
-
 <body>
-
-
-<div class="container">
-
-
-<!-- =====================================================
-     HEADER
-===================================================== -->
 
 <div class="header">
 
-    <div class="header-icon">
-        ⚰️
-    </div>
+<h1>⚰️ ระบบจัดการงานศพ</h1>
 
-    <h1>
-        แจ้งเสียชีวิต / งานศพ
-    </h1>
-
-    <p>
-        กลุ่มข้าวสารบ้านร่องเข็ม หมู่ที่ 6
-    </p>
+<p>กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</p>
 
 </div>
 
-
-<!-- =====================================================
-     FORM
-===================================================== -->
+<div class="container">
 
 <div class="card">
 
-    <h2 id="formTitle">
-        ➕ เพิ่มข้อมูลผู้เสียชีวิต
-    </h2>
+<h2>เพิ่มงานศพ</h2>
 
-    <div class="connection-note">
-        🔗 ข้อมูลหน้านี้เชื่อมกับหน้าแรกผ่าน
-        <strong>ข้อมูลรายการงานศพชุดเดียวกัน</strong>
-        เมื่อเพิ่มหรือแก้ไขข้อมูลแล้ว หน้าแรกจะอ่านข้อมูลชุดนี้ไปแสดงโดยอัตโนมัติ
-    </div>
+<input id="deadName" placeholder="ชื่อผู้เสียชีวิต">
 
+<input id="deadDate" type="date">
 
-    <div class="form-grid">
+<input id="burnDate" type="date">
 
+<input id="place" placeholder="สถานที่">
 
-        <div class="field full">
+<button onclick="saveFuneral()">
 
-            <label>
-                👤 ชื่อ - นามสกุลผู้เสียชีวิต
-            </label>
+💾 บันทึกงานศพ
 
-            <input
-                id="name"
-                type="text"
-                placeholder="กรอกชื่อ - นามสกุลผู้เสียชีวิต"
-            >
-
-        </div>
-
-
-        <div class="field">
-
-            <label>
-                🎂 อายุผู้เสียชีวิต
-            </label>
-
-            <input
-                id="age"
-                type="number"
-                min="0"
-                max="120"
-                placeholder="เช่น 47"
-            >
-
-        </div>
-
-
-        <div class="field">
-
-            <label>
-                🏠 บ้านเลขที่
-            </label>
-
-            <input
-                id="house"
-                type="text"
-                placeholder="เช่น 123"
-            >
-
-        </div>
-
-
-        <div class="field full">
-
-            <label>
-                👨‍👩‍👧 ชื่อผู้แจ้งการเสียชีวิต (ญาติ)
-            </label>
-
-            <input
-                id="reporter"
-                type="text"
-                placeholder="ระบุชื่อ - นามสกุลญาติผู้แจ้ง"
-            >
-
-        </div>
-
-
-        <div class="field">
-
-            <label>
-                📅 วันที่เสียชีวิต
-            </label>
-
-            <input
-                id="death"
-                type="date"
-            >
-
-        </div>
-
-
-        <div class="field">
-
-            <label>
-                🔥 วันที่ฌาปนกิจ
-            </label>
-
-            <input
-                id="cremate"
-                type="date"
-            >
-
-        </div>
-
-
-        <div class="field full">
-
-            <label>
-                📌 สถานะ
-            </label>
-
-            <select id="status">
-
-                <option value="ยังไม่ดำเนินการ">
-                    ยังไม่ดำเนินการ
-                </option>
-
-                <option value="นำข้าวสารช่วยเหลือแล้ว">
-                    นำข้าวสารช่วยเหลือแล้ว
-                </option>
-
-            </select>
-
-        </div>
-
-    </div>
-
-
-    <div class="buttons">
-
-        <button
-            id="saveButton"
-            class="save-btn"
-            type="button"
-        >
-            💾 บันทึกข้อมูล
-        </button>
-
-
-        <button
-            id="cancelButton"
-            class="cancel-btn"
-            type="button"
-        >
-            ยกเลิกแก้ไข
-        </button>
-
-    </div>
+</button>
 
 </div>
 
+<div class="summary">
 
-<!-- =====================================================
-     รายการงานศพ
-===================================================== -->
+<div class="box">
 
-<div class="card">
+สมาชิกทั้งหมด
 
-    <h2>
-        📋 รายการแจ้งเสียชีวิต
-    </h2>
-
-
-    <input
-        id="search"
-        class="search"
-        type="text"
-        placeholder="🔎 ค้นหาชื่อ บ้านเลขที่ หรือผู้แจ้ง"
-    >
-
-
-    <div class="table-wrap">
-
-        <table>
-
-            <thead>
-
-                <tr>
-
-                    <th>
-                        ลำดับ
-                    </th>
-
-                    <th>
-                        ชื่อผู้เสียชีวิต
-                    </th>
-
-                    <th>
-                        อายุ
-                    </th>
-
-                    <th>
-                        บ้านเลขที่
-                    </th>
-
-                    <th>
-                        ผู้แจ้ง (ญาติ)
-                    </th>
-
-                    <th>
-                        วันที่เสียชีวิต
-                    </th>
-
-                    <th>
-                        วันที่ฌาปนกิจ
-                    </th>
-
-                    <th>
-                        สถานะ
-                    </th>
-
-                    <th>
-                        จัดการ
-                    </th>
-
-                </tr>
-
-            </thead>
-
-            <tbody id="funeralList">
-            </tbody>
-
-        </table>
-
-    </div>
+<div class="number" id="memberTotal">0</div>
 
 </div>
 
+<div class="box">
 
-<a
-    href="index.html"
-    class="back"
->
-    ⬅ กลับหน้าหลัก
-</a>
+รับแล้ว
 
+<div class="number" id="receivedTotal">0</div>
 
 </div>
 
+<div class="box">
+
+ค้างส่ง
+
+<div class="number" id="pendingTotal">0</div>
+
+</div>
+
+</div>
+
+<div id="funeralList"></div>
+
+</div>
 
 <script>
 
-"use strict";
+let funerals =
+JSON.parse(localStorage.getItem("funerals")) || [];
 
+let members =
+JSON.parse(localStorage.getItem("members")) || [];
 
-/*
-=====================================================
-ใช้ข้อมูลชุดเดียวกับ index.html
-=====================================================
-*/
-
-const STORAGE_KEY = "funerals";
-
-let funerals = loadFunerals();
-
-let editingId = null;
-
-
-/*
-=====================================================
-อ่านข้อมูลโดยไม่ทำข้อมูลเดิมหาย
-=====================================================
-*/
-
-function loadFunerals(){
-
-    try{
-
-        const raw =
-            localStorage.getItem(
-                STORAGE_KEY
-            );
-
-
-        if(!raw){
-
-            return [];
-
-        }
-
-
-        const data =
-            JSON.parse(raw);
-
-
-        if(!Array.isArray(data)){
-
-            return [];
-
-        }
-
-
-        /*
-        สำคัญ:
-        ใช้ ...item เพื่อรักษาฟิลด์เดิม
-        ที่อาจมีอยู่ในข้อมูลเก่า
-        */
-
-        return data.map(
-            (item,index) => {
-
-                const original =
-                    (
-                        item &&
-                        typeof item === "object"
-                    )
-                    ? {...item}
-                    : {};
-
-
-                const id =
-                    String(
-                        original.id ??
-                        original.funeralId ??
-                        original.funeral_id ??
-                        (
-                            "funeral-" +
-                            Date.now() +
-                            "-" +
-                            index
-                        )
-                    );
-
-
-                return {
-
-                    ...original,
-
-                    id:id,
-
-                    name:
-                        String(
-                            original.name ??
-                            original.fullName ??
-                            original.fullname ??
-                            original.deceasedName ??
-                            original.deceased_name ??
-                            ""
-                        ).trim(),
-
-                    age:
-                        original.age ??
-                        original.deceasedAge ??
-                        original.deceased_age ??
-                        "",
-
-                    house:
-                        String(
-                            original.house ??
-                            original.houseNo ??
-                            original.houseNumber ??
-                            original.house_number ??
-                            ""
-                        ).trim(),
-
-                    reporter:
-                        String(
-                            original.reporter ??
-                            original.informer ??
-                            original.contact ??
-                            ""
-                        ).trim(),
-
-                    death:
-                        String(
-                            original.death ??
-                            original.deathDate ??
-                            original.death_date ??
-                            original.dateOfDeath ??
-                            original.date_of_death ??
-                            ""
-                        ),
-
-                    cremate:
-                        String(
-                            original.cremate ??
-                            original.cremateDate ??
-                            original.cremate_date ??
-                            original.ceremonyDate ??
-                            original.ceremony_date ??
-                            ""
-                        ),
-
-                    status:
-                        original.status ??
-                        "ยังไม่ดำเนินการ",
-
-                    timestamp:
-                        Number(
-                            original.timestamp ??
-                            original.createdAt ??
-                            Date.now()
-                        )
-
-                };
-
-            }
-        );
-
-    }
-    catch(error){
-
-        console.error(
-            "อ่านข้อมูล funerals ไม่สำเร็จ:",
-            error
-        );
-
-        return [];
-
-    }
-
-}
-
-
-/*
-=====================================================
-บันทึกกลับเข้า localStorage
-=====================================================
-*/
-
-function saveAll(){
-
-    try{
-
-        localStorage.setItem(
-
-            STORAGE_KEY,
-
-            JSON.stringify(
-                funerals
-            )
-
-        );
-
-    }
-    catch(error){
-
-        console.error(
-            "บันทึกข้อมูลไม่สำเร็จ:",
-            error
-        );
-
-        alert(
-            "ไม่สามารถบันทึกข้อมูลได้ กรุณาตรวจสอบพื้นที่จัดเก็บของเบราว์เซอร์"
-        );
-
-    }
-
-}
-
-
-/*
-=====================================================
-วันที่แสดงผล
-=====================================================
-*/
-
-function displayDate(value){
-
-    if(!value){
-
-        return "-";
-
-    }
-
-
-    if(
-        /^\d{4}-\d{2}-\d{2}$/
-        .test(value)
-    ){
-
-        const parts =
-            value.split("-");
-
-
-        return (
-
-            parts[2].padStart(2,"0")
-            +
-            "/"
-            +
-            parts[1].padStart(2,"0")
-            +
-            "/"
-            +
-            parts[0]
-
-        );
-
-    }
-
-
-    return value;
-
-}
-
-
-/*
-=====================================================
-ใช้เรียงงานศพ
-=====================================================
-*/
-
-function dateValue(value){
-
-    if(!value){
-
-        return 0;
-
-    }
-
-
-    if(
-        /^\d{4}-\d{2}-\d{2}$/
-        .test(value)
-    ){
-
-        const time =
-            new Date(value).getTime();
-
-
-        return Number.isNaN(time)
-            ? 0
-            : time;
-
-    }
-
-
-    return 0;
-
-}
-
-
-/*
-=====================================================
-ป้องกัน HTML
-=====================================================
-*/
-
-function escapeHTML(value){
-
-    const div =
-        document.createElement(
-            "div"
-        );
-
-    div.textContent =
-        String(
-            value ?? ""
-        );
-
-    return div.innerHTML;
-
-}
-
-
-/*
-=====================================================
-แสดงรายการ
-=====================================================
-*/
-
-function render(){
-
-    const tbody =
-        document.getElementById(
-            "funeralList"
-        );
-
-
-    const keyword =
-        document
-        .getElementById(
-            "search"
-        )
-        .value
-        .trim()
-        .toLowerCase();
-
-
-    const filtered =
-
-        funerals
-        .slice()
-        .sort(
-            (
-                a,
-                b
-            ) => {
-
-                const dateCompare =
-                    dateValue(
-                        b.death
-                    )
-                    -
-                    dateValue(
-                        a.death
-                    );
-
-
-                if(
-                    dateCompare !== 0
-                ){
-
-                    return dateCompare;
-
-                }
-
-
-                return (
-                    Number(
-                        b.timestamp || 0
-                    )
-                    -
-                    Number(
-                        a.timestamp || 0
-                    )
-                );
-
-            }
-        )
-        .filter(
-            item => {
-
-                const text = (
-
-                    String(item.name || "")
-                    +
-                    " " +
-                    String(item.house || "")
-                    +
-                    " " +
-                    String(item.reporter || "")
-
-                ).toLowerCase();
-
-
-                return text.includes(
-                    keyword
-                );
-
-            }
-        );
-
-
-    if(
-        filtered.length === 0
-    ){
-
-        tbody.innerHTML = `
-
-            <tr>
-
-                <td
-                    colspan="9"
-                    style="
-                        text-align:center;
-                        padding:30px
-                    "
-                >
-
-                    📭 ยังไม่มีข้อมูล
-
-                </td>
-
-            </tr>
-
-        `;
-
-        return;
-
-    }
-
-
-    tbody.innerHTML =
-
-        filtered
-        .map(
-            (
-                item,
-                index
-            ) => {
-
-                const id =
-                    encodeURIComponent(
-                        String(item.id)
-                    );
-
-
-                return `
-
-                <tr>
-
-                    <td>
-                        ${index + 1}
-                    </td>
-
-
-                    <td>
-
-                        <div
-                            class="deceased-name"
-                        >
-
-                            ${escapeHTML(
-                                item.name
-                            )}
-
-                        </div>
-
-                    </td>
-
-
-                    <td>
-
-                        ${
-                            item.age !== "" &&
-                            item.age !== null &&
-                            item.age !== undefined
-
-                            ? `
-
-                                <span
-                                    class="deceased-age"
-                                >
-
-                                    ${escapeHTML(
-                                        item.age
-                                    )}
-                                    ปี
-
-                                </span>
-
-                              `
-
-                            : "-"
-                        }
-
-                    </td>
-
-
-                    <td>
-
-                        ${escapeHTML(
-                            item.house || "-"
-                        )}
-
-                    </td>
-
-
-                    <td>
-
-                        ${escapeHTML(
-                            item.reporter || "-"
-                        )}
-
-                    </td>
-
-
-                    <td>
-
-                        ${displayDate(
-                            item.death
-                        )}
-
-                    </td>
-
-
-                    <td>
-
-                        ${displayDate(
-                            item.cremate
-                        )}
-
-                    </td>
-
-
-                    <td>
-
-                        <span
-                            class="
-                                status
-                                ${
-                                    item.status ===
-                                    "นำข้าวสารช่วยเหลือแล้ว"
-                                    ? "done"
-                                    : "pending"
-                                }
-                            "
-                        >
-
-                            ${escapeHTML(
-                                item.status
-                            )}
-
-                        </span>
-
-                    </td>
-
-
-                    <td>
-
-                        <div
-                            class="action-buttons"
-                        >
-
-                            <button
-                                class="edit-btn"
-                                type="button"
-                                data-edit-id="${id}"
-                            >
-                                ✏️
-                            </button>
-
-
-                            <button
-                                class="delete-btn"
-                                type="button"
-                                data-delete-id="${id}"
-                            >
-                                🗑️
-                            </button>
-
-                        </div>
-
-                    </td>
-
-                </tr>
-
-                `;
-
-            }
-        )
-        .join("");
-
-
-}
-
-
-/*
-=====================================================
-ล้างฟอร์ม
-=====================================================
-*/
-
-function clearForm(){
-
-    document.getElementById(
-        "name"
-    ).value = "";
-
-
-    document.getElementById(
-        "age"
-    ).value = "";
-
-
-    document.getElementById(
-        "house"
-    ).value = "";
-
-
-    document.getElementById(
-        "reporter"
-    ).value = "";
-
-
-    document.getElementById(
-        "death"
-    ).value = "";
-
-
-    document.getElementById(
-        "cremate"
-    ).value = "";
-
-
-    document.getElementById(
-        "status"
-    ).value =
-        "ยังไม่ดำเนินการ";
-
-
-    editingId =
-        null;
-
-
-    document.getElementById(
-        "formTitle"
-    ).textContent =
-        "➕ เพิ่มข้อมูลผู้เสียชีวิต";
-
-
-    document.getElementById(
-        "cancelButton"
-    ).style.display =
-        "none";
-
-}
-
-
-/*
-=====================================================
-บันทึก
-=====================================================
-*/
+showFuneral();
 
 function saveFuneral(){
 
-    const name =
-        document.getElementById(
-            "name"
-        ).value.trim();
+let deadName =
+document.getElementById("deadName").value.trim();
 
+if(deadName==""){
 
-    const ageRaw =
-        document.getElementById(
-            "age"
-        ).value.trim();
+alert("กรุณากรอกชื่อผู้เสียชีวิต");
 
-
-    const age =
-        Number(ageRaw);
-
-
-    const house =
-        document.getElementById(
-            "house"
-        ).value.trim();
-
-
-    const reporter =
-        document.getElementById(
-            "reporter"
-        ).value.trim();
-
-
-    const death =
-        document.getElementById(
-            "death"
-        ).value;
-
-
-    const cremate =
-        document.getElementById(
-            "cremate"
-        ).value;
-
-
-    const status =
-        document.getElementById(
-            "status"
-        ).value;
-
-
-    if(!name){
-
-        alert(
-            "กรุณากรอกชื่อผู้เสียชีวิต"
-        );
-
-        return;
-
-    }
-
-
-    if(
-        ageRaw === "" ||
-        !Number.isFinite(age) ||
-        age < 0 ||
-        age > 120
-    ){
-
-        alert(
-            "กรุณากรอกอายุผู้เสียชีวิต"
-        );
-
-        return;
-
-    }
-
-
-    if(!house){
-
-        alert(
-            "กรุณากรอกบ้านเลขที่"
-        );
-
-        return;
-
-    }
-
-
-    if(!reporter){
-
-        alert(
-            "กรุณาระบุชื่อผู้แจ้งการเสียชีวิต (ญาติ)"
-        );
-
-        return;
-
-    }
-
-
-    if(!death){
-
-        alert(
-            "กรุณากรอกวันที่เสียชีวิต"
-        );
-
-        return;
-
-    }
-
-
-    /*
-    ================================================
-    แก้ไขข้อมูลเดิม
-    ================================================
-    */
-
-    if(
-        editingId !== null
-    ){
-
-        const index =
-            funerals.findIndex(
-                row =>
-                    String(row.id) ===
-                    String(editingId)
-            );
-
-
-        if(index === -1){
-
-            alert(
-                "ไม่พบข้อมูลที่ต้องการแก้ไข"
-            );
-
-            return;
-
-        }
-
-
-        /*
-        สำคัญ:
-        ใช้ ...เดิม เพื่อรักษาฟิลด์อื่น
-        ที่เราไม่ได้แก้ไขไว้ทั้งหมด
-        */
-
-        funerals[index] = {
-
-            ...funerals[index],
-
-            id:
-                funerals[index].id,
-
-            name:
-                name,
-
-            age:
-                age,
-
-            house:
-                house,
-
-            reporter:
-                reporter,
-
-            death:
-                death,
-
-            cremate:
-                cremate,
-
-            status:
-                status,
-
-            timestamp:
-                funerals[index].timestamp ||
-                Date.now()
-
-        };
-
-
-        saveAll();
-
-        clearForm();
-
-        render();
-
-
-        alert(
-            "แก้ไขข้อมูลเรียบร้อยแล้ว"
-        );
-
-
-        notifyOtherPages();
-
-
-        return;
-
-    }
-
-
-    /*
-    ================================================
-    เพิ่มข้อมูลใหม่
-    ================================================
-    */
-
-    const newId =
-
-        "funeral-" +
-        Date.now() +
-        "-" +
-        Math.random()
-        .toString(36)
-        .slice(2,8);
-
-
-    const newFuneral = {
-
-        id:
-            newId,
-
-        name:
-            name,
-
-        age:
-            age,
-
-        house:
-            house,
-
-        reporter:
-            reporter,
-
-        death:
-            death,
-
-        cremate:
-            cremate,
-
-        status:
-            status,
-
-        timestamp:
-            Date.now()
-
-    };
-
-
-    funerals.push(
-        newFuneral
-    );
-
-
-    saveAll();
-
-    clearForm();
-
-    render();
-
-
-    alert(
-        "บันทึกข้อมูลผู้เสียชีวิตเรียบร้อยแล้ว"
-    );
-
-
-    notifyOtherPages();
+return;
 
 }
 
+funerals.unshift({
 
-/*
-=====================================================
-แก้ไข
-=====================================================
-*/
+id:Date.now(),
 
-function editFuneral(id){
+name:deadName,
 
-    const decodedId =
-        decodeURIComponent(
-            String(id)
-        );
+deadDate:
+document.getElementById("deadDate").value,
 
+burnDate:
+document.getElementById("burnDate").value,
 
-    const item =
-        funerals.find(
-            row =>
-                String(row.id) ===
-                decodedId
-        );
+place:
+document.getElementById("place").value,
 
+received:[]
 
-    if(!item){
+});
 
-        alert(
-            "ไม่พบข้อมูล"
-        );
+localStorage.setItem(
+"funerals",
+JSON.stringify(funerals)
+);
 
-        return;
+showFuneral();
 
-    }
+}
+    function showFuneral(){
 
+let html="";
 
-    editingId =
-        item.id;
+document.getElementById("memberTotal").innerHTML=members.length;
 
+if(funerals.length==0){
 
-    document.getElementById(
-        "name"
-    ).value =
-        item.name || "";
+document.getElementById("receivedTotal").innerHTML=0;
+document.getElementById("pendingTotal").innerHTML=members.length;
 
+document.getElementById("funeralList").innerHTML=
+"<div class='card'>ยังไม่มีงานศพ</div>";
 
-    document.getElementById(
-        "age"
-    ).value =
-        item.age ?? "";
-
-
-    document.getElementById(
-        "house"
-    ).value =
-        item.house || "";
-
-
-    document.getElementById(
-        "reporter"
-    ).value =
-        item.reporter || "";
-
-
-    document.getElementById(
-        "death"
-    ).value =
-        item.death || "";
-
-
-    document.getElementById(
-        "cremate"
-    ).value =
-        item.cremate || "";
-
-
-    document.getElementById(
-        "status"
-    ).value =
-        item.status ||
-        "ยังไม่ดำเนินการ";
-
-
-    document.getElementById(
-        "formTitle"
-    ).textContent =
-        "✏️ แก้ไขข้อมูลผู้เสียชีวิต";
-
-
-    document.getElementById(
-        "cancelButton"
-    ).style.display =
-        "block";
-
-
-    window.scrollTo({
-
-        top:0,
-
-        behavior:"smooth"
-
-    });
+return;
 
 }
 
+let funeral=funerals[0];
 
-/*
-=====================================================
-ลบ
-=====================================================
-*/
+let received=funeral.received||[];
 
-function deleteFuneral(id){
+document.getElementById("receivedTotal").innerHTML=received.length;
 
-    const decodedId =
-        decodeURIComponent(
-            String(id)
-        );
+document.getElementById("pendingTotal").innerHTML=
+members.length-received.length;
 
+html+=`
 
-    const item =
-        funerals.find(
-            row =>
-                String(row.id) ===
-                decodedId
-        );
+<div class="card">
 
+<h2>⚰️ ${funeral.name}</h2>
 
-    if(!item){
+<p>เสียชีวิต : ${funeral.deadDate||"-"}</p>
 
-        return;
+<p>ฌาปนกิจ : ${funeral.burnDate||"-"}</p>
 
-    }
+<p>สถานที่ : ${funeral.place||"-"}</p>
 
+<hr>
 
-    const confirmDelete =
-        confirm(
+<h3>รายชื่อสมาชิก</h3>
 
-            "ต้องการลบข้อมูลนี้หรือไม่?\n\n" +
+`;
 
-            item.name +
+members.forEach(member=>{
 
-            "\nอายุ " +
-            item.age +
-            " ปี" +
+let ok=received.find(r=>r.memberId==member.id);
 
-            "\nบ้านเลขที่ " +
-            item.house
+html+=`
 
-        );
+<div class="funeral">
 
+<b>${member.house}</b>
 
-    if(
-        !confirmDelete
-    ){
+${member.name}
 
-        return;
+<br><br>
 
-    }
+${
+ok?
 
+"<button style='background:#0d6efd'>✅ รับแล้ว</button>"
 
-    funerals =
-        funerals.filter(
-            row =>
-                String(row.id) !==
-                decodedId
-        );
+:
 
+`<button onclick="receiveRice(${funeral.id},'${member.id}')">
 
-    saveAll();
+🌾 รับข้าวสาร
 
-    render();
-
-    notifyOtherPages();
+</button>`
 
 }
 
+</div>
 
-/*
-=====================================================
-แจ้งหน้าอื่นว่า localStorage มีการเปลี่ยนแปลง
-=====================================================
-*/
+`;
 
-function notifyOtherPages(){
+});
 
-    /*
-    หน้า index.html จะเห็นการเปลี่ยนแปลง
-    ผ่าน storage event เมื่อเปิดคนละแท็บ
-    */
+html+="</div>";
 
-    window.dispatchEvent(
-        new CustomEvent(
-            "funeralsUpdated"
-        )
-    );
+document.getElementById("funeralList").innerHTML=html;
 
 }
 
+function receiveRice(funeralId,memberId){
 
-/*
-=====================================================
-EVENTS
-=====================================================
-*/
+let funeral=
 
-document
-.getElementById(
-    "saveButton"
-)
-.addEventListener(
-    "click",
-    saveFuneral
+funerals.find(f=>f.id==funeralId);
+
+if(!funeral)return;
+
+if(!funeral.received)
+
+funeral.received=[];
+
+let exists=
+
+funeral.received.find(r=>r.memberId==memberId);
+
+if(exists){
+
+alert("สมาชิกคนนี้รับแล้ว");
+
+return;
+
+}
+
+funeral.received.push({
+
+memberId:memberId,
+
+date:new Date().toLocaleString("th-TH")
+
+});
+
+localStorage.setItem(
+
+"funerals",
+
+JSON.stringify(funerals)
+
 );
 
+showFuneral();
 
-document
-.getElementById(
-    "cancelButton"
-)
-.addEventListener(
-    "click",
-    clearForm
-);
+}
 
-
-document
-.getElementById(
-    "search"
-)
-.addEventListener(
-    "input",
-    render
-);
-
-
-/*
-ปุ่มแก้ไข/ลบ
-*/
-
-document
-.getElementById(
-    "funeralList"
-)
-.addEventListener(
-    "click",
-    function(event){
-
-        const editButton =
-            event.target.closest(
-                "[data-edit-id]"
-            );
-
-
-        if(editButton){
-
-            editFuneral(
-                editButton.dataset.editId
-            );
-
-            return;
-
-        }
-
-
-        const deleteButton =
-            event.target.closest(
-                "[data-delete-id]"
-            );
-
-
-        if(deleteButton){
-
-            deleteFuneral(
-                deleteButton.dataset.deleteId
-            );
-
-        }
-
-    }
-);
-
-
-/*
-ถ้ามีการเปลี่ยนข้อมูลจากหน้าอื่น
-*/
-
-window.addEventListener(
-    "storage",
-    function(event){
-
-        if(
-            event.key ===
-            STORAGE_KEY
-        ){
-
-            funerals =
-                loadFunerals();
-
-            render();
-
-        }
-
-    }
-);
-
-
-/*
-=====================================================
-INIT
-=====================================================
-*/
-
-render();
+showFuneral();
 
 </script>
-
 
 </body>
 
