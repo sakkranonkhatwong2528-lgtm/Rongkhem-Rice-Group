@@ -381,3 +381,1009 @@ loadFollow();
 
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>
+ติดตามสมาชิกค้างส่ง
+</title>
+
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+
+body{
+
+margin:0;
+font-family:Tahoma,sans-serif;
+background:#f3f7f0;
+color:#333;
+
+}
+
+
+.header{
+
+background:linear-gradient(
+135deg,
+#176b2c,
+#4caf50
+);
+
+color:white;
+
+padding:25px;
+
+text-align:center;
+
+}
+
+
+.container{
+
+max-width:900px;
+
+margin:auto;
+
+padding:15px;
+
+}
+
+
+.box,
+.card{
+
+background:white;
+
+padding:18px;
+
+margin-bottom:15px;
+
+border-radius:15px;
+
+box-shadow:
+0 3px 10px rgba(0,0,0,.1);
+
+}
+
+
+.summary{
+
+display:grid;
+
+grid-template-columns:
+repeat(2,1fr);
+
+gap:10px;
+
+}
+
+
+.number{
+
+font-size:28px;
+
+font-weight:bold;
+
+color:#228B22;
+
+}
+
+
+button{
+
+width:100%;
+
+padding:12px;
+
+border:0;
+
+border-radius:10px;
+
+background:#228B22;
+
+color:white;
+
+font-size:16px;
+
+margin-top:10px;
+
+cursor:pointer;
+
+}
+
+
+button.blue{
+
+background:#1976d2;
+
+}
+
+
+button.red{
+
+background:#c62828;
+
+}
+
+
+input{
+
+width:100%;
+
+padding:12px;
+
+border-radius:10px;
+
+border:1px solid #ccc;
+
+font-size:16px;
+
+}
+
+
+.warning{
+
+background:#fff3cd;
+
+padding:15px;
+
+border-radius:10px;
+
+color:#856404;
+
+}
+
+
+.success{
+
+background:#e8f7e8;
+
+padding:15px;
+
+border-radius:10px;
+
+color:#176b2c;
+
+}
+
+
+.member-name{
+
+font-size:20px;
+
+font-weight:bold;
+
+color:#176b2c;
+
+}
+
+
+.tag{
+
+display:inline-block;
+
+background:#ffe0e0;
+
+color:#c62828;
+
+padding:5px 10px;
+
+border-radius:20px;
+
+}
+
+
+a{
+
+text-decoration:none;
+
+color:#176b2c;
+
+}
+
+
+@media(max-width:600px){
+
+.summary{
+
+grid-template-columns:1fr;
+
+}
+
+}
+
+
+@media print{
+
+button,
+input,
+a{
+
+display:none;
+
+}
+
+body{
+
+background:white;
+
+}
+
+}
+
+
+</style>
+
+
+</head>
+
+
+<body>
+
+
+<div class="header">
+
+<h1>
+⚠️ สมาชิกที่ต้องติดตาม
+</h1>
+
+<p>
+กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
+</p>
+
+</div>
+
+
+
+<div class="container">
+
+
+
+<div class="box">
+
+
+<h2>
+📊 สรุปข้อมูล
+</h2>
+
+
+<div class="summary">
+
+
+<div class="card">
+
+👥 สมาชิกทั้งหมด
+
+<div class="number" id="totalMember">
+0
+</div>
+
+ครัวเรือน
+
+</div>
+
+
+
+<div class="card">
+
+⚠️ ต้องติดตาม
+
+<div class="number" id="followMember">
+0
+</div>
+
+ครัวเรือน
+
+</div>
+
+
+</div>
+
+
+<button
+class="blue"
+onclick="printReport()"
+>
+
+🖨️ พิมพ์รายงาน
+
+</button>
+
+
+<button
+onclick="exportCSV()"
+>
+
+📄 ส่งออก Excel
+
+</button>
+
+
+</div>
+
+
+
+<div class="box">
+
+
+<h2>
+🔎 ค้นหาสมาชิก
+</h2>
+
+
+<input
+id="search"
+placeholder="ค้นหาชื่อ หรือ บ้านเลขที่"
+onkeyup="loadFollow()"
+>
+
+
+</div>
+
+
+
+<div id="followList">
+
+
+</div>
+
+
+
+<a href="index.html">
+
+← กลับหน้าหลัก
+
+</a>
+
+
+
+</div>
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ติดตามสมาชิกกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
+
+<style>
+
+body{
+font-family:"Sarabun",Arial,sans-serif;
+background:#f4f7f2;
+margin:0;
+padding:15px;
+color:#333;
+}
+
+.container{
+max-width:900px;
+margin:auto;
+}
+
+.header{
+background:linear-gradient(135deg,#2e7d32,#66bb6a);
+color:white;
+padding:20px;
+border-radius:15px;
+text-align:center;
+box-shadow:0 5px 15px #aaa;
+}
+
+.header h1{
+margin:0;
+font-size:26px;
+}
+
+.card{
+background:white;
+padding:15px;
+margin-top:15px;
+border-radius:15px;
+box-shadow:0 3px 10px #ddd;
+}
+
+
+.stats{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+}
+
+.stat{
+padding:15px;
+border-radius:12px;
+text-align:center;
+background:#f1f8e9;
+}
+
+.stat b{
+font-size:28px;
+display:block;
+color:#2e7d32;
+}
+
+
+input,button{
+font-size:16px;
+padding:10px;
+border-radius:10px;
+border:1px solid #ccc;
+}
+
+
+input{
+width:100%;
+box-sizing:border-box;
+margin-bottom:10px;
+}
+
+
+button{
+cursor:pointer;
+border:none;
+background:#2e7d32;
+color:white;
+}
+
+
+button:hover{
+opacity:.85;
+}
+
+
+.member{
+background:#fff;
+border-left:6px solid #4caf50;
+padding:15px;
+margin-top:10px;
+border-radius:12px;
+box-shadow:0 2px 8px #ddd;
+}
+
+
+.member.pending{
+border-left-color:#ff9800;
+}
+
+
+.member.danger{
+border-left-color:#e53935;
+}
+
+
+.name{
+font-size:20px;
+font-weight:bold;
+}
+
+
+.status{
+margin-top:8px;
+}
+
+
+.green{
+color:green;
+font-weight:bold;
+}
+
+
+.yellow{
+color:#ef6c00;
+font-weight:bold;
+}
+
+
+.red{
+color:red;
+font-weight:bold;
+}
+
+
+.btn-danger{
+background:#d32f2f;
+}
+
+
+.btn-edit{
+background:#1565c0;
+}
+
+
+.back{
+display:block;
+margin-top:20px;
+text-align:center;
+background:#555;
+padding:12px;
+border-radius:10px;
+color:white;
+text-decoration:none;
+}
+
+
+@media(max-width:600px){
+
+.stats{
+grid-template-columns:1fr;
+}
+
+.header h1{
+font-size:20px;
+}
+
+}
+
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<div class="header">
+
+<h1>👥 ติดตามสมาชิก</h1>
+
+<p>กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</p>
+
+</div>
+
+
+<div class="card">
+
+
+<div class="stats">
+
+<div class="stat">
+สมาชิกทั้งหมด
+<b id="total">0</b>
+ครัวเรือน
+</div>
+
+
+<div class="stat">
+ค้างส่ง
+<b id="pending">0</b>
+ครัวเรือน
+</div>
+
+
+<div class="stat">
+แจ้งเตือน
+<b id="alert">0</b>
+ครั้ง
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+<div class="card">
+
+
+<h3>🔎 ค้นหาสมาชิก</h3>
+
+
+<input 
+id="search"
+placeholder="ค้นหาชื่อ หรือ บ้านเลขที่"
+onkeyup="showMembers()"
+>
+
+
+</div>
+
+
+<div id="list"></div>
+
+
+
+<a class="back" href="index.html">
+← กลับหน้าหลัก
+</a>
+
+
+
+</div>
+
+
+
+<script>
+
+
+let members = JSON.parse(localStorage.getItem("members")) || [];
+<script>
+
+
+// ถ้าไม่มีข้อมูล ให้สร้างโครงข้อมูลเริ่มต้น
+if(members.length===0){
+
+members = [
+
+{
+name:"นายปิ๊ก ขัติย์วงศ์",
+house:"12",
+pending:0,
+status:"ปกติ"
+},
+
+{
+name:"นางแสงเพียร วงค์ขัติย์",
+house:"6",
+pending:0,
+status:"ปกติ"
+},
+
+{
+name:"นายจักร์กวัส ประพลรัตนัง",
+house:"2",
+pending:0,
+status:"ปกติ"
+},
+
+{
+name:"น.ส. ปวีณา มิ่งขวัญ",
+house:"44",
+pending:0,
+status:"ปกติ"
+},
+
+{
+name:"นายเกษมสุข ใฝ่ใจ",
+house:"123",
+pending:0,
+status:"ปกติ"
+}
+
+];
+
+
+localStorage.setItem(
+"members",
+JSON.stringify(members)
+);
+
+}
+
+
+
+// แสดงข้อมูลสมาชิก
+
+function showMembers(){
+
+
+let search =
+document.getElementById("search").value
+.toLowerCase();
+
+
+let html="";
+
+
+let pendingCount=0;
+
+let alertCount=0;
+
+
+
+members.forEach((m,index)=>{
+
+
+if(m.pending>0){
+
+pendingCount++;
+
+alertCount += m.pending;
+
+}
+
+
+
+let text =
+(m.name+m.house).toLowerCase();
+
+
+
+if(text.includes(search)){
+
+
+
+let box="member";
+
+let status="🟢 ปกติ";
+
+let color="green";
+
+
+
+if(m.pending==1){
+
+box+=" pending";
+
+status=
+"🟡 แจ้งเตือน "+m.pending+" ครั้ง";
+
+color="yellow";
+
+}
+
+
+
+if(m.pending>=2){
+
+box+=" danger";
+
+status=
+"🔴 เสนอพิจารณาตัดสมาชิก";
+
+color="red";
+
+}
+
+
+
+html += `
+
+
+<div class="${box}">
+
+
+<div class="name">
+${index+1}. ${m.name}
+</div>
+
+
+<div>
+🏠 บ้านเลขที่ : ${m.house}
+</div>
+
+
+
+<div class="status ${color}">
+
+📦 ค้างส่ง : ${m.pending || 0} ครั้ง
+
+<br>
+
+${status}
+
+</div>
+
+
+
+<div style="margin-top:10px">
+
+
+<button 
+class="btn-edit"
+onclick="editMember(${index})">
+
+✏️ แก้ไข
+
+</button>
+
+
+
+<button 
+class="btn-danger"
+onclick="deleteMember(${index})">
+
+🗑 ลบสมาชิก
+
+</button>
+
+
+
+</div>
+
+
+</div>
+
+
+`;
+
+}
+
+
+});
+
+
+
+document.getElementById("list").innerHTML=html;
+
+
+document.getElementById("total").innerHTML=
+members.length;
+
+
+document.getElementById("pending").innerHTML=
+pendingCount;
+
+
+document.getElementById("alert").innerHTML=
+alertCount;
+
+
+
+}
+
+
+
+showMembers();
+
+
+
+</script>
+<script>
+
+
+// เพิ่มสมาชิกใหม่
+
+function addMember(){
+
+let name =
+prompt("กรอกชื่อสมาชิก");
+
+if(!name) return;
+
+
+let house =
+prompt("กรอกบ้านเลขที่");
+
+
+members.push({
+
+name:name,
+
+house:house || "",
+
+pending:0,
+
+status:"ปกติ"
+
+});
+
+
+saveData();
+
+
+}
+
+
+
+// แก้ไขสมาชิก
+
+function editMember(index){
+
+
+let m = members[index];
+
+
+let name =
+prompt(
+"แก้ไขชื่อสมาชิก",
+m.name
+);
+
+
+if(name){
+
+m.name=name;
+
+}
+
+
+
+let house =
+prompt(
+"แก้ไขบ้านเลขที่",
+m.house
+);
+
+
+if(house){
+
+m.house=house;
+
+}
+
+
+
+let pending =
+prompt(
+"จำนวนครั้งค้างส่ง",
+m.pending
+);
+
+
+
+if(pending!==null){
+
+m.pending=parseInt(pending) || 0;
+
+}
+
+
+
+saveData();
+
+
+}
+
+
+
+// ลบสมาชิก
+
+function deleteMember(index){
+
+
+let ok =
+confirm(
+"ต้องการลบสมาชิกนี้หรือไม่?"
+);
+
+
+
+if(ok){
+
+members.splice(index,1);
+
+saveData();
+
+}
+
+
+}
+
+
+
+// บันทึกข้อมูล
+
+function saveData(){
+
+
+localStorage.setItem(
+"members",
+JSON.stringify(members)
+);
+
+
+showMembers();
+
+
+alert("บันทึกข้อมูลเรียบร้อย");
+
+
+}
+
+
+
+
+</script>
+
+
+
+</body>
+</html>
