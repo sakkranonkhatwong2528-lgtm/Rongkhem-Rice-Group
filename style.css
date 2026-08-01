@@ -1,18 +1,29 @@
-/* --- โทนสีหลักของกลุ่มข้าวรงเขม --- */
+/* =========================================
+   กลุ่มข้าวรงเขม - Theme & Animations
+   ========================================= */
+
 :root {
-  --primary-color: #2e7d32;   /* สีเขียว */
-  --secondary-color: #fbc02d; /* สีทองรวงข้าว */
-  --bg-color: #f8f9fa;        /* สีพื้นหลัง */
-  --text-color: #2c3e50;      /* สีตัวอักษร */
+  --primary: #2e7d32;       /* เขียวเกษตร */
+  --primary-dark: #1b5e20;  /* เขียวเข้ม */
+  --accent: #fbc02d;        /* เหลืองรวงข้าว */
+  --bg-color: #f4f7f6;      /* พื้นหลังสว่างสบายตา */
+  --card-bg: #ffffff;       /* พื้นหลังการ์ด */
+  --text-main: #2c3e50;     /* สีตัวอักษรหลัก */
+  --text-muted: #6c757d;    /* สีตัวอักษรรอง */
 }
 
-/* --- ตั้งค่าฟอนต์และพื้นหลัง + อนิเมชันตอนเปิดหน้า --- */
+/* 1. Reset & Global Styles */
+* {
+  box-sizing: border-box;
+}
+
 body {
   font-family: 'Sarabun', sans-serif !important;
   background-color: var(--bg-color);
-  color: var(--text-color);
+  color: var(--text-main);
   margin: 0;
-  animation: fadeInPage 0.6s ease-in-out;
+  padding: 0;
+  animation: fadeInPage 0.6s ease-out;
 }
 
 @keyframes fadeInPage {
@@ -20,36 +31,137 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* --- ปรับแต่ง การ์ด/กล่องข้อมูล ให้มีมิติ + ขยับได้เวลาชี้เมาส์ --- */
-.card, .box, div[class*="container"] {
+/* 2. Loading Overlay */
+.spinner-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.spinner {
+  width: 45px;
+  height: 45px;
+  border: 4px solid #e0e0e0;
+  border-top: 4px solid var(--primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.spinner-overlay.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* 3. Layout Component */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  margin-bottom: 20px;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(46, 125, 50, 0.15);
+}
+
+/* 4. Buttons */
+.btn {
+  font-family: 'Sarabun', sans-serif;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: #fff;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 25px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(46, 125, 50, 0.2);
+  text-decoration: none;
+}
+
+.btn:hover {
+  transform: scale(1.04);
+  box-shadow: 0 6px 18px rgba(46, 125, 50, 0.35);
+  color: #fff;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+/* 5. Form Control */
+input[type="text"], input[type="number"], input[type="date"], select, textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 10px;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(46, 125, 50, 0.15);
+  transform: translateY(-1px);
+}
+
+/* 6. Tables & Badges */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
   border-radius: 12px;
-  transition: all 0.3s ease-in-out;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 
-.card:hover, .box:hover {
-  transform: translateY(-5px); /* ลอยขึ้น 5px */
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
 }
 
-/* --- ปรับแต่ง ปุ่มกด ให้ลอยและขยายเล็กน้อย --- */
-button, .btn {
-  border-radius: 20px !important;
-  transition: all 0.2s ease-in-out !important;
+th {
+  background-color: var(--primary);
+  color: white;
+  padding: 14px 16px;
+  text-align: left;
+  font-weight: 600;
 }
 
-button:hover, .btn:hover {
-  transform: scale(1.03); /* ขยายขึ้น 3% */
-  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #eee;
+  transition: background 0.2s ease;
 }
 
-/* --- ไฮไลต์แถวในตารางเมื่อเมาส์ชี้ --- */
-tr {
-  transition: background-color 0.2s ease;
+tr:hover td {
+  background-color: #f1f8e9;
 }
-tr:hover {
-  background-color: #e8f5e9 !important; /* เปลี่ยนเป็นสีเขียวอ่อน */
-}
-/* --- ปรับแต่ง Badge สถานะในตาราง --- */
+
 .badge {
   padding: 6px 12px;
   border-radius: 20px;
@@ -58,16 +170,6 @@ tr:hover {
   display: inline-block;
 }
 
-.badge-success { background-color: #e8f5e9; color: #2e7d32; } /* สีเขียว:สำเร็จ/ปกติ */
-.badge-warning { background-color: #fffde7; color: #f57f17; } /* สีเหลือง: รอดำเนินการ */
-.badge-danger  { background-color: #ffebee; color: #c62828; } /* สีแดง: ยกเลิก/ขาด */
-
-/* เอฟเฟกต์ Fade In ทีละแถวตาราง */
-tbody tr {
-  animation: fadeInRow 0.5s ease-in-out forwards;
-}
-
-@keyframes fadeInRow {
-  from { opacity: 0; transform: translateX(-10px); }
-  to { opacity: 1; transform: translateX(0); }
-}
+.badge-success { background-color: #e8f5e9; color: #2e7d32; }
+.badge-warning { background-color: #fffde7; color: #f57f17; }
+.badge-danger  { background-color: #ffebee; color: #c62828; }
