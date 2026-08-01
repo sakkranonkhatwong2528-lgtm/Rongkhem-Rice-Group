@@ -143,7 +143,245 @@ login();
 }
 
 });
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>🌾 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Tahoma,sans-serif;
+}
+
+body{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(135deg,#0d5c2f,#1e8c4f,#3cb371);
+background-size:400% 400%;
+animation:bg 12s ease infinite;
+}
+
+@keyframes bg{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+.login-box{
+width:390px;
+background:#fff;
+padding:35px;
+border-radius:20px;
+box-shadow:0 15px 40px rgba(0,0,0,.3);
+text-align:center;
+animation:fade .8s;
+}
+
+@keyframes fade{
+from{
+opacity:0;
+transform:translateY(30px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+.logo{
+font-size:70px;
+margin-bottom:10px;
+animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+50%{
+transform:scale(1.1);
+}
+}
+
+h1{
+color:#146c43;
+margin-bottom:5px;
+}
+
+p{
+color:#666;
+margin-bottom:20px;
+}
+
+input[type=text],
+input[type=password]{
+width:100%;
+padding:13px;
+margin-bottom:15px;
+border:1px solid #ccc;
+border-radius:10px;
+font-size:16px;
+}
+
+.option{
+display:flex;
+justify-content:space-between;
+align-items:center;
+font-size:14px;
+margin-bottom:15px;
+}
+
+button{
+width:100%;
+padding:14px;
+background:#198754;
+border:0;
+border-radius:10px;
+color:#fff;
+font-size:17px;
+font-weight:bold;
+cursor:pointer;
+transition:.3s;
+}
+
+button:hover{
+background:#157347;
+}
+
+#error{
+margin-top:15px;
+color:#d32f2f;
+font-weight:bold;
+}
+
+.footer{
+margin-top:20px;
+font-size:13px;
+color:#777;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="login-box">
+
+<div class="logo">🌾</div>
+
+<h1>ระบบกลุ่มข้าวสาร</h1>
+
+<p>บ้านร่องเข็ม หมู่ที่ 6</p>
+
+<input
+type="text"
+id="username"
+placeholder="ชื่อผู้ใช้">
+
+<input
+type="password"
+id="password"
+placeholder="รหัสผ่าน">
+
+<div class="option">
+
+<label>
+<input
+type="checkbox"
+id="showPass">
+แสดงรหัสผ่าน
+</label>
+
+<label>
+<input
+type="checkbox"
+id="remember">
+จดจำการเข้าสู่ระบบ
+</label>
+
+</div>
+
+<button onclick="login()">
+
+🔐 เข้าสู่ระบบ
+
+</button>
+
+<div id="error"></div>
+
+<div class="footer">
+
+Version 3.0<br>
+
+Rongkhem Rice Group
+
+</div>
+
+</div>
+
+<script>
+
+const ADMIN_USER="admin";
+const ADMIN_PASS="123456";
+
+if(localStorage.getItem("loggedIn")=="true"){
+location.href="dashboard.html";
+}
+
+function login(){
+
+let u=document.getElementById("username").value.trim();
+
+let p=document.getElementById("password").value;
+
+if(u===ADMIN_USER && p===ADMIN_PASS){
+
+if(document.getElementById("remember").checked){
+
+localStorage.setItem("loggedIn","true");
+
+}else{
+
+sessionStorage.setItem("loggedIn","true");
+
+}
+
+location.href="dashboard.html";
+
+}else{
+
+document.getElementById("error").innerHTML="❌ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง";
+
+}
+
+}
+
+document.getElementById("showPass").addEventListener("change",function(){
+
+document.getElementById("password").type=
+this.checked?"text":"password";
+
+});
+
+document.addEventListener("keydown",function(e){
+
+if(e.key==="Enter"){
+
+login();
+
+}
+
+});
+
+</script>
+
+</body>
+</html>
 </script>
 
 </body>
