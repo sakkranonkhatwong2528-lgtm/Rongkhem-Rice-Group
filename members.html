@@ -12,8 +12,8 @@
     
     .card-title { margin-top: 0; color: #2c3e50; border-bottom: 2px solid #ecf0f1; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
     
-    .search-box { margin-bottom: 15px; }
-    .search-box input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px; box-sizing: border-box; }
+    .search-box { margin-bottom: 15px; display: flex; gap: 10px; }
+    .search-box input { flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px; box-sizing: border-box; }
 
     table { width: 100%; border-collapse: collapse; margin-top: 10px; }
     th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; font-size: 14px; white-space: nowrap; }
@@ -25,7 +25,7 @@
     .status-cut { color: #7f8c8d; font-weight: bold; background: #e0e0e0; padding: 3px 8px; border-radius: 12px; font-size: 12px; }
 
     .btn-cut { background: #e67e22; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; }
-    .btn-cut:hover { background: #d35400; }
+    .btn-reset { background: #27ae60; color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 13px; }
 
     .badge-count { background: #e74c3c; color: white; padding: 2px 10px; border-radius: 12px; font-size: 14px; }
     .btn-back { display: block; text-align: center; margin-top: 20px; color: #7f8c8d; text-decoration: none; font-weight: bold; }
@@ -43,7 +43,7 @@
   <div class="card" style="border: 2px solid #e74c3c;">
     <h3 class="card-title" style="color:#c0392b;">
       <span>⚠️ สมาชิกที่ไม่ได้นำข้าวสารมาส่ง</span>
-      <span class="badge-count" id="unpaidBadge">10 ครัวเรือน</span>
+      <span class="badge-count" id="unpaidBadge">0 ครัวเรือน</span>
     </h3>
     <p style="font-size: 13px; color: #666; margin-top: -5px;">รายชื่อสมาชิกที่ยังค้างส่งข้าวสาร สามารถตรวจสอบและกดพิจารณาตัดสิทธิ์ได้ที่นี่</p>
     
@@ -59,7 +59,7 @@
           </tr>
         </thead>
         <tbody id="unpaidTableBody">
-          <!-- โหลดเฉพาะ 10 ครัวเรือนค้างส่ง -->
+          <!-- แสดงเฉพาะรายการค้างส่ง -->
         </tbody>
       </table>
     </div>
@@ -74,6 +74,7 @@
 
     <div class="search-box">
       <input type="text" id="searchInput" onkeyup="filterMembers()" placeholder="🔍 พิมพ์ค้นหาบ้านเลขที่ หรือ ชื่อสมาชิก...">
+      <button class="btn-reset" onclick="resetMembersData()">🔄 รีเซ็ตดึงรายชื่อ 192 คน</button>
     </div>
 
     <div class="table-container">
@@ -87,7 +88,7 @@
           </tr>
         </thead>
         <tbody id="allMemberTableBody">
-          <!-- โหลดข้อมูลครบ 192 ครัวเรือน -->
+          <!-- แสดงรายชื่อทั้งหมด 192 ครัวเรือน -->
         </tbody>
       </table>
     </div>
@@ -97,31 +98,45 @@
 </div>
 
 <script>
-// ฟังก์ชันเริ่มต้นข้อมูล 192 ครัวเรือน
-function initMembersData() {
+// ฟังก์ชันสร้างข้อมูลสมาชิกใหม่ 192 ครัวเรือน
+function createDefaultMembers() {
+  let members = [];
+  for (let i = 1; i <= 192; i++) {
+    // 182 รายแรกส่งแล้ว / 10 รายหลัง (183-192) ค้างส่ง
+    let status = i <= 182 ? "ส่งแล้ว" : "ค้างส่ง";
+    members.push({
+      id: i,
+      houseNo: `${i}`,
+      name: `ครัวเรือนที่ ${i} (บ้านร่องเข็ม ม.6)`,
+      status: status,
+      remark: ""
+    });
+  }
+  localStorage.setItem('memberList', JSON.stringify(members));
+  return members;
+}
+
+// โหลดข้อมูลสมาชิก
+function getMembersData() {
   let members = JSON.parse(localStorage.getItem('memberList'));
-  
-  if (!members || members.length < 192) {
-    members = [];
-    for (let i = 1; i <= 192; i++) {
-      // 182 รายแรกส่งแล้ว / 10 รายหลัง (183-192) ค้างส่ง
-      let status = i <= 182 ? "ส่งแล้ว" : "ค้างส่ง";
-      members.push({
-        id: i,
-        houseNo: `${i}`,
-        name: `ครัวเรือนที่ ${i} (บ้านร่องเข็ม ม.6)`,
-        status: status,
-        remark: ""
-      });
-    }
-    localStorage.setItem('memberList', JSON.stringify(members));
+  if (!members || !Array.isArray(members) || members.length === 0) {
+    members = createDefaultMembers();
   }
   return members;
 }
 
+// กดปุ่มรีเซ็ตดึงข้อมูลใหม่
+function resetMembersData() {
+  if (confirm("คุณต้องการดึงรายชื่อสมาชิก 192 ครัวเรือนใหม่ทั้งหมด ใช่หรือไม่?")) {
+    createDefaultMembers();
+    renderTables();
+    alert("รีเซ็ตดึงรายชื่อสมาชิก 192 ครัวเรือนเรียบร้อยแล้ว!");
+  }
+}
+
 // แสดงผลตารางสมาชิก
 function renderTables() {
-  const members = initMembersData();
+  const members = getMembersData();
   const unpaidBody = document.getElementById("unpaidTableBody");
   const allBody = document.getElementById("allMemberTableBody");
   
@@ -131,7 +146,7 @@ function renderTables() {
   let unpaidCount = 0;
 
   members.forEach((m, index) => {
-    // 1. วาดตารางรวม 192 ครัวเรือน
+    // 1. ตารางรวม 192 ครัวเรือน
     let statusHTML = `<span class="status-paid">✅ ส่งแล้ว</span>`;
     if (m.status === 'ค้างส่ง') {
       statusHTML = `<span class="status-unpaid">❌ ค้างส่ง</span>`;
@@ -148,7 +163,7 @@ function renderTables() {
       </tr>
     `;
 
-    // 2. แยกวาดเฉพาะคนที่ "ค้างส่ง" หรือ "ถูกพิจารณาตัดสิทธิ์"
+    // 2. ตารางเฉพาะคนที่ "ค้างส่ง" หรือ "ตัดสิทธิ์"
     if (m.status === 'ค้างส่ง' || m.status === 'พิจารณาตัดสิทธิ์') {
       unpaidCount++;
       unpaidBody.innerHTML += `
@@ -168,13 +183,12 @@ function renderTables() {
     }
   });
 
-  // อัปเดตตัวเลขจำนวนค้างส่ง
   document.getElementById("unpaidBadge").innerText = `${unpaidCount} ครัวเรือน`;
 }
 
-// ฟังก์ชันพิจารณาตัดสิทธิ์สมาชิก
+// พิจารณาตัดสิทธิ์
 function cutMember(index) {
-  let members = JSON.parse(localStorage.getItem('memberList')) || [];
+  let members = getMembersData();
   const target = members[index];
 
   const reason = prompt(`ระบุสาเหตุการพิจารณาตัดสิทธิ์ของ "บ้านเลขที่ ${target.houseNo} (${target.name})":`, "ค้างส่งข้าวสารเกินกำหนด");
@@ -189,7 +203,7 @@ function cutMember(index) {
   }
 }
 
-// ฟังก์ชันค้นหาในตารางรวม
+// ค้นหา
 function filterMembers() {
   const input = document.getElementById("searchInput").value.toLowerCase();
   const rows = document.querySelectorAll("#allMemberTableBody tr");
@@ -200,7 +214,7 @@ function filterMembers() {
   });
 }
 
-// โหลดข้อมูลเมื่อเปิดหน้า
+// เรียกทำงานเมื่อเปิดหน้า
 document.addEventListener("DOMContentLoaded", renderTables);
 </script>
 
