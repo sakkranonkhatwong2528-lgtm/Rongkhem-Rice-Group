@@ -9,16 +9,16 @@
     :root {
       --primary: #1b4332;
       --primary-light: #2d6a4f;
-      --accent-gold: #f39c12;
+      --accent-gold: #d4af37;
+      --accent-gold-dark: #b38b14;
       --accent-red: #e74c3c;
-      --accent-green: #27ae60;
       --bg-gradient: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
-      --glass-bg: rgba(255, 255, 255, 0.88);
-      --glass-border: rgba(255, 255, 255, 0.35);
+      --glass-bg: rgba(255, 255, 255, 0.92);
+      --glass-border: rgba(255, 255, 255, 0.4);
       --shadow-3d: 0 20px 40px rgba(0, 0, 0, 0.3), 0 10px 10px rgba(0, 0, 0, 0.2);
     }
 
-    * { box-sizing: border-box; font-family: 'Sarabun', sans-serif; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); }
+    * { box-sizing: border-box; font-family: 'Sarabun', sans-serif; transition: all 0.3s ease; }
 
     body {
       background: var(--bg-gradient);
@@ -31,11 +31,40 @@
 
     .container { max-width: 1000px; margin: auto; animation: fadeIn 0.8s ease-out; }
 
+    /* Top Bar with Music Toggle */
+    .top-bar {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 10px;
+    }
+
+    .music-btn {
+      background: rgba(212, 175, 55, 0.2);
+      border: 1px solid var(--accent-gold);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      backdrop-filter: blur(5px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    .music-btn:hover {
+      background: var(--accent-gold);
+      color: #1a252f;
+      transform: translateY(-2px);
+    }
+
     /* Header 3D Glow */
     .header {
       background: linear-gradient(135deg, #1b4332, #2d6a4f);
       color: white;
-      padding: 25px;
+      padding: 22px;
       border-radius: 20px;
       text-align: center;
       margin-bottom: 25px;
@@ -45,29 +74,113 @@
       overflow: hidden;
     }
 
-    .header::before {
+    /* 🎗️ Elegant Funeral Banner with Wreath */
+    .funeral-card-3d {
+      background: linear-gradient(135deg, rgba(255,255,255,0.96) 0%, rgba(254,251,240,0.96) 100%);
+      border: 2px solid rgba(212, 175, 55, 0.4);
+      border-radius: 20px;
+      padding: 30px 20px;
+      margin-bottom: 25px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.25), inset 0 0 15px rgba(212, 175, 55, 0.1);
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    .funeral-card-3d::before {
       content: '';
       position: absolute;
-      top: -50%; left: -50%; width: 200%; height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 60%);
-      animation: rotateGlow 12s infinite linear;
+      top: 0; left: 0; width: 6px; height: 100%;
+      background: linear-gradient(to bottom, #d4af37, #8a6d1c);
     }
 
-    /* Funeral Notice Card 3D */
-    .funeral-notice {
-      background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(254,249,231,0.95));
-      border-left: 6px solid #e67e22;
-      padding: 20px;
-      border-radius: 16px;
-      margin-bottom: 25px;
-      box-shadow: var(--shadow-3d);
-      border-top: 1px solid var(--glass-border);
-      position: relative;
+    /* Wreath Graphic Centered */
+    .wreath-container {
+      margin: 0 auto 15px auto;
+      width: 130px;
+      height: 130px;
     }
 
-    .funeral-title { color: #d35400; font-weight: bold; font-size: 18px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .wreath-svg {
+      width: 130px;
+      height: 130px;
+      filter: drop-shadow(0 8px 12px rgba(0,0,0,0.15));
+      animation: floatWreath 4s ease-in-out infinite;
+    }
 
-    /* Stat Cards Grid 3D */
+    .funeral-info {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .funeral-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #2c3e50, #1a252f);
+      color: #f1c40f;
+      padding: 6px 18px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+    }
+
+    .deceased-name {
+      font-size: 26px;
+      font-weight: 700;
+      color: #1a252f;
+      margin: 8px 0;
+      letter-spacing: 0.3px;
+    }
+
+    .deceased-meta {
+      font-size: 15px;
+      color: #555;
+      margin-bottom: 12px;
+    }
+
+    /* ข้อความวิ่ง (Marquee Text) */
+    .marquee-container {
+      background: rgba(212, 175, 55, 0.08);
+      padding: 10px 0;
+      border-radius: 10px;
+      border-left: 3px solid #d4af37;
+      border-right: 3px solid #d4af37;
+      margin: 0 auto 15px auto;
+      max-width: 650px;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .marquee-text {
+      display: inline-block;
+      animation: marquee 16s linear infinite;
+      font-size: 14px;
+      color: #555;
+      font-weight: 600;
+    }
+
+    @keyframes marquee {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+
+    .cremation-date {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 14.5px;
+      font-weight: bold;
+      color: #8a6d1c;
+      background: #fff8e7;
+      padding: 8px 18px;
+      border-radius: 8px;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+    }
+
+    /* Stats Grid */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -83,12 +196,11 @@
       text-align: center;
       box-shadow: var(--shadow-3d);
       border: 1px solid var(--glass-border);
-      transform-style: preserve-3d;
       cursor: pointer;
     }
 
     .stat-card:hover {
-      transform: translateY(-8px) rotateX(5deg) scale(1.02);
+      transform: translateY(-6px) scale(1.02);
       box-shadow: 0 25px 45px rgba(0,0,0,0.35);
     }
 
@@ -107,7 +219,7 @@
     .card-unpaid { border-bottom: 4px solid #e74c3c; animation: pulseGlow 2.5s infinite; }
     .card-unpaid .stat-number { color: #c0392b; }
 
-    /* Nav Buttons Grid 3D */
+    /* Nav Buttons Grid */
     .menu-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
@@ -135,14 +247,13 @@
 
     .menu-btn:hover {
       background: rgba(255, 255, 255, 0.98);
-      transform: translateY(-5px) scale(1.03);
+      transform: translateY(-4px);
       color: var(--primary);
-      box-shadow: 0 15px 30px rgba(0,0,0,0.3);
     }
 
     .menu-icon { font-size: 28px; }
 
-    /* Footer Glass */
+    /* Footer */
     .footer {
       background: rgba(0, 0, 0, 0.4);
       backdrop-filter: blur(10px);
@@ -155,47 +266,89 @@
       line-height: 1.6;
     }
 
-    /* Keyframe Animations */
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
+      from { opacity: 0; transform: translateY(15px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    @keyframes rotateGlow {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+    @keyframes floatWreath {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
     }
 
     @keyframes pulseGlow {
       0% { box-shadow: 0 10px 25px rgba(231, 76, 60, 0.2); }
-      50% { box-shadow: 0 15px 35px rgba(231, 76, 60, 0.5); }
+      50% { box-shadow: 0 15px 35px rgba(231, 76, 60, 0.4); }
       100% { box-shadow: 0 10px 25px rgba(231, 76, 60, 0.2); }
     }
   </style>
 </head>
 <body>
 
+<!-- แหล่งเสียงเพลงบรรเลงไว้อาลัย -->
+<audio id="bgMusic" loop>
+  <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf756.mp3?filename=sad-piano-and-strings-110497.mp3" type="audio/mpeg">
+</audio>
+
 <div class="container">
+
+  <!-- ปุ่มเปิด-ปิดเพลง มุมขวาบน -->
+  <div class="top-bar">
+    <button class="music-btn" id="musicToggleBtn" onclick="toggleMusic()">
+      <span id="musicIcon">🎵</span> <span id="musicText">ปิดเพลงไว้อาลัย</span>
+    </button>
+  </div>
 
   <!-- Header -->
   <div class="header">
-    <h2 style="margin:0; font-size: 24px; position:relative; z-index:2;">🌾 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</h2>
-    <small style="position:relative; z-index:2; opacity:0.9;">ตำบลจำป่าหวาย อำเภอเมืองพะเยา จังหวัดพะเยา</small>
+    <h2 style="margin:0; font-size: 24px;">🌾 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</h2>
+    <small style="opacity:0.9;">ตำบลจำป่าหวาย อำเภอเมืองพะเยา จังหวัดพะเยา</small>
   </div>
 
-  <!-- การ์ดแสดงความเสียใจงานศพล่าสุด -->
-  <div class="funeral-notice">
-    <div class="funeral-title">🕊️ ขอแสดงความเสียใจอย่างสุดซึ้ง</div>
-    <div style="font-size: 18px; font-weight: bold; color: #2c3e50; margin: 4px 0;">นายเกษมสุข ใฝ่ใจ</div>
-    <div style="font-size: 14px; color: #555;">
-      อายุ <strong>47</strong> ปี | 📍 <strong>วัดร่องเข็ม</strong>
+  <!-- 🕊️ ป้ายงานศพพร้อมข้อความวิ่งและพวงหรีด -->
+  <div class="funeral-card-3d">
+    
+    <!-- SVG พวงหรีดอยู่กึ่งกลางด้านบน -->
+    <div class="wreath-container">
+      <svg class="wreath-svg" viewBox="0 0 200 200">
+        <circle cx="100" cy="95" r="75" fill="none" stroke="#2d6a4f" stroke-width="18" stroke-dasharray="8 4" />
+        <circle cx="100" cy="95" r="75" fill="none" stroke="#d4af37" stroke-width="4" />
+        <circle cx="100" cy="95" r="62" fill="none" stroke="#ffffff" stroke-width="2" stroke-dasharray="4 4" />
+        <circle cx="100" cy="20" r="12" fill="#f8f9fa" stroke="#d4af37" stroke-width="2" />
+        <circle cx="175" cy="95" r="12" fill="#f8f9fa" stroke="#d4af37" stroke-width="2" />
+        <circle cx="100" cy="170" r="12" fill="#f8f9fa" stroke="#d4af37" stroke-width="2" />
+        <circle cx="25" cy="95" r="12" fill="#f8f9fa" stroke="#d4af37" stroke-width="2" />
+        <circle cx="153" cy="42" r="10" fill="#e9ecef" />
+        <circle cx="153" cy="148" r="10" fill="#e9ecef" />
+        <circle cx="47" cy="148" r="10" fill="#e9ecef" />
+        <circle cx="47" cy="42" r="10" fill="#e9ecef" />
+        <path d="M 80 160 L 50 195 L 85 180 L 100 195 L 115 180 L 150 195 L 120 160 Z" fill="#1a252f" />
+        <rect x="25" y="82" width="150" height="26" rx="5" fill="#1a252f" stroke="#d4af37" stroke-width="1.5" />
+        <text x="100" y="99" fill="#f1c40f" font-size="10" font-weight="bold" text-anchor="middle" font-family="'Sarabun', sans-serif">กลุ่มข้าวสาร บ้านร่องเข็ม ม.6</text>
+      </svg>
     </div>
-    <p style="font-size: 13px; color: #666; margin: 8px 0 10px 0;">
-      ขออำนาจคุณพระศรีรัตนตรัยและสิ่งศักดิ์สิทธิ์ทั้งหลาย โปรดดลบันดาลให้ดวงวิญญาณไปสู่สุคติในสัมปรายภพ และขอเป็นกำลังใจแก่ครอบครัวและญาติมิตรทุกท่าน
-    </p>
-    <div style="font-size: 13px; font-weight: bold; color: #d35400; background: rgba(230,126,34,0.15); padding: 6px 12px; border-radius: 8px; display: inline-block;">
-      📅 กำหนดการฌาปนกิจ : 25 ก.ค. 2569
+
+    <!-- ข้อมูลผู้เสียชีวิต -->
+    <div class="funeral-info">
+      <div class="funeral-badge">🕊️ ทีมผู้นำหมู่บ้านร่องเข็ม และสมาชิกกลุ่มข้าวสาร ขอแสดงความเสียใจ</div>
+      <div class="deceased-name">นายเกษมสุข ใฝ่ใจ</div>
+      <div class="deceased-meta">
+        อายุ <strong>47</strong> ปี &nbsp;|&nbsp; 📍 ตั้งศพ ณ <strong>วัดร่องเข็ม</strong>
+      </div>
+      
+      <!-- ข้อความวิ่ง (Marquee) -->
+      <div class="marquee-container">
+        <span class="marquee-text">
+          🕊️ "ขออำนาจคุณพระศรีรัตนตรัยและสิ่งศักดิ์สิทธิ์ทั้งหลาย โปรดดลบันดาลให้ดวงวิญญาณไปสู่สุคติในสัมปรายภพ และขอเป็นกำลังใจแก่ครอบครัวและญาติมิตรทุกท่าน" 🌾
+        </span>
+      </div>
+
+      <div class="cremation-date">
+        <span>📅 กำหนดการฌาปนกิจ :</span>
+        <span>25 กรกฎาคม 2569</span>
+      </div>
     </div>
+
   </div>
 
   <!-- ตัวเลขสรุป 4 การ์ด 3D -->
@@ -225,32 +378,14 @@
     </div>
   </div>
 
-  <!-- ปุ่มเมนูหลัก 3D -->
+  <!-- เมนูหลัก 3D -->
   <div class="menu-grid">
-    <a href="members.html" class="menu-btn">
-      <span class="menu-icon">👥</span>
-      <span>สมาชิก</span>
-    </a>
-    <a href="funeral.html" class="menu-btn">
-      <span class="menu-icon">⚰️</span>
-      <span>งานศพ</span>
-    </a>
-    <a href="receive.html" class="menu-btn">
-      <span class="menu-icon">🌾</span>
-      <span>รับข้าวสาร</span>
-    </a>
-    <a href="stock.html" class="menu-btn">
-      <span class="menu-icon">📦</span>
-      <span>คลังข้าว</span>
-    </a>
-    <a href="report.html" class="menu-btn">
-      <span class="menu-icon">📊</span>
-      <span>รายงาน</span>
-    </a>
-    <a href="backup.html" class="menu-btn">
-      <span class="menu-icon">💾</span>
-      <span>สำรองข้อมูล</span>
-    </a>
+    <a href="members.html" class="menu-btn"><span class="menu-icon">👥</span><span>สมาชิก</span></a>
+    <a href="funeral.html" class="menu-btn"><span class="menu-icon">⚰️</span><span>งานศพ</span></a>
+    <a href="receive.html" class="menu-btn"><span class="menu-icon">🌾</span><span>รับข้าวสาร</span></a>
+    <a href="stock.html" class="menu-btn"><span class="menu-icon">📦</span><span>คลังข้าว</span></a>
+    <a href="report.html" class="menu-btn"><span class="menu-icon">📊</span><span>รายงาน</span></a>
+    <a href="backup.html" class="menu-btn"><span class="menu-icon">💾</span><span>สำรองข้อมูล</span></a>
   </div>
 
   <!-- Footer -->
@@ -262,6 +397,33 @@
   </div>
 
 </div>
+
+<!-- สคริปต์เล่นเพลงอัตโนมัติเมื่อเปิดเว็บ -->
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const music = document.getElementById('bgMusic');
+    // พยายามเล่นเพลงอัตโนมัติ
+    music.play().catch(error => {
+      console.log("Autoplay was prevented by browser policy. User interaction required.");
+    });
+  });
+
+  function toggleMusic() {
+    const music = document.getElementById('bgMusic');
+    const btnText = document.getElementById('musicText');
+    const btnIcon = document.getElementById('musicIcon');
+
+    if (music.paused) {
+      music.play();
+      btnText.innerText = "ปิดเพลงไว้อาลัย";
+      btnIcon.innerText = "🎵";
+    } else {
+      music.pause();
+      btnText.innerText = "เปิดเพลงไว้อาลัย";
+      btnIcon.innerText = "🔇";
+    }
+  }
+</script>
 
 </body>
 </html>
