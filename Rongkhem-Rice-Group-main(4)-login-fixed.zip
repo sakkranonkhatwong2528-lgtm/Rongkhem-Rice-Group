@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
+<style>
+body{margin:0;font-family:Tahoma,sans-serif;background:linear-gradient(135deg,#0d5c2f,#3cb371);display:flex;justify-content:center;align-items:center;height:100vh}
+.box{background:#fff;padding:30px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.25);width:360px;text-align:center}
+input,button{width:100%;padding:12px;margin:8px 0;border-radius:8px;font-size:16px}
+input{border:1px solid #ccc}
+button{background:#198754;color:#fff;border:none;cursor:pointer}
+#error{color:#d32f2f;margin-top:10px}
+</style>
+</head>
+<body>
+<div class="box">
+<h2>🌾 ระบบกลุ่มข้าวสาร</h2>
+<p>บ้านร่องเข็ม หมู่ที่ 6</p>
+<input id="username" placeholder="ชื่อผู้ใช้">
+<input id="password" type="password" placeholder="รหัสผ่าน">
+<button type="button" onclick="login()">🔐 เข้าสู่ระบบ</button>
+<div id="error"></div>
+</div>
+<script>
+const ADMIN_USER="admin";
+const ADMIN_PASS="123456";
+function login(){
+ const u=document.getElementById("username").value.trim();
+ const p=document.getElementById("password").value;
+ if(u===ADMIN_USER && p===ADMIN_PASS){
+   sessionStorage.setItem("riceGroupLoggedIn","true");
+   location.href="dashboard.html";
+ }else{
+   document.getElementById("error").textContent="❌ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง";
+ }
+}
+document.getElementById("password").addEventListener("keydown",e=>{if(e.key==="Enter")login();});
+</script>
+</body>
+</html>
