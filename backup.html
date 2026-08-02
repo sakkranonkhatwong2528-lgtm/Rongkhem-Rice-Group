@@ -1,722 +1,296 @@
 <!DOCTYPE html>
 <html lang="th">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
-
-<title>
-สำรองข้อมูลระบบกลุ่มข้าวสาร
-</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>สำรองและเรียกคืนข้อมูล | ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
 
 <style>
-
 *{
-    box-sizing:border-box;
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Tahoma,sans-serif;
 }
 
 body{
-    margin:0;
-    font-family:Tahoma,sans-serif;
-    background:#f3f7f0;
-    color:#333;
+  background: linear-gradient(-45deg, #0b3d26, #0f5132, #198754, #20c997);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+  min-height:100vh;
+  display: flex;
+  flex-direction: column;
+  color: #fff;
 }
 
-.header{
-    background:linear-gradient(
-        135deg,
-        #176b2c,
-        #4caf50
-    );
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
 
-    color:white;
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px;
+  background:rgba(255,255,255,.12);
+  backdrop-filter:blur(10px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  animation: slideDown 0.6s ease-out;
+}
 
-    padding:25px 15px;
+.btn-back {
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.4);
+  padding: 8px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.3s;
+}
 
-    text-align:center;
+.btn-back:hover {
+  background: rgba(255,255,255,0.35);
+  transform: translateX(-3px);
 }
 
 .container{
-    max-width:800px;
-
-    margin:auto;
-
-    padding:15px;
+  max-width:800px;
+  margin:auto;
+  padding:25px;
+  flex: 1;
+  width: 100%;
 }
 
-.box{
-    background:white;
-
-    padding:20px;
-
-    margin-bottom:15px;
-
-    border-radius:16px;
-
-    box-shadow:
-        0 3px 10px
-        rgba(0,0,0,.08);
+.card {
+  background:rgba(255,255,255,.18);
+  backdrop-filter:blur(12px);
+  border-radius:18px;
+  padding:25px;
+  box-shadow:0 8px 25px rgba(0,0,0,.18);
+  border: 1px solid rgba(255,255,255,0.2);
+  margin-bottom: 25px;
+  animation: fadeInUp 0.8s ease-out;
 }
 
-.summary{
-    display:grid;
-
-    grid-template-columns:
-        1fr 1fr;
-
-    gap:10px;
+.btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
-.card{
-    background:#f8fff8;
-
-    padding:15px;
-
-    border-radius:12px;
-
-    text-align:center;
+.btn-export {
+  background: #198754;
+  color: white;
+  box-shadow: 0 4px 10px rgba(25, 135, 84, 0.3);
 }
 
-.number{
-    font-size:28px;
-
-    font-weight:bold;
-
-    color:#228B22;
+.btn-export:hover {
+  background: #146c43;
+  transform: translateY(-2px);
 }
 
-button{
-    width:100%;
-
-    padding:14px;
-
-    margin-top:10px;
-
-    border:0;
-
-    border-radius:10px;
-
-    background:#228B22;
-
-    color:white;
-
-    font-size:16px;
-
-    cursor:pointer;
+.btn-import {
+  background: #0d6efd;
+  color: white;
+  box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
 }
 
-button.blue{
-    background:#1976d2;
+.btn-import:hover {
+  background: #0b5ed7;
+  transform: translateY(-2px);
 }
 
-button.red{
-    background:#c62828;
+.btn-reset {
+  background: #dc3545;
+  color: white;
+  box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3);
 }
 
-input[type="file"]{
-    width:100%;
-
-    padding:12px;
-
-    margin-top:10px;
+.btn-reset:hover {
+  background: #bb2d3b;
+  transform: translateY(-2px);
 }
 
-.warning{
-    background:#fff3cd;
-
-    color:#856404;
-
-    padding:14px;
-
-    border-radius:12px;
-
-    margin-top:10px;
+input[type="file"] {
+  display: none;
 }
 
-.success{
-    background:#e8f7e8;
-
-    color:#1b7a1b;
-
-    padding:14px;
-
-    border-radius:12px;
-
-    margin-top:10px;
+.file-label {
+  display: block;
+  padding: 20px;
+  border: 2px dashed rgba(255,255,255,0.4);
+  border-radius: 12px;
+  text-align: center;
+  cursor: pointer;
+  background: rgba(255,255,255,0.1);
+  transition: 0.3s;
+  margin-top: 10px;
 }
 
-.back{
-    display:block;
-
-    text-align:center;
-
-    padding:18px;
-
-    color:#228B22;
-
-    text-decoration:none;
+.file-label:hover {
+  background: rgba(255,255,255,0.2);
+  border-color: #fff;
 }
 
-@media(max-width:600px){
-
-    .summary{
-        grid-template-columns:1fr 1fr;
-    }
-
+@keyframes slideDown {
+  from { transform: translateY(-100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 
+@keyframes fadeInUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+footer {
+  text-align: center;
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.15);
+  font-size: 13px;
+  color: rgba(255,255,255,0.7);
+}
 </style>
-
 </head>
 
 <body>
 
-
-<div class="header">
-
-<h1>
-💾 สำรองข้อมูล
-</h1>
-
-<p>
-กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
-</p>
-
-</div>
-
+<header>
+  <h2>💾 สำรองและเรียกคืนข้อมูล</h2>
+  <a href="dashboard.html" class="btn-back">⬅️ กลับหน้าหลัก</a>
+</header>
 
 <div class="container">
 
+  <!-- ดาวน์โหลดสำรองข้อมูล -->
+  <div class="card">
+    <h3>📥 สำรองข้อมูลระบบ (Export)</h3>
+    <p style="margin-top: 8px; opacity: 0.8; font-size: 14px;">
+      บันทึกข้อมูลทั้งหมด (รายชื่อสมาชิก, ประวัติงานศพ, สต็อกข้าวสาร) ออกมาเป็นไฟล์เก็บไว้ป้องกันข้อมูลสูญหาย
+    </p>
+    <button class="btn btn-export" onclick="exportData()">⬇️ บันทึกไฟล์สำรองข้อมูล (.json)</button>
+  </div>
 
-<!-- =========================
-     สรุปข้อมูล
-========================= -->
+  <!-- นำเข้าข้อมูล -->
+  <div class="card">
+    <h3>📤 เรียกคืนข้อมูล (Import)</h3>
+    <p style="margin-top: 8px; opacity: 0.8; font-size: 14px;">
+      นำไฟล์ข้อมูลที่เคยสำรองไว้กลับเข้าสู่ระบบ (ข้อมูลปัจจุบันจะถูกแทนที่ด้วยข้อมูลจากไฟล์)
+    </p>
+    <label for="importFile" class="file-label" id="fileLabel">
+      📂 คลิกเพื่อเลือกไฟล์สำรองข้อมูล (.json)
+    </label>
+    <input type="file" id="importFile" accept=".json" onchange="handleFileSelect(event)">
+    <button class="btn btn-import" onclick="importData()">⬆️ เริ่มนำเข้าข้อมูล</button>
+  </div>
 
-<div class="box">
-
-<h2>
-📊 ข้อมูลในระบบ
-</h2>
-
-
-<div class="summary">
-
-
-<div class="card">
-
-👥 สมาชิก
-
-<div
-    class="number"
-    id="memberCount"
->
-0
-</div>
-
-ครัวเรือน
-
-</div>
-
-
-<div class="card">
-
-⚰️ งานศพ
-
-<div
-    class="number"
-    id="funeralCount"
->
-0
-</div>
-
-งาน
+  <!-- ล้างข้อมูล -->
+  <div class="card" style="border-color: rgba(220, 53, 69, 0.4);">
+    <h3 style="color: #ff868d;">⚠️ ล้างข้อมูลทั้งหมด (Reset System)</h3>
+    <p style="margin-top: 8px; opacity: 0.8; font-size: 14px;">
+      ลบข้อมูลทั้งหมดในระบบกลับสู่ค่าเริ่มต้น (ไม่แนะนำให้ทำ หากยังไม่ได้สำรองข้อมูล)
+    </p>
+    <button class="btn btn-reset" onclick="resetData()">🗑️ ลบข้อมูลทั้งหมดในระบบ</button>
+  </div>
 
 </div>
 
-
-<div class="card">
-
-🌾 รายการข้าวสาร
-
-<div
-    class="number"
-    id="riceCount"
->
-0
-</div>
-
-รายการ
-
-</div>
-
-
-<div class="card">
-
-📦 ช่วยงานศพ
-
-<div
-    class="number"
-    id="sendCount"
->
-0
-</div>
-
-รายการ
-
-</div>
-
-
-</div>
-
-</div>
-
-
-<!-- =========================
-     สำรองข้อมูล
-========================= -->
-
-<div class="box">
-
-<h2>
-📥 ส่งออกข้อมูล
-</h2>
-
-<p>
-บันทึกข้อมูลทั้งหมดจากระบบเป็นไฟล์
-เพื่อเก็บไว้เป็นข้อมูลสำรอง
-</p>
-
-
-<button
-    onclick="backupData()"
->
-💾 ดาวน์โหลดข้อมูลสำรอง
-</button>
-
-
-<div
-    id="backupMessage"
-></div>
-
-</div>
-
-
-<!-- =========================
-     นำเข้าข้อมูล
-========================= -->
-
-<div class="box">
-
-<h2>
-📤 นำเข้าข้อมูลสำรอง
-</h2>
-
-<p>
-เลือกไฟล์ข้อมูลสำรองที่เคยดาวน์โหลดไว้
-</p>
-
-
-<input
-    id="backupFile"
-    type="file"
-    accept=".json"
->
-
-
-<button
-    class="blue"
-    onclick="restoreData()"
->
-📤 นำเข้าข้อมูล
-</button>
-
-
-<div
-    id="restoreMessage"
-></div>
-
-</div>
-
-
-<!-- =========================
-     กลับหน้าแรก
-========================= -->
-
-<a
-    class="back"
-    href="index.html"
->
-← กลับหน้าหลัก
-</a>
-
-
-</div>
-
+<footer>
+  © 2569 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
+</footer>
 
 <script>
-
-/* =====================================================
-   แสดงจำนวนข้อมูล
-===================================================== */
-
-function showSummary(){
-
-    const members =
-        JSON.parse(
-            localStorage.getItem("members")
-        ) || [];
-
-
-    const funerals =
-        JSON.parse(
-            localStorage.getItem("funerals")
-        ) || [];
-
-
-    const rice =
-        JSON.parse(
-            localStorage.getItem("rice")
-        ) || [];
-
-
-    const funeralSends =
-        JSON.parse(
-            localStorage.getItem("funeralSends")
-        ) || [];
-
-
-    document.getElementById(
-        "memberCount"
-    ).innerText =
-        members.length;
-
-
-    document.getElementById(
-        "funeralCount"
-    ).innerText =
-        funerals.length;
-
-
-    document.getElementById(
-        "riceCount"
-    ).innerText =
-        rice.length;
-
-
-    document.getElementById(
-        "sendCount"
-    ).innerText =
-        funeralSends.length;
-
+// ตรวจสอบการ Login
+if(sessionStorage.getItem("loggedIn") !== "true" && localStorage.getItem("loggedIn") !== "true"){
+  location.href = "index.html";
 }
 
+let selectedFileContent = null;
 
-/* =====================================================
-   สำรองข้อมูล
-===================================================== */
+// ฟังก์ชันส่งออกข้อมูล
+function exportData() {
+  const data = {
+    members: JSON.parse(localStorage.getItem("members")) || [],
+    funerals: JSON.parse(localStorage.getItem("funerals")) || [],
+    stockList: JSON.parse(localStorage.getItem("stockList")) || [],
+    exportDate: new Date().toLocaleString("th-TH")
+  };
 
-function backupData(){
-
-    const backup = {
-
-        ระบบ:
-            "กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6",
-
-        วันที่สำรอง:
-            new Date().toLocaleString(
-                "th-TH"
-            ),
-
-        members:
-            JSON.parse(
-                localStorage.getItem(
-                    "members"
-                )
-            ) || [],
-
-        funerals:
-            JSON.parse(
-                localStorage.getItem(
-                    "funerals"
-                )
-            ) || [],
-
-        rice:
-            JSON.parse(
-                localStorage.getItem(
-                    "rice"
-                )
-            ) || [],
-
-        funeralSends:
-            JSON.parse(
-                localStorage.getItem(
-                    "funeralSends"
-                )
-            ) || [],
-
-        selectedFuneralId:
-            localStorage.getItem(
-                "selectedFuneralId"
-            ) || ""
-
-    };
-
-
-    const data =
-        JSON.stringify(
-            backup,
-            null,
-            2
-        );
-
-
-    const blob =
-        new Blob(
-            [data],
-            {
-                type:
-                    "application/json"
-            }
-        );
-
-
-    const url =
-        URL.createObjectURL(
-            blob
-        );
-
-
-    const link =
-        document.createElement("a");
-
-
-    const date =
-        new Date()
-        .toISOString()
-        .slice(0,10);
-
-
-    link.href =
-        url;
-
-
-    link.download =
-        "backup-rongkhem-rice-" +
-        date +
-        ".json";
-
-
-    document.body.appendChild(
-        link
-    );
-
-
-    link.click();
-
-
-    link.remove();
-
-
-    URL.revokeObjectURL(
-        url
-    );
-
-
-    document.getElementById(
-        "backupMessage"
-    ).innerHTML = `
-
-        <div class="success">
-
-            ✅ สำรองข้อมูลเรียบร้อยแล้ว
-
-            <br>
-
-            กรุณาเก็บไฟล์ไว้ในที่ปลอดภัย
-
-        </div>
-
-    `;
-
+  const jsonString = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
+  const downloadAnchor = document.createElement("a");
+  
+  const dateStr = new Date().toISOString().slice(0, 10);
+  downloadAnchor.setAttribute("href", jsonString);
+  downloadAnchor.setAttribute("download", `rice_group_backup_${dateStr}.json`);
+  document.body.appendChild(downloadAnchor);
+  downloadAnchor.click();
+  downloadAnchor.remove();
 }
 
+// ฟังก์ชันรับไฟล์ที่อัปโหลด
+function handleFileSelect(event) {
+  const file = event.target.files[0];
+  if (!file) return;
 
-/* =====================================================
-   นำเข้าข้อมูล
-===================================================== */
+  document.getElementById("fileLabel").textContent = "📄 เลือกไฟล์แล้ว: " + file.name;
 
-function restoreData(){
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    selectedFileContent = e.target.result;
+  };
+  reader.readAsText(file);
+}
 
-    const fileInput =
-        document.getElementById(
-            "backupFile"
-        );
+// ฟังก์ชันนำเข้าข้อมูล
+function importData() {
+  if (!selectedFileContent) {
+    alert("กรุณาเลือกไฟล์สำรองข้อมูล (.json) ก่อนครับ");
+    return;
+  }
 
+  if (confirm("การนำเข้าข้อมูลจะเขียนทับข้อมูลปัจจุบัน คุณแน่ใจหรือไม่?")) {
+    try {
+      const parsedData = JSON.parse(selectedFileContent);
 
-    const file =
-        fileInput.files[0];
+      if (parsedData.members) localStorage.setItem("members", JSON.stringify(parsedData.members));
+      if (parsedData.funerals) localStorage.setItem("funerals", JSON.stringify(parsedData.funerals));
+      if (parsedData.stockList) localStorage.setItem("stockList", JSON.stringify(parsedData.stockList));
 
-
-    if(!file){
-
-        alert(
-            "กรุณาเลือกไฟล์ข้อมูลสำรอง"
-        );
-
-        return;
-
+      alert("🎉 นำเข้าข้อมูลสำเร็จแล้ว!");
+      location.href = "dashboard.html";
+    } catch (err) {
+      alert("❌ ไฟล์ไม่ถูกต้อง ไม่สามารถนำเข้าได้");
     }
-
-
-    const confirmed =
-        confirm(
-            "การนำเข้าข้อมูลจะเขียนทับข้อมูลปัจจุบัน\n\n" +
-            "ต้องการดำเนินการต่อหรือไม่?"
-        );
-
-
-    if(!confirmed){
-
-        return;
-
-    }
-
-
-    const reader =
-        new FileReader();
-
-
-    reader.onload =
-        function(event){
-
-            try{
-
-                const data =
-                    JSON.parse(
-                        event.target.result
-                    );
-
-
-                if(!data){
-
-                    throw new Error(
-                        "ไฟล์ไม่ถูกต้อง"
-                    );
-
-                }
-
-
-                if(
-                    !Array.isArray(
-                        data.members
-                    )
-                ){
-
-                    throw new Error(
-                        "ไม่พบข้อมูลสมาชิก"
-                    );
-
-                }
-
-
-                localStorage.setItem(
-                    "members",
-                    JSON.stringify(
-                        data.members
-                    )
-                );
-
-
-                localStorage.setItem(
-                    "funerals",
-                    JSON.stringify(
-                        data.funerals || []
-                    )
-                );
-
-
-                localStorage.setItem(
-                    "rice",
-                    JSON.stringify(
-                        data.rice || []
-                    )
-                );
-
-
-                localStorage.setItem(
-                    "funeralSends",
-                    JSON.stringify(
-                        data.funeralSends || []
-                    )
-                );
-
-
-                localStorage.setItem(
-                    "selectedFuneralId",
-                    data.selectedFuneralId || ""
-                );
-
-
-                showSummary();
-
-
-                document.getElementById(
-                    "restoreMessage"
-                ).innerHTML = `
-
-                    <div class="success">
-
-                        ✅ นำเข้าข้อมูลเรียบร้อยแล้ว
-
-                    </div>
-
-                `;
-
-
-            }catch(error){
-
-                document.getElementById(
-                    "restoreMessage"
-                ).innerHTML = `
-
-                    <div class="warning">
-
-                        ❌ นำเข้าข้อมูลไม่สำเร็จ
-
-                        <br>
-
-                        ${error.message}
-
-                    </div>
-
-                `;
-
-            }
-
-        };
-
-
-    reader.readAsText(
-        file
-    );
-
+  }
 }
 
-
-/* =====================================================
-   เริ่มต้น
-===================================================== */
-
-showSummary();
-
+// ฟังก์ชันลบข้อมูลทั้งหมด
+function resetData() {
+  if (confirm("⚠️ คุณแน่ใจหรือไม่ที่จะลบข้อมูลทั้งหมดในระบบ? (ไม่สามารถกู้คืนได้)")) {
+    const confirmAgain = confirm("ยืนยันอีกครั้ง! ลบรายชื่อสมาชิก ประวัติงานศพ และสต็อกทั้งหมด?");
+    if (confirmAgain) {
+      localStorage.removeItem("members");
+      localStorage.removeItem("funerals");
+      localStorage.removeItem("stockList");
+      alert("ล้างข้อมูลเรียบร้อยแล้ว");
+      location.href = "dashboard.html";
+    }
+  }
+}
 </script>
 
 </body>
-
 </html>
