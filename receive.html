@@ -1,516 +1,106 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ลงทะเบียนรับข้าวสาร | ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>รับข้าวสาร - กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
+  <style>
+    body { font-family: 'Sarabun', sans-serif; background: #f4f7f6; margin: 0; padding: 15px; color: #333; }
+    .container { max-width: 800px; margin: auto; }
+    .header { background: #2c3e50; color: white; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 20px; }
+    
+    .card { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+    .search-box { display: flex; gap: 10px; margin-bottom: 15px; }
+    .search-box input { flex: 1; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; }
 
-<style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:Tahoma,sans-serif;
-}
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 12px 10px; text-align: left; border-bottom: 1px solid #ddd; font-size: 15px; }
+    th { background: #f8f9fa; color: #2c3e50; }
 
-body{
-  background: linear-gradient(-45deg, #0b3d26, #0f5132, #198754, #20c997);
-  background-size: 400% 400%;
-  animation: gradientBG 15s ease infinite;
-  min-height:100vh;
-  display: flex;
-  flex-direction: column;
-  color: #fff;
-}
+    .btn-status { padding: 8px 14px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px; }
+    .btn-pending { background: #e74c3c; color: white; }
+    .btn-done { background: #27ae60; color: white; cursor: default; }
 
-@keyframes gradientBG {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:20px;
-  background:rgba(255,255,255,.12);
-  backdrop-filter:blur(10px);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  animation: slideDown 0.6s ease-out;
-}
-
-.btn-back {
-  background: rgba(255,255,255,0.2);
-  color: #fff;
-  border: 1px solid rgba(255,255,255,0.4);
-  padding: 8px 16px;
-  border-radius: 10px;
-  cursor: pointer;
-  text-decoration: none;
-  font-weight: bold;
-  transition: 0.3s;
-}
-
-.btn-back:hover {
-  background: rgba(255,255,255,0.35);
-  transform: translateX(-3px);
-}
-
-.container{
-  max-width:1000px;
-  margin:auto;
-  padding:25px;
-  flex: 1;
-  width: 100%;
-}
-
-.card {
-  background:rgba(255,255,255,.18);
-  backdrop-filter:blur(12px);
-  border-radius:18px;
-  padding:25px;
-  box-shadow:0 8px 25px rgba(0,0,0,.18);
-  border: 1px solid rgba(255,255,255,0.2);
-  margin-bottom: 25px;
-  animation: fadeInUp 0.8s ease-out;
-}
-
-/* ส่วนสรุปข้อมูลงานศพล่าสุด */
-.funeral-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 15px;
-  background: rgba(0,0,0,0.15);
-  padding: 15px 20px;
-  border-radius: 12px;
-  margin-bottom: 20px;
-  border-left: 4px solid #ffc107;
-}
-
-.stat-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 15px;
-  margin-bottom: 20px;
-}
-
-.stat-box {
-  background: rgba(255,255,255,0.1);
-  padding: 15px;
-  border-radius: 12px;
-  text-align: center;
-}
-
-.stat-box h2 {
-  font-size: 28px;
-  margin-top: 5px;
-}
-
-input[type="text"] {
-  width: 100%;
-  padding: 12px 15px;
-  border-radius: 10px;
-  border: 1px solid rgba(255,255,255,0.3);
-  background: rgba(255,255,255,0.2);
-  color: #fff;
-  font-size: 15px;
-  outline: none;
-  transition: 0.3s;
-}
-
-input[type="text"]::placeholder {
-  color: rgba(255,255,255,0.7);
-}
-
-/* ตารางเช็กชื่อ */
-.table-responsive {
-  overflow-x: auto;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
-}
-
-th, td {
-  padding: 14px;
-  text-align: left;
-  border-bottom: 1px solid rgba(255,255,255,0.15);
-}
-
-th {
-  background: rgba(0,0,0,0.15);
-  font-size: 16px;
-}
-
-tr {
-  transition: 0.2s;
-}
-
-tr:hover {
-  background: rgba(255,255,255,0.1);
-}
-
-/* ปุ่มสถานะ Checkbox สไตล์ Glass */
-.checkbox-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  padding: 8px 16px;
-  border-radius: 8px;
-  background: rgba(220, 53, 69, 0.25);
-  border: 1px solid rgba(220, 53, 69, 0.5);
-  color: #ff868d;
-  font-weight: bold;
-  transition: 0.3s;
-  user-select: none;
-}
-
-.checkbox-btn.checked {
-  background: rgba(25, 135, 84, 0.35);
-  border-color: rgba(25, 135, 84, 0.8);
-  color: #75b798;
-}
-
-.checkbox-btn input {
-  display: none;
-}
-
-/* ปุ่มพิมพ์ใบเสร็จ */
-.btn-print-slip {
-  background: #ffc107;
-  color: #000;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 13px;
-  margin-left: 8px;
-  transition: 0.2s;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-}
-
-.btn-print-slip:hover {
-  background: #e0a800;
-  transform: scale(1.05);
-}
-
-/* ซ่อนโซนใบเสร็จในหน้าจอปกติ */
-#receiptModal {
-  display: none;
-}
-
-/* สไตล์สำหรับเวลาสั่งพิมพ์ (Print Mode) */
-@media print {
-  body * {
-    visibility: hidden;
-  }
-  #receiptModal, #receiptModal * {
-    visibility: visible;
-  }
-  #receiptModal {
-    display: block !important;
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    color: #000 !important;
-    background: #fff !important;
-    padding: 20px;
-  }
-  .receipt-box {
-    border: 2px solid #000;
-    padding: 25px;
-    border-radius: 10px;
-    max-width: 650px;
-    margin: auto;
-  }
-  .receipt-header {
-    text-align: center;
-    border-bottom: 1px dashed #000;
-    padding-bottom: 12px;
-    margin-bottom: 15px;
-  }
-  .receipt-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-    font-size: 16px;
-  }
-  .sign-zone {
-    margin-top: 50px;
-    display: flex;
-    justify-content: space-between;
-    text-align: center;
-  }
-}
-
-@keyframes slideDown {
-  from { transform: translateY(-100%); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-@keyframes fadeInUp {
-  from { transform: translateY(30px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-footer {
-  text-align: center;
-  padding: 15px;
-  background: rgba(0, 0, 0, 0.15);
-  font-size: 13px;
-  color: rgba(255,255,255,0.7);
-}
-</style>
+    .btn-back { display: block; text-align: center; margin-top: 20px; color: #7f8c8d; text-decoration: none; font-weight: bold; }
+  </style>
 </head>
-
 <body>
 
-<header>
-  <h2>🌾 เช็กชื่อรับข้าวสาร (งานศพ)</h2>
-  <a href="dashboard.html" class="btn-back">⬅️ กลับหน้าหลัก</a>
-</header>
-
 <div class="container">
+  <div class="header">
+    <h2 style="margin: 0;">🌾 ลงทะเบียนรับข้าวสาร</h2>
+    <small>กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</small>
+  </div>
 
   <div class="card">
-    <!-- รายละเอียดงานศพล่าสุด -->
-    <div class="funeral-info" id="funeralDetails">
-      <div>
-        <span style="font-size:12px; color:#ffc107; font-weight:bold;">งานศพล่าสุด</span>
-        <h3 id="targetFuneralName" style="font-size: 22px; margin-top:2px;">กำลังโหลด...</h3>
-      </div>
-      <div id="targetFuneralDate" style="font-size: 14px; opacity:0.9;">-</div>
+    <div class="search-box">
+      <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="🔍 ค้นหาชื่อ หรือ บ้านเลขที่...">
     </div>
 
-    <!-- สรุปสถานะ -->
-    <div class="stat-grid">
-      <div class="stat-box">
-        <div>สมาชิกทั้งหมด</div>
-        <h2 id="totalMem">0</h2>
-      </div>
-      <div class="stat-box" style="background: rgba(25, 135, 84, 0.2);">
-        <div>รับแล้ว</div>
-        <h2 id="receivedCount" style="color:#75b798;">0</h2>
-      </div>
-      <div class="stat-box" style="background: rgba(220, 53, 69, 0.2);">
-        <div>ยังไม่ได้รับ (ค้าง)</div>
-        <h2 id="pendingCount" style="color:#ff868d;">0</h2>
-      </div>
-    </div>
-
-    <!-- ช่องค้นหา -->
-    <div style="margin-bottom: 15px;">
-      <input type="text" id="searchInput" onkeyup="searchMember()" placeholder="🔍 ค้นหาชื่อสมาชิก หรือ บ้านเลขที่...">
-    </div>
-
-    <!-- ตารางเช็กรายชื่อ -->
-    <div class="table-responsive">
-      <table>
-        <thead>
-          <tr>
-            <th>ลำดับ</th>
-            <th>ชื่อ - นามสกุล</th>
-            <th>บ้านเลขที่</th>
-            <th style="text-align:center;">สถานะการรับข้าวสาร / จัดการ</th>
-          </tr>
-        </thead>
-        <tbody id="receiveTableBody">
-          <!-- ข้อมูลจะแสดงที่นี่ -->
-        </tbody>
-      </table>
-    </div>
+    <table id="receiveTable">
+      <thead>
+        <tr>
+          <th>บ้านเลขที่</th>
+          <th>ชื่อ - สกุล</th>
+          <th>สถานะ</th>
+          <th>การจัดการ</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>91/1</td>
+          <td>นายวุฒิภัทร เตชะวงค์</td>
+          <td><span style="color:#e74c3c; font-weight:bold;">ค้างส่ง</span></td>
+          <td><button class="btn-status btn-pending" onclick="markAsReceived(this)">บันทึกรับข้าว</button></td>
+        </tr>
+        <tr>
+          <td>114</td>
+          <td>นายต่วน ทาทอง</td>
+          <td><span style="color:#e74c3c; font-weight:bold;">ค้างส่ง</span></td>
+          <td><button class="btn-status btn-pending" onclick="markAsReceived(this)">บันทึกรับข้าว</button></td>
+        </tr>
+        <tr>
+          <td>123</td>
+          <td>นายเกษมสุข ใฝ่ใจ (ผู้เสียชีวิต)</td>
+          <td><span style="color:#7f8c8d; font-weight:bold;">ยกเว้น</span></td>
+          <td><button class="btn-status" style="background:#bdc3c7; color:#fff;" disabled>ยกเว้นการส่ง</button></td>
+        </tr>
+        <tr>
+          <td>125</td>
+          <td>นายสมชาย ใจดี</td>
+          <td><span style="color:#27ae60; font-weight:bold;">รับแล้ว</span></td>
+          <td><button class="btn-status btn-done" disabled>✓ ส่งแล้ว</button></td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
+  <a href="index.html" class="btn-back">← กลับหน้าหลัก</a>
 </div>
-
-<!-- โครงสร้างใบสำคัญรับข้าวสาร (จะแสดงเฉพาะตอนสั่งพิมพ์) -->
-<div id="receiptModal">
-  <div class="receipt-box">
-    <div class="receipt-header">
-      <h2>🌾 ใบสำคัญการรับข้าวสาร</h2>
-      <p>กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6 ต.แม่ปืม อ.เมือง จ.พะเยา</p>
-    </div>
-    
-    <div class="receipt-row">
-      <span><strong>วันที่ทำรายการ:</strong> <span id="recDate">-</span></span>
-      <span><strong>เลขที่:</strong> <span id="recId">-</span></span>
-    </div>
-    <div class="receipt-row">
-      <span><strong>ชื่อผู้รับข้าวสาร:</strong> <span id="recMemberName">-</span></span>
-      <span><strong>บ้านเลขที่:</strong> <span id="recHouseNo">-</span></span>
-    </div>
-    
-    <hr style="border: 0.5px solid #ccc; margin: 15px 0;">
-    
-    <div class="receipt-row">
-      <span><strong>เนื่องในงานศพ:</strong> <span id="recFuneralName">-</span></span>
-    </div>
-    <div class="receipt-row">
-      <span><strong>รายการที่ได้รับ:</strong> ข้าวสารสารพัดประโยชน์</span>
-      <span><strong>จำนวน:</strong> 1 ถุง</span>
-    </div>
-
-    <div class="sign-zone">
-      <div>
-        <p>ลงชื่อ......................................................ผู้รับ</p>
-        <p style="margin-top: 5px;">( <span id="recSignMember">-</span> )</p>
-      </div>
-      <div>
-        <p>ลงชื่อ......................................................ผู้จ่าย/กรรมการ</p>
-        <p style="margin-top: 5px;">( ...................................................... )</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<footer>
-  © 2569 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
-</footer>
 
 <script>
-// ตรวจสอบการ Login
-if(sessionStorage.getItem("loggedIn") !== "true" && localStorage.getItem("loggedIn") !== "true"){
-  location.href = "index.html";
-}
+function filterTable() {
+  const input = document.getElementById("searchInput").value.toLowerCase();
+  const rows = document.querySelectorAll("#receiveTable tbody tr");
 
-// โหลดข้อมูล
-let members = JSON.parse(localStorage.getItem("members")) || [];
-let funerals = JSON.parse(localStorage.getItem("funerals")) || [];
-
-let currentFuneral = null;
-
-// ตรวจสอบงานศพล่าสุด
-if(funerals.length > 0) {
-  currentFuneral = funerals[funerals.length - 1];
-  if(!Array.isArray(currentFuneral.received)) {
-    currentFuneral.received = [];
-  }
-}
-
-// แสดงรายละเอียดงานศพบนหัวการ์ด
-function initFuneralHeader() {
-  const nameEl = document.getElementById("targetFuneralName");
-  const dateEl = document.getElementById("targetFuneralDate");
-
-  if(currentFuneral) {
-    nameEl.textContent = "⚰️ " + currentFuneral.name + " (อายุ " + currentFuneral.age + " ปี)";
-    dateEl.textContent = "📅 วันฌาปนกิจ : " + (currentFuneral.burnDate || "-");
-  } else {
-    nameEl.textContent = "❌ ยังไม่มีการบันทึกงานศพในระบบ";
-    dateEl.textContent = "กรุณาไปที่หน้า 'จัดการงานศพ' เพื่อเพิ่มข้อมูลก่อน";
-  }
-}
-
-// แสดงตารางเช็กชื่อ
-function displayChecklist(data) {
-  const tbody = document.getElementById("receiveTableBody");
-  tbody.innerHTML = "";
-
-  if(!currentFuneral) {
-    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; opacity:0.7;">กรุณาเพิ่มข้อมูลงานศพก่อนเช็กชื่อ</td></tr>`;
-    updateStats();
-    return;
-  }
-
-  if(data.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; opacity:0.7;">ไม่พบรายชื่อสมาชิก</td></tr>`;
-    updateStats();
-    return;
-  }
-
-  data.forEach((member, index) => {
-    const isReceived = currentFuneral.received.includes(member.id);
-
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${index + 1}</td>
-      <td><strong>${member.name}</strong></td>
-      <td>หมู่ 6 บ้านเลขที่ ${member.houseNo}</td>
-      <td style="text-align:center;">
-        <label class="checkbox-btn ${isReceived ? 'checked' : ''}" id="btn-${member.id}">
-          <input type="checkbox" ${isReceived ? 'checked' : ''} onchange="toggleReceive(${member.id})">
-          <span id="text-${member.id}">${isReceived ? '✅ รับแล้ว' : '❌ ยังไม่ได้รับ'}</span>
-        </label>
-        ${isReceived ? `<button class="btn-print-slip" onclick="printReceipt(${member.id})">🖨️ พิมพ์สลิป</button>` : ''}
-      </td>
-    `;
-    tbody.appendChild(tr);
+  rows.forEach(row => {
+    const text = row.innerText.toLowerCase();
+    row.style.display = text.includes(input) ? "" : "none";
   });
-
-  updateStats();
 }
 
-// ฟังก์ชันเปิด/ปิด สวิตช์รับข้าวสาร
-function toggleReceive(memberId) {
-  if(!currentFuneral) return;
-
-  const index = currentFuneral.received.indexOf(memberId);
-
-  if (index === -1) {
-    currentFuneral.received.push(memberId);
-  } else {
-    currentFuneral.received.splice(index, 1);
+function markAsReceived(btn) {
+  if (confirm("ยืนยันรับข้าวสาร 1 ถัง จากครัวเรือนนี้หรือไม่?")) {
+    const row = btn.parentElement.parentElement;
+    const statusCell = row.cells[2];
+    
+    statusCell.innerHTML = '<span style="color:#27ae60; font-weight:bold;">รับแล้ว</span>';
+    btn.className = 'btn-status btn-done';
+    btn.innerHTML = '✓ ส่งแล้ว';
+    btn.disabled = true;
+    alert("บันทึกรับข้าวสารเรียบร้อยแล้ว!");
   }
-
-  // อัปเดตกลับลง LocalStorage
-  funerals[funerals.length - 1] = currentFuneral;
-  localStorage.setItem("funerals", JSON.stringify(funerals));
-
-  // แสดงผลตารางใหม่เพื่ออัปเดตปุ่มพิมพ์สลิป
-  searchMember();
 }
-
-// ฟังก์ชันสั่งพิมพ์ใบรับข้าวสาร
-function printReceipt(memberId) {
-  const member = members.find(m => m.id === memberId);
-  if (!member || !currentFuneral) return;
-
-  const today = new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
-
-  // ใส่ข้อมูลลงในใบเสร็จ
-  document.getElementById("recDate").textContent = today;
-  document.getElementById("recId").textContent = "RC-" + Date.now().toString().slice(-6);
-  document.getElementById("recMemberName").textContent = member.name;
-  document.getElementById("recHouseNo").textContent = "หมู่ 6 บ้านเลขที่ " + member.houseNo;
-  document.getElementById("recFuneralName").textContent = currentFuneral.name;
-  document.getElementById("recSignMember").textContent = member.name;
-
-  // สั่งพิมพ์
-  window.print();
-}
-
-// อัปเดตตัวเลขสรุปด้านบน
-function updateStats() {
-  const total = members.length;
-  const received = currentFuneral ? currentFuneral.received.length : 0;
-  const pending = Math.max(total - received, 0);
-
-  document.getElementById("totalMem").textContent = total;
-  document.getElementById("receivedCount").textContent = received;
-  document.getElementById("pendingCount").textContent = pending;
-}
-
-// ค้นหา
-function searchMember() {
-  const keyword = document.getElementById("searchInput").value.toLowerCase();
-  const filtered = members.filter(item => 
-    item.name.toLowerCase().includes(keyword) || 
-    item.houseNo.toLowerCase().includes(keyword)
-  );
-  displayChecklist(filtered);
-}
-
-// เริ่มทำงานเมื่อเปิดหน้า
-initFuneralHeader();
-displayChecklist(members);
 </script>
 
 </body>
