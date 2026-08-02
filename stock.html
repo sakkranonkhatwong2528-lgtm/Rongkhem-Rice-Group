@@ -1,798 +1,395 @@
 <!DOCTYPE html>
 <html lang="th">
-
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>คลังข้าวสาร</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>จัดการคลังข้าวสาร | ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
 
 <style>
-
 *{
-    box-sizing:border-box;
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Tahoma,sans-serif;
 }
 
 body{
-    margin:0;
-    font-family:Tahoma,sans-serif;
-    background:#f3f7f0;
-    color:#333;
+  background: linear-gradient(-45deg, #0b3d26, #0f5132, #198754, #20c997);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+  min-height:100vh;
+  display: flex;
+  flex-direction: column;
+  color: #fff;
 }
 
-.header{
-    background:linear-gradient(135deg,#176b2c,#4caf50);
-    color:white;
-    padding:22px 15px;
-    text-align:center;
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px;
+  background:rgba(255,255,255,.12);
+  backdrop-filter:blur(10px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  animation: slideDown 0.6s ease-out;
+}
+
+.btn-back {
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.4);
+  padding: 8px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.btn-back:hover {
+  background: rgba(255,255,255,0.35);
+  transform: translateX(-3px);
 }
 
 .container{
-    max-width:900px;
-    margin:auto;
-    padding:15px;
+  max-width:1000px;
+  margin:auto;
+  padding:25px;
+  flex: 1;
+  width: 100%;
 }
 
-.box{
-    background:white;
-    padding:18px;
-    margin-bottom:15px;
-    border-radius:16px;
-    box-shadow:0 3px 10px rgba(0,0,0,.08);
+.card {
+  background:rgba(255,255,255,.18);
+  backdrop-filter:blur(12px);
+  border-radius:18px;
+  padding:25px;
+  box-shadow:0 8px 25px rgba(0,0,0,.18);
+  border: 1px solid rgba(255,255,255,0.2);
+  margin-bottom: 25px;
+  animation: fadeInUp 0.8s ease-out;
 }
 
-.summary{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:12px;
+/* การ์ดแสดงสรุปคลังข้าว */
+.stock-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+  margin-bottom: 25px;
 }
 
-.summary-card{
-    background:#f8fff8;
-    padding:16px;
-    border-radius:14px;
-    text-align:center;
+.summary-box {
+  background: rgba(0,0,0,0.15);
+  border-radius: 15px;
+  padding: 20px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.15);
 }
 
-.balance-card{
-    grid-column:1 / -1;
-    background:#e8f7e8;
+.summary-box h1 {
+  font-size: 36px;
+  margin-top: 8px;
 }
 
-.icon{
-    font-size:34px;
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 15px;
+  margin-top: 15px;
 }
 
-.number{
-    font-size:30px;
-    font-weight:bold;
-    color:#228B22;
+input, select {
+  width: 100%;
+  padding: 12px 15px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+  font-size: 15px;
+  outline: none;
+  transition: 0.3s;
 }
 
-.red{
-    color:#c62828;
+select option {
+  background: #0f5132;
+  color: #fff;
 }
 
-.blue{
-    color:#1976d2;
+input::placeholder {
+  color: rgba(255,255,255,0.7);
 }
 
-.yellow{
-    color:#b88600;
+input:focus, select:focus {
+  background: rgba(255,255,255,0.3);
+  border-color: #fff;
 }
 
-.filter{
-    width:100%;
-    padding:12px;
-    border:1px solid #ccc;
-    border-radius:10px;
-    font-size:16px;
-    margin-bottom:10px;
+.btn-add {
+  background: #198754;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  transition: 0.3s;
+  grid-column: 1 / -1;
+  box-shadow: 0 4px 10px rgba(25, 135, 84, 0.3);
 }
 
-.transaction{
-    background:#fafafa;
-    padding:15px;
-    margin-top:10px;
-    border-radius:12px;
-    border-left:5px solid #228B22;
+.btn-add:hover {
+  background: #146c43;
+  transform: translateY(-2px);
 }
 
-.transaction.out{
-    border-left-color:#c62828;
+/* ตารางประวัติ */
+.table-responsive {
+  overflow-x: auto;
 }
 
-.transaction.funeral{
-    border-left-color:#1976d2;
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
 }
 
-.in-text{
-    color:#228B22;
-    font-weight:bold;
+th, td {
+  padding: 14px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
 }
 
-.out-text{
-    color:#c62828;
-    font-weight:bold;
+th {
+  background: rgba(0,0,0,0.15);
+  font-size: 16px;
 }
 
-.funeral-text{
-    color:#1976d2;
-    font-weight:bold;
+tr {
+  transition: 0.2s;
 }
 
-.empty{
-    text-align:center;
-    color:#777;
-    padding:20px;
+tr:hover {
+  background: rgba(255,255,255,0.1);
 }
 
-button{
-    width:100%;
-    padding:13px;
-    margin-top:10px;
-    border:0;
-    border-radius:10px;
-    background:#228B22;
-    color:white;
-    font-size:16px;
+.badge-in {
+  background: rgba(25, 135, 84, 0.35);
+  color: #75b798;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-weight: bold;
+  border: 1px solid rgba(25, 135, 84, 0.6);
 }
 
-.back{
-    display:block;
-    text-align:center;
-    padding:15px;
-    color:#228B22;
-    text-decoration:none;
+.badge-out {
+  background: rgba(220, 53, 69, 0.35);
+  color: #ff868d;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-weight: bold;
+  border: 1px solid rgba(220, 53, 69, 0.6);
 }
 
-@media(max-width:600px){
-
-    .summary{
-        grid-template-columns:1fr 1fr;
-    }
-
-    .summary-card{
-        padding:12px 7px;
-    }
-
+.btn-delete {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
-@media print{
-
-    body{
-        background:white;
-    }
-
-    .header{
-        background:white;
-        color:#000;
-        border-bottom:2px solid #333;
-    }
-
-    button,
-    .back,
-    .filter{
-        display:none;
-    }
-
-    .box{
-        box-shadow:none;
-    }
-
+.btn-delete:hover {
+  background: #bb2d3b;
+  transform: scale(1.05);
 }
 
+@keyframes slideDown {
+  from { transform: translateY(-100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+footer {
+  text-align: center;
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.15);
+  font-size: 13px;
+  color: rgba(255,255,255,0.7);
+}
 </style>
-
 </head>
 
 <body>
 
-
-<div class="header">
-
-<h1>🌾 คลังข้าวสาร</h1>
-
-<p>กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</p>
-
-</div>
-
+<header>
+  <h2>📦 ระบบจัดการคลังข้าวสาร</h2>
+  <a href="dashboard.html" class="btn-back">⬅️ กลับหน้าหลัก</a>
+</header>
 
 <div class="container">
 
+  <!-- สรุปสถานะคลัง -->
+  <div class="stock-summary">
+    <div class="summary-box">
+      <div>นำเข้าทั้งหมด</div>
+      <h1 id="totalIn" style="color: #75b798;">0 ถุง</h1>
+    </div>
+    <div class="summary-box">
+      <div>เบิกจ่ายทั้งหมด</div>
+      <h1 id="totalOut" style="color: #ff868d;">0 ถุง</h1>
+    </div>
+    <div class="summary-box" style="background: rgba(255, 193, 7, 0.15); border-color: rgba(255, 193, 7, 0.3);">
+      <div>คงเหลือในคลัง</div>
+      <h1 id="totalBalance" style="color: #ffda6a;">0 ถุง</h1>
+    </div>
+  </div>
 
-<!-- =========================
-     สรุปคลัง
-========================= -->
+  <!-- ฟอร์มบันทึกการรับ-จ่าย -->
+  <div class="card">
+    <h3>➕ บันทึกรายการ เข้า/ออก คลังข้าวสาร</h3>
+    <form id="stockForm" onsubmit="addStockTransaction(event)">
+      <div class="form-grid">
+        <select id="type" required>
+          <option value="in">📥 นำเข้า (รับเพิ่ม)</option>
+          <option value="out">📤 เบิกจ่าย (นำไปใช้)</option>
+        </select>
+        <input type="number" id="amount" placeholder="จำนวน (ถุง / กระสอบ)" required min="1">
+        <input type="text" id="date" placeholder="วันที่ (เช่น 12 ม.ค. 2569)" required>
+        <input type="text" id="note" placeholder="หมายเหตุ / รายละเอียด (เช่น ซื้อเข้าคลัง, งานศพคุณ...)" required>
+        <button type="submit" class="btn-add">บันทึกรายการคลัง</button>
+      </div>
+    </form>
+  </div>
 
-<div class="box">
-
-<div class="summary">
-
-
-<div class="summary-card">
-
-<div class="icon">📥</div>
-
-รับเข้าทั้งหมด
-
-<div
-    class="number"
-    id="totalIn"
->
-0
-</div>
-
-ถุง
-
-</div>
-
-
-<div class="summary-card">
-
-<div class="icon">📤</div>
-
-นำออกทั้งหมด
-
-<div
-    class="number red"
-    id="totalOut"
->
-0
-</div>
-
-ถุง
-
-</div>
-
-
-<div class="summary-card">
-
-<div class="icon">⚰️</div>
-
-ช่วยงานศพ
-
-<div
-    class="number blue"
-    id="funeralOut"
->
-0
-</div>
-
-ถุง
+  <!-- ตารางประวัติเคลื่อนไหว -->
+  <div class="card">
+    <h3>📋 ประวัติการรับ - เบิกจ่ายข้าวสาร</h3>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>วันที่</th>
+            <th>ประเภท</th>
+            <th>จำนวน</th>
+            <th>หมายเหตุ</th>
+            <th style="text-align:center;">จัดการ</th>
+          </tr>
+        </thead>
+        <tbody id="stockTableBody">
+          <!-- ข้อมูลจะแสดงที่นี่ -->
+        </tbody>
+      </table>
+    </div>
+  </div>
 
 </div>
 
-
-<div class="summary-card">
-
-<div class="icon">📦</div>
-
-จ่ายอื่น ๆ
-
-<div
-    class="number yellow"
-    id="otherOut"
->
-0
-</div>
-
-ถุง
-
-</div>
-
-
-<div class="summary-card balance-card">
-
-<div class="icon">🌾</div>
-
-ข้าวสารคงเหลือ
-
-<div
-    class="number"
-    id="balance"
->
-0
-</div>
-
-ถุง
-
-</div>
-
-
-</div>
-
-</div>
-
-
-<!-- =========================
-     ประวัติ
-========================= -->
-
-<div class="box">
-
-<h2>📋 ประวัติการเคลื่อนไหวข้าวสาร</h2>
-
-
-<input
-    id="search"
-    class="filter"
-    type="text"
-    placeholder="ค้นหาชื่อ บ้านเลขที่ หรืองานศพ"
-    oninput="showTransactions()"
->
-
-
-<div id="transactionList"></div>
-
-
-</div>
-
-
-<div class="box">
-
-<button onclick="window.print()">
-
-🖨️ พิมพ์รายงานคลังข้าวสาร
-
-</button>
-
-</div>
-
-
-<a
-    class="back"
-    href="index.html"
->
-← กลับหน้าหลัก
-</a>
-
-
-</div>
-
+<footer>
+  © 2569 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
+</footer>
 
 <script>
-
-/* =====================================================
-   โหลดข้อมูล
-===================================================== */
-
-const rice =
-    JSON.parse(
-        localStorage.getItem("rice")
-    ) || [];
-
-
-const funeralSends =
-    JSON.parse(
-        localStorage.getItem("funeralSends")
-    ) || [];
-
-
-const funerals =
-    JSON.parse(
-        localStorage.getItem("funerals")
-    ) || [];
-
-
-/* =====================================================
-   คำนวณยอด
-===================================================== */
-
-let totalIn = 0;
-
-let otherOut = 0;
-
-
-rice.forEach(item => {
-
-    if(item.type === "รับ"){
-
-        totalIn +=
-            Number(item.amount || 0);
-
-    }
-
-
-    if(item.type === "จ่าย"){
-
-        otherOut +=
-            Number(item.amount || 0);
-
-    }
-
-});
-
-
-let funeralOut = 0;
-
-funeralSends.forEach(item => {
-
-    funeralOut +=
-        Number(item.amount || 0);
-
-});
-
-
-const totalOut =
-    otherOut +
-    funeralOut;
-
-
-let balance =
-    totalIn -
-    totalOut;
-
-
-if(balance < 0){
-
-    balance = 0;
-
+// ตรวจสอบการ Login
+if(sessionStorage.getItem("loggedIn") !== "true" && localStorage.getItem("loggedIn") !== "true"){
+  location.href = "index.html";
 }
 
+// โหลดข้อมูลประวัติสต็อก
+let stockList = JSON.parse(localStorage.getItem("stockList")) || [];
 
-/* =====================================================
-   แสดงยอด
-===================================================== */
+// แสดงผลเมื่อเปิดหน้า
+displayStock();
 
-document.getElementById("totalIn")
-    .innerText =
-    totalIn;
+// ฟังก์ชันบันทึกรายการ
+function addStockTransaction(event) {
+  event.preventDefault();
 
+  const type = document.getElementById("type").value;
+  const amount = parseInt(document.getElementById("amount").value.trim());
+  const date = document.getElementById("date").value.trim();
+  const note = document.getElementById("note").value.trim();
 
-document.getElementById("totalOut")
-    .innerText =
-    totalOut;
+  const newItem = {
+    id: Date.now(),
+    type: type,
+    amount: amount,
+    date: date,
+    note: note
+  };
 
+  stockList.unshift(newItem); // เอา รายการใหม่ไว้ข้างบนสุด
+  localStorage.setItem("stockList", JSON.stringify(stockList));
 
-document.getElementById("funeralOut")
-    .innerText =
-    funeralOut;
+  document.getElementById("stockForm").reset();
+  displayStock();
+}
 
+// ฟังก์ชันคำนวณและแสดงผลตาราง
+function displayStock() {
+  const tbody = document.getElementById("stockTableBody");
+  tbody.innerHTML = "";
 
-document.getElementById("otherOut")
-    .innerText =
-    otherOut;
+  let inSum = 0;
+  let outSum = 0;
 
+  if (stockList.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; opacity:0.7;">ยังไม่มีประวัติการทำรายการคลัง</td></tr>`;
+  } else {
+    stockList.forEach((item) => {
+      if (item.type === "in") {
+        inSum += item.amount;
+      } else {
+        outSum += item.amount;
+      }
 
-document.getElementById("balance")
-    .innerText =
-    balance;
-
-
-/* =====================================================
-   รวมประวัติ
-===================================================== */
-
-function getTransactions(){
-
-    let list = [];
-
-
-    /* -------------------------
-       รับเข้าคลัง
-    ------------------------- */
-
-    rice
-    .filter(
-        item =>
-        item.type === "รับ"
-    )
-    .forEach(item => {
-
-        list.push({
-
-            type:"รับเข้า",
-
-            date:item.date || "-",
-
-            name:item.name || "-",
-
-            house:item.house || "-",
-
-            amount:
-                Number(item.amount || 0),
-
-            note:item.note || "-"
-
-        });
-
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${item.date}</td>
+        <td>
+          <span class="${item.type === 'in' ? 'badge-in' : 'badge-out'}">
+            ${item.type === 'in' ? '📥 นำเข้า' : '📤 เบิกจ่าย'}
+          </span>
+        </td>
+        <td><strong>${item.amount}</strong> ถุง</td>
+        <td>${item.note}</td>
+        <td style="text-align:center;">
+          <button class="btn-delete" onclick="deleteStock(${item.id})">🗑️ ลบ</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
     });
+  }
 
-
-    /* -------------------------
-       จ่ายทั่วไป
-    ------------------------- */
-
-    rice
-    .filter(
-        item =>
-        item.type === "จ่าย"
-    )
-    .forEach(item => {
-
-        list.push({
-
-            type:"จ่ายออก",
-
-            date:item.date || "-",
-
-            name:item.name || "-",
-
-            house:item.house || "-",
-
-            amount:
-                Number(item.amount || 0),
-
-            note:item.note || "-"
-
-        });
-
-    });
-
-
-    /* -------------------------
-       ช่วยงานศพ
-    ------------------------- */
-
-    funeralSends.forEach(item => {
-
-        const funeral =
-            funerals.find(
-                f =>
-                String(f.id) ===
-                String(item.funeralId)
-            );
-
-
-        list.push({
-
-            type:"ช่วยงานศพ",
-
-            date:item.date || "-",
-
-            name:
-                item.memberName || "-",
-
-            house:
-                item.memberHouse || "-",
-
-            amount:
-                Number(item.amount || 1),
-
-            note:
-                funeral
-                ?
-                "งานศพ " +
-                funeral.name
-                :
-                "งานศพไม่พบข้อมูล"
-
-        });
-
-    });
-
-
-    return list;
-
+  // อัปเดตตัวเลขสรุป
+  document.getElementById("totalIn").textContent = inSum + " ถุง";
+  document.getElementById("totalOut").textContent = outSum + " ถุง";
+  
+  const balance = inSum - outSum;
+  document.getElementById("totalBalance").textContent = balance + " ถุง";
 }
 
-
-/* =====================================================
-   แสดงประวัติ
-===================================================== */
-
-function showTransactions(){
-
-    const keyword =
-        document.getElementById("search")
-        .value
-        .trim()
-        .toLowerCase();
-
-
-    let transactions =
-        getTransactions();
-
-
-    transactions =
-        transactions.filter(item => {
-
-            const text =
-                (
-                    item.type +
-                    " " +
-                    item.date +
-                    " " +
-                    item.name +
-                    " " +
-                    item.house +
-                    " " +
-                    item.note
-                )
-                .toLowerCase();
-
-
-            return text.includes(keyword);
-
-        });
-
-
-    let html = "";
-
-
-    transactions.forEach((item,index)=>{
-
-        let cardClass =
-            "";
-
-
-        let titleClass =
-            "in-text";
-
-
-        let sign =
-            "+";
-
-
-        if(item.type === "จ่ายออก"){
-
-            cardClass =
-                "out";
-
-            titleClass =
-                "out-text";
-
-            sign =
-                "-";
-
-        }
-
-
-        if(item.type === "ช่วยงานศพ"){
-
-            cardClass =
-                "funeral";
-
-            titleClass =
-                "funeral-text";
-
-            sign =
-                "-";
-
-        }
-
-
-        html += `
-
-        <div class="
-            transaction
-            ${cardClass}
-        ">
-
-            <strong
-                class="${titleClass}"
-            >
-
-                ${index + 1}.
-                ${getIcon(item.type)}
-                ${item.type}
-
-            </strong>
-
-            <br>
-
-            📅 วันที่:
-            ${escapeHTML(item.date)}
-
-            <br>
-
-            🏠 บ้านเลขที่:
-            ${escapeHTML(item.house)}
-
-            <br>
-
-            👤 ชื่อ:
-            ${escapeHTML(item.name)}
-
-            <br>
-
-            📦 จำนวน:
-
-            <strong
-                class="${titleClass}"
-            >
-
-                ${sign}
-                ${item.amount}
-                ถุง
-
-            </strong>
-
-            <br>
-
-            📝 รายละเอียด:
-            ${escapeHTML(item.note)}
-
-        </div>
-
-        `;
-
-    });
-
-
-    if(transactions.length === 0){
-
-        html = `
-
-        <div class="empty">
-
-            ยังไม่มีรายการ
-
-        </div>
-
-        `;
-
-    }
-
-
-    document.getElementById("transactionList")
-        .innerHTML =
-        html;
-
+// ฟังก์ชันลบรายการ
+function deleteStock(id) {
+  if (confirm("คุณต้องการลบรายการคลังนี้ใช่หรือไม่?")) {
+    stockList = stockList.filter(item => item.id !== id);
+    localStorage.setItem("stockList", JSON.stringify(stockList));
+    displayStock();
+  }
 }
-
-
-/* =====================================================
-   ไอคอน
-===================================================== */
-
-function getIcon(type){
-
-    if(type === "รับเข้า"){
-        return "📥";
-    }
-
-    if(type === "จ่ายออก"){
-        return "📤";
-    }
-
-    if(type === "ช่วยงานศพ"){
-        return "⚰️";
-    }
-
-    return "📦";
-
-}
-
-
-/* =====================================================
-   ป้องกัน HTML
-===================================================== */
-
-function escapeHTML(value){
-
-    return String(
-        value || ""
-    )
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-
-}
-
-
-/* =====================================================
-   เริ่มระบบ
-===================================================== */
-
-showTransactions();
-
 </script>
 
 </body>
-
 </html>
