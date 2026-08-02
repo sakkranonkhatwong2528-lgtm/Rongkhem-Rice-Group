@@ -3,306 +3,297 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Dashboard | ระบบกลุ่มข้าวสาร</title>
+<title>Dashboard | ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
 
 <style>
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Tahoma,sans-serif
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Tahoma,sans-serif;
 }
 
 body{
-background:linear-gradient(135deg,#0f5132,#198754,#56c271);
-min-height:100vh
+  background:linear-gradient(135deg,#0f5132,#198754,#56c271);
+  min-height:100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:20px;
-color:#fff;
-background:rgba(255,255,255,.12);
-backdrop-filter:blur(10px)
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px;
+  color:#fff;
+  background:rgba(255,255,255,.12);
+  backdrop-filter:blur(10px);
 }
 
 .container{
-max-width:1200px;
-margin:auto;
-padding:25px
+  max-width:1200px;
+  margin:auto;
+  padding:25px;
+  flex: 1;
 }
 
 .summary{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:18px;
-margin-bottom:25px
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:18px;
+  margin-bottom:25px;
 }
 
 .box,.card{
-background:rgba(255,255,255,.18);
-backdrop-filter:blur(12px);
-border-radius:18px;
-padding:22px;
-color:#fff;
-box-shadow:0 8px 25px rgba(0,0,0,.18)
+  background:rgba(255,255,255,.18);
+  backdrop-filter:blur(12px);
+  border-radius:18px;
+  padding:22px;
+  color:#fff;
+  box-shadow:0 8px 25px rgba(0,0,0,.18);
 }
 
 .box h1{
-font-size:42px;
-margin-top:10px
+  font-size:42px;
+  margin-top:10px;
 }
 
 .grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:18px
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:18px;
 }
 
 .card{
-text-align:center;
-cursor:pointer;
-transition:.25s
+  text-align:center;
+  cursor:pointer;
+  transition:.25s;
 }
 
 .card:hover{
-transform:translateY(-6px)
+  transform:translateY(-6px);
 }
 
 .card h2{
-font-size:50px
+  font-size:50px;
 }
 
 button{
-background:#dc3545;
-border:none;
-color:#fff;
-padding:10px 16px;
-border-radius:10px;
-cursor:pointer
+  background:#dc3545;
+  border:none;
+  color:#fff;
+  padding:10px 16px;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight: bold;
 }
 
-footer{
-text-align:center;
-color:#fff;
-padding:25px
+button:hover{
+  background:#bb2d3b;
 }
 
 .condolence{
-margin:30px 0;
-padding:30px;
-border-radius:20px;
-background:rgba(255,255,255,.18);
-backdrop-filter:blur(15px);
-text-align:center;
-box-shadow:0 10px 25px rgba(0,0,0,.15);
-color:#fff;
+  margin:30px 0;
+  padding:30px;
+  border-radius:20px;
+  background:rgba(255,255,255,.18);
+  backdrop-filter:blur(15px);
+  text-align:center;
+  box-shadow:0 10px 25px rgba(0,0,0,.15);
+  color:#fff;
 }
 
 .dove{
-font-size:70px;
-animation:fly 3s ease-in-out infinite;
+  font-size:70px;
+  animation:fly 3s ease-in-out infinite;
 }
 
 .message{
-margin:20px 0;
-line-height:1.8;
-font-size:17px;
+  margin:20px 0;
+  line-height:1.8;
+  font-size:17px;
 }
 
 @keyframes fly{
-0%{transform:translateY(0);}
-50%{transform:translateY(-10px);}
-100%{transform:translateY(0);}
+  0%{transform:translateY(0);}
+  50%{transform:translateY(-10px);}
+  100%{transform:translateY(0);}
+}
+
+/* Style สำหรับ Footer v5.0 */
+footer {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.9);
+  padding: 25px 15px;
+  margin-top: 30px;
+  background: rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  line-height: 1.6;
+}
+
+footer .developer-info {
+  margin-top: 6px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+footer .version-tag {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 3px 12px;
+  border-radius: 12px;
+  font-size: 13px;
+  margin-bottom: 8px;
+  font-weight: bold;
 }
 </style>
-
 </head>
 
 <body>
 
 <header>
-
-<h2>🌾 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</h2>
-
-<button onclick="logout()">
-ออกจากระบบ
-</button>
-
+  <h2>🌾 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</h2>
+  <button onclick="logout()">ออกจากระบบ</button>
 </header>
 
 <div class="container">
 
-<div class="summary">
+  <div class="summary">
+    <div class="box">
+      <div>สมาชิกทั้งหมด</div>
+      <h1 id="m">0</h1>
+    </div>
 
-<div class="box">
-<div>สมาชิกทั้งหมด</div>
-<h1 id="m">0</h1>
-</div>
+    <div class="box">
+      <div>งานศพ</div>
+      <h1 id="f">0</h1>
+    </div>
 
-<div class="box">
-<div>งานศพ</div>
-<h1 id="f">0</h1>
-</div>
+    <div class="box">
+      <div>รับข้าวสารแล้ว</div>
+      <h1 id="r">0</h1>
+    </div>
 
-<div class="box">
-<div>รับข้าวสารแล้ว</div>
-<h1 id="r">0</h1>
-</div>
+    <div class="box">
+      <div>ค้างส่ง</div>
+      <h1 id="p">0</h1>
+    </div>
+  </div>
 
-<div class="box">
-<div>ค้างส่ง</div>
-<h1 id="p">0</h1>
-</div>
+  <div class="grid">
+    <div class="card" onclick="location.href='members.html'">
+      <h2>👥</h2>
+      <h3>สมาชิก</h3>
+    </div>
 
-</div>
+    <div class="card" onclick="location.href='funeral.html'">
+      <h2>⚰️</h2>
+      <h3>งานศพ</h3>
+    </div>
 
-<div class="grid">
+    <div class="card" onclick="location.href='receive.html'">
+      <h2>🌾</h2>
+      <h3>รับข้าวสาร</h3>
+    </div>
 
-<div class="card" onclick="location.href='members.html'">
-<h2>👥</h2>
-<h3>สมาชิก</h3>
-</div>
+    <div class="card" onclick="location.href='stock.html'">
+      <h2>📦</h2>
+      <h3>คลังข้าว</h3>
+    </div>
 
-<div class="card" onclick="location.href='funeral.html'">
-<h2>⚰️</h2>
-<h3>งานศพ</h3>
-</div>
+    <div class="card" onclick="location.href='report.html'">
+      <h2>📊</h2>
+      <h3>รายงาน</h3>
+    </div>
 
-<div class="card" onclick="location.href='receive.html'">
-<h2>🌾</h2>
-<h3>รับข้าวสาร</h3>
-</div>
+    <div class="card" onclick="location.href='backup.html'">
+      <h2>💾</h2>
+      <h3>สำรองข้อมูล</h3>
+    </div>
+  </div>
 
-<div class="card" onclick="location.href='stock.html'">
-<h2>📦</h2>
-<h3>คลังข้าว</h3>
-</div>
-
-<div class="card" onclick="location.href='report.html'">
-<h2>📊</h2>
-<h3>รายงาน</h3>
-</div>
-
-<div class="card" onclick="location.href='backup.html'">
-<h2>💾</h2>
-<h3>สำรองข้อมูล</h3>
-</div>
-
-</div>
-
-<div class="condolence">
-
-<div class="dove">🕊️</div>
-
-<h2>ขอแสดงความเสียใจ</h2>
-
-<h3 id="funeralName">⚰️ -</h3>
-
-<p id="funeralAge">
-อายุ - ปี
-</p>
-<p id="deadDate">
-📅 วันเสียชีวิต : -
-</p>
-
-<p id="funeralPlace">
-📍 สถานที่ : -
-</p>
-<p class="message">
-ขอแสดงความเสียใจอย่างสุดซึ้งต่อการจากไปของผู้วายชนม์
-ขออำนาจคุณพระศรีรัตนตรัยและสิ่งศักดิ์สิทธิ์ทั้งหลาย
-โปรดดลบันดาลให้ดวงวิญญาณไปสู่สุคติในสัมปรายภพ
-และขอเป็นกำลังใจแก่ครอบครัวและญาติมิตรทุกท่าน
-</p>
-
-<p id="burnDate">
-📅 กำหนดฌาปนกิจ : -
-</p>
-
-</div>
+  <div class="condolence">
+    <div class="dove">🕊️</div>
+    <h2>ขอแสดงความเสียใจ</h2>
+    <h3 id="funeralName">⚰️ -</h3>
+    <p id="funeralAge">อายุ - ปี</p>
+    <p id="deadDate">📅 วันเสียชีวิต : -</p>
+    <p id="funeralPlace">📍 สถานที่ : -</p>
+    <p class="message">
+      ขอแสดงความเสียใจอย่างสุดซึ้งต่อการจากไปของผู้วายชนม์<br>
+      ขออำนาจคุณพระศรีรัตนตรัยและสิ่งศักดิ์สิทธิ์ทั้งหลาย<br>
+      โปรดดลบันดาลให้ดวงวิญญาณไปสู่สุคติในสัมปรายภพ<br>
+      และขอเป็นกำลังใจแก่ครอบครัวและญาติมิตรทุกท่าน
+    </p>
+    <p id="burnDate">📅 กำหนดฌาปนกิจ : -</p>
+  </div>
 
 </div>
 
 <footer>
-Version 4.0
+  <div class="version-tag">Version 5.0</div>
+  <div><strong>ผู้จัดทำและพัฒนาระบบ</strong></div>
+  <div class="developer-info">
+    <strong>นายศักรนนทน์ ขัติย์วงศ์</strong><br>
+    ผู้ใหญ่บ้าน บ้านร่องเข็ม หมู่ที่ 6<br>
+    ตำบลจำป่าหวาย อำเภอเมือง จังหวัดพะเยา
+  </div>
+  <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.15); margin: 15px auto; width: 60%;">
+  <div style="font-size: 13px; color: rgba(255,255,255,0.7);">
+    © 2569 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
+  </div>
 </footer>
+
 <script>
-
-// ตรวจสอบการ Login
+// 1. ตรวจสอบการ Login
 if(
-sessionStorage.getItem("loggedIn")!=="true" &&
-localStorage.getItem("loggedIn")!=="true"
+  sessionStorage.getItem("loggedIn") !== "true" &&
+  localStorage.getItem("loggedIn") !== "true"
 ){
-location.href="index.html";
+  location.href = "index.html";
 }
 
-// โหลดข้อมูลสมาชิก
-const members =
-JSON.parse(localStorage.getItem("members")) || [];
+// 2. โหลดข้อมูลสมาชิกและงานศพจาก LocalStorage
+const members = JSON.parse(localStorage.getItem("members")) || [];
+const funerals = JSON.parse(localStorage.getItem("funerals")) || [];
 
-// โหลดข้อมูลงานศพ
-const funerals =
-JSON.parse(localStorage.getItem("funerals")) || [];
+// 3. แสดงจำนวนสมาชิกและงานศพทั้งหมด
+document.getElementById("m").textContent = members.length;
+document.getElementById("f").textContent = funerals.length;
 
-// แสดงจำนวนสมาชิก
-document.getElementById("m").textContent =
-members.length;
+// 4. คำนวณและแสดงข้อมูลผู้เสียชีวิตล่าสุด + การรับข้าวสาร
+let receiveCount = 0;
 
-// แสดงจำนวนงานศพ
-document.getElementById("f").textContent =
-funerals.length;
-
-// นับจำนวนรับข้าวสาร
-let receive = 0;
-
-if(
-funerals.length > 0 &&
-Array.isArray(funerals[0].received)
-){
-receive = funerals[0].received.length;
-}
-
-// แสดงผล
-document.getElementById("r").textContent =
-receive;
-
-document.getElementById("p").textContent =
-Math.max(members.length - receive,0);
-
-// แสดงข้อมูลผู้เสียชีวิตล่าสุด
 if(funerals.length > 0){
+  // ดึงข้อมูลงานศพล่าสุด (รายการสุดท้ายใน Array)
+  const lastFuneral = funerals[funerals.length - 1];
 
-let last = funerals[funerals.length-1];
+  // นับจำนวนรับข้าวสารเฉพาะของงานศพล่าสุด
+  if(Array.isArray(lastFuneral.received)){
+    receiveCount = lastFuneral.received.length;
+  }
 
-document.getElementById("funeralName").textContent =
-"⚰️ " + (last.name || "-");
-
-document.getElementById("funeralAge").textContent =
-"อายุ " + (last.age || "-") + " ปี";
-
-document.getElementById("burnDate").textContent =
-"📅 กำหนดฌาปนกิจ : " +
-(last.burnDate || "-");
-
+  // แสดงผลข้อมูลผู้เสียชีวิต
+  document.getElementById("funeralName").textContent = "⚰️ " + (lastFuneral.name || "-");
+  document.getElementById("funeralAge").textContent = "อายุ " + (lastFuneral.age || "-") + " ปี";
+  document.getElementById("deadDate").textContent = "📅 วันเสียชีวิต : " + (lastFuneral.deadDate || "-");
+  document.getElementById("funeralPlace").textContent = "📍 สถานที่ : " + (lastFuneral.place || "-");
+  document.getElementById("burnDate").textContent = "📅 กำหนดฌาปนกิจ : " + (lastFuneral.burnDate || "-");
 }
 
-// ออกจากระบบ
+// 5. แสดงยอดรับข้าวสารและค้างส่ง (คำนวณอ้างอิงจากงานศพล่าสุด)
+document.getElementById("r").textContent = receiveCount;
+document.getElementById("p").textContent = Math.max(members.length - receiveCount, 0);
+
+// 6. ฟังก์ชันออกจากระบบ
 function logout(){
-
-if(confirm("ออกจากระบบหรือไม่?")){
-
-sessionStorage.removeItem("loggedIn");
-localStorage.removeItem("loggedIn");
-
-location.href="index.html";
-
+  if(confirm("คุณต้องการออกจากระบบหรือไม่?")){
+    sessionStorage.removeItem("loggedIn");
+    localStorage.removeItem("loggedIn");
+    location.href = "index.html";
+  }
 }
-
-}
-
 </script>
 
 </body>
