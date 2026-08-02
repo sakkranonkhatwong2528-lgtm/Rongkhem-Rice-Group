@@ -3,43 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ทะเบียนสมาชิก - กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
+  <title>รายชื่อสมาชิก 192 ครัวเรือน - กลุ่มข้าวสาร บ้านร่องเข็ม</title>
   <style>
-    body { font-family: 'Sarabun', sans-serif; background-color: #f4f7f6; margin: 0; padding: 15px; }
-    .container { max-width: 800px; margin: auto; }
-    .header { background: #2c3e50; color: white; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 15px; }
+    body { font-family: 'Sarabun', sans-serif; background: #f4f7f6; margin: 0; padding: 15px; color: #333; }
+    .container { max-width: 900px; margin: auto; }
+    .header { background: #1b4332; color: white; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 20px; }
+    .card { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
     
-    /* สรุปยอด */
-    .summary-cards { display: flex; gap: 10px; margin-bottom: 15px; }
-    .card-stat { flex: 1; background: white; padding: 12px; border-radius: 8px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-    .card-stat h3 { margin: 0; font-size: 20px; color: #2c3e50; }
-    .card-stat p { margin: 5px 0 0 0; color: #7f8c8d; font-size: 13px; }
+    .search-box { margin-bottom: 15px; }
+    .search-box input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px; box-sizing: border-box; }
 
-    /* แท็บตัวกรองแยกประเภท */
-    .filter-tabs { display: flex; gap: 8px; margin-bottom: 15px; background: #e0e0e0; padding: 5px; border-radius: 8px; }
-    .tab-btn { flex: 1; padding: 10px; border: none; background: transparent; border-radius: 6px; cursor: pointer; font-weight: bold; color: #555; transition: 0.3s; }
-    .tab-btn.active { background: white; color: #2c3e50; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-    .tab-btn.warning.active { background: #f39c12; color: white; }
-    .tab-btn.danger.active { background: #e74c3c; color: white; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; display: table; }
+    th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; font-size: 14px; }
+    th { background: #f8f9fa; color: #1b4332; position: sticky; top: 0; }
+    .table-container { max-height: 500px; overflow-y: auto; border: 1px solid #e0e0e0; border-radius: 6px; }
 
-    /* ค้นหา */
-    .search-box { width: 100%; padding: 12px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 8px; margin-bottom: 15px; font-size: 15px; }
+    .status-paid { color: #27ae60; font-weight: bold; background: #e8f8f5; padding: 3px 8px; border-radius: 12px; font-size: 12px; }
+    .status-unpaid { color: #e74c3c; font-weight: bold; background: #fadbd8; padding: 3px 8px; border-radius: 12px; font-size: 12px; }
 
-    /* การ์ดสมาชิก */
-    .member-card { background: white; border-radius: 8px; padding: 15px; margin-bottom: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border-left: 5px solid #2ecc71; }
-    .member-card.pending { border-left-color: #f39c12; background: #fffdf9; }
-    .member-card.banned { border-left-color: #e74c3c; background: #fff5f5; }
-    
-    .badge { display: inline-block; padding: 3px 8px; border-radius: 12px; font-size: 12px; font-weight: bold; }
-    .badge-normal { background: #e8f8f5; color: #27ae60; }
-    .badge-warning { background: #fef9e7; color: #d35400; }
-    .badge-danger { background: #fadbd8; color: #c0392b; }
-
-    .actions { display: flex; gap: 5px; margin-top: 10px; flex-wrap: wrap; }
-    .btn { padding: 6px 12px; border: none; border-radius: 5px; cursor: pointer; font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
-    .btn-warning { background: #f39c12; color: white; }
-    .btn-edit { background: #3498db; color: white; }
-    .btn-delete { background: #e74c3c; color: white; }
     .btn-back { display: block; text-align: center; margin-top: 20px; color: #7f8c8d; text-decoration: none; font-weight: bold; }
   </style>
 </head>
@@ -47,83 +28,95 @@
 
 <div class="container">
   <div class="header">
-    <h2 style="margin: 0;">👥 ทะเบียนสมาชิก</h2>
-    <small>กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</small>
+    <h2 style="margin:0;">👥 รายชื่อสมาชิกกลุ่มข้าวสาร</h2>
+    <small>บ้านร่องเข็ม หมู่ที่ 6 (ทั้งหมด 192 ครัวเรือน)</small>
   </div>
 
-  <!-- ยอดสรุป -->
-  <div class="summary-cards">
-    <div class="card-stat">
-      <h3 id="cnt-all">192</h3>
-      <p>สมาชิกทั้งหมด</p>
+  <div class="card">
+    <div class="search-box">
+      <input type="text" id="searchInput" onkeyup="filterMembers()" placeholder="🔍 พิมพ์ค้นหาบ้านเลขที่ หรือ ชื่อสมาชิก...">
     </div>
-    <div class="card-stat" style="background: #fef9e7;">
-      <h3 id="cnt-pending" style="color: #d35400;">10</h3>
-      <p>ค้างส่งข้าวสาร</p>
+
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>ลำดับ</th>
+            <th>บ้านเลขที่</th>
+            <th>ชื่อ - นามสกุล หัวหน้าครอบครัว</th>
+            <th>สถานะส่งข้าวสาร</th>
+          </tr>
+        </thead>
+        <tbody id="memberTableBody">
+          <!-- โค้ดจะสร้างรายชื่อ 192 ครัวเรือนตรงนี้ -->
+        </tbody>
+      </table>
     </div>
-    <div class="card-stat" style="background: #fadbd8;">
-      <h3 id="cnt-banned" style="color: #c0392b;">6</h3>
-      <p>เสนอตัดสิทธิ์</p>
-    </div>
   </div>
 
-  <!-- แท็บแยกประเภทสมาชิก -->
-  <div class="filter-tabs">
-    <button class="tab-btn active" onclick="filterMembers('all')">🟢 ทั้งหมด</button>
-    <button class="tab-btn warning" onclick="filterMembers('pending')">🟡 ค้างส่งข้าวสาร</button>
-    <button class="tab-btn danger" onclick="filterMembers('banned')">🔴 เสนอตัดสิทธิ์</button>
-  </div>
-
-  <!-- ช่องค้นหา -->
-  <input type="text" id="searchInput" class="search-box" placeholder="🔎 ค้นหาชื่อ หรือ บ้านเลขที่..." onkeyup="searchMember()">
-
-  <!-- รายการสมาชิก -->
-  <div id="memberList">
-    <!-- ข้อมูลสมาชิกจะแสดงตรงนี้ตามแท็บที่เลือก -->
-  </div>
-
-  <a href="index.html" class="btn-back">← กลับหน้าหลัก</a>
+  <a href="dashboard.html" class="btn-back">⬅️ กลับหน้าหลัก Dashboard</a>
 </div>
 
 <script>
-  // เช็กว่ามาจาก URL param หรือไม่ (เช่น index.html?tab=pending)
-  const urlParams = new URLSearchParams(window.location.search);
-  let currentTab = urlParams.get('tab') || 'all';
-
-  function filterMembers(type) {
-    currentTab = type;
-    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-    
-    if(type === 'all') document.querySelectorAll('.tab-btn')[0].classList.add('active');
-    if(type === 'pending') document.querySelectorAll('.tab-btn')[1].classList.add('active');
-    if(type === 'banned') document.querySelectorAll('.tab-btn')[2].classList.add('active');
-
-    renderList();
+// ฟังก์ชันสร้างรายชื่อสมาชิกครบ 192 ครัวเรือนอัตโนมัติ
+function init192Members() {
+  let members = JSON.parse(localStorage.getItem('memberList'));
+  
+  // ถ้ายังไม่มีข้อมูล หรือข้อมูลมีน้อยกว่า 192 ให้สร้างใหม่ให้ครบ 192 ครัวเรือน
+  if (!members || members.length < 192) {
+    members = [];
+    for (let i = 1; i <= 192; i++) {
+      // ตัวอย่างการกำหนดสถานะ (182 รายแรกส่งแล้ว / 10 รายหลังค้างส่ง ตามตัวเลขหน้า Dashboard)
+      let status = i <= 182 ? "ส่งแล้ว" : "ค้างส่ง";
+      
+      members.push({
+        id: i,
+        houseNo: `${i}`,
+        name: `ครัวเรือนที่ ${i} (บ้านร่องเข็ม ม.6)`,
+        status: status
+      });
+    }
+    localStorage.setItem('memberList', JSON.stringify(members));
   }
+  return members;
+}
 
-  function renderList() {
-    // ฟังก์ชั่นนี้จะกรองการ์ดสมาชิกตามแท็บที่กดเลือกอัตโนมัติ
-    const cards = document.querySelectorAll('.member-card');
-    cards.forEach(card => {
-      const isPending = card.classList.contains('pending');
-      const isBanned = card.classList.contains('banned');
+// วาดตารางรายชื่อสมาชิก
+function renderMembers() {
+  const members = init192Members();
+  const tbody = document.getElementById("memberTableBody");
+  tbody.innerHTML = "";
 
-      if (currentTab === 'all') {
-        card.style.display = 'block';
-      } else if (currentTab === 'pending' && (isPending || isBanned)) {
-        card.style.display = 'block'; // แสดงทุกคนที่ค้างส่ง
-      } else if (currentTab === 'banned' && isBanned) {
-        card.style.display = 'block'; // แสดงเฉพาะคนเสนอตัดสิทธิ์ (ค้าง 2 ครั้งขึ้นไป)
-      } else {
-        card.style.display = 'none';
-      }
-    });
-  }
+  members.forEach((m, index) => {
+    const isPaid = m.status === 'ส่งแล้ว';
+    tbody.innerHTML += `
+      <tr>
+        <td>${index + 1}</td>
+        <td><strong>บ้านเลขที่ ${m.houseNo}</strong></td>
+        <td>${m.name}</td>
+        <td>
+          <span class="${isPaid ? 'status-paid' : 'status-unpaid'}">
+            ${isPaid ? '✅ ส่งแล้ว' : '❌ ค้างส่ง'}
+          </span>
+        </td>
+      </tr>
+    `;
+  });
+}
 
-  // เรียกใช้เมื่อโหลดหน้าเว็บ
-  window.onload = function() {
-    filterMembers(currentTab);
-  };
+// ฟังก์ชันค้นหาบ้านเลขที่ / ชื่อ
+function filterMembers() {
+  const input = document.getElementById("searchInput").value.toLowerCase();
+  const rows = document.querySelectorAll("#memberTableBody tr");
+
+  rows.forEach(row => {
+    const text = row.innerText.toLowerCase();
+    row.style.display = text.includes(input) ? "" : "none";
+  });
+}
+
+// โหลดข้อมูลเมื่อเปิดหน้าเว็บ
+document.addEventListener("DOMContentLoaded", renderMembers);
 </script>
 
 </body>
