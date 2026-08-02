@@ -101,6 +101,63 @@
       <div>
         <p>ลงชื่อ......................................................ผู้จ่าย/กรรมการ</p>
         <p>( ...................................................... )</p>
+        // อัปเดตตารางให้มีปุ่ม "🖨️ พิมพ์ใบเสร็จ" เพิ่มขึ้นมา
+function displayChecklist(data) {
+  const tbody = document.getElementById("receiveTableBody");
+  tbody.innerHTML = "";
+
+  if(!currentFuneral) {
+    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; opacity:0.7;">กรุณาเพิ่มข้อมูลงานศพก่อนเช็กชื่อ</td></tr>`;
+    updateStats();
+    return;
+  }
+
+  if(data.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; opacity:0.7;">ไม่พบรายชื่อสมาชิก</td></tr>`;
+    updateStats();
+    return;
+  }
+
+  data.forEach((member, index) => {
+    const isReceived = currentFuneral.received.includes(member.id);
+
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${index + 1}</td>
+      <td><strong>${member.name}</strong></td>
+      <td>หมู่ 6 บ้านเลขที่ ${member.houseNo}</td>
+      <td style="text-align:center;">
+        <label class="checkbox-btn ${isReceived ? 'checked' : ''}" id="btn-${member.id}">
+          <input type="checkbox" ${isReceived ? 'checked' : ''} onchange="toggleReceive(${member.id})">
+          <span id="text-${member.id}">${isReceived ? '✅ รับแล้ว' : '❌ ยังไม่ได้รับ'}</span>
+        </label>
+        ${isReceived ? `<button class="btn-print-slip" onclick="printReceipt(${member.id})">🖨️ พิมพ์สลิป</button>` : ''}
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  updateStats();
+}
+
+// ฟังก์ชันสั่งพิมพ์ใบรับข้าวสาร
+function printReceipt(memberId) {
+  const member = members.find(m => m.id === memberId);
+  if (!member || !currentFuneral) return;
+
+  const today = new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
+
+  // ใส่ข้อมูลลงในใบเสร็จ
+  document.getElementById("recDate").textContent = today;
+  document.getElementById("recId").textContent = "RC-" + Date.now().toString().slice(-6);
+  document.getElementById("recMemberName").textContent = member.name;
+  document.getElementById("recHouseNo").textContent = "หมู่ 6 บ้านเลขที่ " + member.houseNo;
+  document.getElementById("recFuneralName").textContent = currentFuneral.name;
+  document.getElementById("recSignMember").textContent = member.name;
+
+  // สั่งพิมพ์
+  window.print();
+}
       </div>
     </div>
   </div>
