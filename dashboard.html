@@ -14,10 +14,20 @@
 }
 
 body{
-  background:linear-gradient(135deg,#0f5132,#198754,#56c271);
+  background: linear-gradient(-45deg, #0b3d26, #0f5132, #198754, #20c997);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
   min-height:100vh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
+}
+
+/* Background Animation */
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 header{
@@ -28,6 +38,8 @@ header{
   color:#fff;
   background:rgba(255,255,255,.12);
   backdrop-filter:blur(10px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  animation: slideDown 0.8s ease-out;
 }
 
 .container{
@@ -51,11 +63,21 @@ header{
   padding:22px;
   color:#fff;
   box-shadow:0 8px 25px rgba(0,0,0,.18);
+  border: 1px solid rgba(255,255,255,0.2);
+  animation: fadeInUp 0.8s ease-out forwards;
+  opacity: 0;
 }
+
+/* Delay แอนิเมชันของแต่ละกล่อง */
+.summary .box:nth-child(1) { animation-delay: 0.1s; }
+.summary .box:nth-child(2) { animation-delay: 0.2s; }
+.summary .box:nth-child(3) { animation-delay: 0.3s; }
+.summary .box:nth-child(4) { animation-delay: 0.4s; }
 
 .box h1{
   font-size:42px;
   margin-top:10px;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.2);
 }
 
 .grid{
@@ -67,29 +89,65 @@ header{
 .card{
   text-align:center;
   cursor:pointer;
-  transition:.25s;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.card:nth-child(1) { animation-delay: 0.3s; }
+.card:nth-child(2) { animation-delay: 0.4s; }
+.card:nth-child(3) { animation-delay: 0.5s; }
+.card:nth-child(4) { animation-delay: 0.6s; }
+.card:nth-child(5) { animation-delay: 0.7s; }
+.card:nth-child(6) { animation-delay: 0.8s; }
+
+/* Shine Effect เมื่อ Hover */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: 0.5s;
+}
+
+.card:hover::before {
+  left: 100%;
 }
 
 .card:hover{
-  transform:translateY(-6px);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+  background: rgba(255, 255, 255, 0.25);
 }
 
 .card h2{
   font-size:50px;
+  transition: transform 0.3s ease;
+}
+
+.card:hover h2 {
+  transform: scale(1.15) rotate(5deg);
 }
 
 button{
   background:#dc3545;
   border:none;
   color:#fff;
-  padding:10px 16px;
+  padding:10px 18px;
   border-radius:10px;
   cursor:pointer;
   font-weight: bold;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3);
 }
 
 button:hover{
   background:#bb2d3b;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(220, 53, 69, 0.5);
 }
 
 .condolence{
@@ -101,11 +159,16 @@ button:hover{
   text-align:center;
   box-shadow:0 10px 25px rgba(0,0,0,.15);
   color:#fff;
+  border: 1px solid rgba(255,255,255,0.25);
+  animation: fadeInUp 0.8s ease-out 0.9s forwards;
+  opacity: 0;
 }
 
 .dove{
   font-size:70px;
-  animation:fly 3s ease-in-out infinite;
+  display: inline-block;
+  animation: fly 3.5s ease-in-out infinite;
+  filter: drop-shadow(0 5px 10px rgba(0,0,0,0.15));
 }
 
 .message{
@@ -114,13 +177,26 @@ button:hover{
   font-size:17px;
 }
 
+/* Keyframe Animations */
 @keyframes fly{
-  0%{transform:translateY(0);}
-  50%{transform:translateY(-10px);}
-  100%{transform:translateY(0);}
+  0%{ transform: translateY(0) rotate(0deg); }
+  25%{ transform: translateY(-12px) rotate(-3deg); }
+  50%{ transform: translateY(-5px) rotate(2deg); }
+  75%{ transform: translateY(-15px) rotate(-1deg); }
+  100%{ transform: translateY(0) rotate(0deg); }
 }
 
-/* Style สำหรับ Footer v5.0 */
+@keyframes slideDown {
+  from { transform: translateY(-100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Footer Style */
 footer {
   text-align: center;
   color: rgba(255, 255, 255, 0.9);
@@ -130,6 +206,8 @@ footer {
   backdrop-filter: blur(10px);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   line-height: 1.6;
+  animation: fadeInUp 0.8s ease-out 1s forwards;
+  opacity: 0;
 }
 
 footer .developer-info {
@@ -258,18 +336,35 @@ if(
 const members = JSON.parse(localStorage.getItem("members")) || [];
 const funerals = JSON.parse(localStorage.getItem("funerals")) || [];
 
-// 3. แสดงจำนวนสมาชิกและงานศพทั้งหมด
-document.getElementById("m").textContent = members.length;
-document.getElementById("f").textContent = funerals.length;
+// 3. ฟังก์ชันสร้าง Counting Animation (นับตัวเลขวิ่งจาก 0 ไปตามจำนวนจริง)
+function animateValue(id, start, end, duration) {
+  if (start === end) {
+    document.getElementById(id).textContent = end;
+    return;
+  }
+  let current = start;
+  let range = end - start;
+  let increment = end > start ? 1 : -1;
+  let stepTime = Math.abs(Math.floor(duration / range));
+  stepTime = Math.max(stepTime, 20); // ป้องกันไม่ให้เร็วเกินไป
+  
+  let timer = setInterval(function() {
+    current += increment;
+    document.getElementById(id).textContent = current;
+    if (current == end) {
+      clearInterval(timer);
+    }
+  }, stepTime);
+}
 
-// 4. คำนวณและแสดงข้อมูลผู้เสียชีวิตล่าสุด + การรับข้าวสาร
+// 4. คำนวณข้อมูล
+let totalMembers = members.length;
+let totalFunerals = funerals.length;
 let receiveCount = 0;
 
 if(funerals.length > 0){
-  // ดึงข้อมูลงานศพล่าสุด (รายการสุดท้ายใน Array)
   const lastFuneral = funerals[funerals.length - 1];
 
-  // นับจำนวนรับข้าวสารเฉพาะของงานศพล่าสุด
   if(Array.isArray(lastFuneral.received)){
     receiveCount = lastFuneral.received.length;
   }
@@ -282,11 +377,19 @@ if(funerals.length > 0){
   document.getElementById("burnDate").textContent = "📅 กำหนดฌาปนกิจ : " + (lastFuneral.burnDate || "-");
 }
 
-// 5. แสดงยอดรับข้าวสารและค้างส่ง (คำนวณอ้างอิงจากงานศพล่าสุด)
-document.getElementById("r").textContent = receiveCount;
-document.getElementById("p").textContent = Math.max(members.length - receiveCount, 0);
+let pendingCount = Math.max(totalMembers - receiveCount, 0);
 
-// 6. ฟังก์ชันออกจากระบบ
+// เรียกใช้แอนิเมชันนับตัวเลขเมื่อโหลดหน้าเว็บ
+window.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    animateValue("m", 0, totalMembers, 1000);
+    animateValue("f", 0, totalFunerals, 1000);
+    animateValue("r", 0, receiveCount, 1000);
+    animateValue("p", 0, pendingCount, 1000);
+  }, 300);
+});
+
+// 5. ฟังก์ชันออกจากระบบ
 function logout(){
   if(confirm("คุณต้องการออกจากระบบหรือไม่?")){
     sessionStorage.removeItem("loggedIn");
