@@ -17,3 +17,48 @@
 </button>
 
 </div>
+function saveFuneral(){
+
+    let deadName = document.getElementById("deadName").value.trim();
+
+    if(deadName==""){
+
+        alert("กรุณากรอกชื่อผู้เสียชีวิต");
+
+        return;
+
+    }
+
+    funerals.unshift({
+
+        id: Date.now(),
+
+        name: document.getElementById("deadName").value.trim(),
+
+        age: Number(document.getElementById("age").value) || 0,
+
+        deadDate: document.getElementById("deadDate").value,
+
+        burnDate: document.getElementById("burnDate").value,
+
+        place: document.getElementById("place").value,
+
+        received: []
+
+    });
+
+    localStorage.setItem(
+        "funerals",
+        JSON.stringify(funerals)
+    );
+
+    // ล้างข้อมูลในฟอร์ม
+    document.getElementById("deadName").value = "";
+    document.getElementById("age").value = "";
+    document.getElementById("deadDate").value = "";
+    document.getElementById("burnDate").value = "";
+    document.getElementById("place").value = "";
+
+    showFuneral();
+
+}
