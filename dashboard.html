@@ -3,167 +3,265 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
+  <title>Dashboard - ระบบกลุ่มข้าวสาร บ้านร่องเข็ม</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Sarabun', sans-serif; background: #eef2f3; margin: 0; padding: 15px; color: #333; }
-    .container { max-width: 900px; margin: auto; }
-    
-    /* Header */
-    .header { background: #1b4332; color: white; padding: 20px; border-radius: 12px; text-align: center; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-    .header h2 { margin: 0; font-size: 22px; }
-    .header small { opacity: 0.9; }
+    :root {
+      --primary: #1b4332;
+      --primary-light: #2d6a4f;
+      --accent-gold: #f39c12;
+      --accent-red: #e74c3c;
+      --accent-green: #27ae60;
+      --bg-gradient: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+      --glass-bg: rgba(255, 255, 255, 0.88);
+      --glass-border: rgba(255, 255, 255, 0.35);
+      --shadow-3d: 0 20px 40px rgba(0, 0, 0, 0.3), 0 10px 10px rgba(0, 0, 0, 0.2);
+    }
 
-    /* การ์ดงานศพ / ไว้อาลัย */
-    .mourning-card {
-      background: linear-gradient(135deg, #111111 0%, #2c3e50 100%);
-      color: #f1c40f;
-      border: 2px solid #f1c40f;
-      border-radius: 12px;
-      padding: 20px;
+    * { box-sizing: border-box; font-family: 'Sarabun', sans-serif; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); }
+
+    body {
+      background: var(--bg-gradient);
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px 15px;
+      color: #2c3e50;
+      perspective: 1000px;
+    }
+
+    .container { max-width: 1000px; margin: auto; animation: fadeIn 0.8s ease-out; }
+
+    /* Header 3D Glow */
+    .header {
+      background: linear-gradient(135deg, #1b4332, #2d6a4f);
+      color: white;
+      padding: 25px;
+      border-radius: 20px;
       text-align: center;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      margin-bottom: 25px;
+      box-shadow: var(--shadow-3d);
+      border: 1px solid var(--glass-border);
+      position: relative;
+      overflow: hidden;
     }
-    .mourning-card h3 { margin: 5px 0 15px 0; color: #ffffff; font-size: 20px; }
-    .mourning-card .name { font-size: 22px; font-weight: bold; color: #f1c40f; margin-bottom: 5px; }
-    .mourning-card .details { color: #ecf0f1; font-size: 15px; margin-bottom: 15px; }
-    .mourning-card .quote-box {
-      background: rgba(255, 255, 255, 0.08);
-      border-left: 3px solid #f1c40f;
-      padding: 10px;
-      margin: 10px 0;
-      color: #e0e0e0;
-      font-size: 14px;
-      text-align: left;
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%; width: 200%; height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 60%);
+      animation: rotateGlow 12s infinite linear;
     }
-    .mourning-card .schedule { background: #d35400; color: white; padding: 6px 12px; border-radius: 20px; display: inline-block; font-weight: bold; font-size: 14px; }
 
-    /* ตัวเลขสรุป Dashboard */
-    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
-    .stat-card { background: white; padding: 12px; border-radius: 8px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-    .stat-card .num { font-size: 22px; font-weight: bold; color: #2c3e50; margin-top: 5px; }
-    .stat-card.green .num { color: #27ae60; }
-    .stat-card.red .num { color: #e74c3c; }
+    /* Funeral Notice Card 3D */
+    .funeral-notice {
+      background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(254,249,231,0.95));
+      border-left: 6px solid #e67e22;
+      padding: 20px;
+      border-radius: 16px;
+      margin-bottom: 25px;
+      box-shadow: var(--shadow-3d);
+      border-top: 1px solid var(--glass-border);
+      position: relative;
+    }
 
-    /* ปุ่มเมนูระบบหลัก */
-    .menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 25px; }
+    .funeral-title { color: #d35400; font-weight: bold; font-size: 18px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+
+    /* Stat Cards Grid 3D */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 18px;
+      margin-bottom: 25px;
+    }
+
+    .stat-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      padding: 20px;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: var(--shadow-3d);
+      border: 1px solid var(--glass-border);
+      transform-style: preserve-3d;
+      cursor: pointer;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-8px) rotateX(5deg) scale(1.02);
+      box-shadow: 0 25px 45px rgba(0,0,0,0.35);
+    }
+
+    .stat-number { font-size: 36px; font-weight: 700; margin: 5px 0; }
+    .stat-label { font-size: 14px; color: #555; font-weight: 600; }
+
+    .card-total { border-bottom: 4px solid #3498db; }
+    .card-total .stat-number { color: #2980b9; }
+
+    .card-funeral { border-bottom: 4px solid #e67e22; }
+    .card-funeral .stat-number { color: #d35400; }
+
+    .card-paid { border-bottom: 4px solid #27ae60; }
+    .card-paid .stat-number { color: #27ae60; }
+
+    .card-unpaid { border-bottom: 4px solid #e74c3c; animation: pulseGlow 2.5s infinite; }
+    .card-unpaid .stat-number { color: #c0392b; }
+
+    /* Nav Buttons Grid 3D */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
     .menu-btn {
-      background: white;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 15px 8px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      padding: 18px 10px;
+      border-radius: 16px;
       text-align: center;
       text-decoration: none;
       color: #2c3e50;
       font-weight: bold;
       font-size: 14px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-      transition: all 0.2s;
+      box-shadow: var(--shadow-3d);
+      border: 1px solid var(--glass-border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
     }
-    .menu-btn:hover { background: #27ae60; color: white; border-color: #27ae60; }
 
-    /* Footer */
-    .footer { text-align: center; color: #7f8c8d; font-size: 13px; padding: 15px 0; border-top: 1px solid #ccc; line-height: 1.6; }
+    .menu-btn:hover {
+      background: rgba(255, 255, 255, 0.98);
+      transform: translateY(-5px) scale(1.03);
+      color: var(--primary);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+    }
 
-    @media (max-width: 600px) {
-      .stats-grid { grid-template-columns: repeat(2, 1fr); }
-      .menu-grid { grid-template-columns: repeat(2, 1fr); }
+    .menu-icon { font-size: 28px; }
+
+    /* Footer Glass */
+    .footer {
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(10px);
+      color: rgba(255,255,255,0.85);
+      padding: 20px;
+      border-radius: 16px;
+      text-align: center;
+      font-size: 13px;
+      border: 1px solid rgba(255,255,255,0.15);
+      line-height: 1.6;
+    }
+
+    /* Keyframe Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes rotateGlow {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes pulseGlow {
+      0% { box-shadow: 0 10px 25px rgba(231, 76, 60, 0.2); }
+      50% { box-shadow: 0 15px 35px rgba(231, 76, 60, 0.5); }
+      100% { box-shadow: 0 10px 25px rgba(231, 76, 60, 0.2); }
     }
   </style>
 </head>
 <body>
 
 <div class="container">
-  
+
   <!-- Header -->
   <div class="header">
-    <h2>🌾 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</h2>
-    <small>ตำบลจำป่าหวาย อำเภอเมืองพะเยา จังหวัดพะเยา</small>
+    <h2 style="margin:0; font-size: 24px; position:relative; z-index:2;">🌾 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</h2>
+    <small style="position:relative; z-index:2; opacity:0.9;">ตำบลจำป่าหวาย อำเภอเมืองพะเยา จังหวัดพะเยา</small>
   </div>
 
-  <!-- การ์ดแจ้งข่าวงานศพ / ไว้อาลัย -->
-  <div class="mourning-card" id="mourningBox">
-    <h3>🕊️ ขอแสดงความเสียใจอย่างสุดซึ้ง</h3>
-    <div class="name" id="mName">นายเกษมสุข ใฝ่ใจ</div>
-    <div class="details" id="mDetails">อายุ 47 ปี | 📍 วัดร่องเข็ม</div>
-    <div class="quote-box">
+  <!-- การ์ดแสดงความเสียใจงานศพล่าสุด -->
+  <div class="funeral-notice">
+    <div class="funeral-title">🕊️ ขอแสดงความเสียใจอย่างสุดซึ้ง</div>
+    <div style="font-size: 18px; font-weight: bold; color: #2c3e50; margin: 4px 0;">นายเกษมสุข ใฝ่ใจ</div>
+    <div style="font-size: 14px; color: #555;">
+      อายุ <strong>47</strong> ปี | 📍 <strong>วัดร่องเข็ม</strong>
+    </div>
+    <p style="font-size: 13px; color: #666; margin: 8px 0 10px 0;">
       ขออำนาจคุณพระศรีรัตนตรัยและสิ่งศักดิ์สิทธิ์ทั้งหลาย โปรดดลบันดาลให้ดวงวิญญาณไปสู่สุคติในสัมปรายภพ และขอเป็นกำลังใจแก่ครอบครัวและญาติมิตรทุกท่าน
+    </p>
+    <div style="font-size: 13px; font-weight: bold; color: #d35400; background: rgba(230,126,34,0.15); padding: 6px 12px; border-radius: 8px; display: inline-block;">
+      📅 กำหนดการฌาปนกิจ : 25 ก.ค. 2569
     </div>
-    <div class="schedule" id="mCremation">📅 กำหนดการฌาปนกิจ : 25 ก.ค. 2569</div>
   </div>
 
-  <!-- สรุปสถานะส่งข้าวสาร -->
+  <!-- ตัวเลขสรุป 4 การ์ด 3D -->
   <div class="stats-grid">
-    <div class="stat-card">
-      <div>สมาชิกทั้งหมด</div>
-      <div class="num">192</div>
+    <div class="stat-card card-total" onclick="location.href='members.html'">
+      <div class="stat-label">👥 สมาชิกทั้งหมด</div>
+      <div class="stat-number">192</div>
+      <small style="color:#7f8c8d;">ครัวเรือน</small>
     </div>
-    <div class="stat-card">
-      <div>งานศพ (ขณะนี้)</div>
-      <div class="num" id="funeralCount">1</div>
+
+    <div class="stat-card card-funeral" onclick="location.href='funeral.html'">
+      <div class="stat-label">⚰️ งานศพ (ขณะนี้)</div>
+      <div class="stat-number">2</div>
+      <small style="color:#7f8c8d;">รายการ</small>
     </div>
-    <div class="stat-card green">
-      <div>ส่งข้าวสารแล้ว</div>
-      <div class="num" id="paidCount">182</div>
+
+    <div class="stat-card card-paid" onclick="location.href='members.html'">
+      <div class="stat-label">✅ ส่งข้าวสารแล้ว</div>
+      <div class="stat-number">182</div>
+      <small style="color:#27ae60; font-weight:bold;">เรียบร้อย</small>
     </div>
-    <div class="stat-card red">
-      <div>ค้างส่งข้าวสาร</div>
-      <div class="num" id="unpaidCount">10</div>
+
+    <div class="stat-card card-unpaid" onclick="location.href='members.html'">
+      <div class="stat-label">⚠️ ค้างส่งข้าวสาร</div>
+      <div class="stat-number">10</div>
+      <small style="color:#e74c3c; font-weight:bold;">รอการติดตาม</small>
     </div>
   </div>
 
-  <!-- ปุ่มเมนูหลัก -->
+  <!-- ปุ่มเมนูหลัก 3D -->
   <div class="menu-grid">
-    <a href="#" class="menu-btn">👥 สมาชิก</a>
-    <a href="funeral.html" class="menu-btn">⚰️ งานศพ</a>
-    <a href="#" class="menu-btn">🌾 รับข้าวสาร</a>
-    <a href="#" class="menu-btn">📦 คลังข้าว</a>
-    <a href="#" class="menu-btn">📊 รายงาน</a>
-    <a href="#" class="menu-btn">💾 สำรองข้อมูล</a>
+    <a href="members.html" class="menu-btn">
+      <span class="menu-icon">👥</span>
+      <span>สมาชิก</span>
+    </a>
+    <a href="funeral.html" class="menu-btn">
+      <span class="menu-icon">⚰️</span>
+      <span>งานศพ</span>
+    </a>
+    <a href="receive.html" class="menu-btn">
+      <span class="menu-icon">🌾</span>
+      <span>รับข้าวสาร</span>
+    </a>
+    <a href="stock.html" class="menu-btn">
+      <span class="menu-icon">📦</span>
+      <span>คลังข้าว</span>
+    </a>
+    <a href="report.html" class="menu-btn">
+      <span class="menu-icon">📊</span>
+      <span>รายงาน</span>
+    </a>
+    <a href="backup.html" class="menu-btn">
+      <span class="menu-icon">💾</span>
+      <span>สำรองข้อมูล</span>
+    </a>
   </div>
 
   <!-- Footer -->
   <div class="footer">
-    <strong>Version 5.0</strong><br>
-    ผู้จัดทำและพัฒนาระบบ: <strong>นายศักรนนทน์ ขัติย์วงศ์</strong><br>
-    ผู้ใหญ่บ้าน บ้านร่องเข็ม หมู่ที่ 6 ตำบลจำป่าหวาย อำเภอเมือง จังหวัดพะเยา<br>
-    © 2569 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
+    <div style="font-weight: bold; font-size: 14px; margin-bottom: 4px; color: #48bb78;">Version 5.0</div>
+    <div><strong>ผู้จัดทำและพัฒนาระบบ:</strong> นายศักรนนทน์ ขัติย์วงศ์</div>
+    <div style="opacity: 0.8; font-size: 12px;">ผู้ใหญ่บ้าน บ้านร่องเข็ม หมู่ที่ 6 ตำบลจำป่าหวาย อำเภอเมือง จังหวัดพะเยา</div>
+    <div style="margin-top: 8px; opacity: 0.6; font-size: 11px;">© 2569 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</div>
   </div>
 
 </div>
-
-<script>
-// แปลงวันที่ YYYY-MM-DD เป็นไทยสั้น
-function formatDateTh(dateStr) {
-  if (!dateStr || dateStr === 'undefined') return '-';
-  const monthsTh = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
-  const d = new Date(dateStr);
-  if (isNaN(d.getTime())) return dateStr;
-  return `${d.getDate()} ${monthsTh[d.getMonth()]} ${d.getFullYear() + 543}`;
-}
-
-// ดึงข้อมูลงานศพล่าสุดมาแสดงที่การ์ด
-function updateDashboardMourning() {
-  let funeralList = JSON.parse(localStorage.getItem('funeralList')) || [];
-  
-  if (funeralList.length > 0) {
-    // ดึงงานศพล่าสุด (ตัวสุดท้ายในอาร์เรย์)
-    let latest = funeralList[funeralList.length - 1];
-    
-    document.getElementById('mName').innerText = latest.name || 'ไม่ระบุชื่อ';
-    document.getElementById('mDetails').innerText = `อายุ ${latest.age || '-'} ปี | 📍 ${latest.location || '-'}`;
-    document.getElementById('mCremation').innerText = `📅 กำหนดการฌาปนกิจ : ${formatDateTh(latest.cremationDate)}`;
-    document.getElementById('funeralCount').innerText = funeralList.length;
-  } else {
-    // กรณีไม่มีงานศพในระบบ
-    document.getElementById('mourningBox').style.display = 'none';
-    document.getElementById('funeralCount').innerText = '0';
-  }
-}
-
-// โหลดข้อมูลเมื่อเปิดหน้า Dashboard
-document.addEventListener("DOMContentLoaded", updateDashboardMourning);
-</script>
 
 </body>
 </html>
