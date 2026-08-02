@@ -200,7 +200,7 @@
   </div>
 
   <div class="search-box">
-    <input type="text" id="searchInput" class="search-input" placeholder="🔍 ค้นหาด้วยชื่อ, นามสกุล หรือบ้านเลขที่..." onkeyup="searchTable()">
+    <input type="text" id="searchInput" class="search-input" placeholder="🔍 พิมพ์ค้นหา บ้านเลขที่, ชื่อ หรือนามสกุล..." onkeyup="searchTable()">
   </div>
 
   <div class="section-card">
@@ -218,7 +218,6 @@
           </tr>
         </thead>
         <tbody>
-          <!-- โซนค้างส่ง 2 ครั้งขึ้นไป (เสนอตัดสิทธิ์) -->
           <tr>
             <td>1</td><td>นาย</td><td>ประหยัด</td><td>ปิงเมือง</td><td>120</td>
             <td><span class="badge-status status-danger">ตัดสิทธิ์</span></td>
@@ -249,8 +248,6 @@
             <td><span class="badge-status status-danger">ตัดสิทธิ์</span></td>
             <td style="text-align: center;"><div class="action-btns"><button class="btn-edit" onclick="editRow(this)">แก้ไข</button><button class="btn-delete" onclick="deleteRow(this)">ลบ</button></div></td>
           </tr>
-
-          <!-- โซนค้างส่ง 1 ครั้ง -->
           <tr>
             <td>7</td><td>นาย</td><td>วุฒิภัทร</td><td>เตชะวงค์</td><td>91/1</td>
             <td><span class="badge-status status-warning">ค้าง 1 ครั้ง</span></td>
@@ -271,8 +268,6 @@
             <td><span class="badge-status status-warning">ค้าง 1 ครั้ง</span></td>
             <td style="text-align: center;"><div class="action-btns"><button class="btn-edit" onclick="editRow(this)">แก้ไข</button><button class="btn-delete" onclick="deleteRow(this)">ลบ</button></div></td>
           </tr>
-
-          <!-- สมาชิกปกติ -->
           <tr>
             <td>11</td><td>นาย</td><td>ศักรนนทน์</td><td>ขัติย์วงศ์</td><td>1</td>
             <td><span class="badge-status status-normal">ปกติ</span></td>
