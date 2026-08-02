@@ -131,10 +131,10 @@
     tr:hover { background: rgba(255, 255, 255, 0.03); }
 
     .badge-status {
-      padding: 4px 12px;
+      padding: 4px 10px;
       border-radius: 20px;
       font-weight: bold;
-      font-size: 12.5px;
+      font-size: 12px;
     }
     .status-normal { background: rgba(74, 222, 128, 0.2); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.4); }
     .status-warning { background: rgba(251, 191, 36, 0.2); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.4); }
@@ -208,72 +208,74 @@
       <table id="memberTable">
         <thead>
           <tr>
-            <th style="width: 8%;">ลำดับ</th>
-            <th style="width: 37%;">ชื่อ - สกุล</th>
-            <th style="width: 20%;">บ้านเลขที่</th>
-            <th style="width: 20%; text-align: center;">สถานะสมาชิก</th>
-            <th style="width: 15%; text-align: center;">จัดการ</th>
+            <th style="width: 7%;">ลำดับ</th>
+            <th style="width: 15%;">คำนำหน้า</th>
+            <th style="width: 25%;">ชื่อ</th>
+            <th style="width: 20%;">นามสกุล</th>
+            <th style="width: 13%;">บ้านเลขที่</th>
+            <th style="width: 10%; text-align: center;">สถานะ</th>
+            <th style="width: 10%; text-align: center;">จัดการ</th>
           </tr>
         </thead>
         <tbody>
-          <!-- โซนสมาชิกค้างส่ง 2 ครั้งขึ้นไป (เสนอตัดสิทธิ์) -->
+          <!-- โซนค้างส่ง 2 ครั้งขึ้นไป (เสนอตัดสิทธิ์) -->
           <tr>
-            <td>1</td><td>นายประหยัด ปิงเมือง</td><td>120</td>
-            <td style="text-align: center;"><span class="badge-status status-danger">เสนอตัดสิทธิ์ (ค้าง 2+)</span></td>
+            <td>1</td><td>นาย</td><td>ประหยัด</td><td>ปิงเมือง</td><td>120</td>
+            <td><span class="badge-status status-danger">ตัดสิทธิ์</span></td>
             <td style="text-align: center;"><div class="action-btns"><button class="btn-edit" onclick="editRow(this)">แก้ไข</button><button class="btn-delete" onclick="deleteRow(this)">ลบ</button></div></td>
           </tr>
           <tr>
-            <td>2</td><td>นายตื่น มิ่งขวัญ</td><td>176</td>
-            <td style="text-align: center;"><span class="badge-status status-danger">เสนอตัดสิทธิ์ (ค้าง 2+)</span></td>
+            <td>2</td><td>นาย</td><td>ตื่น</td><td>มิ่งขวัญ</td><td>176</td>
+            <td><span class="badge-status status-danger">ตัดสิทธิ์</span></td>
             <td style="text-align: center;"><div class="action-btns"><button class="btn-edit" onclick="editRow(this)">แก้ไข</button><button class="btn-delete" onclick="deleteRow(this)">ลบ</button></div></td>
           </tr>
           <tr>
-            <td>3</td><td>น.ส.สำรอง มหาวรรณศรี</td><td>200</td>
-            <td style="text-align: center;"><span class="badge-status status-danger">เสนอตัดสิทธิ์ (ค้าง 2+)</span></td>
+            <td>3</td><td>น.ส.</td><td>สำรอง</td><td>มหาวรรณศรี</td><td>200</td>
+            <td><span class="badge-status status-danger">ตัดสิทธิ์</span></td>
             <td style="text-align: center;"><div class="action-btns"><button class="btn-edit" onclick="editRow(this)">แก้ไข</button><button class="btn-delete" onclick="deleteRow(this)">ลบ</button></div></td>
           </tr>
           <tr>
-            <td>4</td><td>นายบรรพต อินวงค์</td><td>212</td>
-            <td style="text-align: center;"><span class="badge-status status-danger">เสนอตัดสิทธิ์ (ค้าง 2+)</span></td>
+            <td>4</td><td>นาย</td><td>บรรพต</td><td>อินวงค์</td><td>212</td>
+            <td><span class="badge-status status-danger">ตัดสิทธิ์</span></td>
             <td style="text-align: center;"><div class="action-btns"><button class="btn-edit" onclick="editRow(this)">แก้ไข</button><button class="btn-delete" onclick="deleteRow(this)">ลบ</button></div></td>
           </tr>
           <tr>
-            <td>5</td><td>นางลวงทิพย์ ใฝ่จิต</td><td>315</td>
-            <td style="text-align: center;"><span class="badge-status status-danger">เสนอตัดสิทธิ์ (ค้าง 2+)</span></td>
+            <td>5</td><td>นาง</td><td>ลวงทิพย์</td><td>ใฝ่จิต</td><td>315</td>
+            <td><span class="badge-status status-danger">ตัดสิทธิ์</span></td>
             <td style="text-align: center;"><div class="action-btns"><button class="btn-edit" onclick="editRow(this)">แก้ไข</button><button class="btn-delete" onclick="deleteRow(this)">ลบ</button></div></td>
           </tr>
           <tr>
-            <td>6</td><td>นายประทุม ดาวกระจาย</td><td>328</td>
-            <td style="text-align: center;"><span class="badge-status status-danger">เสนอตัดสิทธิ์ (ค้าง 2+)</span></td>
-            <td style="text-align: center;"><div class="action-btns"><button class="btn-edit" onclick="editRow(this)">แก้ไข</button><button class="btn-delete" onclick="deleteRow(this)">ลบ</button></div></td>
-          </tr>
-
-          <!-- โซนสมาชิกค้างส่ง 1 ครั้ง -->
-          <tr>
-            <td>7</td><td>นายวุฒิภัทร เตชะวงค์</td><td>91/1</td>
-            <td style="text-align: center;"><span class="badge-status status-warning">ค้างส่ง 1 ครั้ง</span></td>
-            <td style="text-align: center;"><div class="action-btns"><button class="btn-edit" onclick="editRow(this)">แก้ไข</button><button class="btn-delete" onclick="deleteRow(this)">ลบ</button></div></td>
-          </tr>
-          <tr>
-            <td>8</td><td>นายต่วน ทาทอง</td><td>114</td>
-            <td style="text-align: center;"><span class="badge-status status-warning">ค้างส่ง 1 ครั้ง</span></td>
-            <td style="text-align: center;"><div class="action-btns"><button class="btn-edit" onclick="editRow(this)">แก้ไข</button><button class="btn-delete" onclick="deleteRow(this)">ลบ</button></div></td>
-          </tr>
-          <tr>
-            <td>9</td><td>นายสมศีล งามจิต</td><td>135</td>
-            <td style="text-align: center;"><span class="badge-status status-warning">ค้างส่ง 1 ครั้ง</span></td>
-            <td style="text-align: center;"><div class="action-btns"><button class="btn-edit" onclick="editRow(this)">แก้ไข</button><button class="btn-delete" onclick="deleteRow(this)">ลบ</button></div></td>
-          </tr>
-          <tr>
-            <td>10</td><td>น.ส.ยุพา ใจดี</td><td>160</td>
-            <td style="text-align: center;"><span class="badge-status status-warning">ค้างส่ง 1 ครั้ง</span></td>
+            <td>6</td><td>นาย</td><td>ประทุม</td><td>ดาวกระจาย</td><td>328</td>
+            <td><span class="badge-status status-danger">ตัดสิทธิ์</span></td>
             <td style="text-align: center;"><div class="action-btns"><button class="btn-edit" onclick="editRow(this)">แก้ไข</button><button class="btn-delete" onclick="deleteRow(this)">ลบ</button></div></td>
           </tr>
 
-          <!-- สมาชิกปกติทั่วไป (ตัวอย่าง สามารถเพิ่มรายชื่อครัวเรือนที่เหลือจนครบ 192 ครัวเรือนได้ที่นี่ครับ) -->
+          <!-- โซนค้างส่ง 1 ครั้ง -->
           <tr>
-            <td>11</td><td>นายศักรนนทน์ ขัติย์วงศ์</td><td>1</td>
-            <td style="text-align: center;"><span class="badge-status status-normal">ปกติ (ส่งครบ)</span></td>
+            <td>7</td><td>นาย</td><td>วุฒิภัทร</td><td>เตชะวงค์</td><td>91/1</td>
+            <td><span class="badge-status status-warning">ค้าง 1 ครั้ง</span></td>
+            <td style="text-align: center;"><div class="action-btns"><button class="btn-edit" onclick="editRow(this)">แก้ไข</button><button class="btn-delete" onclick="deleteRow(this)">ลบ</button></div></td>
+          </tr>
+          <tr>
+            <td>8</td><td>นาย</td><td>ต่วน</td><td>ทาทอง</td><td>114</td>
+            <td><span class="badge-status status-warning">ค้าง 1 ครั้ง</span></td>
+            <td style="text-align: center;"><div class="action-btns"><button class="btn-edit" onclick="editRow(this)">แก้ไข</button><button class="btn-delete" onclick="deleteRow(this)">ลบ</button></div></td>
+          </tr>
+          <tr>
+            <td>9</td><td>นาย</td><td>สมศีล</td><td>งามจิต</td><td>135</td>
+            <td><span class="badge-status status-warning">ค้าง 1 ครั้ง</span></td>
+            <td style="text-align: center;"><div class="action-btns"><button class="btn-edit" onclick="editRow(this)">แก้ไข</button><button class="btn-delete" onclick="deleteRow(this)">ลบ</button></div></td>
+          </tr>
+          <tr>
+            <td>10</td><td>น.ส.</td><td>ยุพา</td><td>ใจดี</td><td>160</td>
+            <td><span class="badge-status status-warning">ค้าง 1 ครั้ง</span></td>
+            <td style="text-align: center;"><div class="action-btns"><button class="btn-edit" onclick="editRow(this)">แก้ไข</button><button class="btn-delete" onclick="deleteRow(this)">ลบ</button></div></td>
+          </tr>
+
+          <!-- สมาชิกปกติ -->
+          <tr>
+            <td>11</td><td>นาย</td><td>ศักรนนทน์</td><td>ขัติย์วงศ์</td><td>1</td>
+            <td><span class="badge-status status-normal">ปกติ</span></td>
             <td style="text-align: center;"><div class="action-btns"><button class="btn-edit" onclick="editRow(this)">แก้ไข</button><button class="btn-delete" onclick="deleteRow(this)">ลบ</button></div></td>
           </tr>
         </tbody>
@@ -289,7 +291,6 @@
 </div>
 
 <script>
-  // ฟังก์ชันค้นหาข้อมูลในตาราง
   function searchTable() {
     let input = document.getElementById("searchInput");
     let filter = input.value.toLowerCase();
@@ -297,12 +298,14 @@
     let tr = table.getElementsByTagName("tr");
 
     for (let i = 1; i < tr.length; i++) {
-      let tdName = tr[i].getElementsByTagName("td")[1];
-      let tdHouse = tr[i].getElementsByTagName("td")[2];
-      if (tdName || tdHouse) {
-        let txtName = tdName.textContent || tdName.innerText;
-        let txtHouse = tdHouse.textContent || tdHouse.innerText;
-        if (txtName.toLowerCase().indexOf(filter) > -1 || txtHouse.toLowerCase().indexOf(filter) > -1) {
+      let tdPrefix = tr[i].getElementsByTagName("td")[1];
+      let tdName = tr[i].getElementsByTagName("td")[2];
+      let tdSurname = tr[i].getElementsByTagName("td")[3];
+      let tdHouse = tr[i].getElementsByTagName("td")[4];
+      
+      if (tdName || tdSurname || tdHouse) {
+        let txt = (tdPrefix.innerText + " " + tdName.innerText + " " + tdSurname.innerText + " " + tdHouse.innerText).toLowerCase();
+        if (txt.indexOf(filter) > -1) {
           tr[i].style.display = "";
         } else {
           tr[i].style.display = "none";
@@ -311,7 +314,6 @@
     }
   }
 
-  // ฟังก์ชันลบแถวรายชื่อ
   function deleteRow(btn) {
     if (confirm("ท่านผู้ใหญ่ต้องการลบรายชื่อนี้ออกจากระบบใช่หรือไม่?")) {
       let row = btn.closest("tr");
@@ -322,24 +324,22 @@
     }
   }
 
-  // ฟังก์ชันแก้ไขข้อมูลในแถว
   function editRow(btn) {
     let row = btn.closest("tr");
-    let nameCell = row.cells[1];
-    let houseCell = row.cells[2];
+    let prefixCell = row.cells[1];
+    let nameCell = row.cells[2];
+    let surnameCell = row.cells[3];
+    let houseCell = row.cells[4];
 
-    let currentName = nameCell.innerText;
-    let currentHouse = houseCell.innerText;
+    let newPrefix = prompt("แก้ไขคำนำหน้า:", prefixCell.innerText);
+    let newName = prompt("แก้ไขชื่อ:", nameCell.innerText);
+    let newSurname = prompt("แก้ไขนามสกุล:", surnameCell.innerText);
+    let newHouse = prompt("แก้ไขบ้านเลขที่:", houseCell.innerText);
 
-    let newName = prompt("แก้ไขชื่อ - สกุล:", currentName);
-    let newHouse = prompt("แก้ไขบ้านเลขที่:", currentHouse);
-
-    if (newName !== null && newName.trim() !== "") {
-      nameCell.innerText = newName.trim();
-    }
-    if (newHouse !== null && newHouse.trim() !== "") {
-      houseCell.innerText = newHouse.trim();
-    }
+    if (newPrefix !== null) prefixCell.innerText = newPrefix.trim();
+    if (newName !== null) nameCell.innerText = newName.trim();
+    if (newSurname !== null) surnameCell.innerText = newSurname.trim();
+    if (newHouse !== null) houseCell.innerText = newHouse.trim();
   }
 </script>
 
