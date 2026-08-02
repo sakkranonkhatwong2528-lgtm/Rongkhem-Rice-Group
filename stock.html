@@ -1,394 +1,157 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>จัดการคลังข้าวสาร | ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>คลังข้าวสาร - กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
+  <style>
+    body { font-family: 'Sarabun', sans-serif; background-color: #f4f7f6; margin: 0; padding: 15px; color: #333; }
+    .container { max-width: 800px; margin: auto; }
+    .header { background: #2c3e50; color: white; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 20px; }
+    
+    /* สรุปยอดคลัง */
+    .stock-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+    .stock-card { background: white; padding: 15px; border-radius: 10px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+    .stock-card h3 { margin: 0; font-size: 24px; }
+    .stock-card p { margin: 5px 0 0 0; color: #7f8c8d; font-size: 13px; }
 
-<style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:Tahoma,sans-serif;
-}
+    /* ฟอร์มเบิก-จ่าย */
+    .card { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+    .card h3 { margin-top: 0; color: #2c3e50; border-bottom: 2px solid #ecf0f1; padding-bottom: 10px; }
 
-body{
-  background: linear-gradient(-45deg, #0b3d26, #0f5132, #198754, #20c997);
-  background-size: 400% 400%;
-  animation: gradientBG 15s ease infinite;
-  min-height:100vh;
-  display: flex;
-  flex-direction: column;
-  color: #fff;
-}
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+    .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
 
-@keyframes gradientBG {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
+    .btn { padding: 10px 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; font-size: 15px; }
+    .btn-primary { background: #27ae60; color: white; }
+    .btn-primary:hover { background: #219150; }
 
-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:20px;
-  background:rgba(255,255,255,.12);
-  backdrop-filter:blur(10px);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  animation: slideDown 0.6s ease-out;
-}
+    /* ประวัติรายการ */
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; font-size: 14px; }
+    th { background: #f8f9fa; color: #2c3e50; }
 
-.btn-back {
-  background: rgba(255,255,255,0.2);
-  color: #fff;
-  border: 1px solid rgba(255,255,255,0.4);
-  padding: 8px 16px;
-  border-radius: 10px;
-  cursor: pointer;
-  text-decoration: none;
-  font-weight: bold;
-  transition: 0.3s;
-}
+    .badge-in { color: #27ae60; font-weight: bold; }
+    .badge-out { color: #e74c3c; font-weight: bold; }
 
-.btn-back:hover {
-  background: rgba(255,255,255,0.35);
-  transform: translateX(-3px);
-}
-
-.container{
-  max-width:1000px;
-  margin:auto;
-  padding:25px;
-  flex: 1;
-  width: 100%;
-}
-
-.card {
-  background:rgba(255,255,255,.18);
-  backdrop-filter:blur(12px);
-  border-radius:18px;
-  padding:25px;
-  box-shadow:0 8px 25px rgba(0,0,0,.18);
-  border: 1px solid rgba(255,255,255,0.2);
-  margin-bottom: 25px;
-  animation: fadeInUp 0.8s ease-out;
-}
-
-/* การ์ดแสดงสรุปคลังข้าว */
-.stock-summary {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 18px;
-  margin-bottom: 25px;
-}
-
-.summary-box {
-  background: rgba(0,0,0,0.15);
-  border-radius: 15px;
-  padding: 20px;
-  text-align: center;
-  border: 1px solid rgba(255,255,255,0.15);
-}
-
-.summary-box h1 {
-  font-size: 36px;
-  margin-top: 8px;
-}
-
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 15px;
-  margin-top: 15px;
-}
-
-input, select {
-  width: 100%;
-  padding: 12px 15px;
-  border-radius: 10px;
-  border: 1px solid rgba(255,255,255,0.3);
-  background: rgba(255,255,255,0.2);
-  color: #fff;
-  font-size: 15px;
-  outline: none;
-  transition: 0.3s;
-}
-
-select option {
-  background: #0f5132;
-  color: #fff;
-}
-
-input::placeholder {
-  color: rgba(255,255,255,0.7);
-}
-
-input:focus, select:focus {
-  background: rgba(255,255,255,0.3);
-  border-color: #fff;
-}
-
-.btn-add {
-  background: #198754;
-  color: white;
-  border: none;
-  padding: 12px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 16px;
-  transition: 0.3s;
-  grid-column: 1 / -1;
-  box-shadow: 0 4px 10px rgba(25, 135, 84, 0.3);
-}
-
-.btn-add:hover {
-  background: #146c43;
-  transform: translateY(-2px);
-}
-
-/* ตารางประวัติ */
-.table-responsive {
-  overflow-x: auto;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
-}
-
-th, td {
-  padding: 14px;
-  text-align: left;
-  border-bottom: 1px solid rgba(255,255,255,0.15);
-}
-
-th {
-  background: rgba(0,0,0,0.15);
-  font-size: 16px;
-}
-
-tr {
-  transition: 0.2s;
-}
-
-tr:hover {
-  background: rgba(255,255,255,0.1);
-}
-
-.badge-in {
-  background: rgba(25, 135, 84, 0.35);
-  color: #75b798;
-  padding: 4px 10px;
-  border-radius: 8px;
-  font-weight: bold;
-  border: 1px solid rgba(25, 135, 84, 0.6);
-}
-
-.badge-out {
-  background: rgba(220, 53, 69, 0.35);
-  color: #ff868d;
-  padding: 4px 10px;
-  border-radius: 8px;
-  font-weight: bold;
-  border: 1px solid rgba(220, 53, 69, 0.6);
-}
-
-.btn-delete {
-  background: #dc3545;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.btn-delete:hover {
-  background: #bb2d3b;
-  transform: scale(1.05);
-}
-
-@keyframes slideDown {
-  from { transform: translateY(-100%); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-@keyframes fadeInUp {
-  from { transform: translateY(30px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-footer {
-  text-align: center;
-  padding: 15px;
-  background: rgba(0, 0, 0, 0.15);
-  font-size: 13px;
-  color: rgba(255,255,255,0.7);
-}
-</style>
+    .btn-back { display: block; text-align: center; margin-top: 20px; color: #7f8c8d; text-decoration: none; font-weight: bold; }
+  </style>
 </head>
-
 <body>
 
-<header>
-  <h2>📦 ระบบจัดการคลังข้าวสาร</h2>
-  <a href="dashboard.html" class="btn-back">⬅️ กลับหน้าหลัก</a>
-</header>
-
 <div class="container">
+  <div class="header">
+    <h2 style="margin: 0;">📦 บัญชีคลังข้าวสาร</h2>
+    <small>กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</small>
+  </div>
 
-  <!-- สรุปสถานะคลัง -->
+  <!-- ยอดสรุปคลังข้าว -->
   <div class="stock-summary">
-    <div class="summary-box">
-      <div>นำเข้าทั้งหมด</div>
-      <h1 id="totalIn" style="color: #75b798;">0 ถุง</h1>
+    <div class="stock-card" style="border-top: 4px solid #27ae60;">
+      <h3 style="color: #27ae60;">182 ถัง</h3>
+      <p>รับเข้าทั้งหมด</p>
     </div>
-    <div class="summary-box">
-      <div>เบิกจ่ายทั้งหมด</div>
-      <h1 id="totalOut" style="color: #ff868d;">0 ถุง</h1>
+    <div class="stock-card" style="border-top: 4px solid #e74c3c;">
+      <h3 style="color: #e74c3c;">180 ถัง</h3>
+      <p>จ่ายออกงานศพ</p>
     </div>
-    <div class="summary-box" style="background: rgba(255, 193, 7, 0.15); border-color: rgba(255, 193, 7, 0.3);">
-      <div>คงเหลือในคลัง</div>
-      <h1 id="totalBalance" style="color: #ffda6a;">0 ถุง</h1>
+    <div class="stock-card" style="border-top: 4px solid #f39c12;">
+      <h3 style="color: #f39c12;">2 ถัง</h3>
+      <p>คงเหลือในคลัง</p>
     </div>
   </div>
 
-  <!-- ฟอร์มบันทึกการรับ-จ่าย -->
+  <!-- บันทึกรายการ เบิก/จ่าย -->
   <div class="card">
-    <h3>➕ บันทึกรายการ เข้า/ออก คลังข้าวสาร</h3>
-    <form id="stockForm" onsubmit="addStockTransaction(event)">
-      <div class="form-grid">
-        <select id="type" required>
-          <option value="in">📥 นำเข้า (รับเพิ่ม)</option>
-          <option value="out">📤 เบิกจ่าย (นำไปใช้)</option>
+    <h3>➕ บันทึกการรับเข้า - เบิกจ่ายข้าวสาร</h3>
+    <form id="stockForm">
+      <div class="form-group">
+        <label>ประเภทรายการ</label>
+        <select id="type">
+          <option value="in">🌾 รับข้าวสารเข้าคลัง (จากการจัดเก็บสมาชิก)</option>
+          <option value="out">⚰️ เบิกจ่ายช่วยเหลือ (งานศพ)</option>
         </select>
-        <input type="number" id="amount" placeholder="จำนวน (ถุง / กระสอบ)" required min="1">
-        <input type="text" id="date" placeholder="วันที่ (เช่น 12 ม.ค. 2569)" required>
-        <input type="text" id="note" placeholder="หมายเหตุ / รายละเอียด (เช่น ซื้อเข้าคลัง, งานศพคุณ...)" required>
-        <button type="submit" class="btn-add">บันทึกรายการคลัง</button>
       </div>
+
+      <div class="form-group">
+        <label>จำนวน (ถัง)</label>
+        <input type="number" id="amount" placeholder="ระบุจำนวนถัง" required min="1">
+      </div>
+
+      <div class="form-group">
+        <label>รายละเอียด / หมายเหตุ</label>
+        <input type="text" id="note" placeholder="เช่น งานศพ นายเกษมสุข ใฝ่ใจ" required>
+      </div>
+
+      <button type="button" class="btn btn-primary" onclick="addTransaction()">บันทึกรายการ</button>
     </form>
   </div>
 
-  <!-- ตารางประวัติเคลื่อนไหว -->
+  <!-- ประวัติการทำรายการ -->
   <div class="card">
-    <h3>📋 ประวัติการรับ - เบิกจ่ายข้าวสาร</h3>
-    <div class="table-responsive">
-      <table>
-        <thead>
-          <tr>
-            <th>วันที่</th>
-            <th>ประเภท</th>
-            <th>จำนวน</th>
-            <th>หมายเหตุ</th>
-            <th style="text-align:center;">จัดการ</th>
-          </tr>
-        </thead>
-        <tbody id="stockTableBody">
-          <!-- ข้อมูลจะแสดงที่นี่ -->
-        </tbody>
-      </table>
-    </div>
+    <h3>📜 ประวัติการรับเข้า - เบิกจ่ายล่าสุด</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>วันที่</th>
+          <th>รายการ</th>
+          <th>รายละเอียด</th>
+          <th>จำนวน</th>
+        </tr>
+      </thead>
+      <tbody id="historyTable">
+        <tr>
+          <td>02/08/2569</td>
+          <td><span class="badge-out">จ่ายออก</span></td>
+          <td>มอบเจ้าภาพ งานศพ นายเกษมสุข ใฝ่ใจ</td>
+          <td style="color:red; font-weight:bold;">-180 ถัง</td>
+        </tr>
+        <tr>
+          <td>01/08/2569</td>
+          <td><span class="badge-in">รับเข้า</span></td>
+          <td>รับจากสมาชิก (182 ราย)</td>
+          <td style="color:green; font-weight:bold;">+182 ถัง</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
+  <a href="index.html" class="btn-back">← กลับหน้าหลัก</a>
 </div>
 
-<footer>
-  © 2569 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
-</footer>
-
 <script>
-// ตรวจสอบการ Login
-if(sessionStorage.getItem("loggedIn") !== "true" && localStorage.getItem("loggedIn") !== "true"){
-  location.href = "index.html";
-}
+  function addTransaction() {
+    const type = document.getElementById('type').value;
+    const amount = document.getElementById('amount').value;
+    const note = document.getElementById('note').value;
 
-// โหลดข้อมูลประวัติสต็อก
-let stockList = JSON.parse(localStorage.getItem("stockList")) || [];
+    if(!amount || !note) {
+      alert('กรุณากรอกข้อมูลให้ครบถ้วน');
+      return;
+    }
 
-// แสดงผลเมื่อเปิดหน้า
-displayStock();
+    const table = document.getElementById('historyTable');
+    const newRow = table.insertRow(0);
 
-// ฟังก์ชันบันทึกรายการ
-function addStockTransaction(event) {
-  event.preventDefault();
+    const today = new Date();
+    const dateStr = today.getDate().toString().padStart(2, '0') + '/' + 
+                    (today.getMonth()+1).toString().padStart(2, '0') + '/' + 
+                    (today.getFullYear() + 543);
 
-  const type = document.getElementById("type").value;
-  const amount = parseInt(document.getElementById("amount").value.trim());
-  const date = document.getElementById("date").value.trim();
-  const note = document.getElementById("note").value.trim();
+    const typeBadge = type === 'in' ? '<span class="badge-in">รับเข้า</span>' : '<span class="badge-out">จ่ายออก</span>';
+    const amountText = type === 'in' ? `<span style="color:green; font-weight:bold;">+${amount} ถัง</span>` : `<span style="color:red; font-weight:bold;">-${amount} ถัง</span>`;
 
-  const newItem = {
-    id: Date.now(),
-    type: type,
-    amount: amount,
-    date: date,
-    note: note
-  };
+    newRow.innerHTML = `
+      <td>${dateStr}</td>
+      <td>${typeBadge}</td>
+      <td>${note}</td>
+      <td>${amountText}</td>
+    `;
 
-  stockList.unshift(newItem); // เอา รายการใหม่ไว้ข้างบนสุด
-  localStorage.setItem("stockList", JSON.stringify(stockList));
-
-  document.getElementById("stockForm").reset();
-  displayStock();
-}
-
-// ฟังก์ชันคำนวณและแสดงผลตาราง
-function displayStock() {
-  const tbody = document.getElementById("stockTableBody");
-  tbody.innerHTML = "";
-
-  let inSum = 0;
-  let outSum = 0;
-
-  if (stockList.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; opacity:0.7;">ยังไม่มีประวัติการทำรายการคลัง</td></tr>`;
-  } else {
-    stockList.forEach((item) => {
-      if (item.type === "in") {
-        inSum += item.amount;
-      } else {
-        outSum += item.amount;
-      }
-
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${item.date}</td>
-        <td>
-          <span class="${item.type === 'in' ? 'badge-in' : 'badge-out'}">
-            ${item.type === 'in' ? '📥 นำเข้า' : '📤 เบิกจ่าย'}
-          </span>
-        </td>
-        <td><strong>${item.amount}</strong> ถุง</td>
-        <td>${item.note}</td>
-        <td style="text-align:center;">
-          <button class="btn-delete" onclick="deleteStock(${item.id})">🗑️ ลบ</button>
-        </td>
-      `;
-      tbody.appendChild(tr);
-    });
+    alert('บันทึกรายการสำเร็จ!');
+    document.getElementById('stockForm').reset();
   }
-
-  // อัปเดตตัวเลขสรุป
-  document.getElementById("totalIn").textContent = inSum + " ถุง";
-  document.getElementById("totalOut").textContent = outSum + " ถุง";
-  
-  const balance = inSum - outSum;
-  document.getElementById("totalBalance").textContent = balance + " ถุง";
-}
-
-// ฟังก์ชันลบรายการ
-function deleteStock(id) {
-  if (confirm("คุณต้องการลบรายการคลังนี้ใช่หรือไม่?")) {
-    stockList = stockList.filter(item => item.id !== id);
-    localStorage.setItem("stockList", JSON.stringify(stockList));
-    displayStock();
-  }
-}
 </script>
 
 </body>
