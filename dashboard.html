@@ -2,402 +2,263 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Dashboard | ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:Tahoma,sans-serif;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Sarabun', Tahoma, sans-serif;
 }
 
-body{
-  background: linear-gradient(-45deg, #0b3d26, #0f5132, #198754, #20c997);
-  background-size: 400% 400%;
-  animation: gradientBG 15s ease infinite;
-  min-height:100vh;
-  display: flex;
-  flex-direction: column;
-  overflow-x: hidden;
+body {
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  min-height: 100vh;
+  color: #fff;
+  padding: 15px;
 }
 
-/* Background Animation */
-@keyframes gradientBG {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+.container {
+  max-width: 900px;
+  margin: 0 auto;
 }
 
-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:20px;
-  color:#fff;
-  background:rgba(255,255,255,.12);
-  backdrop-filter:blur(10px);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  animation: slideDown 0.8s ease-out;
+/* หัวข้อระบบ */
+.app-header {
+  text-align: center;
+  padding: 15px 0 10px 0;
 }
 
-.container{
-  max-width:1200px;
-  margin:auto;
-  padding:25px;
-  flex: 1;
+.app-header h1 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
 }
 
-.summary{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:18px;
-  margin-bottom:25px;
-}
-
-.box,.card{
-  background:rgba(255,255,255,.18);
-  backdrop-filter:blur(12px);
-  border-radius:18px;
-  padding:22px;
-  color:#fff;
-  box-shadow:0 8px 25px rgba(0,0,0,.18);
-  border: 1px solid rgba(255,255,255,0.2);
-  animation: fadeInUp 0.8s ease-out forwards;
-  opacity: 0;
-}
-
-/* Delay แอนิเมชันของแต่ละกล่อง */
-.summary .box:nth-child(1) { animation-delay: 0.1s; }
-.summary .box:nth-child(2) { animation-delay: 0.2s; }
-.summary .box:nth-child(3) { animation-delay: 0.3s; }
-.summary .box:nth-child(4) { animation-delay: 0.4s; }
-
-.box h1{
-  font-size:42px;
-  margin-top:10px;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.2);
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:18px;
-}
-
-.card{
-  text-align:center;
-  cursor:pointer;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+/* 🕊️ การ์ดแสดงความเสียใจ (ย้ายไว้บนสุด & ตกแต่งพิเศษ) */
+.condolence-card {
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1.5px solid rgba(255, 215, 0, 0.6);
+  border-radius: 20px;
+  padding: 25px 20px;
+  margin: 15px 0 25px 0;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 0 15px rgba(255, 215, 0, 0.1);
+  text-align: center;
   position: relative;
   overflow: hidden;
+  animation: fadeInDown 0.8s ease-out;
 }
 
-.card:nth-child(1) { animation-delay: 0.3s; }
-.card:nth-child(2) { animation-delay: 0.4s; }
-.card:nth-child(3) { animation-delay: 0.5s; }
-.card:nth-child(4) { animation-delay: 0.6s; }
-.card:nth-child(5) { animation-delay: 0.7s; }
-.card:nth-child(6) { animation-delay: 0.8s; }
-
-/* Shine Effect เมื่อ Hover */
-.card::before {
+.condolence-card::before {
   content: '';
   position: absolute;
   top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-  transition: 0.5s;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #d4af37, #fff8dc, #d4af37);
 }
 
-.card:hover::before {
-  left: 100%;
-}
-
-.card:hover{
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 12px 30px rgba(0,0,0,0.25);
-  background: rgba(255, 255, 255, 0.25);
-}
-
-.card h2{
-  font-size:50px;
-  transition: transform 0.3s ease;
-}
-
-.card:hover h2 {
-  transform: scale(1.15) rotate(5deg);
-}
-
-button{
-  background:#dc3545;
-  border:none;
-  color:#fff;
-  padding:10px 18px;
-  border-radius:10px;
-  cursor:pointer;
+.condolence-title {
+  color: #ffd700;
+  font-size: 20px;
   font-weight: bold;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3);
+  margin-bottom: 12px;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
-button:hover{
-  background:#bb2d3b;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(220, 53, 69, 0.5);
+.deceased-name {
+  font-size: 26px;
+  font-weight: bold;
+  color: #ffffff;
+  margin: 10px 0 5px 0;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.6);
 }
 
-.condolence{
-  margin:30px 0;
-  padding:30px;
-  border-radius:20px;
-  background:rgba(255,255,255,.18);
-  backdrop-filter:blur(15px);
-  text-align:center;
-  box-shadow:0 10px 25px rgba(0,0,0,.15);
-  color:#fff;
-  border: 1px solid rgba(255,255,255,0.25);
-  animation: fadeInUp 0.8s ease-out 0.9s forwards;
-  opacity: 0;
-}
-
-.dove{
-  font-size:70px;
-  display: inline-block;
-  animation: fly 3.5s ease-in-out infinite;
-  filter: drop-shadow(0 5px 10px rgba(0,0,0,0.15));
-}
-
-.message{
-  margin:20px 0;
-  line-height:1.8;
-  font-size:17px;
-}
-
-/* Keyframe Animations */
-@keyframes fly{
-  0%{ transform: translateY(0) rotate(0deg); }
-  25%{ transform: translateY(-12px) rotate(-3deg); }
-  50%{ transform: translateY(-5px) rotate(2deg); }
-  75%{ transform: translateY(-15px) rotate(-1deg); }
-  100%{ transform: translateY(0) rotate(0deg); }
-}
-
-@keyframes slideDown {
-  from { transform: translateY(-100%); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-@keyframes fadeInUp {
-  from { transform: translateY(30px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-/* Footer Style */
-footer {
-  text-align: center;
-  color: rgba(255, 255, 255, 0.9);
-  padding: 25px 15px;
-  margin-top: 30px;
-  background: rgba(0, 0, 0, 0.15);
-  backdrop-filter: blur(10px);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  line-height: 1.6;
-  animation: fadeInUp 0.8s ease-out 1s forwards;
-  opacity: 0;
-}
-
-footer .developer-info {
-  margin-top: 6px;
-  font-size: 14px;
+.deceased-info {
+  font-size: 15px;
   color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 15px;
 }
 
-footer .version-tag {
-  display: inline-block;
-  background: rgba(255, 255, 255, 0.2);
-  padding: 3px 12px;
+.condolence-msg {
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: #f0f0f0;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 15px;
   border-radius: 12px;
-  font-size: 13px;
-  margin-bottom: 8px;
+  border-left: 3px solid #ffd700;
+  margin: 15px 0;
+  text-align: center;
+}
+
+.funeral-date-badge {
+  display: inline-block;
+  background: linear-gradient(45deg, #d4af37, #aa7c11);
+  color: #000;
   font-weight: bold;
+  padding: 8px 20px;
+  border-radius: 30px;
+  font-size: 15px;
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+  margin-top: 5px;
+}
+
+/* ตารางสรุปยอดย้อนหลัง */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.stat-box {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  padding: 15px 10px;
+  border-radius: 15px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.15);
+}
+
+.stat-box .num {
+  font-size: 22px;
+  font-weight: bold;
+  margin-top: 4px;
+}
+
+/* ปุ่มเมนูหลัก */
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.menu-btn {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 18px 10px;
+  border-radius: 16px;
+  text-align: center;
+  color: #fff;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.menu-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-3px);
+}
+
+.menu-btn span {
+  display: block;
+  font-size: 26px;
+  margin-bottom: 6px;
+}
+
+/* เครดิตผู้ใหญ่บ้านด้านล่าง */
+.footer-credits {
+  text-align: center;
+  padding: 20px 10px;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.6;
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 600px) {
+  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  .menu-grid { grid-template-columns: repeat(2, 1fr); }
 }
 </style>
 </head>
-
 <body>
-
-<header>
-  <h2>🌾 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</h2>
-  <button onclick="logout()">ออกจากระบบ</button>
-</header>
 
 <div class="container">
 
-  <div class="summary">
-    <div class="box">
-      <div>สมาชิกทั้งหมด</div>
-      <h1 id="m">0</h1>
-    </div>
-
-    <div class="box">
-      <div>งานศพ</div>
-      <h1 id="f">0</h1>
-    </div>
-
-    <div class="box">
-      <div>รับข้าวสารแล้ว</div>
-      <h1 id="r">0</h1>
-    </div>
-
-    <div class="box">
-      <div>ค้างส่ง</div>
-      <h1 id="p">0</h1>
-    </div>
+  <!-- หัวข้อเว็บ -->
+  <div class="app-header">
+    <h1>🌾 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</h1>
   </div>
 
-  <div class="grid">
-    <div class="card" onclick="location.href='members.html'">
-      <h2>👥</h2>
-      <h3>สมาชิก</h3>
+  <!-- 🕊️ การ์ดแสดงความเสียใจ (ย้ายไว้บนสุด) -->
+  <div class="condolence-card">
+    <div class="condolence-title">
+      🕊️ ขอแสดงความเสียใจอย่างสุดซึ้ง 🕊️
     </div>
+    
+    <div class="deceased-name">⚰️ นายเกษมสุข ใฝ่ใจ</div>
+    <div class="deceased-info">อายุ - ปี | 📍 บ้านเลขที่ 123 หมู่ที่ 6</div>
 
-    <div class="card" onclick="location.href='funeral.html'">
-      <h2>⚰️</h2>
-      <h3>งานศพ</h3>
-    </div>
-
-    <div class="card" onclick="location.href='receive.html'">
-      <h2>🌾</h2>
-      <h3>รับข้าวสาร</h3>
-    </div>
-
-    <div class="card" onclick="location.href='stock.html'">
-      <h2>📦</h2>
-      <h3>คลังข้าว</h3>
-    </div>
-
-    <div class="card" onclick="location.href='report.html'">
-      <h2>📊</h2>
-      <h3>รายงาน</h3>
-    </div>
-
-    <div class="card" onclick="location.href='backup.html'">
-      <h2>💾</h2>
-      <h3>สำรองข้อมูล</h3>
-    </div>
-  </div>
-
-  <div class="condolence">
-    <div class="dove">🕊️</div>
-    <h2>ขอแสดงความเสียใจ</h2>
-    <h3 id="funeralName">⚰️ -</h3>
-    <p id="funeralAge">อายุ - ปี</p>
-    <p id="deadDate">📅 วันเสียชีวิต : -</p>
-    <p id="funeralPlace">📍 สถานที่ : -</p>
-    <p class="message">
-      ขอแสดงความเสียใจอย่างสุดซึ้งต่อการจากไปของผู้วายชนม์<br>
+    <div class="condolence-msg">
       ขออำนาจคุณพระศรีรัตนตรัยและสิ่งศักดิ์สิทธิ์ทั้งหลาย<br>
       โปรดดลบันดาลให้ดวงวิญญาณไปสู่สุคติในสัมปรายภพ<br>
       และขอเป็นกำลังใจแก่ครอบครัวและญาติมิตรทุกท่าน
-    </p>
-    <p id="burnDate">📅 กำหนดฌาปนกิจ : -</p>
+    </div>
+
+    <div class="funeral-date-badge">
+      📅 กำหนดการฌาปนกิจ : -
+    </div>
+  </div>
+
+  <!-- สรุปตัวเลข Real-time -->
+  <div class="stat-grid">
+    <div class="stat-box">
+      <small>สมาชิกทั้งหมด</small>
+      <div class="num">192</div>
+    </div>
+    <div class="stat-box">
+      <small>งานศพ</small>
+      <div class="num">1</div>
+    </div>
+    <div class="stat-box" style="color: #2ecc71;">
+      <small>รับข้าวแล้ว</small>
+      <div class="num">0</div>
+    </div>
+    <div class="stat-box" style="color: #e74c3c;">
+      <small>ค้างส่ง</small>
+      <div class="num">192</div>
+    </div>
+  </div>
+
+  <!-- ปุ่มเมนูหลัก -->
+  <div class="menu-grid">
+    <a href="members.html" class="menu-btn"><span>👥</span>สมาชิก</a>
+    <a href="funeral.html" class="menu-btn"><span>⚰️</span>งานศพ</a>
+    <a href="receive.html" class="menu-btn"><span>🌾</span>รับข้าวสาร</a>
+    <a href="stock.html" class="menu-btn"><span>📦</span>คลังข้าว</a>
+    <a href="report.html" class="menu-btn"><span>📊</span>รายงาน</a>
+    <a href="backup.html" class="menu-btn"><span>💾</span>สำรองข้อมูล</a>
+  </div>
+
+  <!-- ส่วนท้ายแสดงผู้พัฒนา -->
+  <div class="footer-credits">
+    <strong style="color: #ffd700; font-size: 14px;">Version 5.0</strong><br>
+    <strong>ผู้จัดทำและพัฒนาระบบ:</strong> นายศักรนนทน์ ขัติย์วงศ์<br>
+    ผู้ใหญ่บ้าน บ้านร่องเข็ม หมู่ที่ 6 ตำบลจำป่าหวาย อำเภอเมือง จังหวัดพะเยา<br>
+    <small style="opacity: 0.6;">© 2569 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</small>
   </div>
 
 </div>
-
-<footer>
-  <div class="version-tag">Version 5.0</div>
-  <div><strong>ผู้จัดทำและพัฒนาระบบ</strong></div>
-  <div class="developer-info">
-    <strong>นายศักรนนทน์ ขัติย์วงศ์</strong><br>
-    ผู้ใหญ่บ้าน บ้านร่องเข็ม หมู่ที่ 6<br>
-    ตำบลจำป่าหวาย อำเภอเมือง จังหวัดพะเยา
-  </div>
-  <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.15); margin: 15px auto; width: 60%;">
-  <div style="font-size: 13px; color: rgba(255,255,255,0.7);">
-    © 2569 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
-  </div>
-</footer>
-
-<script>
-// 1. ตรวจสอบการ Login
-if(
-  sessionStorage.getItem("loggedIn") !== "true" &&
-  localStorage.getItem("loggedIn") !== "true"
-){
-  location.href = "index.html";
-}
-
-// 2. โหลดข้อมูลสมาชิกและงานศพจาก LocalStorage
-const members = JSON.parse(localStorage.getItem("members")) || [];
-const funerals = JSON.parse(localStorage.getItem("funerals")) || [];
-
-// 3. ฟังก์ชันสร้าง Counting Animation (นับตัวเลขวิ่งจาก 0 ไปตามจำนวนจริง)
-function animateValue(id, start, end, duration) {
-  if (start === end) {
-    document.getElementById(id).textContent = end;
-    return;
-  }
-  let current = start;
-  let range = end - start;
-  let increment = end > start ? 1 : -1;
-  let stepTime = Math.abs(Math.floor(duration / range));
-  stepTime = Math.max(stepTime, 20); // ป้องกันไม่ให้เร็วเกินไป
-  
-  let timer = setInterval(function() {
-    current += increment;
-    document.getElementById(id).textContent = current;
-    if (current == end) {
-      clearInterval(timer);
-    }
-  }, stepTime);
-}
-
-// 4. คำนวณข้อมูล
-let totalMembers = members.length;
-let totalFunerals = funerals.length;
-let receiveCount = 0;
-
-if(funerals.length > 0){
-  const lastFuneral = funerals[funerals.length - 1];
-
-  if(Array.isArray(lastFuneral.received)){
-    receiveCount = lastFuneral.received.length;
-  }
-
-  // แสดงผลข้อมูลผู้เสียชีวิต
-  document.getElementById("funeralName").textContent = "⚰️ " + (lastFuneral.name || "-");
-  document.getElementById("funeralAge").textContent = "อายุ " + (lastFuneral.age || "-") + " ปี";
-  document.getElementById("deadDate").textContent = "📅 วันเสียชีวิต : " + (lastFuneral.deadDate || "-");
-  document.getElementById("funeralPlace").textContent = "📍 สถานที่ : " + (lastFuneral.place || "-");
-  document.getElementById("burnDate").textContent = "📅 กำหนดฌาปนกิจ : " + (lastFuneral.burnDate || "-");
-}
-
-let pendingCount = Math.max(totalMembers - receiveCount, 0);
-
-// เรียกใช้แอนิเมชันนับตัวเลขเมื่อโหลดหน้าเว็บ
-window.addEventListener('DOMContentLoaded', () => {
-  setTimeout(() => {
-    animateValue("m", 0, totalMembers, 1000);
-    animateValue("f", 0, totalFunerals, 1000);
-    animateValue("r", 0, receiveCount, 1000);
-    animateValue("p", 0, pendingCount, 1000);
-  }, 300);
-});
-
-// 5. ฟังก์ชันออกจากระบบ
-function logout(){
-  if(confirm("คุณต้องการออกจากระบบหรือไม่?")){
-    sessionStorage.removeItem("loggedIn");
-    localStorage.removeItem("loggedIn");
-    location.href = "index.html";
-  }
-}
-</script>
 
 </body>
 </html>
