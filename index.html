@@ -3,266 +3,99 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
-
-<style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:"Tahoma",sans-serif;
-}
-
-body{
-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-background:linear-gradient(135deg,#0d5c2f,#1e8c4f,#3cb371);
-}
-
-.login-box{
-width:380px;
-background:#ffffff;
-padding:35px;
-border-radius:20px;
-box-shadow:0 15px 40px rgba(0,0,0,.3);
-text-align:center;
-}
-
-.logo{
-font-size:70px;
-margin-bottom:10px;
-}
-
-h1{
-font-size:28px;
-color:#146c43;
-margin-bottom:5px;
-}
-
-p{
-color:#666;
-margin-bottom:25px;
-}
-
-input{
-width:100%;
-padding:13px;
-margin-bottom:15px;
-border:1px solid #ccc;
-border-radius:10px;
-font-size:16px;
-}
-
-button{
-width:100%;
-padding:14px;
-border:none;
-border-radius:10px;
-background:#198754;
-color:#fff;
-font-size:17px;
-font-weight:bold;
-cursor:pointer;
-transition:.3s;
-}
-
-button:hover{
-background:#157347;
-}
-
-#error{
-margin-top:15px;
-color:red;
-font-weight:bold;
-}
-</style>
-
-</head>
-
-<body>
-
-<div class="login-box">
-
-<div class="logo">🌾</div>
-
-<h1>ระบบกลุ่มข้าวสาร</h1>
-
-<p>บ้านร่องเข็ม หมู่ที่ 6</p>
-
-<input
-type="text"
-id="username"
-placeholder="ชื่อผู้ใช้">
-
-<input
-type="password"
-id="password"
-placeholder="รหัสผ่าน">
-
-<button onclick="login()">
-🔐 เข้าสู่ระบบ
-</button>
-
-<div id="error"></div>
-
-</div>
-
-<script>
-
-const ADMIN_USER="admin";
-const ADMIN_PASS="123456";
-
-function login(){
-
-let u=document.getElementById("username").value.trim();
-let p=document.getElementById("password").value;
-
-if(u===ADMIN_USER && p===ADMIN_PASS){
-
-sessionStorage.setItem("loggedIn","true");
-
-window.location.href="dashboard.html";
-
-}else{
-
-document.getElementById("error").innerHTML=
-"❌ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง";
-
-}
-
-}
-
-document.getElementById("password").addEventListener("keypress",function(e){
-
-if(e.key==="Enter"){
-
-login();
-
-}
-
-});
-<!DOCTYPE html>
-<html lang="th">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>🌾 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
 
 <style>
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Tahoma,sans-serif;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Tahoma,sans-serif;
 }
 
 body{
-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-background:linear-gradient(135deg,#0d5c2f,#1e8c4f,#3cb371);
-background-size:400% 400%;
-animation:bg 12s ease infinite;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#0d5c2f,#1e8c4f,#3cb371);
+    background-size:400% 400%;
+    animation:bg 12s ease infinite;
 }
 
 @keyframes bg{
-0%{background-position:0% 50%;}
-50%{background-position:100% 50%;}
-100%{background-position:0% 50%;}
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
 }
 
 .login-box{
-width:390px;
-background:#fff;
-padding:35px;
-border-radius:20px;
-box-shadow:0 15px 40px rgba(0,0,0,.3);
-text-align:center;
-animation:fade .8s;
-}
-
-@keyframes fade{
-from{
-opacity:0;
-transform:translateY(30px);
-}
-to{
-opacity:1;
-transform:translateY(0);
-}
+    width:390px;
+    background:#fff;
+    padding:35px;
+    border-radius:20px;
+    box-shadow:0 15px 40px rgba(0,0,0,.3);
+    text-align:center;
 }
 
 .logo{
-font-size:70px;
-margin-bottom:10px;
-animation:pulse 2s infinite;
-}
-
-@keyframes pulse{
-50%{
-transform:scale(1.1);
-}
+    font-size:70px;
+    margin-bottom:10px;
 }
 
 h1{
-color:#146c43;
-margin-bottom:5px;
+    color:#146c43;
+    margin-bottom:5px;
 }
 
 p{
-color:#666;
-margin-bottom:20px;
+    color:#666;
+    margin-bottom:20px;
 }
 
 input[type=text],
 input[type=password]{
-width:100%;
-padding:13px;
-margin-bottom:15px;
-border:1px solid #ccc;
-border-radius:10px;
-font-size:16px;
+    width:100%;
+    padding:13px;
+    margin-bottom:15px;
+    border:1px solid #ccc;
+    border-radius:10px;
+    font-size:16px;
 }
 
 .option{
-display:flex;
-justify-content:space-between;
-align-items:center;
-font-size:14px;
-margin-bottom:15px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+    font-size:14px;
 }
 
 button{
-width:100%;
-padding:14px;
-background:#198754;
-border:0;
-border-radius:10px;
-color:#fff;
-font-size:17px;
-font-weight:bold;
-cursor:pointer;
-transition:.3s;
+    width:100%;
+    padding:14px;
+    border:0;
+    border-radius:10px;
+    background:#198754;
+    color:#fff;
+    font-size:17px;
+    cursor:pointer;
 }
 
 button:hover{
-background:#157347;
+    background:#157347;
 }
 
 #error{
-margin-top:15px;
-color:#d32f2f;
-font-weight:bold;
+    margin-top:15px;
+    color:#d32f2f;
+    font-weight:bold;
 }
 
 .footer{
-margin-top:20px;
-font-size:13px;
-color:#777;
+    margin-top:20px;
+    color:#777;
+    font-size:13px;
 }
 </style>
 
@@ -306,37 +139,35 @@ id="remember">
 
 </div>
 
-<button onclick="login()">
-
+<button type="button" onclick="login()">
 🔐 เข้าสู่ระบบ
-
 </button>
 
 <div id="error"></div>
 
 <div class="footer">
-
-Version 3.0<br>
-
+Version 4.0<br>
 Rongkhem Rice Group
-
 </div>
 
 </div>
 
 <script>
 
-const ADMIN_USER="admin";
-const ADMIN_PASS="123456";
+const ADMIN_USER = "admin";
+const ADMIN_PASS = "123456";
 
-if(localStorage.getItem("loggedIn")=="true"){
+// ถ้าจำการเข้าสู่ระบบไว้ ให้เข้าหน้า Dashboard ทันที
+if(
+localStorage.getItem("loggedIn")=="true" ||
+sessionStorage.getItem("loggedIn")=="true"
+){
 location.href="dashboard.html";
 }
 
 function login(){
 
 let u=document.getElementById("username").value.trim();
-
 let p=document.getElementById("password").value;
 
 if(u===ADMIN_USER && p===ADMIN_PASS){
@@ -361,14 +192,16 @@ document.getElementById("error").innerHTML="❌ ชื่อผู้ใช้�
 
 }
 
+// แสดงรหัสผ่าน
 document.getElementById("showPass").addEventListener("change",function(){
 
 document.getElementById("password").type=
-this.checked?"text":"password";
+this.checked ? "text" : "password";
 
 });
 
-document.addEventListener("keydown",function(e){
+// กด Enter เพื่อ Login
+document.getElementById("password").addEventListener("keydown",function(e){
 
 if(e.key==="Enter"){
 
@@ -380,50 +213,5 @@ login();
 
 </script>
 
-</body>
-</html>
-</script>
-
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="th">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
-<style>
-body{margin:0;font-family:Tahoma,sans-serif;background:linear-gradient(135deg,#0d5c2f,#3cb371);display:flex;justify-content:center;align-items:center;height:100vh}
-.box{background:#fff;padding:30px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.25);width:360px;text-align:center}
-input,button{width:100%;padding:12px;margin:8px 0;border-radius:8px;font-size:16px}
-input{border:1px solid #ccc}
-button{background:#198754;color:#fff;border:none;cursor:pointer}
-#error{color:#d32f2f;margin-top:10px}
-</style>
-</head>
-<body>
-<div class="box">
-<h2>🌾 ระบบกลุ่มข้าวสาร</h2>
-<p>บ้านร่องเข็ม หมู่ที่ 6</p>
-<input id="username" placeholder="ชื่อผู้ใช้">
-<input id="password" type="password" placeholder="รหัสผ่าน">
-<button type="button" onclick="login()">🔐 เข้าสู่ระบบ</button>
-<div id="error"></div>
-</div>
-<script>
-const ADMIN_USER="admin";
-const ADMIN_PASS="123456";
-function login(){
- const u=document.getElementById("username").value.trim();
- const p=document.getElementById("password").value;
- if(u===ADMIN_USER && p===ADMIN_PASS){
-   sessionStorage.setItem("riceGroupLoggedIn","true");
-   location.href="dashboard.html";
- }else{
-   document.getElementById("error").textContent="❌ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง";
- }
-}
-document.getElementById("password").addEventListener("keydown",e=>{if(e.key==="Enter")login();});
-</script>
 </body>
 </html>
