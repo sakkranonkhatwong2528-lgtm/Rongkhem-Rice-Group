@@ -66,3 +66,42 @@
     text-align: center;
   }
 }
+<!-- โครงสร้างใบสำคัญรับข้าวสาร (จะแสดงเฉพาะตอนกดพิมพ์) -->
+<div id="receiptModal">
+  <div class="receipt-box">
+    <div class="receipt-header">
+      <h2>🌾 ใบสำคัญการรับข้าวสาร</h2>
+      <p>กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6 ต.แม่ปืม อ.เมือง จ.พะเยา</p>
+    </div>
+    
+    <div class="receipt-row">
+      <span><strong>วันที่ทำรายการ:</strong> <span id="recDate">-</span></span>
+      <span><strong>เลขที่:</strong> <span id="recId">-</span></span>
+    </div>
+    <div class="receipt-row">
+      <span><strong>ชื่อผู้รับข้าวสาร:</strong> <span id="recMemberName">-</span></span>
+      <span><strong>บ้านเลขที่:</strong> <span id="recHouseNo">-</span></span>
+    </div>
+    
+    <hr style="border: 0.5px solid #ccc; margin: 15px 0;">
+    
+    <div class="receipt-row">
+      <span><strong>เนื่องในงานศพ:</strong> <span id="recFuneralName">-</span></span>
+    </div>
+    <div class="receipt-row">
+      <span><strong>รายการที่ได้รับ:</strong> ข้าวสารสารพัดประโยชน์</span>
+      <span><strong>จำนวน:</strong> 1 ถุง</span>
+    </div>
+
+    <div class="sign-zone">
+      <div>
+        <p>ลงชื่อ......................................................ผู้รับ</p>
+        <p>( <span id="recSignMember">-</span> )</p>
+      </div>
+      <div>
+        <p>ลงชื่อ......................................................ผู้จ่าย/กรรมการ</p>
+        <p>( ...................................................... )</p>
+      </div>
+    </div>
+  </div>
+</div>
