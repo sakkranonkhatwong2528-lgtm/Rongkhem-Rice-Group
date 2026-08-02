@@ -9,24 +9,16 @@
     .container { max-width: 950px; margin: auto; }
     .header { background: #1b4332; color: white; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 20px; }
     .card { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-    
     .card-title { margin-top: 0; color: #2c3e50; border-bottom: 2px solid #ecf0f1; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-    
-    .search-box { margin-bottom: 15px; display: flex; gap: 10px; }
-    .search-box input { flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px; box-sizing: border-box; }
-
+    .search-box { margin-bottom: 15px; }
+    .search-box input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px; box-sizing: border-box; }
     table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-    th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; font-size: 14px; white-space: nowrap; }
+    th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; font-size: 14px; }
     th { background: #f8f9fa; color: #1b4332; position: sticky; top: 0; }
-    .table-container { max-height: 400px; overflow-y: auto; border: 1px solid #e0e0e0; border-radius: 6px; overflow-x: auto; }
-
+    .table-container { max-height: 400px; overflow-y: auto; border: 1px solid #e0e0e0; border-radius: 6px; }
     .status-paid { color: #27ae60; font-weight: bold; background: #e8f8f5; padding: 3px 8px; border-radius: 12px; font-size: 12px; }
     .status-unpaid { color: #e74c3c; font-weight: bold; background: #fadbd8; padding: 3px 8px; border-radius: 12px; font-size: 12px; }
-    .status-cut { color: #7f8c8d; font-weight: bold; background: #e0e0e0; padding: 3px 8px; border-radius: 12px; font-size: 12px; }
-
     .btn-cut { background: #e67e22; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; }
-    .btn-reset { background: #27ae60; color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 13px; }
-
     .badge-count { background: #e74c3c; color: white; padding: 2px 10px; border-radius: 12px; font-size: 14px; }
     .btn-back { display: block; text-align: center; margin-top: 20px; color: #7f8c8d; text-decoration: none; font-weight: bold; }
   </style>
@@ -39,14 +31,12 @@
     <small>บ้านร่องเข็ม หมู่ที่ 6</small>
   </div>
 
-  <!-- การ์ดที่ 1: รายชื่อสมาชิกค้างส่งข้าวสาร 10 ครัวเรือน และพิจารณาตัดสิทธิ์ -->
+  <!-- ตารางค้างส่ง -->
   <div class="card" style="border: 2px solid #e74c3c;">
     <h3 class="card-title" style="color:#c0392b;">
-      <span>⚠️ สมาชิกที่ไม่ได้นำข้าวสารมาส่ง</span>
-      <span class="badge-count" id="unpaidBadge">0 ครัวเรือน</span>
+      <span>⚠️ สมาชิกที่ไม่ได้นำข้าวสารมาส่ง (ค้างส่ง)</span>
+      <span class="badge-count" id="unpaidBadge">10 ครัวเรือน</span>
     </h3>
-    <p style="font-size: 13px; color: #666; margin-top: -5px;">รายชื่อสมาชิกที่ยังค้างส่งข้าวสาร สามารถตรวจสอบและกดพิจารณาตัดสิทธิ์ได้ที่นี่</p>
-    
     <div class="table-container">
       <table>
         <thead>
@@ -58,25 +48,20 @@
             <th>จัดการสิทธิ์</th>
           </tr>
         </thead>
-        <tbody id="unpaidTableBody">
-          <!-- แสดงเฉพาะรายการค้างส่ง -->
-        </tbody>
+        <tbody id="unpaidTableBody"></tbody>
       </table>
     </div>
   </div>
 
-  <!-- การ์ดที่ 2: รายชื่อสมาชิกทั้งหมด (192 ครัวเรือน) -->
+  <!-- ตารางรายชื่อทั้งหมด -->
   <div class="card">
     <h3 class="card-title">
       <span>📋 รายชื่อสมาชิกทั้งหมด</span>
-      <span style="font-size:14px; font-weight:normal; color:#555;">(192 ครัวเรือน)</span>
+      <span style="font-size:14px; color:#555;" id="totalLabel">(192 ครัวเรือน)</span>
     </h3>
-
     <div class="search-box">
       <input type="text" id="searchInput" onkeyup="filterMembers()" placeholder="🔍 พิมพ์ค้นหาบ้านเลขที่ หรือ ชื่อสมาชิก...">
-      <button class="btn-reset" onclick="resetMembersData()">🔄 รีเซ็ตดึงรายชื่อ 192 คน</button>
     </div>
-
     <div class="table-container">
       <table>
         <thead>
@@ -87,9 +72,7 @@
             <th>สถานะส่งข้าวสาร</th>
           </tr>
         </thead>
-        <tbody id="allMemberTableBody">
-          <!-- แสดงรายชื่อทั้งหมด 192 ครัวเรือน -->
-        </tbody>
+        <tbody id="allMemberTableBody"></tbody>
       </table>
     </div>
   </div>
@@ -98,85 +81,67 @@
 </div>
 
 <script>
-// ฟังก์ชันสร้างข้อมูลสมาชิกใหม่ 192 ครัวเรือน
-function createDefaultMembers() {
-  let members = [];
-  for (let i = 1; i <= 192; i++) {
-    // 182 รายแรกส่งแล้ว / 10 รายหลัง (183-192) ค้างส่ง
-    let status = i <= 182 ? "ส่งแล้ว" : "ค้างส่ง";
-    members.push({
-      id: i,
-      houseNo: `${i}`,
-      name: `ครัวเรือนที่ ${i} (บ้านร่องเข็ม ม.6)`,
-      status: status,
-      remark: ""
-    });
-  }
-  localStorage.setItem('memberList', JSON.stringify(members));
-  return members;
-}
-
-// โหลดข้อมูลสมาชิก
+// สร้างรายชื่ออัตโนมัติ 192 ครัวเรือน (มีค้างส่ง 10 คน)
 function getMembersData() {
-  let members = JSON.parse(localStorage.getItem('memberList'));
-  if (!members || !Array.isArray(members) || members.length === 0) {
-    members = createDefaultMembers();
+  let list = JSON.parse(localStorage.getItem('memberList'));
+  if (!list || list.length === 0) {
+    list = [];
+    for (let i = 1; i <= 192; i++) {
+      let isUnpaid = i > 182; // 10 คนสุดท้ายเป็นค้างส่ง
+      list.push({
+        id: i,
+        houseNo: `${i}`,
+        name: `ครัวเรือนที่ ${i} (บ้านร่องเข็ม ม.6)`,
+        status: isUnpaid ? "ค้างส่ง" : "ส่งแล้ว"
+      });
+    }
+    localStorage.setItem('memberList', JSON.stringify(list));
   }
-  return members;
+  return list;
 }
 
-// กดปุ่มรีเซ็ตดึงข้อมูลใหม่
-function resetMembersData() {
-  if (confirm("คุณต้องการดึงรายชื่อสมาชิก 192 ครัวเรือนใหม่ทั้งหมด ใช่หรือไม่?")) {
-    createDefaultMembers();
-    renderTables();
-    alert("รีเซ็ตดึงรายชื่อสมาชิก 192 ครัวเรือนเรียบร้อยแล้ว!");
-  }
-}
-
-// แสดงผลตารางสมาชิก
-function renderTables() {
+function render() {
   const members = getMembersData();
   const unpaidBody = document.getElementById("unpaidTableBody");
   const allBody = document.getElementById("allMemberTableBody");
-  
+
   unpaidBody.innerHTML = "";
   allBody.innerHTML = "";
 
   let unpaidCount = 0;
 
-  members.forEach((m, index) => {
-    // 1. ตารางรวม 192 ครัวเรือน
-    let statusHTML = `<span class="status-paid">✅ ส่งแล้ว</span>`;
-    if (m.status === 'ค้างส่ง') {
-      statusHTML = `<span class="status-unpaid">❌ ค้างส่ง</span>`;
-    } else if (m.status === 'พิจารณาตัดสิทธิ์') {
-      statusHTML = `<span class="status-cut">🚫 ตัดสิทธิ์แล้ว</span>`;
-    }
+  members.forEach((m, idx) => {
+    let houseNo = m.houseNo || (idx + 1);
+    let name = m.name || `ครัวเรือนที่ ${idx + 1}`;
+    let status = m.status || 'ส่งแล้ว';
 
+    let statusTag = status === 'ค้างส่ง' 
+      ? `<span class="status-unpaid">❌ ค้างส่ง</span>` 
+      : (status === 'พิจารณาตัดสิทธิ์' ? `<span style="color:#7f8c8d; font-weight:bold;">🚫 พิจารณาตัดสิทธิ์</span>` : `<span class="status-paid">✅ ส่งแล้ว</span>`);
+
+    // ใส่ตารางทั้งหมด
     allBody.innerHTML += `
       <tr>
-        <td>${index + 1}</td>
-        <td><strong>บ้านเลขที่ ${m.houseNo}</strong></td>
-        <td>${m.name}</td>
-        <td>${statusHTML}</td>
+        <td>${idx + 1}</td>
+        <td><strong>บ้านเลขที่ ${houseNo}</strong></td>
+        <td>${name}</td>
+        <td>${statusTag}</td>
       </tr>
     `;
 
-    // 2. ตารางเฉพาะคนที่ "ค้างส่ง" หรือ "ตัดสิทธิ์"
-    if (m.status === 'ค้างส่ง' || m.status === 'พิจารณาตัดสิทธิ์') {
+    // ใส่ตารางค้างส่ง
+    if (status === 'ค้างส่ง' || status === 'พิจารณาตัดสิทธิ์') {
       unpaidCount++;
       unpaidBody.innerHTML += `
         <tr>
           <td>${unpaidCount}</td>
-          <td><strong>บ้านเลขที่ ${m.houseNo}</strong></td>
-          <td>${m.name}</td>
-          <td>${statusHTML}</td>
+          <td><strong>บ้านเลขที่ ${houseNo}</strong></td>
+          <td>${name}</td>
+          <td>${statusTag}</td>
           <td>
-            ${m.status === 'ค้างส่ง' 
-              ? `<button class="btn-cut" onclick="cutMember(${index})">⚠️ พิจารณาตัดสิทธิ์</button>` 
-              : `<small style="color:#7f8c8d;">${m.remark || 'ตัดสิทธิ์แล้ว'}</small>`
-            }
+            ${status === 'ค้างส่ง' 
+              ? `<button class="btn-cut" onclick="cutMember(${idx})">⚠️ พิจารณาตัดสิทธิ์</button>` 
+              : `<small style="color:#7f8c8d;">บันทึกแล้ว</small>`}
           </td>
         </tr>
       `;
@@ -184,38 +149,27 @@ function renderTables() {
   });
 
   document.getElementById("unpaidBadge").innerText = `${unpaidCount} ครัวเรือน`;
+  document.getElementById("totalLabel").innerText = `(${members.length} ครัวเรือน)`;
 }
 
-// พิจารณาตัดสิทธิ์
 function cutMember(index) {
-  let members = getMembersData();
-  const target = members[index];
-
-  const reason = prompt(`ระบุสาเหตุการพิจารณาตัดสิทธิ์ของ "บ้านเลขที่ ${target.houseNo} (${target.name})":`, "ค้างส่งข้าวสารเกินกำหนด");
-  
-  if (reason !== null && reason.trim() !== "") {
-    members[index].status = "พิจารณาตัดสิทธิ์";
-    members[index].remark = `ตัดสิทธิ์เนื่องจาก: ${reason}`;
-    
-    localStorage.setItem('memberList', JSON.stringify(members));
-    alert(`อัปเดตสถานะพิจารณาตัดสิทธิ์บ้านเลขที่ ${target.houseNo} เรียบร้อยแล้ว!`);
-    renderTables();
+  let list = getMembersData();
+  if (confirm(`ยืนยันการเปลี่ยนสถานะเป็น "พิจารณาตัดสิทธิ์" ใช่หรือไม่?`)) {
+    list[index].status = "พิจารณาตัดสิทธิ์";
+    localStorage.setItem('memberList', JSON.stringify(list));
+    render();
   }
 }
 
-// ค้นหา
 function filterMembers() {
   const input = document.getElementById("searchInput").value.toLowerCase();
   const rows = document.querySelectorAll("#allMemberTableBody tr");
-
   rows.forEach(row => {
-    const text = row.innerText.toLowerCase();
-    row.style.display = text.includes(input) ? "" : "none";
+    row.style.display = row.innerText.toLowerCase().includes(input) ? "" : "none";
   });
 }
 
-// เรียกทำงานเมื่อเปิดหน้า
-document.addEventListener("DOMContentLoaded", renderTables);
+document.addEventListener("DOMContentLoaded", render);
 </script>
 
 </body>
