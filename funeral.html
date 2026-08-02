@@ -3,184 +3,138 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>จัดการข้อมูลงานศพ - กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
+  <title>จัดการงานศพ - กลุ่มข้าวสาร บ้านร่องเข็ม</title>
   <style>
     body { font-family: 'Sarabun', sans-serif; background: #f4f7f6; margin: 0; padding: 15px; color: #333; }
     .container { max-width: 900px; margin: auto; }
-    .header { background: #2c3e50; color: white; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 20px; }
-    
+    .header { background: #1b4332; color: white; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 20px; }
     .card { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-    .card h3 { margin-top: 0; color: #2c3e50; border-bottom: 2px solid #ecf0f1; padding-bottom: 10px; }
-
-    .form-group { margin-bottom: 15px; }
-    .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
-    .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 15px; }
-
-    .btn { padding: 10px 18px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 15px; display: inline-block; }
-    .btn-save { background: #27ae60; color: white; width: 100%; }
-    .btn-save:hover { background: #219150; }
-    .btn-delete { background: #e74c3c; color: white; padding: 6px 12px; font-size: 13px; }
-    .btn-delete:hover { background: #c0392b; }
-
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; overflow-x: auto; display: block; }
-    th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; font-size: 14px; white-space: nowrap; }
-    th { background: #f8f9fa; color: #2c3e50; }
-
+    .card-title { margin-top: 0; color: #2c3e50; border-bottom: 2px solid #ecf0f1; padding-bottom: 10px; }
+    .funeral-card { background: #fffdf9; border-left: 5px solid #e67e22; padding: 15px; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .funeral-title { font-weight: bold; font-size: 16px; color: #d35400; margin-bottom: 5px; }
+    .btn-add { background: #27ae60; color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-bottom: 15px; }
     .btn-back { display: block; text-align: center; margin-top: 20px; color: #7f8c8d; text-decoration: none; font-weight: bold; }
+    label { font-weight: bold; font-size: 14px; display: block; margin-top: 10px; }
+    input, select { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; margin-top: 4px; }
   </style>
 </head>
 <body>
 
 <div class="container">
   <div class="header">
-    <h2 style="margin:0;">⚰️ จัดการข้อมูลงานศพ</h2>
+    <h2 style="margin:0;">🕊️ จัดการข้อมูลงานศพและการจ่ายข้าวสาร</h2>
     <small>กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</small>
   </div>
 
-  <!-- ฟอร์มเพิ่มงานศพใหม่ -->
+  <!-- บันทึกงานศพใหม่ -->
   <div class="card">
-    <h3>➕ บันทึกข้อมูลงานศพใหม่</h3>
+    <h3 class="card-title">➕ บันทึกแจ้งงานศพใหม่</h3>
     <form id="funeralForm" onsubmit="saveFuneral(event)">
-      <div class="form-group">
-        <label>ชื่อ - นามสกุล ผู้เสียชีวิต:</label>
-        <input type="text" id="name" required placeholder="เช่น นายเกษมสุข ใฝ่ใจ">
+      <label>ชื่อ - นามสกุล ผู้เสียชีวิต:</label>
+      <input type="text" id="deceasedName" placeholder="เช่น นายเกษมสุข ใฝ่ใจ" required>
+
+      <div style="display:flex; gap:10px;">
+        <div style="flex:1;">
+          <label>อายุ (ปี):</label>
+          <input type="number" id="age" placeholder="47" required>
+        </div>
+        <div style="flex:2;">
+          <label>ตั้งศพ ณ / วัด:</label>
+          <input type="text" id="venue" placeholder="เช่น วัดร่องเข็ม" required>
+        </div>
       </div>
-      <div class="form-group">
-        <label>อายุ (ปี):</label>
-        <input type="number" id="age" required placeholder="เช่น 47">
-      </div>
-      <div class="form-group">
-        <label>วันเสียชีวิต:</label>
-        <input type="date" id="deathDate" required>
-      </div>
-      <div class="form-group">
-        <label>สถานที่จัดงาน / วัด:</label>
-        <input type="text" id="location" placeholder="เช่น วัดร่องเข็ม หรือ บ้านเลขที่ 123" required>
-      </div>
-      <div class="form-group">
-        <label>กำหนดการฌาปนกิจ (วันเผา):</label>
-        <input type="date" id="cremationDate" required>
-      </div>
-      <button type="submit" class="btn btn-save">💾 บันทึกข้อมูลงานศพ</button>
+
+      <label>กำหนดการฌาปนกิจ (เผา):</label>
+      <input type="date" id="cremationDate" required>
+
+      <button type="submit" class="btn-add" style="margin-top:15px;">💾 บันทึกแจ้งงานศพ</button>
     </form>
   </div>
 
-  <!-- ตารางแสดงประวัติงานศพ -->
+  <!-- แสดงรายการงานศพปัจจุบัน -->
   <div class="card">
-    <h3>📋 ประวัติงานศพทั้งหมด</h3>
-    <table id="funeralTable">
-      <thead>
-        <tr>
-          <th>ลำดับ</th>
-          <th>ชื่อ - นามสกุล</th>
-          <th>อายุ</th>
-          <th>วันเสียชีวิต</th>
-          <th>สถานที่</th>
-          <th>วันฌาปนกิจ</th>
-          <th>จัดการ</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- ข้อมูลจะถูกแสดงผ่าน JavaScript -->
-      </tbody>
-    </table>
+    <h3 class="card-title">🕊️ งานศพปัจจุบัน (ขณะนี้)</h3>
+    <div id="funeralList">
+      <!-- ข้อมูลจะโหลดแสดงตรงนี้ -->
+    </div>
   </div>
 
-  <a href="dashboard.html" class="btn-back">⬅️ กลับหน้าหลัก</a>
+  <a href="dashboard.html" class="btn-back">⬅️ กลับหน้าหลัก Dashboard</a>
 </div>
 
 <script>
-// ข้อมูลเริ่มต้นสำหรับทดสอบระบบ
-const defaultList = [
-  { name: "นายบูรณพิภพ ผัดดี", age: "27", deathDate: "2026-07-03", location: "บ้านเลขที่ 123", cremationDate: "2026-07-05" },
-  { name: "นายเกษมสุข ใฝ่ใจ", age: "47", deathDate: "2026-07-22", location: "วัดร่องเข็ม", cremationDate: "2026-07-25" }
+// ข้อมูลงานศพเริ่มต้น
+const initialFunerals = [
+  {
+    id: 1,
+    name: "นายเกษมสุข ใฝ่ใจ",
+    age: 47,
+    venue: "วัดร่องเข็ม",
+    date: "2026-07-25",
+    status: "กำลังดำเนินงาน"
+  },
+  {
+    id: 2,
+    name: "สมาชิกครอบครัว (รายที่ 2)",
+    age: 68,
+    venue: "วัดร่องเข็ม",
+    date: "2026-08-05",
+    status: "กำลังดำเนินงาน"
+  }
 ];
 
-// แปลงวันที่ YYYY-MM-DD เป็นวันที่ไทย
-function formatDateTh(dateStr) {
-  if (!dateStr || dateStr === 'undefined') return '-';
-  const monthsTh = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
-  const d = new Date(dateStr);
-  if (isNaN(d.getTime())) return dateStr;
-  return `${d.getDate()} ${monthsTh[d.getMonth()]} ${d.getFullYear() + 543}`;
+function getFunerals() {
+  let data = localStorage.getItem('funeralList');
+  if (!data) {
+    localStorage.setItem('funeralList', JSON.stringify(initialFunerals));
+    return initialFunerals;
+  }
+  return JSON.parse(data);
 }
 
-// วาดตารางแสดงรายการงานศพ
-function renderFuneralTable() {
-  let funeralList = JSON.parse(localStorage.getItem('funeralList'));
-  
-  // ถ้าเปิดครั้งแรกและไม่มีข้อมูล ให้ใส่ข้อมูลเริ่มต้น
-  if (!funeralList) {
-    funeralList = defaultList;
-    localStorage.setItem('funeralList', JSON.stringify(funeralList));
-  }
+function renderFunerals() {
+  const funerals = getFunerals();
+  const container = document.getElementById('funeralList');
+  container.innerHTML = "";
 
-  const tbody = document.querySelector("#funeralTable tbody");
-  tbody.innerHTML = "";
-
-  if (funeralList.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:#999;">ไม่มีข้อมูลงานศพ</td></tr>';
+  if (funerals.length === 0) {
+    container.innerHTML = "<p style='text-align:center; color:#888;'>ไม่มีงานศพในขณะนี้</p>";
     return;
   }
 
-  funeralList.forEach((item, index) => {
-    const row = document.createElement("tr");
-    row.innerHTML = `
-      <td>${index + 1}</td>
-      <td><strong>${item.name || '-'}</strong></td>
-      <td>${item.age ? item.age + ' ปี' : '-'}</td>
-      <td>${formatDateTh(item.deathDate)}</td>
-      <td>${item.location || '-'}</td>
-      <td>${formatDateTh(item.cremationDate)}</td>
-      <td>
-        <button class="btn btn-delete" onclick="deleteFuneral(${index})">🗑️ ลบ</button>
-      </td>
+  funerals.forEach((f, idx) => {
+    container.innerHTML += `
+      <div class="funeral-card">
+        <div class="funeral-title">🕊️ ${f.name} (อายุ ${f.age} ปี)</div>
+        <div>📍 สถานที่: ${f.venue}</div>
+        <div>📅 กำหนดฌาปนกิจ: ${f.date}</div>
+        <div style="margin-top:5px; font-weight:bold; color:#27ae60;">🌾 เรียกเก็บข้าวสารช่วยเหลือ: 182 ถุง (ตามยอดส่งแล้ว)</div>
+      </div>
     `;
-    tbody.appendChild(row);
   });
 }
 
-// บันทึกข้อมูลงานศพใหม่
 function saveFuneral(e) {
   e.preventDefault();
+  let funerals = getFunerals();
   
-  const name = document.getElementById("name").value.trim();
-  const age = document.getElementById("age").value;
-  const deathDate = document.getElementById("deathDate").value;
-  const location = document.getElementById("location").value.trim();
-  const cremationDate = document.getElementById("cremationDate").value;
+  const newFuneral = {
+    id: Date.now(),
+    name: document.getElementById('deceasedName').value,
+    age: document.getElementById('age').value,
+    venue: document.getElementById('venue').value,
+    date: document.getElementById('cremationDate').value,
+    status: "กำลังดำเนินงาน"
+  };
 
-  if (!name || !age || !deathDate || !cremationDate) {
-    alert("กรุณากรอกข้อมูลให้ครบถ้วนก่อนบันทึก!");
-    return;
-  }
-
-  const newItem = { name, age, deathDate, location, cremationDate };
-  let funeralList = JSON.parse(localStorage.getItem('funeralList')) || [];
-  
-  funeralList.push(newItem);
-  localStorage.setItem('funeralList', JSON.stringify(funeralList));
-
-  alert("บันทึกข้อมูลงานศพเรียบร้อยแล้ว!");
-  document.getElementById("funeralForm").reset();
-  renderFuneralTable();
+  funerals.unshift(newFuneral);
+  localStorage.setItem('funeralList', JSON.stringify(funerals));
+  alert('บันทึกข้อมูลงานศพเรียบร้อยแล้ว');
+  document.getElementById('funeralForm').reset();
+  renderFunerals();
 }
 
-// ฟังก์ชันลบรายการ (กดลบได้แน่นอน 100%)
-function deleteFuneral(index) {
-  let funeralList = JSON.parse(localStorage.getItem('funeralList')) || [];
-  const targetName = funeralList[index] ? funeralList[index].name : "รายการนี้";
-
-  if (confirm(`คุณต้องการลบข้อมูลงานศพของ "${targetName}" ใช่หรือไม่?`)) {
-    funeralList.splice(index, 1);
-    localStorage.setItem('funeralList', JSON.stringify(funeralList));
-    renderFuneralTable();
-    alert("ลบข้อมูลเรียบร้อยแล้ว!");
-  }
-}
-
-// โหลดตารางเมื่อเปิดหน้าเว็บ
-document.addEventListener("DOMContentLoaded", renderFuneralTable);
+document.addEventListener("DOMContentLoaded", renderFunerals);
 </script>
 
 </body>
