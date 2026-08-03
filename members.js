@@ -42,14 +42,24 @@ function loadMembers() {
 
 <td>
 
-<button class="btn btn-info"
+<button
+class="btn btn-success"
+onclick="showQR('${member.id}')">
+
+📱 QR
+
+</button>
+
+<button
+class="btn btn-info"
 onclick="editMember('${member.id}')">
 
 ✏️
 
 </button>
 
-<button class="btn btn-danger"
+<button
+class="btn btn-danger"
 onclick="deleteMember('${member.id}')">
 
 🗑️
@@ -321,5 +331,204 @@ window.addEventListener(
 "load",
 
 loadMembers
+// ===============================
+// Export JSON
+// ===============================
 
+function exportMembers(){
+
+    const blob = new Blob(
+        [JSON.stringify(db.members,null,2)],
+        {type:"application/json"}
+    );
+
+    const a = document.createElement("a");
+
+    a.href = URL.createObjectURL(blob);
+
+    a.download = "members.json";
+
+    a.click();
+
+}
+
+
+
+// ===============================
+// Import JSON
+// ===============================
+
+function importMembers(file){
+
+    const reader = new FileReader();
+
+    reader.onload = function(e){
+
+        db.members = JSON.parse(e.target.result);
+
+        saveDB();
+
+        loadMembers();
+
+        notify("นำเข้าข้อมูลสมาชิกสำเร็จ");
+
+    };
+
+    reader.readAsText(file);
+
+}
+
+
+
+// ===============================
+// QR Code
+// ===============================
+
+function showQR(id){
+
+    const member = db.members.find(x=>x.id==id);
+
+    if(!member){
+
+        alert("ไม่พบสมาชิก");
+
+        return;
+
+    }
+
+    document.getElementById("qrModal").style.display="flex";
+
+    const box=document.getElementById("qrcode");
+
+    box.innerHTML="";
+
+    new QRCode(box,{
+
+        text:JSON.stringify({
+
+            id:member.id,
+
+            houseNo:member.houseNo,
+
+            name:member.name,
+
+            phone:member.phone||""
+
+        }),
+
+        width:220,
+
+        height:220,
+
+        colorDark:"#0f5132",
+
+        colorLight:"#ffffff",
+
+        correctLevel:QRCode.CorrectLevel.H
+
+    });
+
+    document.getElementById("qrMemberName").innerHTML=member.name;
+
+    document.getElementById("qrHouseNo").innerHTML=member.houseNo;
+
+}
+
+
+
+// ===============================
+// ปิด QR
+// ===============================
+
+function closeQR(){
+
+    document.getElementById("qrModal").style.display="none";
+
+}
+
+
+
+// ===============================
+// พิมพ์ QR
+// ===============================
+
+function printQR(){
+
+    const w = window.open("","","width=500,height=700");
+
+    w.document.write(`
+
+    <html>
+
+    <head>
+
+    <title>QR สมาชิก</title>
+
+    <style>
+
+    body{
+
+        font-family:Sarabun;
+
+        text-align:center;
+
+        padding:30px;
+
+    }
+
+    h2{
+
+        color:#198754;
+
+    }
+
+    </style>
+
+    </head>
+
+    <body>
+
+        <h2>กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</h2>
+
+        ${document.getElementById("qrcode").innerHTML}
+
+        <h3>${document.getElementById("qrMemberName").innerHTML}</h3>
+
+        <p>บ้านเลขที่ ${document.getElementById("qrHouseNo").innerHTML}</p>
+
+    </body>
+
+    </html>
+
+    `);
+
+    w.document.close();
+
+    w.print();
+
+}
+
+
+
+// ===============================
+// นับสมาชิก
+// ===============================
+
+function totalMembers(){
+
+    return db.members.length;
+
+}
+
+
+
+// ===============================
+// โหลดระบบ
+// ===============================
+
+window.addEventListener("load",()=>{
+
+    loadMembers();
+
+});
 );
