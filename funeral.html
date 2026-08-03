@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ไว้อาลัยผู้วายชนม์ - ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
+  <title>แจ้งผู้เสียชีวิตและไว้อาลัย - ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -57,7 +57,52 @@
       color: #09130d;
     }
 
-    /* กล่องการ์ดไว้อาลัยพรีเมียม */
+    /* กล่องฟอร์มกรอกข้อมูล (สำหรับผู้ใหญ่บ้านระบุข้อมูล) */
+    .form-box {
+      background: rgba(10, 20, 14, 0.7);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-premium);
+    }
+
+    .form-box h3 { margin: 0 0 12px 0; font-size: 16px; color: var(--gold-light); }
+    
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 120px;
+      gap: 10px;
+    }
+
+    @media(max-width: 600px) {
+      .form-grid { grid-template-columns: 1fr; }
+    }
+
+    .form-control {
+      background: rgba(18, 38, 27, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 10px 14px;
+      border-radius: 12px;
+      color: var(--text-main);
+      font-size: 14px;
+      outline: none;
+    }
+    .form-control:focus { border-color: var(--gold-primary); }
+
+    .btn-update {
+      background: linear-gradient(135deg, #d4af37, #aa8c2c);
+      color: #09130d;
+      border: none;
+      padding: 10px;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .btn-update:hover { background: #e6c555; }
+
+    /* การ์ดไว้อาลัยอนิเมชั่นหรูหรา */
     .condolence-card {
       background: var(--glass-surface);
       backdrop-filter: blur(20px);
@@ -77,13 +122,11 @@
       animation: floatIcon 3s ease-in-out infinite;
     }
 
-    /* อニメーションตัวหนังสือวิ่ง / ค่อยๆ ปรากฏทีละบรรทัด */
     .title-anim {
       font-size: 22px;
       color: var(--gold-light);
       margin-bottom: 15px;
       font-weight: 700;
-      letter-spacing: 0.5px;
     }
 
     .marquee-box {
@@ -92,16 +135,15 @@
       border-radius: 16px;
       padding: 25px;
       margin: 25px 0;
-      position: relative;
     }
 
-    /* เอฟเฟกต์ตัวหนังสือวิ่งแบบข้อความประกาศ (Marquee) */
     .marquee-text {
       font-size: 20px;
       line-height: 1.8;
       color: #fff;
       font-weight: 600;
       text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+      min-height: 60px;
     }
 
     .signature {
@@ -125,17 +167,14 @@
       margin-top: 20px;
     }
 
-    /* คีย์เฟรมอนิเมชั่น */
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
     @keyframes floatIcon {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-8px); }
     }
-
     @keyframes pulseGlow {
       0%, 100% { opacity: 0.8; }
       50% { opacity: 1; text-shadow: 0 0 10px rgba(212, 175, 55, 0.6); }
@@ -149,7 +188,17 @@
   <!-- แถบบน -->
   <div class="top-bar">
     <a href="แดชบอร์ด.html" class="back-btn">⬅️ กลับหน้าหลัก</a>
-    <div style="font-size: 13px; color: var(--gold-light);">🕯️ ร่วมไว้อาลัยผู้วายชนม์</div>
+    <div style="font-size: 13px; color: var(--gold-light);">🕯️ ระบบแจ้งข่าวและไว้อาลัย</div>
+  </div>
+
+  <!-- ส่วนผู้ใหญ่บ้านกรอกข้อมูลผู้เสียชีวิต -->
+  <div class="form-box">
+    <h3>📝 บันทึกข้อมูลผู้เสียชีวิต (สำหรับแสดงผลหน้าจอ)</h3>
+    <div class="form-grid">
+      <input type="text" id="inputName" class="form-control" placeholder="ชื่อ - นามสกุล ผู้เสียชีวิต">
+      <input type="text" id="inputAge" class="form-control" placeholder="อายุ (เช่น 72 ปี)">
+      <button onclick="updateCondolence()" class="btn-update">แสดงผล 📢</button>
+    </div>
   </div>
 
   <!-- การ์ดไว้อาลัยอนิเมชั่นหรูหรา -->
@@ -158,9 +207,8 @@
     <div class="title-anim">ด้วยความอาลัยและเสียใจอย่างยิ่ง</div>
     
     <div class="marquee-box">
-      <!-- ข้อความวิ่งสลับหรือพิมพ์ดีด -->
       <div id="typingText" class="marquee-text">
-        ขอแสดงความเสียใจกับครอบครัว ต่อการจากไปของผู้วายชนม์ ขอให้ดวงวิญญาณไปสู่สุคติในสัมปรายภพ
+        กำลังโหลดข้อมูล...
       </div>
     </div>
 
@@ -177,25 +225,45 @@
 </div>
 
 <script>
-  // เอฟเฟกต์พิมพ์ข้อความตัวหนังสือทีละตัว (Typing Animation) เพิ่มความพรีเมียม
-  const textElement = document.getElementById("typingText");
-  const message = "ขอแสดงความเสียใจกับครอบครัว ต่อการจากไปของผู้วายชนม์ ขอให้ดวงวิญญาณไปสู่สุคติในสัมปรายภพ อันสงบสุขร่มเย็นเบื้องสรวงสวรรค์";
-  
-  let i = 0;
-  textElement.innerHTML = "";
-  
-  function typeWriter() {
-    if (i < message.length) {
-      textElement.innerHTML += message.charAt(i);
-      i++;
-      setTimeout(typeWriter, 70); // ความเร็วในการพิมพ์
-    }
+  // โหลดข้อมูลล่าสุดจาก localStorage (ถ้ามี)
+  window.onload = function() {
+    const savedName = localStorage.getItem('funeral_name') || "คุณพ่อ/คุณแม่ (ตัวอย่าง)";
+    const savedAge = localStorage.getItem('funeral_age') || "75 ปี";
+    
+    document.getElementById('inputName').value = savedName === "คุณพ่อ/คุณแม่ (ตัวอย่าง)" ? "" : savedName;
+    document.getElementById('inputAge').value = savedAge === "75 ปี" ? "" : savedAge;
+    
+    displayMessage(savedName, savedAge);
+  };
+
+  function updateCondolence() {
+    const name = document.getElementById('inputName').value.trim() || "ผู้วายชนม์";
+    const age = document.getElementById('inputAge').value.trim() || "";
+    
+    // บันทึกเก็บไว้
+    localStorage.setItem('funeral_name', name);
+    localStorage.setItem('funeral_age', age);
+    
+    displayMessage(name, age);
   }
 
-  // เริ่มเล่นอนิเมชั่นเมื่อเปิดหน้าเว็บ
-  window.onload = function() {
-    setTimeout(typeWriter, 500);
-  };
+  function displayMessage(name, age) {
+    const textElement = document.getElementById("typingText");
+    let ageText = age ? ` อายุ ${age}` : "";
+    const message = `ขอแสดงความเสียใจกับครอบครัว ต่อการจากไปของ ${name}${ageText} ขอให้ดวงวิญญาณไปสู่สุคติในสัมปรายภพอันสงบสุขร่มเย็นเบื้องสรวงสวรรค์`;
+    
+    textElement.innerHTML = "";
+    let i = 0;
+    
+    function typeWriter() {
+      if (i < message.length) {
+        textElement.innerHTML += message.charAt(i);
+        i++;
+        setTimeout(typeWriter, 50);
+      }
+    }
+    typeWriter();
+  }
 </script>
 
 </body>
