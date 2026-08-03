@@ -1,702 +1,766 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { 
-            font-family: 'Prompt', sans-serif; 
-            background-color: #064e3b; /* เขียวเข้มพื้นหลัง */
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>🌾 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Prompt',sans-serif;
+}
+
+body{
+background:#f4f7f6;
+}
+
+.hero{
+background:linear-gradient(135deg,#0f5132,#198754,#28a745);
+}
+
+.card{
+background:#fff;
+border-radius:22px;
+box-shadow:0 10px 30px rgba(0,0,0,.08);
+transition:.3s;
+}
+
+.card:hover{
+transform:translateY(-6px);
+box-shadow:0 20px 40px rgba(0,0,0,.18);
+}
+
+.menu-card{
+background:#fff;
+border-radius:20px;
+padding:30px;
+text-align:center;
+cursor:pointer;
+transition:.3s;
+box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+.menu-card:hover{
+background:#198754;
+color:#fff;
+transform:scale(1.03);
+}
+
+.menu-card:hover h3{
+color:#fff;
+}
+
+footer{
+background:#0f5132;
+color:#fff;
+}
+
+</style>
+
 </head>
-<body class="text-gray-800 min-h-screen pb-10">
 
-    <div class="max-w-md mx-auto p-4 text-white">
-        <div class="text-center my-4">
-            <div class="text-4xl mb-1">🌾</div>
-            <h1 class="text-xl font-bold">ระบบกลุ่มข้าวสาร</h1>
-            <p class="text-emerald-200 text-sm">บ้านร่องเข็ม หมู่ที่ 6</p>
-            <p class="text-xs text-emerald-300 mt-1">สมาชิกทั้งหมด <span id="top-total-members">185</span> ครัวเรือน</p>
-        </div>
+<body>
 
-        <div class="grid grid-cols-2 gap-3 text-gray-800">
-            <div class="bg-white/90 backdrop-blur p-3 rounded-2xl shadow-sm border border-white/20">
-                <div class="text-2xl text-blue-600 mb-1">👥</div>
-                <div class="text-xs text-gray-500 font-medium">สมาชิกทั้งหมด</div>
-                <div class="text-xl font-bold text-gray-800 mt-1"><span id="stat-members">185</span> <span class="text-xs font-normal text-gray-500">ครัวเรือน</span></div>
-            </div>
+<!-- HEADER -->
 
-            <div class="bg-white/90 backdrop-blur p-3 rounded-2xl shadow-sm border border-white/20">
-                <div class="text-2xl text-amber-700 mb-1">⚰️</div>
-                <div class="text-xs text-gray-500 font-medium">งานศพ</div>
-                <div class="text-xl font-bold text-gray-800 mt-1"><span id="stat-funerals">0</span> <span class="text-xs font-normal text-gray-500">งาน</span></div>
-            </div>
+<header class="hero shadow-xl">
 
-            <div class="bg-white/90 backdrop-blur p-3 rounded-2xl shadow-sm border border-white/20">
-                <div class="text-2xl mb-1">📥</div>
-                <div class="text-xs text-gray-500 font-medium">ข้าวสารรับเข้าทั้งหมด</div>
-                <div class="text-xl font-bold text-gray-800 mt-1"><span id="stat-received-rice">0</span> <span class="text-xs font-normal text-gray-500">ถุง</span></div>
-            </div>
+<div class="max-w-7xl mx-auto p-6">
 
-            <div class="bg-white/90 backdrop-blur p-3 rounded-2xl shadow-sm border border-white/20">
-                <div class="text-2xl text-emerald-600 mb-1">🌾</div>
-                <div class="text-xs text-gray-500 font-medium">ข้าวสารคงเหลือ</div>
-                <div class="text-xl font-bold text-gray-800 mt-1"><span id="stat-stock-rice">0</span> <span class="text-xs font-normal text-gray-500">ถุง</span></div>
-            </div>
+<div class="flex flex-col lg:flex-row justify-between items-center">
 
-            <div class="bg-white/90 backdrop-blur p-3 rounded-2xl shadow-sm border border-white/20">
-                <div class="text-2xl text-amber-500 mb-1">⚠️</div>
-                <div class="text-xs text-gray-500 font-medium">สมาชิกค้างส่ง</div>
-                <div class="text-xl font-bold text-gray-800 mt-1"><span id="stat-pending">0</span> <span class="text-xs font-normal text-gray-500">ครัวเรือน</span></div>
-            </div>
+<div class="flex items-center gap-5">
 
-            <div class="bg-white/90 backdrop-blur p-3 rounded-2xl shadow-sm border border-white/20">
-                <div class="text-2xl mb-1">🚨</div>
-                <div class="text-xs text-gray-500 font-medium">ค้างส่ง 2 ครั้งขึ้นไป</div>
-                <div class="text-xl font-bold text-rose-600 mt-1"><span id="stat-urgent">0</span> <span class="text-xs font-normal text-gray-500">ครัวเรือน</span></div>
-            </div>
+<div class="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-xl text-5xl">
 
-            <div class="bg-white/90 backdrop-blur p-3 rounded-2xl shadow-sm border border-white/20">
-                <div class="text-2xl mb-1">⚰️</div>
-                <div class="text-xs text-gray-500 font-medium">ข้าวสารช่วยงานศพ</div>
-                <div class="text-xl font-bold text-gray-800 mt-1"><span id="stat-used-rice">0</span> <span class="text-xs font-normal text-gray-500">ถุง</span></div>
-            </div>
+🌾
 
-            <div class="bg-white/90 backdrop-blur p-3 rounded-2xl shadow-sm border border-white/20">
-                <div class="text-2xl text-emerald-500 mb-1">✅</div>
-                <div class="text-xs text-gray-500 font-medium">สมาชิกปกติ</div>
-                <div class="text-xl font-bold text-emerald-600 mt-1"><span id="stat-normal">185</span> <span class="text-xs font-normal text-gray-500">ครัวเรือน</span></div>
-            </div>
-        </div>
+</div>
 
-        <h2 class="text-lg font-bold mt-6 mb-3 text-white">เมนูระบบ</h2>
+<div>
 
-        <div class="grid grid-cols-2 gap-3">
-            <button onclick="openTab('members')" class="bg-emerald-800/80 hover:bg-emerald-700 text-white p-4 rounded-2xl shadow-sm flex flex-col items-center justify-center gap-2 border border-emerald-600/30 transition">
-                <span class="text-3xl">👥</span>
-                <span class="text-xs font-medium">ทะเบียนสมาชิก</span>
-            </button>
+<h1 class="text-4xl font-bold text-white">
 
-            <button onclick="openTab('funeral')" class="bg-emerald-800/80 hover:bg-emerald-700 text-white p-4 rounded-2xl shadow-sm flex flex-col items-center justify-center gap-2 border border-emerald-600/30 transition">
-                <span class="text-3xl">⚰️</span>
-                <span class="text-xs font-medium">แจ้งเสียชีวิต / งานศพ</span>
-            </button>
+ระบบกลุ่มข้าวสาร
 
-            <button onclick="openTab('receive')" class="bg-emerald-800/80 hover:bg-emerald-700 text-white p-4 rounded-2xl shadow-sm flex flex-col items-center justify-center gap-2 border border-emerald-600/30 transition">
-                <span class="text-3xl">📥</span>
-                <span class="text-xs font-medium">รับข้าวสารเข้ากลุ่ม</span>
-            </button>
+</h1>
 
-            <button onclick="openTab('stock')" class="bg-emerald-800/80 hover:bg-emerald-700 text-white p-4 rounded-2xl shadow-sm flex flex-col items-center justify-center gap-2 border border-emerald-600/30 transition">
-                <span class="text-3xl">🌾</span>
-                <span class="text-xs font-medium">คลังข้าวสาร</span>
-            </button>
+<p class="text-green-100 text-lg">
 
-            <button onclick="openTab('notify')" class="bg-emerald-800/80 hover:bg-emerald-700 text-white p-4 rounded-2xl shadow-sm flex flex-col items-center justify-center gap-2 border border-emerald-600/30 transition">
-                <span class="text-3xl">🔔</span>
-                <span class="text-xs font-medium">แจ้งเตือนสมาชิก</span>
-            </button>
+บ้านร่องเข็ม หมู่ที่ 6
 
-            <button onclick="openTab('report')" class="bg-emerald-800/80 hover:bg-emerald-700 text-white p-4 rounded-2xl shadow-sm flex flex-col items-center justify-center gap-2 border border-emerald-600/30 transition">
-                <span class="text-3xl">📊</span>
-                <span class="text-xs font-medium">รายงานข้อมูล</span>
-            </button>
+</p>
 
-            <button onclick="window.print()" class="bg-emerald-800/80 hover:bg-emerald-700 text-white p-4 rounded-2xl shadow-sm flex flex-col items-center justify-center gap-2 border border-emerald-600/30 transition">
-                <span class="text-3xl">📄</span>
-                <span class="text-xs font-medium">พิมพ์รายงานงานศพ</span>
-            </button>
+<p class="text-green-200">
 
-            <button onclick="exportData()" class="bg-emerald-800/80 hover:bg-emerald-700 text-white p-4 rounded-2xl shadow-sm flex flex-col items-center justify-center gap-2 border border-emerald-600/30 transition">
-                <span class="text-3xl">💾</span>
-                <span class="text-xs font-medium">สำรองข้อมูล</span>
-            </button>
-        </div>
-    </div>
+ตำบลจำป่าหวาย อำเภอเมือง จังหวัดพะเยา
 
-    <div id="modal-container" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-md rounded-2xl shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
-            <div class="bg-emerald-700 text-white p-4 flex justify-between items-center">
-                <h3 id="modal-title" class="font-bold text-lg">หัวข้อเมนู</h3>
-                <button onclick="closeModal()" class="text-2xl font-bold text-emerald-200 hover:text-white">&times;</button>
-            </div>
+</p>
 
-            <div id="modal-body" class="p-4 overflow-y-auto flex-1">
-                </div>
-        </div>
-    </div>
+</div>
 
-    <script>
-        // ข้อมูลเบื้องต้น
-        let membersData = JSON.parse(localStorage.getItem('membersData')) || [
-            { id: 1, name: 'นายสมชาย ใจดี', houseNo: '12/1' },
-            { id: 2, name: 'นางสมศรี สุขใจ', houseNo: '15' }
-        ];
+</div>
 
-        let funeralData = JSON.parse(localStorage.getItem('funeralData')) || [];
+<div class="mt-5 lg:mt-0">
 
-        // ฟังก์ชันเปิด Modal หน้าเมนูย่อย
-        function openTab(tab) {
-            const modal = document.getElementById('modal-container');
-            const title = document.getElementById('modal-title');
-            const body = document.getElementById('modal-body');
+<div class="bg-white/20 rounded-2xl backdrop-blur-lg p-5 text-white text-center">
 
-            modal.classList.remove('hidden');
+<div id="clock" class="text-3xl font-bold">
 
-            if (tab === 'funeral') {
-                title.innerText = '⚰️ แจ้งเสียชีวิต / งานศพ';
-                body.innerHTML = `
-                    <div class="flex flex-col gap-3">
-                        <h4 class="font-bold text-gray-700 flex items-center gap-1">➕ เพิ่มข้อมูลผู้เสียชีวิต</h4>
-                        <div>
-                            <label class="text-xs text-gray-500">ชื่อ - นามสกุล</label>
-                            <input type="text" id="fn-name" class="w-full border p-2 rounded-lg text-sm" placeholder="กรอกชื่อ-นามสกุล">
-                        </div>
-                        <div>
-                            <label class="text-xs text-gray-500">บ้านเลขที่</label>
-                            <input type="text" id="fn-house" class="w-full border p-2 rounded-lg text-sm" placeholder="กรอกบ้านเลขที่">
-                        </div>
-                        <div>
-                            <label class="text-xs text-gray-500">วันที่เสียชีวิต</label>
-                            <input type="date" id="fn-death-date" class="w-full border p-2 rounded-lg text-sm">
-                        </div>
-                        <div>
-                            <label class="text-xs text-gray-500">วันที่ฌาปนกิจ</label>
-                            <input type="date" id="fn-cremation-date" class="w-full border p-2 rounded-lg text-sm">
-                        </div>
-                        <button onclick="saveFuneral()" class="bg-emerald-600 text-white font-semibold py-2 rounded-lg text-sm hover:bg-emerald-700 mt-2">
-                            บันทึกข้อมูล
-                        </button>
+00:00:00
 
-                        <hr class="my-3">
-                        <h4 class="font-bold text-gray-700">📋 รายการแจ้งเสียชีวิต</h4>
-                        <div id="funeral-list" class="text-sm divide-y">
-                            ${funeralData.length === 0 ? '<p class="text-xs text-gray-400 py-2">ยังไม่มีข้อมูล</p>' : ''}
-                        </div>
-                    </div>
-                `;
-            } else if (tab === 'members') {
-                title.innerText = '👥 ทะเบียนสมาชิก';
-                body.innerHTML = `
-                    <div class="flex flex-col gap-3">
-                        <div class="flex gap-2">
-                            <input type="text" id="mb-name" placeholder="ชื่อ-นามสกุล" class="border p-2 rounded-lg text-sm w-2/3">
-                            <input type="text" id="mb-house" placeholder="บ้านเลขที่" class="border p-2 rounded-lg text-sm w-1/3">
-                        </div>
-                        <button onclick="saveMember()" class="bg-emerald-600 text-white py-2 rounded-lg text-sm font-semibold">
-                            + เพิ่มสมาชิก
-                        </button>
-                    </div>
-                `;
-            } else {
-                title.innerText = 'เมนูระบบ';
-                body.innerHTML = `<p class="text-center text-gray-500 py-6">อยู่ระหว่างการเชื่อมต่อข้อมูลหน้า ${tab}</p>`;
-            }
-        }
+</div>
 
-        function closeModal() {
-            document.getElementById('modal-container').classList.add('hidden');
-        }
+<div id="today">
 
-        function saveFuneral() {
-            const name = document.getElementById('fn-name').value;
-            const house = document.getElementById('fn-house').value;
-            const deathDate = document.getElementById('fn-death-date').value;
-            const cremationDate = document.getElementById('fn-cremation-date').value;
+-
 
-            if(!name) return alert('กรุณากรอกชื่อผู้เสียชีวิต');
+</div>
 
-            funeralData.push({ name, house, deathDate, cremationDate });
-            localStorage.setItem('funeralData', JSON.stringify(funeralData));
-            alert('บันทึกข้อมูลงานศพเรียบร้อยแล้ว!');
-            closeModal();
-            updateStats();
-        }
+</div>
 
-        function updateStats() {
-            document.getElementById('stat-funerals').innerText = funeralData.length;
-        }
+</div>
 
-        function exportData() {
-            alert('สำรองข้อมูลเรียบร้อยแล้ว!');
-        }
+</div>
 
-        // เริ่มต้นการทำงาน
-        updateStats();
-    </script>
+</div>
+
+</header>
+
+
+
+<!-- HERO -->
+
+<section class="max-w-7xl mx-auto px-5 mt-8">
+
+<div class="hero rounded-3xl overflow-hidden">
+
+<div class="grid lg:grid-cols-2">
+
+<div class="p-10">
+
+<div class="inline-block bg-white/20 text-white px-4 py-2 rounded-full">
+
+🌾 Rongkhem Rice Group
+
+</div>
+
+<h2 class="text-5xl font-bold text-white mt-6">
+
+ระบบบริหารกลุ่มข้าวสาร
+
+</h2>
+
+<p class="text-green-100 mt-5 leading-8">
+
+ระบบบริหารจัดการสมาชิก
+
+รับข้าวสาร
+
+งานศพ
+
+คลังข้าวสาร
+
+รายงานข้อมูล
+
+แบบครบวงจร
+
+</p>
+
+<div class="mt-8 flex gap-4">
+
+<button class="bg-white text-green-700 px-6 py-3 rounded-xl font-bold">
+
+📥 รับข้าวสาร
+
+</button>
+
+<button class="bg-yellow-400 text-black px-6 py-3 rounded-xl font-bold">
+
+⚰️ แจ้งงานศพ
+
+</button>
+
+</div>
+
+</div>
+
+<div class="flex justify-center items-center">
+
+<div class="text-[180px] animate-bounce">
+
+🌾
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<!-- DASHBOARD -->
+
+<section class="max-w-7xl mx-auto px-5 mt-10">
+
+<div class="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
+
+<div class="card p-6">
+
+<div class="flex justify-between">
+
+<div>
+
+<p class="text-gray-500">
+
+สมาชิกทั้งหมด
+
+</p>
+
+<h2 id="stat-members" class="text-5xl font-bold text-blue-600">
+
+185
+
+</h2>
+
+<p class="text-gray-400">
+
+ครัวเรือน
+
+</p>
+
+</div>
+
+<div class="text-6xl">
+
+👥
+
+</div>
+
+</div>
+
+</div>
+
+<div class="card p-6">
+
+<div class="flex justify-between">
+
+<div>
+
+<p class="text-gray-500">
+
+งานศพ
+
+</p>
+
+<h2 id="stat-funerals" class="text-5xl font-bold text-red-600">
+
+0
+
+</h2>
+
+<p class="text-gray-400">
+
+งาน
+
+</p>
+
+</div>
+
+<div class="text-6xl">
+
+⚰️
+
+</div>
+
+</div>
+
+</div>
+
+<div class="card p-6">
+
+<div class="flex justify-between">
+
+<div>
+
+<p class="text-gray-500">
+
+รับข้าวสาร
+
+</p>
+
+<h2 id="stat-rice" class="text-5xl font-bold text-green-600">
+
+0
+
+</h2>
+
+<p class="text-gray-400">
+
+ถุง
+
+</p>
+
+</div>
+
+<div class="text-6xl">
+
+🌾
+
+</div>
+
+</div>
+
+</div>
+
+<div class="card p-6">
+
+<div class="flex justify-between">
+
+<div>
+
+<p class="text-gray-500">
+
+สมาชิกค้างส่ง
+
+</p>
+
+<h2 id="stat-pending" class="text-5xl font-bold text-orange-500">
+
+0
+
+</h2>
+
+<p class="text-gray-400">
+
+ครัวเรือน
+
+</p>
+
+</div>
+
+<div class="text-6xl">
+
+⚠️
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<!-- MENU -->
+
+<section class="max-w-7xl mx-auto px-5 mt-10">
+
+<h2 class="text-3xl font-bold mb-5">
+
+⚡ เมนูหลัก
+
+</h2>
+
+<div class="grid grid-cols-2 md:grid-cols-4 gap-5">
+
+<div class="menu-card">
+
+<div class="text-6xl">
+
+👥
+
+</div>
+
+<h3 class="text-xl font-bold mt-4">
+
+ทะเบียนสมาชิก
+
+</h3>
+
+</div>
+
+<div class="menu-card">
+
+<div class="text-6xl">
+
+⚰️
+
+</div>
+
+<h3 class="text-xl font-bold mt-4">
+
+งานศพ
+
+</h3>
+
+</div>
+
+<div class="menu-card">
+
+<div class="text-6xl">
+
+📥
+
+</div>
+
+<h3 class="text-xl font-bold mt-4">
+
+รับข้าวสาร
+
+</h3>
+
+</div>
+
+<div class="menu-card">
+
+<div class="text-6xl">
+
+🌾
+
+</div>
+
+<h3 class="text-xl font-bold mt-4">
+
+คลังข้าวสาร
+
+</h3>
+
+</div>
+<!-- ================= ข่าว + งานศพ ================= -->
+
+<section class="max-w-7xl mx-auto px-5 mt-10">
+
+<div class="grid lg:grid-cols-2 gap-6">
+
+<div class="card p-6">
+
+<h2 class="text-2xl font-bold text-red-600 mb-5">
+
+⚰️ งานศพที่กำลังเปิด
+
+</h2>
+
+<div id="activeFuneral">
+
+<div class="text-center py-10">
+
+<div class="text-7xl">
+
+🕊️
+
+</div>
+
+<h3 class="text-xl font-bold mt-4">
+
+ยังไม่มีงานศพ
+
+</h3>
+
+<p class="text-gray-500">
+
+เมื่อเปิดงานศพ ระบบจะแสดงข้อมูลที่นี่
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<div class="card p-6">
+
+<h2 class="text-2xl font-bold text-green-700 mb-5">
+
+📢 ข่าวประชาสัมพันธ์
+
+</h2>
+
+<div class="space-y-4">
+
+<div class="border-l-4 border-green-600 pl-4">
+
+<h4 class="font-bold">
+
+🌾 ระบบกลุ่มข้าวสาร Version 4.0
+
+</h4>
+
+<p class="text-gray-500">
+
+พร้อมใช้งานแล้ว
+
+</p>
+
+</div>
+
+<div class="border-l-4 border-yellow-500 pl-4">
+
+<h4 class="font-bold">
+
+📅 ประชุมคณะกรรมการ
+
+</h4>
+
+<p class="text-gray-500">
+
+ติดตามประกาศของหมู่บ้าน
+
+</p>
+
+</div>
+
+<div class="border-l-4 border-red-500 pl-4">
+
+<h4 class="font-bold">
+
+⚠️ สมาชิกค้างส่ง
+
+</h4>
+
+<p class="text-gray-500">
+
+ตรวจสอบได้จากเมนูรายงาน
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<!-- ================= กิจกรรมล่าสุด ================= -->
+
+<section class="max-w-7xl mx-auto px-5 mt-10">
+
+<div class="card p-6">
+
+<h2 class="text-2xl font-bold mb-5">
+
+📋 กิจกรรมล่าสุด
+
+</h2>
+
+<div id="activityList">
+
+<div class="flex items-center gap-4 border-b py-3">
+
+<div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
+
+📥
+
+</div>
+
+<div>
+
+<h4 class="font-bold">
+
+ยังไม่มีกิจกรรม
+
+</h4>
+
+<p class="text-gray-500">
+
+ระบบจะแสดงรายการล่าสุดอัตโนมัติ
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<!-- ================= กราฟ ================= -->
+
+<section class="max-w-7xl mx-auto px-5 mt-10">
+
+<div class="card p-6">
+
+<h2 class="text-2xl font-bold mb-5">
+
+📊 สถิติการรับข้าวสาร
+
+</h2>
+
+<canvas id="myChart"></canvas>
+
+</div>
+
+</section>
+
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer class="mt-12">
+
+<div class="max-w-7xl mx-auto p-8">
+
+<div class="grid lg:grid-cols-2 gap-8">
+
+<div>
+
+<h2 class="text-3xl font-bold">
+
+🌾 ระบบกลุ่มข้าวสาร
+
+</h2>
+
+<p class="mt-3">
+
+บ้านร่องเข็ม หมู่ที่ 6
+
+</p>
+
+<p>
+
+ตำบลจำป่าหวาย อำเภอเมือง จังหวัดพะเยา
+
+</p>
+
+</div>
+
+<div class="text-right">
+
+<h3 class="font-bold">
+
+จัดทำและพัฒนาระบบโดย
+
+</h3>
+
+<h2 class="text-3xl font-bold mt-3">
+
+นายศักรนนทน์ ขัติย์วงศ์
+
+</h2>
+
+<p>
+
+ผู้ใหญ่บ้าน บ้านร่องเข็ม หมู่ที่ 6
+
+</p>
+
+<p class="text-green-200 mt-2">
+
+Rongkhem Rice Group V4.0
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</footer>
+
+
+
+<script>
+
+function updateClock(){
+
+const now=new Date();
+
+document.getElementById("clock").innerHTML=
+
+now.toLocaleTimeString("th-TH");
+
+document.getElementById("today").innerHTML=
+
+now.toLocaleDateString("th-TH",{
+
+weekday:"long",
+
+day:"numeric",
+
+month:"long",
+
+year:"numeric"
+
+});
+
+}
+
+setInterval(updateClock,1000);
+
+updateClock();
+
+
+
+const ctx=document.getElementById('myChart');
+
+new Chart(ctx,{
+
+type:'bar',
+
+data:{
+
+labels:['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.'],
+
+datasets:[{
+
+label:'รับข้าวสาร',
+
+data:[20,18,25,30,28,35],
+
+backgroundColor:'#16a34a'
+
+}]
+
+},
+
+options:{
+
+responsive:true,
+
+plugins:{
+
+legend:{display:false}
+
+}
+
+}
+
+});
+
+</script>
+
 </body>
+
 </html>
-// ==========================================
-// 1. ระบบจัดการข้อมูล (LocalStorage)
-// ==========================================
-const DEFAULT_MEMBERS = Array.from({ length: 185 }, (_, i) => ({
-    id: i + 1,
-    name: `สมาชิก ครัวเรือนที่ ${i + 1}`,
-    houseNo: `${i + 1}`,
-    status: 'normal' // normal, pending
-}));
-
-function getData(key, defaultValue) {
-    const data = localStorage.getItem(key);
-    return data ? JSON.parse(data) : defaultValue;
-}
-
-function saveData(key, data) {
-    localStorage.setItem(key, JSON.stringify(data));
-    updateDashboardStats();
-}
-
-// โหลดข้อมูลเริ่มต้น
-let members = getData('app_members', DEFAULT_MEMBERS);
-let funerals = getData('app_funerals', []);
-let deliveries = getData('app_deliveries', []); // { funeralId, memberId, date, qty }
-
-// ==========================================
-// 2. อัปเดตตัวเลขหน้า Dashboard
-// ==========================================
-function updateDashboardStats() {
-    const activeFuneral = funerals.find(f => f.is_active);
-    
-    // คำนวณยอด
-    const totalMembers = members.length;
-    const totalFunerals = funerals.length;
-    
-    // ข้าวสารรับเข้าทั้งหมด (1 ถุงต่อการส่ง 1 ครั้ง)
-    const totalReceivedRice = deliveries.length;
-    
-    // คำนวณค้างส่งสำหรับงานศพที่เปิดอยู่
-    let pendingCount = 0;
-    if (activeFuneral) {
-        const deliveredMemberIds = new Set(
-            deliveries.filter(d => d.funeralId === activeFuneral.id).map(d => d.memberId)
-        );
-        pendingCount = totalMembers - deliveredMemberIds.size;
-    }
-
-    // อัปเดตแสดงผลบนหน้าจอ
-    if (document.getElementById('stat-members')) document.getElementById('stat-members').innerText = totalMembers;
-    if (document.getElementById('top-total-members')) document.getElementById('top-total-members').innerText = totalMembers;
-    if (document.getElementById('stat-funerals')) document.getElementById('stat-funerals').innerText = totalFunerals;
-    if (document.getElementById('stat-received-rice')) document.getElementById('stat-received-rice').innerText = totalReceivedRice;
-    if (document.getElementById('stat-stock-rice')) document.getElementById('stat-stock-rice').innerText = totalReceivedRice;
-    if (document.getElementById('stat-pending')) document.getElementById('stat-pending').innerText = pendingCount;
-    if (document.getElementById('stat-normal')) document.getElementById('stat-normal').innerText = totalMembers - pendingCount;
-}
-
-// ==========================================
-// 3. ระบบ Modal และสลับเมนู
-// ==========================================
-function openTab(tabName) {
-    const modal = document.getElementById('modal-container');
-    const title = document.getElementById('modal-title');
-    const body = document.getElementById('modal-body');
-
-    if (!modal) return;
-    modal.classList.remove('hidden');
-
-    switch (tabName) {
-        case 'members':
-            title.innerText = '👥 ทะเบียนสมาชิก';
-            renderMembersTab(body);
-            break;
-        case 'funeral':
-            title.innerText = '⚰️ แจ้งเสียชีวิต / งานศพ';
-            renderFuneralTab(body);
-            break;
-        case 'receive':
-            title.innerText = '📥 รับข้าวสารเข้ากลุ่ม';
-            renderReceiveTab(body);
-            break;
-        case 'stock':
-            title.innerText = '🌾 คลังข้าวสาร';
-            renderStockTab(body);
-            break;
-        case 'notify':
-            title.innerText = '🔔 แจ้งเตือนสมาชิก';
-            renderNotifyTab(body);
-            break;
-        case 'report':
-            title.innerText = '📊 รายงานข้อมูล';
-            renderReportTab(body);
-            break;
-        default:
-            title.innerText = 'เมนูระบบ';
-            body.innerHTML = '<p class="text-center text-gray-500 py-6">ไม่พบเมนูนี้</p>';
-    }
-}
-
-function closeModal() {
-    const modal = document.getElementById('modal-container');
-    if (modal) modal.classList.add('hidden');
-}
-
-// ==========================================
-// 4. เนื้อหาของแต่ละเมนูย่อย
-// ==========================================
-
-// --- [เมนู 1] ทะเบียนสมาชิก ---
-function renderMembersTab(container) {
-    container.innerHTML = `
-        <div class="flex flex-col gap-3">
-            <div class="bg-gray-50 p-3 rounded-lg border">
-                <h4 class="font-bold text-xs text-gray-600 mb-2">+ เพิ่มสมาชิกใหม่</h4>
-                <div class="flex gap-2 mb-2">
-                    <input type="text" id="mb-name" placeholder="ชื่อ-นามสกุล" class="border p-2 rounded-lg text-sm w-2/3 outline-none focus:ring-1 focus:ring-emerald-500">
-                    <input type="text" id="mb-house" placeholder="บ้านเลขที่" class="border p-2 rounded-lg text-sm w-1/3 outline-none focus:ring-1 focus:ring-emerald-500">
-                </div>
-                <button onclick="addMemberAction()" class="bg-emerald-600 text-white w-full py-2 rounded-lg text-sm font-semibold hover:bg-emerald-700">
-                    บันทึกสมาชิก
-                </button>
-            </div>
-            <div class="max-h-60 overflow-y-auto border rounded-lg divide-y">
-                ${members.map(m => `
-                    <div class="p-2.5 flex justify-between items-center text-sm">
-                        <div>
-                            <span class="font-medium text-gray-800">${m.name}</span>
-                            <span class="text-xs text-gray-400 block">บ้านเลขที่ ${m.houseNo}</span>
-                        </div>
-                        <button onclick="deleteMemberAction(${m.id})" class="text-xs text-red-500 hover:underline">ลบ</button>
-                    </div>
-                `).join('')}
-            </div>
-        </div>
-    `;
-}
-
-function addMemberAction() {
-    const name = document.getElementById('mb-name').value.trim();
-    const houseNo = document.getElementById('mb-house').value.trim();
-    if (!name) return alert('กรุณากรอกชื่อสมาชิก');
-
-    members.push({ id: Date.now(), name, houseNo: houseNo || '-' });
-    saveData('app_members', members);
-    openTab('members');
-}
-
-function deleteMemberAction(id) {
-    if (!confirm('ยืนยันลบสมาชิกนี้?')) return;
-    members = members.filter(m => m.id !== id);
-    saveData('app_members', members);
-    openTab('members');
-}
-
-// --- [เมนู 2] แจ้งเสียชีวิต / งานศพ ---
-function renderFuneralTab(container) {
-    const activeFuneral = funerals.find(f => f.is_active);
-    container.innerHTML = `
-        <div class="flex flex-col gap-3">
-            <div class="bg-gray-50 p-3 rounded-lg border">
-                <h4 class="font-bold text-xs text-gray-600 mb-2">➕ บันทึกผู้เสียชีวิต (เปิดงานศพ)</h4>
-                <div class="grid grid-cols-2 gap-2 mb-2">
-                    <input type="text" id="fn-first-name" placeholder="ชื่อ" class="border p-2 rounded-lg text-sm">
-                    <input type="text" id="fn-last-name" placeholder="นามสกุล" class="border p-2 rounded-lg text-sm">
-                    <input type="number" id="fn-age" placeholder="อายุ" class="border p-2 rounded-lg text-sm">
-                    <input type="text" id="fn-house" placeholder="บ้านเลขที่" class="border p-2 rounded-lg text-sm">
-                    <div>
-                        <label class="text-[10px] text-gray-400 block">วันเสียชีวิต</label>
-                        <input type="date" id="fn-death-date" class="border p-1.5 rounded-lg text-xs w-full">
-                    </div>
-                    <div>
-                        <label class="text-[10px] text-gray-400 block">วันเผา</label>
-                        <input type="date" id="fn-cremation-date" class="border p-1.5 rounded-lg text-xs w-full">
-                    </div>
-                </div>
-                <button onclick="saveFuneralAction()" class="bg-emerald-600 text-white w-full py-2 rounded-lg text-sm font-semibold hover:bg-emerald-700">
-                    เปิดงานศพนี้
-                </button>
-            </div>
-
-            <h4 class="font-bold text-xs text-gray-600 mt-2">📜 ประวัติงานศพ</h4>
-            <div class="max-h-48 overflow-y-auto border rounded-lg divide-y text-xs">
-                ${funerals.length === 0 ? '<p class="p-3 text-center text-gray-400">ยังไม่มีข้อมูล</p>' : ''}
-                ${funerals.slice().reverse().map(f => `
-                    <div class="p-2.5 flex justify-between items-center">
-                        <div>
-                            <div class="font-bold text-gray-800">${f.name} (อายุ ${f.age} ปี)</div>
-                            <div class="text-gray-400">บ้านเลขที่ ${f.houseNo} | เผา: ${f.cremationDate || '-'}</div>
-                        </div>
-                        <div>
-                            ${f.is_active 
-                                ? '<span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold">กำลังเปิด</span>' 
-                                : '<span class="bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">ปิดงานแล้ว</span>'}
-                        </div>
-                    </div>
-                `).join('')}
-            </div>
-        </div>
-    `;
-}
-
-function saveFuneralAction() {
-    const firstName = document.getElementById('fn-first-name').value.trim();
-    const lastName = document.getElementById('fn-last-name').value.trim();
-    const age = document.getElementById('fn-age').value.trim();
-    const houseNo = document.getElementById('fn-house').value.trim();
-    const deathDate = document.getElementById('fn-death-date').value;
-    const cremationDate = document.getElementById('fn-cremation-date').value;
-
-    if (!firstName || !lastName) return alert('กรุณากรอกชื่อ และ นามสกุล ผู้เสียชีวิต');
-
-    // ปิดงานศพเก่าทั้งหมดก่อน
-    funerals.forEach(f => f.is_active = false);
-
-    funerals.push({
-        id: 'F' + Date.now(),
-        name: `${firstName} ${lastName}`,
-        age: age || '-',
-        houseNo: houseNo || '-',
-        deathDate: deathDate || '-',
-        cremationDate: cremationDate || '-',
-        is_active: true
-    });
-
-    saveData('app_funerals', funerals);
-    alert('เปิดรับข้าวสารสำหรับงานศพใหม่เรียบร้อยแล้ว!');
-    openTab('funeral');
-}
-
-// --- [เมนู 3] รับข้าวสารเข้ากลุ่ม ---
-function renderReceiveTab(container) {
-    const activeFuneral = funerals.find(f => f.is_active);
-    if (!activeFuneral) {
-        container.innerHTML = `
-            <div class="text-center py-8">
-                <div class="text-3xl mb-2">⚰️</div>
-                <p class="text-sm font-semibold text-gray-700">ขณะนี้ยังไม่มีงานศพที่เปิดรับ</p>
-                <p class="text-xs text-gray-400 mt-1">กรุณาเปิดงานศพในเมนู "แจ้งเสียชีวิต / งานศพ" ก่อนครับ</p>
-            </div>
-        `;
-        return;
-    }
-
-    const deliveredSet = new Set(
-        deliveries.filter(d => d.funeralId === activeFuneral.id).map(d => d.memberId)
-    );
-
-    container.innerHTML = `
-        <div class="flex flex-col gap-3">
-            <div class="bg-emerald-50 border border-emerald-200 p-2.5 rounded-lg text-xs text-emerald-800 font-medium">
-                📌 งานศพปัจจุบัน: <b>${activeFuneral.name}</b> (ส่งแล้ว ${deliveredSet.size}/${members.length} คน)
-            </div>
-            
-            <input type="text" id="search-member" oninput="filterReceiveList()" placeholder="🔍 ค้นหาชื่อ หรือ บ้านเลขที่..." class="border p-2 rounded-lg text-sm w-full outline-none">
-
-            <div id="receive-list-box" class="max-h-64 overflow-y-auto border rounded-lg divide-y">
-                </div>
-        </div>
-    `;
-    filterReceiveList();
-}
-
-function filterReceiveList() {
-    const activeFuneral = funerals.find(f => f.is_active);
-    if (!activeFuneral) return;
-
-    const query = (document.getElementById('search-member')?.value || '').toLowerCase();
-    const listBox = document.getElementById('receive-list-box');
-    if (!listBox) return;
-
-    const deliveredSet = new Set(
-        deliveries.filter(d => d.funeralId === activeFuneral.id).map(d => d.memberId)
-    );
-
-    const filtered = members.filter(m => 
-        m.name.toLowerCase().includes(query) || m.houseNo.toLowerCase().includes(query)
-    );
-
-    listBox.innerHTML = filtered.map(m => {
-        const isDelivered = deliveredSet.has(m.id);
-        return `
-            <div class="p-2.5 flex justify-between items-center text-sm">
-                <div>
-                    <span class="font-medium ${isDelivered ? 'text-gray-400 line-through' : 'text-gray-800'}">${m.name}</span>
-                    <span class="text-xs text-gray-400 block">บ้านเลขที่ ${m.houseNo}</span>
-                </div>
-                ${isDelivered 
-                    ? '<span class="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded">✓ ส่งแล้ว</span>' 
-                    : `<button onclick="recordDelivery(${m.id})" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg font-semibold">บันทึกรับข้าว</button>`}
-            </div>
-        `;
-    }).join('');
-}
-
-function recordDelivery(memberId) {
-    const activeFuneral = funerals.find(f => f.is_active);
-    if (!activeFuneral) return;
-
-    deliveries.push({
-        funeralId: activeFuneral.id,
-        memberId: memberId,
-        date: new Date().toISOString()
-    });
-
-    saveData('app_deliveries', deliveries);
-    filterReceiveList();
-}
-
-// --- [เมนู 4] คลังข้าวสาร & [เมนู 5] แจ้งเตือนสมาชิก & [เมนู 6] รายงาน ---
-function renderStockTab(container) {
-    container.innerHTML = `
-        <div class="text-center py-6">
-            <div class="text-4xl mb-2">🌾</div>
-            <h4 class="font-bold text-gray-800 text-lg">คลังข้าวสารสะสม</h4>
-            <div class="text-3xl font-bold text-emerald-600 my-2">${deliveries.length} ถุง</div>
-            <p class="text-xs text-gray-500">คำนวณจากยอดการส่งข้าวสารของสมาชิกทุกงานศพ</p>
-        </div>
-    `;
-}
-
-function renderNotifyTab(container) {
-    const activeFuneral = funerals.find(f => f.is_active);
-    let pendingMembers = [];
-
-    if (activeFuneral) {
-        const deliveredSet = new Set(
-            deliveries.filter(d => d.funeralId === activeFuneral.id).map(d => d.memberId)
-        );
-        pendingMembers = members.filter(m => !deliveredSet.has(m.id));
-    }
-
-    container.innerHTML = `
-        <div class="flex flex-col gap-3">
-            <h4 class="font-bold text-xs text-amber-700">⚠️ รายชื่อสมาชิกที่ยังไม่ได้ส่งข้าวสาร (${pendingMembers.length} ราย)</h4>
-            <div class="max-h-60 overflow-y-auto border rounded-lg divide-y text-sm">
-                ${pendingMembers.length === 0 
-                    ? '<p class="p-4 text-center text-emerald-600 font-medium">🎉 สมาชิกทุกคนส่งข้าวสารครบถ้วนแล้ว!</p>' 
-                    : pendingMembers.map(m => `
-                        <div class="p-2 flex justify-between items-center">
-                            <span>${m.name} (บ้านเลขที่ ${m.houseNo})</span>
-                            <span class="text-xs text-amber-600 bg-amber-50 px-2 py-0.5 rounded">ค้างส่ง</span>
-                        </div>
-                    `).join('')}
-            </div>
-        </div>
-    `;
-}
-
-function renderReportTab(container) {
-    container.innerHTML = `
-        <div class="flex flex-col gap-3 text-center py-4">
-            <h4 class="font-bold text-gray-700">📊 สรุปรายงานภาพรวมระบบ</h4>
-            <div class="grid grid-cols-2 gap-2 text-left">
-                <div class="bg-gray-50 p-3 rounded border"><p class="text-xs text-gray-500">งานศพทั้งหมด</p><p class="font-bold text-lg">${funerals.length} งาน</p></div>
-                <div class="bg-gray-50 p-3 rounded border"><p class="text-xs text-gray-500">ข้าวสารรับรวม</p><p class="font-bold text-lg">${deliveries.length} ถุง</p></div>
-            </div>
-            <button onclick="window.print()" class="bg-emerald-700 text-white py-2 rounded-lg text-sm font-semibold mt-2">🖨️ พิมพ์รายงานหน้านี้</button>
-        </div>
-    `;
-}
-
-// สตาร์ทระบบเมื่อเปิดหน้าเว็บ
-document.addEventListener('DOMContentLoaded', updateDashboardStats);
-// ==========================================
-// ฟังก์ชัน บันทึกรับข้าวสาร + พิมพ์สลิป
-// ==========================================
-
-// 1. ฟังก์ชันพิมพ์สลิป/ใบรับข้าวสาร
-function printReceipt(memberName, houseNo, funeralName) {
-    const receiptWindow = window.open('', '', 'width=400,height=600');
-    const now = new Date();
-    const dateStr = now.toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
-    const timeStr = now.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
-
-    receiptWindow.document.write(`
-        <!DOCTYPE html>
-        <html lang="th">
-        <head>
-            <meta charset="UTF-8">
-            <title>ใบรับข้าวสาร</title>
-            <style>
-                body { font-family: 'Prompt', sans-serif; padding: 20px; text-align: center; color: #333; }
-                .ticket { border: 1px dashed #444; padding: 15px; border-radius: 8px; }
-                h2 { margin: 0 0 5px 0; font-size: 18px; color: #064e3b; }
-                p { margin: 3px 0; font-size: 13px; }
-                .highlight { font-weight: bold; font-size: 15px; color: #000; margin: 10px 0; }
-                .footer { font-size: 11px; color: #777; margin-top: 15px; border-top: 1px solid #eee; padding-top: 5px; }
-            </style>
-        </head>
-        <body>
-            <div class="ticket">
-                <h2>🌾 กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ 6</h2>
-                <p><b>ใบรับข้าวสาร (ฌาปนกิจสงเคราะห์)</b></p>
-                <hr>
-                <p class="highlight">งานศพ: ${funeralName}</p>
-                <p><b>ผู้ส่งข้าวสาร:</b> ${memberName}</p>
-                <p><b>บ้านเลขที่:</b> ${houseNo}</p>
-                <p><b>จำนวน:</b> 1 ถุง</p>
-                <hr>
-                <p><b>วันที่บันทึก:</b> ${dateStr} (${timeStr} น.)</p>
-                <p class="footer">ขอบคุณที่ร่วมทำบุญสงเคราะห์สมาชิกกลุ่ม</p>
-            </div>
-            <script>
-                window.onload = function() { window.print(); window.close(); }
-            <\/script>
-        </body>
-        </html>
-    `);
-    receiptWindow.document.close();
-}
-
-// 2. ฟังก์ชันกรองรายชื่อสมาชิกในหน้าบันทึกรับข้าวสาร
-function filterReceiveList() {
-    const activeFuneral = funerals.find(f => f.is_active);
-    if (!activeFuneral) return;
-
-    const searchInput = document.getElementById('search-member');
-    const query = (searchInput ? searchInput.value : '').toLowerCase();
-    const listBox = document.getElementById('receive-list-box');
-    if (!listBox) return;
-
-    const deliveredSet = new Set(
-        deliveries.filter(d => d.funeralId === activeFuneral.id).map(d => d.memberId)
-    );
-
-    const filtered = members.filter(m => 
-        m.name.toLowerCase().includes(query) || (m.houseNo && m.houseNo.toLowerCase().includes(query))
-    );
-
-    listBox.innerHTML = filtered.map(m => {
-        const isDelivered = deliveredSet.has(m.id);
-        return `
-            <div class="p-2.5 flex justify-between items-center text-sm border-b">
-                <div>
-                    <span class="font-medium ${isDelivered ? 'text-gray-400 line-through' : 'text-gray-800'}">${m.name}</span>
-                    <span class="text-xs text-gray-400 block">บ้านเลขที่ ${m.houseNo}</span>
-                </div>
-                ${isDelivered 
-                    ? '<span class="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded">✓ ส่งแล้ว</span>' 
-                    : `<button onclick="recordDelivery(${m.id})" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg font-semibold">บันทึกรับข้าว</button>`}
-            </div>
-        `;
-    }).join('');
-}
-
-// 3. ฟังก์ชันบันทึกการส่งข้าวสาร
-function recordDelivery(memberId) {
-    const activeFuneral = funerals.find(f => f.is_active);
-    if (!activeFuneral) {
-        alert("กรุณาเปิดงานศพก่อนบันทึกรับข้าวสารครับ");
-        return;
-    }
-
-    const member = members.find(m => m.id === memberId);
-    if (!member) return;
-
-    deliveries.push({
-        funeralId: activeFuneral.id,
-        memberId: memberId,
-        date: new Date().toISOString()
-    });
-
-    saveData('app_deliveries', deliveries);
-    filterReceiveList();
-
-    // ถามเพื่อพิมพ์สลิป
-    if (confirm(`บันทึกรับข้าวสารจาก "${member.name}" เรียบร้อยแล้ว!\n\nคุณต้องการพิมพ์ใบรับข้าวสารหรือไม่?`)) {
-        printReceipt(member.name, member.houseNo, activeFuneral.name);
-    }
-}
