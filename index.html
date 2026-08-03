@@ -463,6 +463,48 @@
             initData();
             renderAll();
         });
+        // 1. ฟังก์ชันส่งออกข้อมูลสำรอง (Export Data)
+function exportBackupData() {
+    const backupObj = {
+        members: getData("members"),
+        funerals: getData("funerals"),
+        deliveries: getData("deliveries"),
+        exportedAt: new Date().toISOString()
+    };
+
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupObj, null, 2));
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.setAttribute("href", dataStr);
+    downloadAnchor.setAttribute("download", `rice_donation_backup_${new Date().toISOString().slice(0,10)}.json`);
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+}
+
+// 2. ฟังก์ชันนำเข้าข้อมูลจากไฟล์สำรอง (Import Data)
+function importBackupData(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const importedData = JSON.parse(e.target.result);
+            if (importedData.members && importedData.funerals && importedData.deliveries) {
+                saveData("members", importedData.members);
+                saveData("funerals", importedData.funerals);
+                saveData("deliveries", importedData.deliveries);
+                alert("เรียกคืนข้อมูลสำเร็จแล้ว!");
+                renderAll();
+            } else {
+                alert("รูปแบบไฟล์ไม่ถูกต้อง!");
+            }
+        } catch (err) {
+            alert("เกิดข้อผิดพลาดในการอ่านไฟล์");
+        }
+    };
+    reader.readAsText(file);
+}
     </script>
 </body>
 </html>
