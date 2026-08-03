@@ -1,42 +1,58 @@
-// ===============================
+// ==========================================
 // members.js
-// ระบบสมาชิก V4.0
-// ===============================
+// Rongkhem Rice Group V5.0
+// ==========================================
 
 // โหลดสมาชิก
 function loadMembers() {
+
     const tbody = document.getElementById("memberTable");
+
     if (!tbody) return;
 
     tbody.innerHTML = "";
 
-    db.members
-        .sort((a, b) => Number(a.houseNo) - Number(b.houseNo))
-        .forEach((member, index) => {
+    const members = db.members.sort((a,b)=>{
 
-            let status = `<span class="status normal">ปกติ</span>`;
+        return Number(a.houseNo)-Number(b.houseNo);
 
-            if (member.pending >= 1)
-                status = `<span class="status pending">ค้าง ${member.pending} ครั้ง</span>`;
+    });
 
-            if (member.pending >= 2)
-                status = `<span class="status danger">ค้าง ${member.pending} ครั้ง</span>`;
+    members.forEach((member,index)=>{
 
-            tbody.innerHTML += `
+        let status = '<span class="status normal">ปกติ</span>';
+
+        if(member.pending>=1){
+
+            status=`<span class="status pending">
+            ค้าง ${member.pending} ครั้ง
+            </span>`;
+
+        }
+
+        if(member.pending>=2){
+
+            status=`<span class="status danger">
+            ค้าง ${member.pending} ครั้ง
+            </span>`;
+
+        }
+
+        tbody.innerHTML+=`
 
 <tr>
 
-<td>${index + 1}</td>
+<td>${index+1}</td>
 
 <td>${member.houseNo}</td>
 
 <td>${member.name}</td>
 
-<td>${member.phone || "-"}</td>
+<td>${member.phone||"-"}</td>
 
-<td>${member.sent || 0}</td>
+<td>${member.sent||0}</td>
 
-<td>${member.pending || 0}</td>
+<td>${member.pending||0}</td>
 
 <td>${status}</td>
 
@@ -72,199 +88,223 @@ onclick="deleteMember('${member.id}')">
 
 `;
 
-        });
+    });
 
     updateDashboard();
+
 }
+
+
 
 // เพิ่มสมาชิก
 
-function addMember() {
+function addMember(){
 
-const name =
-document.getElementById("memberName").value;
+    const name=document.getElementById("memberName").value.trim();
 
-const house =
-document.getElementById("memberHouse").value;
+    const house=document.getElementById("memberHouse").value.trim();
 
-const phone =
-document.getElementById("memberPhone").value;
+    const phone=document.getElementById("memberPhone").value.trim();
 
-if(name==""){
+    if(name==""){
 
-notify("กรุณากรอกชื่อ");
+        alert("กรุณากรอกชื่อสมาชิก");
 
-return;
+        return;
 
-}
+    }
 
-db.members.push({
+    db.members.push({
 
-id:Date.now().toString(),
+        id:Date.now().toString(),
 
-name:name,
+        houseNo:house,
 
-houseNo:house,
+        name:name,
 
-phone:phone,
+        phone:phone,
 
-sent:0,
+        sent:0,
 
-pending:0
+        pending:0
 
-});
+    });
 
-addActivity("เพิ่มสมาชิก "+name);
+    addActivity("เพิ่มสมาชิก "+name);
 
-saveDB();
+    saveDB();
 
-loadMembers();
+    loadMembers();
 
-clearMemberForm();
-
-notify("บันทึกสำเร็จ");
+    clearMemberForm();
 
 }
+
+
 
 // แก้ไขสมาชิก
 
 function editMember(id){
 
-const m=db.members.find(x=>x.id==id);
+    const member=db.members.find(x=>x.id==id);
 
-if(!m)return;
+    if(!member) return;
 
-document.getElementById("memberId").value=m.id;
+    document.getElementById("memberId").value=member.id;
 
-document.getElementById("memberName").value=m.name;
+    document.getElementById("memberHouse").value=member.houseNo;
 
-document.getElementById("memberHouse").value=m.houseNo;
+    document.getElementById("memberName").value=member.name;
 
-document.getElementById("memberPhone").value=m.phone;
+    document.getElementById("memberPhone").value=member.phone;
 
 }
+
+
 
 // บันทึกการแก้ไข
 
 function updateMember(){
 
-const id=
-document.getElementById("memberId").value;
+    const id=document.getElementById("memberId").value;
 
-const m=db.members.find(x=>x.id==id);
+    const member=db.members.find(x=>x.id==id);
 
-if(!m)return;
+    if(!member) return;
 
-m.name=
-document.getElementById("memberName").value;
+    member.houseNo=document.getElementById("memberHouse").value;
 
-m.houseNo=
-document.getElementById("memberHouse").value;
+    member.name=document.getElementById("memberName").value;
 
-m.phone=
-document.getElementById("memberPhone").value;
+    member.phone=document.getElementById("memberPhone").value;
 
-addActivity("แก้ไขสมาชิก "+m.name);
+    addActivity("แก้ไขสมาชิก "+member.name);
 
-saveDB();
+    saveDB();
 
-loadMembers();
+    loadMembers();
 
-clearMemberForm();
+    clearMemberForm();
 
 }
+
+
 
 // ลบสมาชิก
 
 function deleteMember(id){
 
-if(!confirm("ต้องการลบสมาชิกใช่หรือไม่"))
+    if(!confirm("ต้องการลบสมาชิกใช่หรือไม่?"))
 
-return;
+        return;
 
-db.members=db.members.filter(x=>x.id!=id);
+    db.members=db.members.filter(x=>x.id!=id);
 
-saveDB();
+    saveDB();
 
-loadMembers();
-
-notify("ลบสำเร็จ");
+    loadMembers();
 
 }
+
+
 
 // ล้างฟอร์ม
 
 function clearMemberForm(){
 
-document.getElementById("memberId").value="";
+    document.getElementById("memberId").value="";
 
-document.getElementById("memberName").value="";
+    document.getElementById("memberHouse").value="";
 
-document.getElementById("memberHouse").value="";
+    document.getElementById("memberName").value="";
 
-document.getElementById("memberPhone").value="";
+    document.getElementById("memberPhone").value="";
 
 }
-
-// ค้นหา
+// ===============================
+// ค้นหาสมาชิก
+// ===============================
 
 function searchMember(){
 
-const keyword=
+    const keyword = document
+        .getElementById("searchMember")
+        .value
+        .toLowerCase();
 
-document.getElementById("searchMember")
+    const tbody = document.getElementById("memberTable");
 
-.value.toLowerCase();
+    tbody.innerHTML = "";
 
-const result=db.members.filter(m=>{
+    const result = db.members.filter(member=>{
 
-return m.name.toLowerCase().includes(keyword)
+        return (
+            member.name.toLowerCase().includes(keyword) ||
+            member.houseNo.toLowerCase().includes(keyword) ||
+            (member.phone||"").includes(keyword)
+        );
 
-||
+    });
 
-m.houseNo.toLowerCase().includes(keyword)
+    result.forEach((member,index)=>{
 
-||
+        let status = '<span class="status normal">ปกติ</span>';
 
-(m.phone||"").includes(keyword);
+        if(member.pending>=1){
 
-});
+            status=`<span class="status pending">
+            ค้าง ${member.pending} ครั้ง
+            </span>`;
 
-const tbody=document.getElementById("memberTable");
+        }
 
-tbody.innerHTML="";
+        if(member.pending>=2){
 
-result.forEach((m,i)=>{
+            status=`<span class="status danger">
+            ค้าง ${member.pending} ครั้ง
+            </span>`;
 
-tbody.innerHTML+=`
+        }
+
+        tbody.innerHTML += `
 
 <tr>
 
-<td>${i+1}</td>
+<td>${index+1}</td>
 
-<td>${m.houseNo}</td>
+<td>${member.houseNo}</td>
 
-<td>${m.name}</td>
+<td>${member.name}</td>
 
-<td>${m.phone||"-"}</td>
+<td>${member.phone||"-"}</td>
 
-<td>${m.sent}</td>
+<td>${member.sent||0}</td>
 
-<td>${m.pending}</td>
+<td>${member.pending||0}</td>
+
+<td>${status}</td>
 
 <td>
 
-<button class="btn btn-info"
+<button
+class="btn btn-success"
+onclick="showQR('${member.id}')">
 
-onclick="editMember('${m.id}')">
+📱 QR
+
+</button>
+
+<button
+class="btn btn-info"
+onclick="editMember('${member.id}')">
 
 ✏️
 
 </button>
 
-<button class="btn btn-danger"
-
-onclick="deleteMember('${m.id}')">
+<button
+class="btn btn-danger"
+onclick="deleteMember('${member.id}')">
 
 🗑️
 
@@ -276,77 +316,31 @@ onclick="deleteMember('${m.id}')">
 
 `;
 
-});
+    });
 
 }
 
-// ส่งออก JSON
 
-function exportMembers(){
 
-const blob=new Blob(
-
-[JSON.stringify(db.members)],
-
-{type:"application/json"}
-
-);
-
-const a=document.createElement("a");
-
-a.href=URL.createObjectURL(blob);
-
-a.download="members.json";
-
-a.click();
-
-}
-
-// นำเข้า JSON
-
-function importMembers(file){
-
-const reader=new FileReader();
-
-reader.onload=function(e){
-
-db.members=
-
-JSON.parse(e.target.result);
-
-saveDB();
-
-loadMembers();
-
-};
-
-reader.readAsText(file);
-
-}
-
-// โหลดเมื่อเปิดหน้า
-
-window.addEventListener(
-
-"load",
-
-loadMembers
 // ===============================
-// Export JSON
+// Export สมาชิก
 // ===============================
 
 function exportMembers(){
 
     const blob = new Blob(
+
         [JSON.stringify(db.members,null,2)],
+
         {type:"application/json"}
+
     );
 
-    const a = document.createElement("a");
+    const a=document.createElement("a");
 
-    a.href = URL.createObjectURL(blob);
+    a.href=URL.createObjectURL(blob);
 
-    a.download = "members.json";
+    a.download="members.json";
 
     a.click();
 
@@ -355,22 +349,22 @@ function exportMembers(){
 
 
 // ===============================
-// Import JSON
+// Import สมาชิก
 // ===============================
 
 function importMembers(file){
 
-    const reader = new FileReader();
+    const reader=new FileReader();
 
-    reader.onload = function(e){
+    reader.onload=function(e){
 
-        db.members = JSON.parse(e.target.result);
+        db.members=JSON.parse(e.target.result);
 
         saveDB();
 
         loadMembers();
 
-        notify("นำเข้าข้อมูลสมาชิกสำเร็จ");
+        alert("นำเข้าข้อมูลสำเร็จ");
 
     };
 
@@ -386,7 +380,7 @@ function importMembers(file){
 
 function showQR(id){
 
-    const member = db.members.find(x=>x.id==id);
+    const member=db.members.find(x=>x.id==id);
 
     if(!member){
 
@@ -398,11 +392,11 @@ function showQR(id){
 
     document.getElementById("qrModal").style.display="flex";
 
-    const box=document.getElementById("qrcode");
+    const qr=document.getElementById("qrcode");
 
-    box.innerHTML="";
+    qr.innerHTML="";
 
-    new QRCode(box,{
+    new QRCode(qr,{
 
         text:JSON.stringify({
 
@@ -420,7 +414,7 @@ function showQR(id){
 
         height:220,
 
-        colorDark:"#0f5132",
+        colorDark:"#198754",
 
         colorLight:"#ffffff",
 
@@ -428,9 +422,9 @@ function showQR(id){
 
     });
 
-    document.getElementById("qrMemberName").innerHTML=member.name;
+    document.getElementById("qrMemberName").textContent=member.name;
 
-    document.getElementById("qrHouseNo").innerHTML=member.houseNo;
+    document.getElementById("qrHouseNo").textContent=member.houseNo;
 
 }
 
@@ -454,9 +448,9 @@ function closeQR(){
 
 function printQR(){
 
-    const w = window.open("","","width=500,height=700");
+    const win=window.open("","","width=500,height=700");
 
-    w.document.write(`
+    win.document.write(`
 
     <html>
 
@@ -492,9 +486,9 @@ function printQR(){
 
         ${document.getElementById("qrcode").innerHTML}
 
-        <h3>${document.getElementById("qrMemberName").innerHTML}</h3>
+        <h3>${document.getElementById("qrMemberName").textContent}</h3>
 
-        <p>บ้านเลขที่ ${document.getElementById("qrHouseNo").innerHTML}</p>
+        <p>บ้านเลขที่ ${document.getElementById("qrHouseNo").textContent}</p>
 
     </body>
 
@@ -502,21 +496,9 @@ function printQR(){
 
     `);
 
-    w.document.close();
+    win.document.close();
 
-    w.print();
-
-}
-
-
-
-// ===============================
-// นับสมาชิก
-// ===============================
-
-function totalMembers(){
-
-    return db.members.length;
+    win.print();
 
 }
 
@@ -526,9 +508,8 @@ function totalMembers(){
 // โหลดระบบ
 // ===============================
 
-window.addEventListener("load",()=>{
+window.addEventListener("load",function(){
 
     loadMembers();
 
 });
-);
