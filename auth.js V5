@@ -1,0 +1,263 @@
+// =====================================
+// auth.js V5
+// Rongkhem Rice Group
+// =====================================
+
+// ผู้ใช้เริ่มต้น
+const defaultUsers = [
+
+{
+id:1,
+username:"admin",
+password:"1234",
+name:"นายศักรนนทน์ ขัติย์วงศ์",
+role:"admin"
+},
+
+{
+id:2,
+username:"committee",
+password:"1234",
+name:"คณะกรรมการ",
+role:"committee"
+},
+
+{
+id:3,
+username:"user",
+password:"1234",
+name:"สมาชิก",
+role:"member"
+}
+
+];
+
+
+
+// โหลดฐานข้อมูลผู้ใช้
+
+let users = JSON.parse(localStorage.getItem("users"));
+
+if(!users){
+
+users = defaultUsers;
+
+localStorage.setItem("users",JSON.stringify(users));
+
+}
+
+
+
+// Login
+
+function login(){
+
+const username=document.getElementById("username").value.trim();
+
+const password=document.getElementById("password").value.trim();
+
+const user=users.find(u=>
+
+u.username===username &&
+
+u.password===password
+
+);
+
+if(!user){
+
+alert("ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง");
+
+return;
+
+}
+
+localStorage.setItem("loggedIn","true");
+
+localStorage.setItem("currentUser",JSON.stringify(user));
+
+window.location.href="index.html";
+
+}
+
+
+
+// Logout
+
+function logout(){
+
+if(!confirm("ออกจากระบบใช่หรือไม่")) return;
+
+localStorage.removeItem("loggedIn");
+
+localStorage.removeItem("currentUser");
+
+window.location.href="login.html";
+
+}
+
+
+
+// ตรวจสอบการ Login
+
+function checkLogin(){
+
+if(window.location.pathname.includes("login.html")) return;
+
+if(localStorage.getItem("loggedIn")!="true"){
+
+window.location.href="login.html";
+
+}
+
+}
+
+
+
+// โหลดชื่อผู้ใช้
+
+function loadUser(){
+
+const user=JSON.parse(localStorage.getItem("currentUser"));
+
+if(!user) return;
+
+const name=document.getElementById("userName");
+
+const role=document.getElementById("userRole");
+
+if(name) name.innerHTML=user.name;
+
+if(role) role.innerHTML=user.role;
+
+}
+
+
+
+// เพิ่มผู้ใช้
+
+function addUser(name,username,password,role){
+
+users.push({
+
+id:Date.now(),
+
+name,
+
+username,
+
+password,
+
+role
+
+});
+
+localStorage.setItem("users",JSON.stringify(users));
+
+}
+
+
+
+// ลบผู้ใช้
+
+function deleteUser(id){
+
+users=users.filter(u=>u.id!=id);
+
+localStorage.setItem("users",JSON.stringify(users));
+
+}
+
+
+
+// เปลี่ยนรหัสผ่าน
+
+function changePassword(){
+
+const user=JSON.parse(localStorage.getItem("currentUser"));
+
+if(!user) return;
+
+const oldPass=prompt("รหัสผ่านเดิม");
+
+if(oldPass!==user.password){
+
+alert("รหัสผ่านเดิมไม่ถูกต้อง");
+
+return;
+
+}
+
+const newPass=prompt("รหัสผ่านใหม่");
+
+if(!newPass) return;
+
+const index=users.findIndex(x=>x.id==user.id);
+
+users[index].password=newPass;
+
+localStorage.setItem("users",JSON.stringify(users));
+
+localStorage.setItem("currentUser",JSON.stringify(users[index]));
+
+alert("เปลี่ยนรหัสผ่านสำเร็จ");
+
+}
+
+
+
+// สิทธิ์
+
+function isAdmin(){
+
+const user=JSON.parse(localStorage.getItem("currentUser"));
+
+return user && user.role=="admin";
+
+}
+
+function isCommittee(){
+
+const user=JSON.parse(localStorage.getItem("currentUser"));
+
+return user && user.role=="committee";
+
+}
+
+function isMember(){
+
+const user=JSON.parse(localStorage.getItem("currentUser"));
+
+return user && user.role=="member";
+
+}
+
+
+
+// ซ่อนเมนู
+
+function permission(){
+
+if(isAdmin()) return;
+
+document.querySelectorAll(".admin-only").forEach(el=>{
+
+el.style.display="none";
+
+});
+
+}
+
+
+
+// Auto
+
+window.onload=function(){
+
+checkLogin();
+
+loadUser();
+
+permission();
+
+}
