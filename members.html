@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>รายชื่อสมาชิกทั้งหมด 192 ครัวเรือน - ระบบกลุ่มข้าวสาร บ้านร่องเข็ม</title>
+  <title>จัดการส่งข้าวสาร - ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -23,167 +23,153 @@
       background: radial-gradient(circle at 50% 0%, #132e1e 0%, var(--bg-deep) 100%);
       min-height: 100vh;
       margin: 0;
-      padding: 25px 15px;
+      padding: 30px 15px;
       color: var(--text-main);
-    }
-
-    .container { max-width: 1100px; margin: auto; animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
-
-    .top-bar {
       display: flex;
+      flex-direction: column;
       justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
     }
 
-    .back-btn {
-      background: rgba(212, 175, 55, 0.1);
-      border: 1px solid var(--gold-primary);
-      color: var(--gold-light);
-      padding: 8px 18px;
+    .container { max-width: 1050px; margin: auto; width: 100%; animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+
+    .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+
+    .back-btn, .action-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--glass-border);
+      color: var(--text-main);
+      padding: 8px 16px;
       border-radius: 30px;
       font-size: 13.5px;
       font-weight: 600;
       cursor: pointer;
+      backdrop-filter: blur(10px);
       text-decoration: none;
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      backdrop-filter: blur(10px);
+      gap: 6px;
     }
-
-    .back-btn:hover {
-      background: var(--gold-primary);
-      color: #09130d;
-      transform: translateY(-2px);
-    }
+    .back-btn:hover, .action-btn:hover { background: var(--gold-primary); color: #09130d; border-color: var(--gold-primary); }
 
     .header {
       background: linear-gradient(135deg, rgba(20, 50, 34, 0.9), rgba(10, 25, 17, 0.95));
       color: white;
-      padding: 24px;
+      padding: 25px 30px;
       border-radius: 20px;
-      text-align: center;
       margin-bottom: 25px;
       box-shadow: var(--shadow-premium);
       border: 1px solid var(--glass-border);
-    }
-
-    .header h2 { margin: 0 0 5px 0; font-size: 24px; color: #fff; }
-    .header small { color: var(--gold-light); font-size: 14px; }
-
-    .search-box {
-      margin-bottom: 20px;
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    .header h1 { margin: 0 0 5px 0; font-size: 22px; color: #fff; }
+    .header p { margin: 0; color: var(--gold-light); font-size: 14px; }
+
+    /* สรุปสถิติด้านบน */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
     }
 
-    .search-input {
-      width: 100%;
-      max-width: 450px;
-      background: rgba(18, 38, 27, 0.8);
+    .stat-card {
+      background: var(--glass-surface);
+      backdrop-filter: blur(15px);
       border: 1px solid var(--glass-border);
-      padding: 12px 20px;
-      border-radius: 30px;
-      color: white;
-      font-size: 15px;
-      outline: none;
+      border-radius: 16px;
+      padding: 20px;
       text-align: center;
       box-shadow: var(--shadow-premium);
     }
+    .stat-card h4 { margin: 0 0 8px 0; font-size: 14px; color: var(--text-muted); }
+    .stat-card .number { font-size: 26px; font-weight: 700; color: var(--gold-light); margin: 0; }
 
-    .search-input:focus { border-color: var(--gold-primary); }
-
-    .section-card {
+    .card {
       background: var(--glass-surface);
       backdrop-filter: blur(15px);
       border-radius: 20px;
       padding: 25px;
-      margin-bottom: 25px;
       box-shadow: var(--shadow-premium);
       border: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: 25px;
     }
 
-    .table-container { width: 100%; overflow-x: auto; max-height: 600px; }
+    .controls-bar { display: flex; justify-content: space-between; align-items: center; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: left;
-      font-size: 14.5px;
-    }
-
-    th, td {
-      padding: 12px 14px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    th {
-      background: rgba(0, 0, 0, 0.3);
-      color: var(--gold-light);
-      font-weight: 600;
-      position: sticky;
-      top: 0;
-      backdrop-filter: blur(10px);
-      z-index: 10;
-    }
-
-    tr:hover { background: rgba(255, 255, 255, 0.03); }
-
-    .badge-status {
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-weight: bold;
-      font-size: 12px;
-    }
-    .status-normal { background: rgba(74, 222, 128, 0.2); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.4); }
-    .status-warning { background: rgba(251, 191, 36, 0.2); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.4); }
-    .status-danger { background: rgba(248, 113, 113, 0.2); color: #f87171; border: 1px solid rgba(248, 113, 113, 0.4); }
-
-    .action-btns {
-      display: flex;
-      gap: 6px;
-      justify-content: center;
-    }
-
-    .btn-edit, .btn-delete {
-      padding: 5px 10px;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      border: none;
-    }
-
-    .btn-edit {
-      background: rgba(56, 189, 248, 0.2);
-      color: #38bdf8;
-      border: 1px solid rgba(56, 189, 248, 0.4);
-    }
-    .btn-edit:hover { background: #38bdf8; color: #09130d; }
-
-    .btn-delete {
-      background: rgba(248, 113, 113, 0.2);
-      color: #f87171;
-      border: 1px solid rgba(248, 113, 113, 0.4);
-    }
-    .btn-delete:hover { background: #f87171; color: #09130d; }
-
-    .footer {
+    .filter-group { display: flex; gap: 8px; flex-wrap: wrap; }
+    .filter-btn {
       background: rgba(10, 20, 14, 0.6);
-      backdrop-filter: blur(15px);
-      color: var(--text-muted);
-      padding: 20px;
-      border-radius: 16px;
-      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: var(--text-main);
+      padding: 8px 14px;
+      border-radius: 20px;
       font-size: 13px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      cursor: pointer;
     }
+    .filter-btn.active, .filter-btn:hover { background: var(--gold-primary); color: #09130d; border-color: var(--gold-primary); font-weight: 600; }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(15px); }
-      to { opacity: 1; transform: translateY(0); }
+    .search-input {
+      background: rgba(10, 20, 14, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 9px 16px;
+      border-radius: 30px;
+      color: var(--text-main);
+      font-size: 13.5px;
+      outline: none;
+      width: 100%;
+      max-width: 280px;
     }
+    .search-input:focus { border-color: var(--gold-primary); }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #d4af37, #aa8c2c);
+      color: #09130d;
+      border: none;
+      padding: 9px 18px;
+      border-radius: 30px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 13.5px;
+    }
+    .btn-primary:hover { background: linear-gradient(135deg, #e6c555, #d4af37); }
+
+    .table-container { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; text-align: left; }
+    th { background: rgba(10, 20, 14, 0.8); color: var(--gold-light); padding: 14px 16px; font-size: 13.5px; border-bottom: 1px solid var(--glass-border); }
+    td { padding: 14px 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-size: 13.5px; }
+    tr:hover td { background: rgba(255, 255, 255, 0.02); }
+
+    /* ป้ายสถานะการส่งข้าว */
+    .badge-sent { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); padding: 5px 12px; border-radius: 20px; font-weight: 600; font-size: 12px; cursor: pointer; }
+    .badge-notsent { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); padding: 5px 12px; border-radius: 20px; font-weight: 600; font-size: 12px; cursor: pointer; }
+    .badge-sent:hover, .badge-notsent:hover { opacity: 0.8; transform: scale(1.05); }
+
+    .badge-status { padding: 4px 10px; border-radius: 15px; font-size: 11.5px; font-weight: 600; display: inline-block; background: rgba(255,255,255,0.08); color: var(--text-muted); }
+
+    .btn-action { background: none; border: none; cursor: pointer; font-size: 13px; font-weight: 600; padding: 4px 8px; border-radius: 6px; margin-right: 4px; }
+    .btn-edit { color: #60a5fa; background: rgba(96, 165, 250, 0.1); }
+    .btn-del { color: #f87171; background: rgba(248, 113, 113, 0.1); }
+
+    .modal { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 100; }
+    .modal.active { display: flex; }
+    .modal-content { background: #11261b; border: 1px solid var(--glass-border); border-radius: 24px; width: 100%; max-width: 450px; padding: 30px; box-shadow: var(--shadow-premium); }
+    .modal-content h3 { margin-top: 0; color: var(--gold-light); font-size: 20px; margin-bottom: 20px; }
+
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 6px; }
+    .form-control { width: 100%; background: rgba(10, 20, 14, 0.8); border: 1px solid rgba(255, 255, 255, 0.15); padding: 10px 14px; border-radius: 12px; color: var(--text-main); font-size: 14px; outline: none; }
+    .form-control:focus { border-color: var(--gold-primary); }
+
+    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 25px; }
+    .btn-secondary { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: var(--text-main); padding: 9px 16px; border-radius: 30px; font-weight: 600; cursor: pointer; }
+
+    .footer { background: rgba(10, 20, 14, 0.6); backdrop-filter: blur(15px); color: var(--text-muted); padding: 20px; border-radius: 16px; text-align: center; font-size: 13px; border: 1px solid rgba(255, 255, 255, 0.05); }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
 <body>
@@ -191,151 +177,276 @@
 <div class="container">
 
   <div class="top-bar">
-    <a href="dashboard.html" class="back-btn">⬅️ กลับหน้าหลัก</a>
+    <a href="แดชบอร์ด.html" class="back-btn">⬅️ กลับหน้าหลัก</a>
+    <div style="display: flex; gap: 8px;">
+      <button onclick="exportData()" class="action-btn">📥 สำรองข้อมูล</button>
+      <label class="action-btn" style="cursor: pointer;">
+        📤 กู้คืน <input type="file" id="importFile" accept=".json" onchange="importData(event)" style="display: none;">
+      </label>
+    </div>
   </div>
 
   <div class="header">
-    <h2>👥 รายชื่อสมาชิกกลุ่มข้าวสารทั้งหมด (192 ครัวเรือน)</h2>
-    <small>กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6 ตำบลจำป่าหวาย อำเภอเมืองพะเยา</small>
+    <div>
+      <h1>🌾 บันทึกการส่งข้าวสารประจำงวด</h1>
+      <p>ตรวจสอบครัวเรือนที่นำส่งแล้ว และติดตามผู้ที่ยังไม่ส่ง</p>
+    </div>
+    <button onclick="openModal()" class="btn-primary">➕ เพิ่มสมาชิกใหม่</button>
   </div>
 
-  <div class="search-box">
-    <input type="text" id="searchInput" class="search-input" placeholder="🔍 พิมพ์ค้นหา บ้านเลขที่, ชื่อ หรือนามสกุล..." onkeyup="searchTable()">
+  <!-- กล่องแสดงสถิติมุมมองด่วน -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <h4>สมาชิกทั้งหมด</h4>
+      <p class="number" id="statTotal">0</p>
+    </div>
+    <div class="stat-card">
+      <h4>✅ นำส่งข้าวแล้ว</h4>
+      <p class="number" id="statSent" style="color: #4ade80;">0</p>
+    </div>
+    <div class="stat-card">
+      <h4>❌ ยังไม่นำส่ง</h4>
+      <p class="number" id="statNotSent" style="color: #f87171;">0</p>
+    </div>
   </div>
 
-  <div class="section-card">
+  <div class="card">
+    <div class="controls-bar">
+      <!-- ปุ่มกรองข้อมูล -->
+      <div class="filter-group">
+        <button class="filter-btn active" onclick="setFilter('all', this)">ทั้งหมด</button>
+        <button class="filter-btn" onclick="setFilter('sent', this)">✅ ส่งแล้ว</button>
+        <button class="filter-btn" onclick="setFilter('notsent', this)">❌ ยังไม่ส่ง</button>
+      </div>
+
+      <input type="text" id="searchInput" onkeyup="filterMembers()" placeholder="🔍 ค้นหาบ้านเลขที่ หรือชื่อ..." class="search-input">
+    </div>
+
     <div class="table-container">
-      <table id="memberTable">
+      <table>
         <thead>
           <tr>
-            <th style="width: 7%;">ลำดับ</th>
-            <th style="width: 15%;">คำนำหน้า</th>
-            <th style="width: 25%;">ชื่อ</th>
-            <th style="width: 20%;">นามสกุล</th>
-            <th style="width: 13%;">บ้านเลขที่</th>
-            <th style="width: 10%; text-align: center;">สถานะ</th>
-            <th style="width: 10%; text-align: center;">จัดการ</th>
+            <th style="width: 70px;">ลำดับ</th>
+            <th style="width: 100px;">บ้านเลขที่</th>
+            <th>ชื่อ - นามสกุล</th>
+            <th style="width: 130px;">สถานะครัวเรือน</th>
+            <th style="width: 150px; text-align: center;">สถานะส่งข้าวสาร</th>
+            <th style="text-align: center; width: 110px;">จัดการ</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>1</td><td>นาย</td><td>ประหยัด</td><td>ปิงเมือง</td><td>120</td>
-            <td><span class="badge-status status-danger">ตัดสิทธิ์</span></td>
-            <td style="text-align: center;"><div class="action-btns"><button class="btn-edit" onclick="editRow(this)">แก้ไข</button><button class="btn-delete" onclick="deleteRow(this)">ลบ</button></div></td>
-          </tr>
-          <tr>
-            <td>2</td><td>นาย</td><td>ตื่น</td><td>มิ่งขวัญ</td><td>176</td>
-            <td><span class="badge-status status-danger">ตัดสิทธิ์</span></td>
-            <td style="text-align: center;"><div class="action-btns"><button class="btn-edit" onclick="editRow(this)">แก้ไข</button><button class="btn-delete" onclick="deleteRow(this)">ลบ</button></div></td>
-          </tr>
-          <tr>
-            <td>3</td><td>น.ส.</td><td>สำรอง</td><td>มหาวรรณศรี</td><td>200</td>
-            <td><span class="badge-status status-danger">ตัดสิทธิ์</span></td>
-            <td style="text-align: center;"><div class="action-btns"><button class="btn-edit" onclick="editRow(this)">แก้ไข</button><button class="btn-delete" onclick="deleteRow(this)">ลบ</button></div></td>
-          </tr>
-          <tr>
-            <td>4</td><td>นาย</td><td>บรรพต</td><td>อินวงค์</td><td>212</td>
-            <td><span class="badge-status status-danger">ตัดสิทธิ์</span></td>
-            <td style="text-align: center;"><div class="action-btns"><button class="btn-edit" onclick="editRow(this)">แก้ไข</button><button class="btn-delete" onclick="deleteRow(this)">ลบ</button></div></td>
-          </tr>
-          <tr>
-            <td>5</td><td>นาง</td><td>ลวงทิพย์</td><td>ใฝ่จิต</td><td>315</td>
-            <td><span class="badge-status status-danger">ตัดสิทธิ์</span></td>
-            <td style="text-align: center;"><div class="action-btns"><button class="btn-edit" onclick="editRow(this)">แก้ไข</button><button class="btn-delete" onclick="deleteRow(this)">ลบ</button></div></td>
-          </tr>
-          <tr>
-            <td>6</td><td>นาย</td><td>ประทุม</td><td>ดาวกระจาย</td><td>328</td>
-            <td><span class="badge-status status-danger">ตัดสิทธิ์</span></td>
-            <td style="text-align: center;"><div class="action-btns"><button class="btn-edit" onclick="editRow(this)">แก้ไข</button><button class="btn-delete" onclick="deleteRow(this)">ลบ</button></div></td>
-          </tr>
-          <tr>
-            <td>7</td><td>นาย</td><td>วุฒิภัทร</td><td>เตชะวงค์</td><td>91/1</td>
-            <td><span class="badge-status status-warning">ค้าง 1 ครั้ง</span></td>
-            <td style="text-align: center;"><div class="action-btns"><button class="btn-edit" onclick="editRow(this)">แก้ไข</button><button class="btn-delete" onclick="deleteRow(this)">ลบ</button></div></td>
-          </tr>
-          <tr>
-            <td>8</td><td>นาย</td><td>ต่วน</td><td>ทาทอง</td><td>114</td>
-            <td><span class="badge-status status-warning">ค้าง 1 ครั้ง</span></td>
-            <td style="text-align: center;"><div class="action-btns"><button class="btn-edit" onclick="editRow(this)">แก้ไข</button><button class="btn-delete" onclick="deleteRow(this)">ลบ</button></div></td>
-          </tr>
-          <tr>
-            <td>9</td><td>นาย</td><td>สมศีล</td><td>งามจิต</td><td>135</td>
-            <td><span class="badge-status status-warning">ค้าง 1 ครั้ง</span></td>
-            <td style="text-align: center;"><div class="action-btns"><button class="btn-edit" onclick="editRow(this)">แก้ไข</button><button class="btn-delete" onclick="deleteRow(this)">ลบ</button></div></td>
-          </tr>
-          <tr>
-            <td>10</td><td>น.ส.</td><td>ยุพา</td><td>ใจดี</td><td>160</td>
-            <td><span class="badge-status status-warning">ค้าง 1 ครั้ง</span></td>
-            <td style="text-align: center;"><div class="action-btns"><button class="btn-edit" onclick="editRow(this)">แก้ไข</button><button class="btn-delete" onclick="deleteRow(this)">ลบ</button></div></td>
-          </tr>
-          <tr>
-            <td>11</td><td>นาย</td><td>ศักรนนทน์</td><td>ขัติย์วงศ์</td><td>1</td>
-            <td><span class="badge-status status-normal">ปกติ</span></td>
-            <td style="text-align: center;"><div class="action-btns"><button class="btn-edit" onclick="editRow(this)">แก้ไข</button><button class="btn-delete" onclick="deleteRow(this)">ลบ</button></div></td>
-          </tr>
-        </tbody>
+        <tbody id="memberTableBody"></tbody>
       </table>
     </div>
   </div>
 
-  <div class="footer">
-    <div><strong>ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</strong></div>
-    <div style="margin-top: 4px; opacity: 0.8;">พัฒนาโดย นายศักรนนทน์ ขัติย์วงศ์ (ผู้ใหญ่บ้าน)</div>
-  </div>
+</div>
 
+<!-- Modal เพิ่ม/แก้ไข -->
+<div id="memberModal" class="modal">
+  <div class="modal-content">
+    <h3 id="modalTitle">เพิ่มสมาชิกใหม่</h3>
+    <form id="memberForm" onsubmit="saveMember(event)">
+      <input type="hidden" id="memberIndex">
+      <div class="form-group">
+        <label>บ้านเลขที่</label>
+        <input type="text" id="houseNo" required class="form-control" placeholder="เช่น 1 หรือ 91/1">
+      </div>
+      <div class="form-group">
+        <label>ชื่อ (รวมคำนำหน้า)</label>
+        <input type="text" id="firstName" required class="form-control" placeholder="เช่น นายศักรนนทน์">
+      </div>
+      <div class="form-group">
+        <label>นามสกุล</label>
+        <input type="text" id="lastName" required class="form-control" placeholder="เช่น ขัติย์วงศ์">
+      </div>
+      <div class="form-group">
+        <label>สถานะครัวเรือนทั่วไป</label>
+        <select id="status" class="form-control">
+          <option value="ปกติ">ปกติ</option>
+          <option value="ค้าง 1 ครั้ง">ค้าง 1 ครั้ง</option>
+          <option value="ตัดสิทธิ์">ตัดสิทธิ์</option>
+        </select>
+      </div>
+      <div class="modal-actions">
+        <button type="button" onclick="closeModal()" class="btn-secondary">ยกเลิก</button>
+        <button type="submit" class="btn-primary">บันทึกข้อมูล</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="footer container">
+  <div><strong>ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</strong></div>
+  <div style="margin-top: 4px; opacity: 0.8;">พัฒนาโดย นายศักรนนทน์ ขัติย์วงศ์ (ผู้ใหญ่บ้าน)</div>
 </div>
 
 <script>
-  function searchTable() {
-    let input = document.getElementById("searchInput");
-    let filter = input.value.toLowerCase();
-    let table = document.getElementById("memberTable");
-    let tr = table.getElementsByTagName("tr");
+  // โหลดข้อมูล (เพิ่มฟิลด์ riceStatus: 'sent' หรือ 'notsent' สำหรับเช็คการส่งข้าว)
+  let members = JSON.parse(localStorage.getItem('rongkhem_members_rice')) || [
+      { house: "1", firstName: "นายศักรนนทน์", lastName: "ขัติย์วงศ์", status: "ปกติ", riceStatus: "sent" },
+      { house: "91/1", firstName: "นายวุฒิภัทร", lastName: "เตชะวงค์", status: "ค้าง 1 ครั้ง", riceStatus: "notsent" },
+      { house: "114", firstName: "นายต่วน", lastName: "ทาทอง", status: "ค้าง 1 ครั้ง", riceStatus: "notsent" },
+      { house: "120", firstName: "นายประหยัด", lastName: "ปิงเมือง", status: "ตัดสิทธิ์", riceStatus: "notsent" }
+  ];
 
-    for (let i = 1; i < tr.length; i++) {
-      let tdPrefix = tr[i].getElementsByTagName("td")[1];
-      let tdName = tr[i].getElementsByTagName("td")[2];
-      let tdSurname = tr[i].getElementsByTagName("td")[3];
-      let tdHouse = tr[i].getElementsByTagName("td")[4];
-      
-      if (tdName || tdSurname || tdHouse) {
-        let txt = (tdPrefix.innerText + " " + tdName.innerText + " " + tdSurname.innerText + " " + tdHouse.innerText).toLowerCase();
-        if (txt.indexOf(filter) > -1) {
-          tr[i].style.display = "";
-        } else {
-          tr[i].style.display = "none";
-        }
+  let currentFilter = 'all';
+
+  function saveToStorage() { localStorage.setItem('rongkhem_members_rice', JSON.stringify(members)); }
+
+  function updateStats() {
+      const total = members.length;
+      const sent = members.filter(m => m.riceStatus === 'sent').length;
+      const notSent = total - sent;
+
+      document.getElementById('statTotal').innerText = total;
+      document.getElementById('statSent').innerText = sent;
+      document.getElementById('statNotSent').innerText = notSent;
+  }
+
+  function renderTable(data = members) {
+      const tbody = document.getElementById('memberTableBody');
+      tbody.innerHTML = '';
+      updateStats();
+
+      if(data.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 30px;">ไม่พบข้อมูลสมาชิกในเงื่อนไขนี้</td></tr>`;
+          return;
       }
-    }
+
+      data.forEach((member, index) => {
+          // หา index จริงในอาเรย์หลัก เพื่อเวลาคลิกจะได้แก้ถูกตัว
+          const realIndex = members.findIndex(m => m === member);
+
+          let riceBadge = member.riceStatus === 'sent' 
+              ? `<span class="badge-sent" onclick="toggleRiceStatus(${realIndex})">✅ ส่งแล้ว (คลิกเปลี่ยน)</span>` 
+              : `<span class="badge-notsent" onclick="toggleRiceStatus(${realIndex})">❌ ยังไม่ส่ง (คลิกเปลี่ยน)</span>`;
+
+          tbody.innerHTML += `
+              <tr>
+                  <td style="color: var(--text-muted);">${index + 1}</td>
+                  <td style="font-weight: 600; color: var(--gold-light);">${member.house}</td>
+                  <td>${member.firstName} ${member.lastName}</td>
+                  <td><span class="badge-status">${member.status}</span></td>
+                  <td style="text-align: center;">${riceBadge}</td>
+                  <td style="text-align: center;">
+                      <button onclick="editMember(${realIndex})" class="btn-action btn-edit">แก้ไข</button>
+                      <button onclick="deleteMember(${realIndex})" class="btn-action btn-del">ลบ</button>
+                  </td>
+              </tr>
+          `;
+      });
   }
 
-  function deleteRow(btn) {
-    if (confirm("ท่านผู้ใหญ่ต้องการลบรายชื่อนี้ออกจากระบบใช่หรือไม่?")) {
-      let row = btn.closest("tr");
-      row.style.opacity = "0";
-      setTimeout(() => {
-        row.remove();
-      }, 300);
-    }
+  // กดสลับสถานะส่งข้าวทันทีจากตาราง
+  function toggleRiceStatus(index) {
+      members[index].riceStatus = members[index].riceStatus === 'sent' ? 'notsent' : 'sent';
+      saveToStorage();
+      applyFilterAndSearch();
   }
 
-  function editRow(btn) {
-    let row = btn.closest("tr");
-    let prefixCell = row.cells[1];
-    let nameCell = row.cells[2];
-    let surnameCell = row.cells[3];
-    let houseCell = row.cells[4];
-
-    let newPrefix = prompt("แก้ไขคำนำหน้า:", prefixCell.innerText);
-    let newName = prompt("แก้ไขชื่อ:", nameCell.innerText);
-    let newSurname = prompt("แก้ไขนามสกุล:", surnameCell.innerText);
-    let newHouse = prompt("แก้ไขบ้านเลขที่:", houseCell.innerText);
-
-    if (newPrefix !== null) prefixCell.innerText = newPrefix.trim();
-    if (newName !== null) nameCell.innerText = newName.trim();
-    if (newSurname !== null) surnameCell.innerText = newSurname.trim();
-    if (newHouse !== null) houseCell.innerText = newHouse.trim();
+  function setFilter(filterType, btnElement) {
+      currentFilter = filterType;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btnElement.classList.add('active');
+      applyFilterAndSearch();
   }
+
+  function filterMembers() {
+      applyFilterAndSearch();
+  }
+
+  function applyFilterAndSearch() {
+      const keyword = document.getElementById('searchInput').value.toLowerCase();
+      
+      let filtered = members.filter(m => {
+          const matchKeyword = m.house.toLowerCase().includes(keyword) || 
+                               m.firstName.toLowerCase().includes(keyword) || 
+                               m.lastName.toLowerCase().includes(keyword);
+          
+          if (currentFilter === 'sent') return matchKeyword && m.riceStatus === 'sent';
+          if (currentFilter === 'notsent') return matchKeyword && m.riceStatus === 'notsent';
+          return matchKeyword;
+      });
+
+      renderTable(filtered);
+  }
+
+  function openModal() {
+      document.getElementById('modalTitle').innerText = 'เพิ่มสมาชิกใหม่';
+      document.getElementById('memberForm').reset();
+      document.getElementById('memberIndex').value = '';
+      document.getElementById('memberModal').classList.add('active');
+  }
+
+  function closeModal() { document.getElementById('memberModal').classList.remove('active'); }
+
+  function saveMember(event) {
+      event.preventDefault();
+      const index = document.getElementById('memberIndex').value;
+      const house = document.getElementById('houseNo').value;
+      const firstName = document.getElementById('firstName').value;
+      const lastName = document.getElementById('lastName').value;
+      const status = document.getElementById('status').value;
+
+      if (index === '') { 
+          members.push({ house, firstName, lastName, status, riceStatus: 'notsent' }); 
+      } else { 
+          members[index].house = house;
+          members[index].firstName = firstName;
+          members[index].lastName = lastName;
+          members[index].status = status;
+      }
+
+      saveToStorage();
+      applyFilterAndSearch();
+      closeModal();
+  }
+
+  function editMember(index) {
+      const m = members[index];
+      document.getElementById('modalTitle').innerText = 'แก้ไขข้อมูลสมาชิก';
+      document.getElementById('memberIndex').value = index;
+      document.getElementById('houseNo').value = m.house;
+      document.getElementById('firstName').value = m.firstName;
+      document.getElementById('lastName').value = m.lastName;
+      document.getElementById('status').value = m.status;
+      document.getElementById('memberModal').classList.add('active');
+  }
+
+  function deleteMember(index) {
+      if(confirm('ท่านผู้ใหญ่ต้องการลบสมาชิกลำดับที่ ' + (index + 1) + ' ใช่หรือไม่?')) {
+          members.splice(index, 1);
+          saveToStorage();
+          applyFilterAndSearch();
+      }
+  }
+
+  function exportData() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(members, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", "backup_rice_rongkhem.json");
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+  }
+
+  function importData(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+          try {
+              members = JSON.parse(e.target.result);
+              saveToStorage();
+              applyFilterAndSearch();
+              alert('กู้คืนข้อมูลสำเร็จ!');
+          } catch (err) { alert('ไฟล์ไม่ถูกต้อง'); }
+      };
+      reader.readAsText(file);
+  }
+
+  applyFilterAndSearch();
 </script>
 
 </body>
