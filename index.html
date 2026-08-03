@@ -1,216 +1,365 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🌾 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
+  <!-- Google Font: Prompt -->
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary: #2e7d32;
+      --primary-light: #e8f5e9;
+      --danger: #d32f2f;
+      --danger-light: #ffebee;
+      --warning: #f57c00;
+      --dark: #2c3e50;
+      --bg: #f4f6f9;
+      --card-bg: #ffffff;
+    }
 
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Tahoma,sans-serif;
-}
+    * {
+      box-sizing: border-box;
+      font-family: 'Prompt', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
 
-body{
-    height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    background:linear-gradient(135deg,#0d5c2f,#1e8c4f,#3cb371);
-    background-size:400% 400%;
-    animation:bg 12s ease infinite;
-}
+    body {
+      background-color: var(--bg);
+      color: var(--dark);
+      padding: 20px 10px;
+      line-height: 1.6;
+    }
 
-@keyframes bg{
-    0%{background-position:0% 50%;}
-    50%{background-position:100% 50%;}
-    100%{background-position:0% 50%;}
-}
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
 
-.login-box{
-    width:390px;
-    background:#fff;
-    padding:35px;
-    border-radius:20px;
-    box-shadow:0 15px 40px rgba(0,0,0,.3);
-    text-align:center;
-}
+    /* --- ANIMATIONS --- */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-.logo{
-    font-size:70px;
-    margin-bottom:10px;
-}
+    @keyframes pulseWarning {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.05); opacity: 0.85; }
+      100% { transform: scale(1); opacity: 1; }
+    }
 
-h1{
-    color:#146c43;
-    margin-bottom:5px;
-}
+    .animate-card {
+      animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
 
-p{
-    color:#666;
-    margin-bottom:20px;
-}
+    /* Delay staggered animation */
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
 
-input[type=text],
-input[type=password]{
-    width:100%;
-    padding:13px;
-    margin-bottom:15px;
-    border:1px solid #ccc;
-    border-radius:10px;
-    font-size:16px;
-}
+    /* Header & Memorial Banner */
+    .header-card {
+      background: linear-gradient(135deg, #1b5e20, #388e3c);
+      color: white;
+      padding: 24px;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      opacity: 0;
+    }
 
-.option{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:15px;
-    font-size:14px;
-}
+    .memorial-card {
+      background: var(--card-bg);
+      border-left: 5px solid var(--dark);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      margin-bottom: 20px;
+      opacity: 0;
+    }
 
-button{
-    width:100%;
-    padding:14px;
-    border:0;
-    border-radius:10px;
-    background:#198754;
-    color:#fff;
-    font-size:17px;
-    cursor:pointer;
-}
+    .memorial-card h3 {
+      color: var(--dark);
+      margin-bottom: 5px;
+    }
 
-button:hover{
-    background:#157347;
-}
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
+    }
 
-#error{
-    margin-top:15px;
-    color:#d32f2f;
-    font-weight:bold;
-}
+    .stat-card {
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: 14px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+      opacity: 0;
+    }
 
-.footer{
-    margin-top:20px;
-    color:#777;
-    font-size:13px;
-}
-</style>
+    .stat-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+    }
 
+    .stat-number {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .stat-card.danger .stat-number {
+      color: var(--danger);
+    }
+
+    /* Form & Interaction Card */
+    .section-card {
+      background: var(--card-bg);
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      margin-bottom: 25px;
+      opacity: 0;
+    }
+
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+
+    select, input {
+      width: 100%;
+      padding: 12px;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      transition: border-color 0.2s;
+    }
+
+    select:focus, input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.2s ease;
+    }
+
+    .btn:hover {
+      background: #256627;
+      transform: translateY(-2px);
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    /* Warning List & Table */
+    .warning-badge {
+      animation: pulseWarning 2s infinite ease-in-out;
+      background-color: var(--danger-light);
+      color: var(--danger);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: inline-block;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th, td {
+      padding: 12px 10px;
+      text-align: left;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    th {
+      background-color: #fafafa;
+      font-weight: 600;
+    }
+
+    tr:hover {
+      background-color: #f9f9f9;
+    }
+
+    .footer-text {
+      text-align: center;
+      color: #777;
+      font-size: 0.85rem;
+      margin-top: 30px;
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="login-box">
+<div class="container">
 
-<div class="logo">🌾</div>
+  <!-- Header -->
+  <header class="header-card animate-card">
+    <h1>🌾 ระบบกลุ่มข้าวสาร</h1>
+    <p>บ้านร่องเข็ม หมู่ที่ 6 | สมาชิกทั้งหมด 192 ครัวเรือน</p>
+  </header>
 
-<h1>ระบบกลุ่มข้าวสาร</h1>
+  <!-- Memorial Alert -->
+  <div class="memorial-card animate-card delay-1">
+    <h3>🕊️ ขอแสดงความเสียใจอย่างสุดซึ้ง</h3>
+    <p><strong>นายเกษมสุข ใฝ่ใจ</strong> (อายุ 47 ปี) — บ้านเลขที่ 123</p>
+    <p style="font-size: 0.9rem; color: #555;">📅 วันแจ้ง: 22/07/2026 | 🔥 วันฌาปนกิจ: 25/07/2026</p>
+    <blockquote style="margin-top: 8px; font-style: italic; color: #666; font-size: 0.88rem;">
+      "บ้านร่องเข็ม หมู่ที่ 6 ขอให้ดวงวิญญาณของท่านไปสู่สุคติ และขอเป็นกำลังใจให้แก่ครอบครัวและญาติผู้สูญเสีย ด้วยความอาลัยยิ่ง"
+    </blockquote>
+  </div>
 
-<p>บ้านร่องเข็ม หมู่ที่ 6</p>
+  <!-- Animated Counters -->
+  <div class="stats-grid">
+    <div class="stat-card animate-card delay-2">
+      <div class="stat-number counter" data-target="192">0</div>
+      <div>สมาชิกทั้งหมด (ครัวเรือน)</div>
+    </div>
+    <div class="stat-card animate-card delay-2">
+      <div class="stat-number counter" data-target="182">0</div>
+      <div>ส่งข้าวสารแล้ว (ถุง)</div>
+    </div>
+    <div class="stat-card danger animate-card delay-2">
+      <div class="stat-number counter" data-target="10">0</div>
+      <div>ยังไม่ส่ง (ครัวเรือน)</div>
+    </div>
+  </div>
 
-<input
-type="text"
-id="username"
-placeholder="ชื่อผู้ใช้">
+  <!-- Record Rice Section -->
+  <div class="section-card animate-card delay-3">
+    <div class="section-title">🌾 บันทึกข้าวสารช่วยงานศพ</div>
+    <div class="form-group">
+      <label for="eventSelect">เลือกงานศพ:</label>
+      <select id="eventSelect">
+        <option>⚰️ นายเกษมสุข ใฝ่ใจ | บ้าน 123</option>
+        <option>⚰️ นายบูรณพิภพ ผัดดี | บ้าน 254</option>
+      </select>
+    </div>
+    <button class="btn" onclick="alert('ระบบเปิดงานบันทึกสำเร็จ!')">เปิดงาน / บันทึกรับข้าวสาร</button>
+  </div>
 
-<input
-type="password"
-id="password"
-placeholder="รหัสผ่าน">
+  <!-- Warning List -->
+  <div class="section-card animate-card delay-4">
+    <div class="section-title">⚠️ สมาชิกที่ต้องติดตาม (ค้างสะสม 2 งาน)</div>
+    <div style="overflow-x: auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>ชื่อ-นามสกุล</th>
+            <th>บ้านเลขที่</th>
+            <th>ค้างสะสม</th>
+            <th>สถานะ</th>
+          </tr>
+        </thead>
+        <tbody id="warningTable">
+          <!-- Filled by JavaScript -->
+        </tbody>
+      </table>
+    </div>
+    <button class="btn" style="margin-top: 15px; background: var(--dark);" onclick="window.print()">🖨️ พิมพ์รายงานแจ้งเตือน</button>
+  </div>
 
-<div class="option">
-
-<label>
-<input
-type="checkbox"
-id="showPass">
-แสดงรหัสผ่าน
-</label>
-
-<label>
-<input
-type="checkbox"
-id="remember">
-จดจำการเข้าสู่ระบบ
-</label>
-
-</div>
-
-<button type="button" onclick="login()">
-🔐 เข้าสู่ระบบ
-</button>
-
-<div id="error"></div>
-
-<div class="footer">
-Version 4.0<br>
-Rongkhem Rice Group
-</div>
+  <!-- Footer -->
+  <div class="footer-text">
+    ระบบจัดการสมาชิกและช่วยเหลืองานศพ<br>
+    จัดทำโดย นายศักรนนทน์ ขัติย์วงศ์
+  </div>
 
 </div>
 
 <script>
+  // ข้อมูลสมาชิกที่ต้องติดตาม
+  const debtors = [
+    { name: "นางแสงเพียร วงค์ขัติย์", house: "6" },
+    { name: "นายจักร์กวัส ประพลรัตนัง", house: "2" },
+    { name: "นายยนต์ ปิงเมือง", house: "7" },
+    { name: "นางสมศรี ปิงเมือง", house: "8" },
+    { name: "นายชัด ปิงเมือง", house: "10" },
+    { name: "นายรังษี ใฝ่จิต", house: "14" },
+    { name: "นายยรรยง ผัดดี", house: "14/1" },
+    { name: "นายหมื่น วังมูล", house: "15" },
+    { name: "นายโกวัฒนธฤทธิ์ ประพลรัตนัง", house: "17" },
+    { name: "นายภาณุวัฒน์ บุญยา", house: "20" }
+  ];
 
-const ADMIN_USER = "admin";
-const ADMIN_PASS = "123456";
+  // Render Table Rows
+  const tableBody = document.getElementById('warningTable');
+  debtors.forEach((item, index) => {
+    const row = `
+      <tr>
+        <td>${index + 1}</td>
+        <td><strong>${item.name}</strong></td>
+        <td>บ้านเลขที่ ${item.house}</td>
+        <td>2 งาน</td>
+        <td><span class="warning-badge">🔴 เสนอพิจารณา</span></td>
+      </tr>
+    `;
+    tableBody.innerHTML += row;
+  });
 
-// ถ้าจำการเข้าสู่ระบบไว้ ให้เข้าหน้า Dashboard ทันที
-if(
-localStorage.getItem("loggedIn")=="true" ||
-sessionStorage.getItem("loggedIn")=="true"
-){
-location.href="dashboard.html";
-}
+  // Count-up Animation for Numbers
+  document.addEventListener("DOMContentLoaded", () => {
+    const counters = document.querySelectorAll('.counter');
+    counters.forEach(counter => {
+      const updateCount = () => {
+        const target = +counter.getAttribute('data-target');
+        const count = +counter.innerText;
+        const speed = 40; // Higher is slower
+        const inc = Math.ceil(target / speed) || 1;
 
-function login(){
-
-let u=document.getElementById("username").value.trim();
-let p=document.getElementById("password").value;
-
-if(u===ADMIN_USER && p===ADMIN_PASS){
-
-if(document.getElementById("remember").checked){
-
-localStorage.setItem("loggedIn","true");
-
-}else{
-
-sessionStorage.setItem("loggedIn","true");
-
-}
-
-location.href="dashboard.html";
-
-}else{
-
-document.getElementById("error").innerHTML="❌ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง";
-
-}
-
-}
-
-// แสดงรหัสผ่าน
-document.getElementById("showPass").addEventListener("change",function(){
-
-document.getElementById("password").type=
-this.checked ? "text" : "password";
-
-});
-
-// กด Enter เพื่อ Login
-document.getElementById("password").addEventListener("keydown",function(e){
-
-if(e.key==="Enter"){
-
-login();
-
-}
-
-});
-
+        if (count < target) {
+          counter.innerText = Math.min(count + inc, target);
+          setTimeout(updateCount, 25);
+        } else {
+          counter.innerText = target;
+        }
+      };
+      updateCount();
+    });
+  });
 </script>
 
 </body>
