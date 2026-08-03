@@ -3,138 +3,199 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>จัดการงานศพ - กลุ่มข้าวสาร บ้านร่องเข็ม</title>
+  <title>ไว้อาลัยผู้วายชนม์ - ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Sarabun', sans-serif; background: #f4f7f6; margin: 0; padding: 15px; color: #333; }
-    .container { max-width: 900px; margin: auto; }
-    .header { background: #1b4332; color: white; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 20px; }
-    .card { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-    .card-title { margin-top: 0; color: #2c3e50; border-bottom: 2px solid #ecf0f1; padding-bottom: 10px; }
-    .funeral-card { background: #fffdf9; border-left: 5px solid #e67e22; padding: 15px; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-    .funeral-title { font-weight: bold; font-size: 16px; color: #d35400; margin-bottom: 5px; }
-    .btn-add { background: #27ae60; color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-bottom: 15px; }
-    .btn-back { display: block; text-align: center; margin-top: 20px; color: #7f8c8d; text-decoration: none; font-weight: bold; }
-    label { font-weight: bold; font-size: 14px; display: block; margin-top: 10px; }
-    input, select { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; margin-top: 4px; }
+    :root {
+      --bg-deep: #09130d;
+      --glass-surface: rgba(18, 38, 27, 0.85);
+      --glass-border: rgba(212, 175, 55, 0.3);
+      --gold-primary: #d4af37;
+      --gold-light: #f3e5ab;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --shadow-premium: 0 20px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    * { box-sizing: border-box; font-family: 'Sarabun', 'Plus Jakarta Sans', sans-serif; transition: all 0.3s ease; }
+
+    body {
+      background: radial-gradient(circle at 50% 0%, #132e1e 0%, var(--bg-deep) 100%);
+      min-height: 100vh;
+      margin: 0;
+      padding: 30px 15px;
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .container { max-width: 800px; margin: auto; width: 100%; }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .back-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--glass-border);
+      color: var(--text-main);
+      padding: 8px 16px;
+      border-radius: 30px;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      text-decoration: none;
+    }
+
+    .back-btn:hover {
+      background: var(--gold-primary);
+      color: #09130d;
+    }
+
+    /* กล่องการ์ดไว้อาลัยพรีเมียม */
+    .condolence-card {
+      background: var(--glass-surface);
+      backdrop-filter: blur(20px);
+      border-radius: 28px;
+      padding: 40px 30px;
+      box-shadow: var(--shadow-premium);
+      border: 1px solid var(--glass-border);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      animation: fadeIn 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .ribbon {
+      font-size: 50px;
+      margin-bottom: 15px;
+      animation: floatIcon 3s ease-in-out infinite;
+    }
+
+    /* อニメーションตัวหนังสือวิ่ง / ค่อยๆ ปรากฏทีละบรรทัด */
+    .title-anim {
+      font-size: 22px;
+      color: var(--gold-light);
+      margin-bottom: 15px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .marquee-box {
+      background: rgba(10, 20, 14, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 25px;
+      margin: 25px 0;
+      position: relative;
+    }
+
+    /* เอฟเฟกต์ตัวหนังสือวิ่งแบบข้อความประกาศ (Marquee) */
+    .marquee-text {
+      font-size: 20px;
+      line-height: 1.8;
+      color: #fff;
+      font-weight: 600;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .signature {
+      margin-top: 30px;
+      font-size: 16px;
+      color: var(--gold-primary);
+      font-weight: 600;
+      letter-spacing: 1px;
+      animation: pulseGlow 2.5s infinite;
+    }
+
+    .footer {
+      background: rgba(10, 20, 14, 0.6);
+      backdrop-filter: blur(15px);
+      color: var(--text-muted);
+      padding: 20px;
+      border-radius: 16px;
+      text-align: center;
+      font-size: 13px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      margin-top: 20px;
+    }
+
+    /* คีย์เฟรมอนิเมชั่น */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes floatIcon {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.8; }
+      50% { opacity: 1; text-shadow: 0 0 10px rgba(212, 175, 55, 0.6); }
+    }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <div class="header">
-    <h2 style="margin:0;">🕊️ จัดการข้อมูลงานศพและการจ่ายข้าวสาร</h2>
-    <small>กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</small>
+
+  <!-- แถบบน -->
+  <div class="top-bar">
+    <a href="แดชบอร์ด.html" class="back-btn">⬅️ กลับหน้าหลัก</a>
+    <div style="font-size: 13px; color: var(--gold-light);">🕯️ ร่วมไว้อาลัยผู้วายชนม์</div>
   </div>
 
-  <!-- บันทึกงานศพใหม่ -->
-  <div class="card">
-    <h3 class="card-title">➕ บันทึกแจ้งงานศพใหม่</h3>
-    <form id="funeralForm" onsubmit="saveFuneral(event)">
-      <label>ชื่อ - นามสกุล ผู้เสียชีวิต:</label>
-      <input type="text" id="deceasedName" placeholder="เช่น นายเกษมสุข ใฝ่ใจ" required>
-
-      <div style="display:flex; gap:10px;">
-        <div style="flex:1;">
-          <label>อายุ (ปี):</label>
-          <input type="number" id="age" placeholder="47" required>
-        </div>
-        <div style="flex:2;">
-          <label>ตั้งศพ ณ / วัด:</label>
-          <input type="text" id="venue" placeholder="เช่น วัดร่องเข็ม" required>
-        </div>
+  <!-- การ์ดไว้อาลัยอนิเมชั่นหรูหรา -->
+  <div class="condolence-card">
+    <div class="ribbon">🕯️</div>
+    <div class="title-anim">ด้วยความอาลัยและเสียใจอย่างยิ่ง</div>
+    
+    <div class="marquee-box">
+      <!-- ข้อความวิ่งสลับหรือพิมพ์ดีด -->
+      <div id="typingText" class="marquee-text">
+        ขอแสดงความเสียใจกับครอบครัว ต่อการจากไปของผู้วายชนม์ ขอให้ดวงวิญญาณไปสู่สุคติในสัมปรายภพ
       </div>
+    </div>
 
-      <label>กำหนดการฌาปนกิจ (เผา):</label>
-      <input type="date" id="cremationDate" required>
-
-      <button type="submit" class="btn-add" style="margin-top:15px;">💾 บันทึกแจ้งงานศพ</button>
-    </form>
-  </div>
-
-  <!-- แสดงรายการงานศพปัจจุบัน -->
-  <div class="card">
-    <h3 class="card-title">🕊️ งานศพปัจจุบัน (ขณะนี้)</h3>
-    <div id="funeralList">
-      <!-- ข้อมูลจะโหลดแสดงตรงนี้ -->
+    <div class="signature">
+      — จากทีมผู้นำหมู่บ้าน และคณะกรรมการหมู่บ้านร่องเข็ม หมู่ที่ 6 —
     </div>
   </div>
 
-  <a href="dashboard.html" class="btn-back">⬅️ กลับหน้าหลัก Dashboard</a>
+</div>
+
+<div class="footer container">
+  <div><strong>ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</strong></div>
+  <div style="margin-top: 4px; opacity: 0.8;">พัฒนาโดย นายศักรนนทน์ ขัติย์วงศ์ (ผู้ใหญ่บ้าน)</div>
 </div>
 
 <script>
-// ข้อมูลงานศพเริ่มต้น
-const initialFunerals = [
-  {
-    id: 1,
-    name: "นายเกษมสุข ใฝ่ใจ",
-    age: 47,
-    venue: "วัดร่องเข็ม",
-    date: "2026-07-25",
-    status: "กำลังดำเนินงาน"
-  },
-  {
-    id: 2,
-    name: "สมาชิกครอบครัว (รายที่ 2)",
-    age: 68,
-    venue: "วัดร่องเข็ม",
-    date: "2026-08-05",
-    status: "กำลังดำเนินงาน"
-  }
-];
-
-function getFunerals() {
-  let data = localStorage.getItem('funeralList');
-  if (!data) {
-    localStorage.setItem('funeralList', JSON.stringify(initialFunerals));
-    return initialFunerals;
-  }
-  return JSON.parse(data);
-}
-
-function renderFunerals() {
-  const funerals = getFunerals();
-  const container = document.getElementById('funeralList');
-  container.innerHTML = "";
-
-  if (funerals.length === 0) {
-    container.innerHTML = "<p style='text-align:center; color:#888;'>ไม่มีงานศพในขณะนี้</p>";
-    return;
-  }
-
-  funerals.forEach((f, idx) => {
-    container.innerHTML += `
-      <div class="funeral-card">
-        <div class="funeral-title">🕊️ ${f.name} (อายุ ${f.age} ปี)</div>
-        <div>📍 สถานที่: ${f.venue}</div>
-        <div>📅 กำหนดฌาปนกิจ: ${f.date}</div>
-        <div style="margin-top:5px; font-weight:bold; color:#27ae60;">🌾 เรียกเก็บข้าวสารช่วยเหลือ: 182 ถุง (ตามยอดส่งแล้ว)</div>
-      </div>
-    `;
-  });
-}
-
-function saveFuneral(e) {
-  e.preventDefault();
-  let funerals = getFunerals();
+  // เอฟเฟกต์พิมพ์ข้อความตัวหนังสือทีละตัว (Typing Animation) เพิ่มความพรีเมียม
+  const textElement = document.getElementById("typingText");
+  const message = "ขอแสดงความเสียใจกับครอบครัว ต่อการจากไปของผู้วายชนม์ ขอให้ดวงวิญญาณไปสู่สุคติในสัมปรายภพ อันสงบสุขร่มเย็นเบื้องสรวงสวรรค์";
   
-  const newFuneral = {
-    id: Date.now(),
-    name: document.getElementById('deceasedName').value,
-    age: document.getElementById('age').value,
-    venue: document.getElementById('venue').value,
-    date: document.getElementById('cremationDate').value,
-    status: "กำลังดำเนินงาน"
+  let i = 0;
+  textElement.innerHTML = "";
+  
+  function typeWriter() {
+    if (i < message.length) {
+      textElement.innerHTML += message.charAt(i);
+      i++;
+      setTimeout(typeWriter, 70); // ความเร็วในการพิมพ์
+    }
+  }
+
+  // เริ่มเล่นอนิเมชั่นเมื่อเปิดหน้าเว็บ
+  window.onload = function() {
+    setTimeout(typeWriter, 500);
   };
-
-  funerals.unshift(newFuneral);
-  localStorage.setItem('funeralList', JSON.stringify(funerals));
-  alert('บันทึกข้อมูลงานศพเรียบร้อยแล้ว');
-  document.getElementById('funeralForm').reset();
-  renderFunerals();
-}
-
-document.addEventListener("DOMContentLoaded", renderFunerals);
 </script>
 
 </body>
