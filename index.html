@@ -230,3 +230,366 @@
     </script>
 </body>
 </html>
+// ==========================================
+// 1. ระบบจัดการข้อมูล (LocalStorage)
+// ==========================================
+const DEFAULT_MEMBERS = Array.from({ length: 185 }, (_, i) => ({
+    id: i + 1,
+    name: `สมาชิก ครัวเรือนที่ ${i + 1}`,
+    houseNo: `${i + 1}`,
+    status: 'normal' // normal, pending
+}));
+
+function getData(key, defaultValue) {
+    const data = localStorage.getItem(key);
+    return data ? JSON.parse(data) : defaultValue;
+}
+
+function saveData(key, data) {
+    localStorage.setItem(key, JSON.stringify(data));
+    updateDashboardStats();
+}
+
+// โหลดข้อมูลเริ่มต้น
+let members = getData('app_members', DEFAULT_MEMBERS);
+let funerals = getData('app_funerals', []);
+let deliveries = getData('app_deliveries', []); // { funeralId, memberId, date, qty }
+
+// ==========================================
+// 2. อัปเดตตัวเลขหน้า Dashboard
+// ==========================================
+function updateDashboardStats() {
+    const activeFuneral = funerals.find(f => f.is_active);
+    
+    // คำนวณยอด
+    const totalMembers = members.length;
+    const totalFunerals = funerals.length;
+    
+    // ข้าวสารรับเข้าทั้งหมด (1 ถุงต่อการส่ง 1 ครั้ง)
+    const totalReceivedRice = deliveries.length;
+    
+    // คำนวณค้างส่งสำหรับงานศพที่เปิดอยู่
+    let pendingCount = 0;
+    if (activeFuneral) {
+        const deliveredMemberIds = new Set(
+            deliveries.filter(d => d.funeralId === activeFuneral.id).map(d => d.memberId)
+        );
+        pendingCount = totalMembers - deliveredMemberIds.size;
+    }
+
+    // อัปเดตแสดงผลบนหน้าจอ
+    if (document.getElementById('stat-members')) document.getElementById('stat-members').innerText = totalMembers;
+    if (document.getElementById('top-total-members')) document.getElementById('top-total-members').innerText = totalMembers;
+    if (document.getElementById('stat-funerals')) document.getElementById('stat-funerals').innerText = totalFunerals;
+    if (document.getElementById('stat-received-rice')) document.getElementById('stat-received-rice').innerText = totalReceivedRice;
+    if (document.getElementById('stat-stock-rice')) document.getElementById('stat-stock-rice').innerText = totalReceivedRice;
+    if (document.getElementById('stat-pending')) document.getElementById('stat-pending').innerText = pendingCount;
+    if (document.getElementById('stat-normal')) document.getElementById('stat-normal').innerText = totalMembers - pendingCount;
+}
+
+// ==========================================
+// 3. ระบบ Modal และสลับเมนู
+// ==========================================
+function openTab(tabName) {
+    const modal = document.getElementById('modal-container');
+    const title = document.getElementById('modal-title');
+    const body = document.getElementById('modal-body');
+
+    if (!modal) return;
+    modal.classList.remove('hidden');
+
+    switch (tabName) {
+        case 'members':
+            title.innerText = '👥 ทะเบียนสมาชิก';
+            renderMembersTab(body);
+            break;
+        case 'funeral':
+            title.innerText = '⚰️ แจ้งเสียชีวิต / งานศพ';
+            renderFuneralTab(body);
+            break;
+        case 'receive':
+            title.innerText = '📥 รับข้าวสารเข้ากลุ่ม';
+            renderReceiveTab(body);
+            break;
+        case 'stock':
+            title.innerText = '🌾 คลังข้าวสาร';
+            renderStockTab(body);
+            break;
+        case 'notify':
+            title.innerText = '🔔 แจ้งเตือนสมาชิก';
+            renderNotifyTab(body);
+            break;
+        case 'report':
+            title.innerText = '📊 รายงานข้อมูล';
+            renderReportTab(body);
+            break;
+        default:
+            title.innerText = 'เมนูระบบ';
+            body.innerHTML = '<p class="text-center text-gray-500 py-6">ไม่พบเมนูนี้</p>';
+    }
+}
+
+function closeModal() {
+    const modal = document.getElementById('modal-container');
+    if (modal) modal.classList.add('hidden');
+}
+
+// ==========================================
+// 4. เนื้อหาของแต่ละเมนูย่อย
+// ==========================================
+
+// --- [เมนู 1] ทะเบียนสมาชิก ---
+function renderMembersTab(container) {
+    container.innerHTML = `
+        <div class="flex flex-col gap-3">
+            <div class="bg-gray-50 p-3 rounded-lg border">
+                <h4 class="font-bold text-xs text-gray-600 mb-2">+ เพิ่มสมาชิกใหม่</h4>
+                <div class="flex gap-2 mb-2">
+                    <input type="text" id="mb-name" placeholder="ชื่อ-นามสกุล" class="border p-2 rounded-lg text-sm w-2/3 outline-none focus:ring-1 focus:ring-emerald-500">
+                    <input type="text" id="mb-house" placeholder="บ้านเลขที่" class="border p-2 rounded-lg text-sm w-1/3 outline-none focus:ring-1 focus:ring-emerald-500">
+                </div>
+                <button onclick="addMemberAction()" class="bg-emerald-600 text-white w-full py-2 rounded-lg text-sm font-semibold hover:bg-emerald-700">
+                    บันทึกสมาชิก
+                </button>
+            </div>
+            <div class="max-h-60 overflow-y-auto border rounded-lg divide-y">
+                ${members.map(m => `
+                    <div class="p-2.5 flex justify-between items-center text-sm">
+                        <div>
+                            <span class="font-medium text-gray-800">${m.name}</span>
+                            <span class="text-xs text-gray-400 block">บ้านเลขที่ ${m.houseNo}</span>
+                        </div>
+                        <button onclick="deleteMemberAction(${m.id})" class="text-xs text-red-500 hover:underline">ลบ</button>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `;
+}
+
+function addMemberAction() {
+    const name = document.getElementById('mb-name').value.trim();
+    const houseNo = document.getElementById('mb-house').value.trim();
+    if (!name) return alert('กรุณากรอกชื่อสมาชิก');
+
+    members.push({ id: Date.now(), name, houseNo: houseNo || '-' });
+    saveData('app_members', members);
+    openTab('members');
+}
+
+function deleteMemberAction(id) {
+    if (!confirm('ยืนยันลบสมาชิกนี้?')) return;
+    members = members.filter(m => m.id !== id);
+    saveData('app_members', members);
+    openTab('members');
+}
+
+// --- [เมนู 2] แจ้งเสียชีวิต / งานศพ ---
+function renderFuneralTab(container) {
+    const activeFuneral = funerals.find(f => f.is_active);
+    container.innerHTML = `
+        <div class="flex flex-col gap-3">
+            <div class="bg-gray-50 p-3 rounded-lg border">
+                <h4 class="font-bold text-xs text-gray-600 mb-2">➕ บันทึกผู้เสียชีวิต (เปิดงานศพ)</h4>
+                <div class="grid grid-cols-2 gap-2 mb-2">
+                    <input type="text" id="fn-first-name" placeholder="ชื่อ" class="border p-2 rounded-lg text-sm">
+                    <input type="text" id="fn-last-name" placeholder="นามสกุล" class="border p-2 rounded-lg text-sm">
+                    <input type="number" id="fn-age" placeholder="อายุ" class="border p-2 rounded-lg text-sm">
+                    <input type="text" id="fn-house" placeholder="บ้านเลขที่" class="border p-2 rounded-lg text-sm">
+                    <div>
+                        <label class="text-[10px] text-gray-400 block">วันเสียชีวิต</label>
+                        <input type="date" id="fn-death-date" class="border p-1.5 rounded-lg text-xs w-full">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-gray-400 block">วันเผา</label>
+                        <input type="date" id="fn-cremation-date" class="border p-1.5 rounded-lg text-xs w-full">
+                    </div>
+                </div>
+                <button onclick="saveFuneralAction()" class="bg-emerald-600 text-white w-full py-2 rounded-lg text-sm font-semibold hover:bg-emerald-700">
+                    เปิดงานศพนี้
+                </button>
+            </div>
+
+            <h4 class="font-bold text-xs text-gray-600 mt-2">📜 ประวัติงานศพ</h4>
+            <div class="max-h-48 overflow-y-auto border rounded-lg divide-y text-xs">
+                ${funerals.length === 0 ? '<p class="p-3 text-center text-gray-400">ยังไม่มีข้อมูล</p>' : ''}
+                ${funerals.slice().reverse().map(f => `
+                    <div class="p-2.5 flex justify-between items-center">
+                        <div>
+                            <div class="font-bold text-gray-800">${f.name} (อายุ ${f.age} ปี)</div>
+                            <div class="text-gray-400">บ้านเลขที่ ${f.houseNo} | เผา: ${f.cremationDate || '-'}</div>
+                        </div>
+                        <div>
+                            ${f.is_active 
+                                ? '<span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold">กำลังเปิด</span>' 
+                                : '<span class="bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">ปิดงานแล้ว</span>'}
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `;
+}
+
+function saveFuneralAction() {
+    const firstName = document.getElementById('fn-first-name').value.trim();
+    const lastName = document.getElementById('fn-last-name').value.trim();
+    const age = document.getElementById('fn-age').value.trim();
+    const houseNo = document.getElementById('fn-house').value.trim();
+    const deathDate = document.getElementById('fn-death-date').value;
+    const cremationDate = document.getElementById('fn-cremation-date').value;
+
+    if (!firstName || !lastName) return alert('กรุณากรอกชื่อ และ นามสกุล ผู้เสียชีวิต');
+
+    // ปิดงานศพเก่าทั้งหมดก่อน
+    funerals.forEach(f => f.is_active = false);
+
+    funerals.push({
+        id: 'F' + Date.now(),
+        name: `${firstName} ${lastName}`,
+        age: age || '-',
+        houseNo: houseNo || '-',
+        deathDate: deathDate || '-',
+        cremationDate: cremationDate || '-',
+        is_active: true
+    });
+
+    saveData('app_funerals', funerals);
+    alert('เปิดรับข้าวสารสำหรับงานศพใหม่เรียบร้อยแล้ว!');
+    openTab('funeral');
+}
+
+// --- [เมนู 3] รับข้าวสารเข้ากลุ่ม ---
+function renderReceiveTab(container) {
+    const activeFuneral = funerals.find(f => f.is_active);
+    if (!activeFuneral) {
+        container.innerHTML = `
+            <div class="text-center py-8">
+                <div class="text-3xl mb-2">⚰️</div>
+                <p class="text-sm font-semibold text-gray-700">ขณะนี้ยังไม่มีงานศพที่เปิดรับ</p>
+                <p class="text-xs text-gray-400 mt-1">กรุณาเปิดงานศพในเมนู "แจ้งเสียชีวิต / งานศพ" ก่อนครับ</p>
+            </div>
+        `;
+        return;
+    }
+
+    const deliveredSet = new Set(
+        deliveries.filter(d => d.funeralId === activeFuneral.id).map(d => d.memberId)
+    );
+
+    container.innerHTML = `
+        <div class="flex flex-col gap-3">
+            <div class="bg-emerald-50 border border-emerald-200 p-2.5 rounded-lg text-xs text-emerald-800 font-medium">
+                📌 งานศพปัจจุบัน: <b>${activeFuneral.name}</b> (ส่งแล้ว ${deliveredSet.size}/${members.length} คน)
+            </div>
+            
+            <input type="text" id="search-member" oninput="filterReceiveList()" placeholder="🔍 ค้นหาชื่อ หรือ บ้านเลขที่..." class="border p-2 rounded-lg text-sm w-full outline-none">
+
+            <div id="receive-list-box" class="max-h-64 overflow-y-auto border rounded-lg divide-y">
+                </div>
+        </div>
+    `;
+    filterReceiveList();
+}
+
+function filterReceiveList() {
+    const activeFuneral = funerals.find(f => f.is_active);
+    if (!activeFuneral) return;
+
+    const query = (document.getElementById('search-member')?.value || '').toLowerCase();
+    const listBox = document.getElementById('receive-list-box');
+    if (!listBox) return;
+
+    const deliveredSet = new Set(
+        deliveries.filter(d => d.funeralId === activeFuneral.id).map(d => d.memberId)
+    );
+
+    const filtered = members.filter(m => 
+        m.name.toLowerCase().includes(query) || m.houseNo.toLowerCase().includes(query)
+    );
+
+    listBox.innerHTML = filtered.map(m => {
+        const isDelivered = deliveredSet.has(m.id);
+        return `
+            <div class="p-2.5 flex justify-between items-center text-sm">
+                <div>
+                    <span class="font-medium ${isDelivered ? 'text-gray-400 line-through' : 'text-gray-800'}">${m.name}</span>
+                    <span class="text-xs text-gray-400 block">บ้านเลขที่ ${m.houseNo}</span>
+                </div>
+                ${isDelivered 
+                    ? '<span class="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded">✓ ส่งแล้ว</span>' 
+                    : `<button onclick="recordDelivery(${m.id})" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg font-semibold">บันทึกรับข้าว</button>`}
+            </div>
+        `;
+    }).join('');
+}
+
+function recordDelivery(memberId) {
+    const activeFuneral = funerals.find(f => f.is_active);
+    if (!activeFuneral) return;
+
+    deliveries.push({
+        funeralId: activeFuneral.id,
+        memberId: memberId,
+        date: new Date().toISOString()
+    });
+
+    saveData('app_deliveries', deliveries);
+    filterReceiveList();
+}
+
+// --- [เมนู 4] คลังข้าวสาร & [เมนู 5] แจ้งเตือนสมาชิก & [เมนู 6] รายงาน ---
+function renderStockTab(container) {
+    container.innerHTML = `
+        <div class="text-center py-6">
+            <div class="text-4xl mb-2">🌾</div>
+            <h4 class="font-bold text-gray-800 text-lg">คลังข้าวสารสะสม</h4>
+            <div class="text-3xl font-bold text-emerald-600 my-2">${deliveries.length} ถุง</div>
+            <p class="text-xs text-gray-500">คำนวณจากยอดการส่งข้าวสารของสมาชิกทุกงานศพ</p>
+        </div>
+    `;
+}
+
+function renderNotifyTab(container) {
+    const activeFuneral = funerals.find(f => f.is_active);
+    let pendingMembers = [];
+
+    if (activeFuneral) {
+        const deliveredSet = new Set(
+            deliveries.filter(d => d.funeralId === activeFuneral.id).map(d => d.memberId)
+        );
+        pendingMembers = members.filter(m => !deliveredSet.has(m.id));
+    }
+
+    container.innerHTML = `
+        <div class="flex flex-col gap-3">
+            <h4 class="font-bold text-xs text-amber-700">⚠️ รายชื่อสมาชิกที่ยังไม่ได้ส่งข้าวสาร (${pendingMembers.length} ราย)</h4>
+            <div class="max-h-60 overflow-y-auto border rounded-lg divide-y text-sm">
+                ${pendingMembers.length === 0 
+                    ? '<p class="p-4 text-center text-emerald-600 font-medium">🎉 สมาชิกทุกคนส่งข้าวสารครบถ้วนแล้ว!</p>' 
+                    : pendingMembers.map(m => `
+                        <div class="p-2 flex justify-between items-center">
+                            <span>${m.name} (บ้านเลขที่ ${m.houseNo})</span>
+                            <span class="text-xs text-amber-600 bg-amber-50 px-2 py-0.5 rounded">ค้างส่ง</span>
+                        </div>
+                    `).join('')}
+            </div>
+        </div>
+    `;
+}
+
+function renderReportTab(container) {
+    container.innerHTML = `
+        <div class="flex flex-col gap-3 text-center py-4">
+            <h4 class="font-bold text-gray-700">📊 สรุปรายงานภาพรวมระบบ</h4>
+            <div class="grid grid-cols-2 gap-2 text-left">
+                <div class="bg-gray-50 p-3 rounded border"><p class="text-xs text-gray-500">งานศพทั้งหมด</p><p class="font-bold text-lg">${funerals.length} งาน</p></div>
+                <div class="bg-gray-50 p-3 rounded border"><p class="text-xs text-gray-500">ข้าวสารรับรวม</p><p class="font-bold text-lg">${deliveries.length} ถุง</p></div>
+            </div>
+            <button onclick="window.print()" class="bg-emerald-700 text-white py-2 rounded-lg text-sm font-semibold mt-2">🖨️ พิมพ์รายงานหน้านี้</button>
+        </div>
+    `;
+}
+
+// สตาร์ทระบบเมื่อเปิดหน้าเว็บ
+document.addEventListener('DOMContentLoaded', updateDashboardStats);
