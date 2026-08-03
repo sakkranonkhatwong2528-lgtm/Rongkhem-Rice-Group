@@ -1,466 +1,321 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>จัดการส่งข้าวสาร - ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg-deep: #09130d;
-      --glass-surface: rgba(18, 38, 27, 0.75);
-      --glass-border: rgba(212, 175, 55, 0.25);
-      --gold-primary: #d4af37;
-      --gold-light: #f3e5ab;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --shadow-premium: 0 20px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    }
 
-    * { box-sizing: border-box; font-family: 'Sarabun', 'Plus Jakarta Sans', sans-serif; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+<meta charset="UTF-8">
 
-    body {
-      background: radial-gradient(circle at 50% 0%, #132e1e 0%, var(--bg-deep) 100%);
-      min-height: 100vh;
-      margin: 0;
-      padding: 30px 15px;
-      color: var(--text-main);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    .container { max-width: 1050px; margin: auto; width: 100%; animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+<title>👥 ทะเบียนสมาชิก</title>
 
-    .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-    .back-btn, .action-btn {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid var(--glass-border);
-      color: var(--text-main);
-      padding: 8px 16px;
-      border-radius: 30px;
-      font-size: 13.5px;
-      font-weight: 600;
-      cursor: pointer;
-      backdrop-filter: blur(10px);
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .back-btn:hover, .action-btn:hover { background: var(--gold-primary); color: #09130d; border-color: var(--gold-primary); }
+<style>
 
-    .header {
-      background: linear-gradient(135deg, rgba(20, 50, 34, 0.9), rgba(10, 25, 17, 0.95));
-      color: white;
-      padding: 25px 30px;
-      border-radius: 20px;
-      margin-bottom: 25px;
-      box-shadow: var(--shadow-premium);
-      border: 1px solid var(--glass-border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 15px;
-    }
-    .header h1 { margin: 0 0 5px 0; font-size: 22px; color: #fff; }
-    .header p { margin: 0; color: var(--gold-light); font-size: 14px; }
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Sarabun',sans-serif;
+}
 
-    /* สรุปสถิติด้านบน */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 15px;
-      margin-bottom: 25px;
-    }
+body{
+background:#eef2f5;
+}
 
-    .stat-card {
-      background: var(--glass-surface);
-      backdrop-filter: blur(15px);
-      border: 1px solid var(--glass-border);
-      border-radius: 16px;
-      padding: 20px;
-      text-align: center;
-      box-shadow: var(--shadow-premium);
-    }
-    .stat-card h4 { margin: 0 0 8px 0; font-size: 14px; color: var(--text-muted); }
-    .stat-card .number { font-size: 26px; font-weight: 700; color: var(--gold-light); margin: 0; }
+.container{
+max-width:1400px;
+margin:auto;
+padding:20px;
+}
 
-    .card {
-      background: var(--glass-surface);
-      backdrop-filter: blur(15px);
-      border-radius: 20px;
-      padding: 25px;
-      box-shadow: var(--shadow-premium);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      margin-bottom: 25px;
-    }
+.header{
+background:linear-gradient(135deg,#0f5132,#198754);
+padding:25px;
+color:#fff;
+border-radius:20px;
+margin-bottom:20px;
+}
 
-    .controls-bar { display: flex; justify-content: space-between; align-items: center; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
+.header h1{
+font-size:34px;
+}
 
-    .filter-group { display: flex; gap: 8px; flex-wrap: wrap; }
-    .filter-btn {
-      background: rgba(10, 20, 14, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      color: var(--text-main);
-      padding: 8px 14px;
-      border-radius: 20px;
-      font-size: 13px;
-      cursor: pointer;
-    }
-    .filter-btn.active, .filter-btn:hover { background: var(--gold-primary); color: #09130d; border-color: var(--gold-primary); font-weight: 600; }
+.card{
+background:#fff;
+padding:20px;
+border-radius:18px;
+box-shadow:0 10px 25px rgba(0,0,0,.08);
+margin-bottom:20px;
+}
 
-    .search-input {
-      background: rgba(10, 20, 14, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      padding: 9px 16px;
-      border-radius: 30px;
-      color: var(--text-main);
-      font-size: 13.5px;
-      outline: none;
-      width: 100%;
-      max-width: 280px;
-    }
-    .search-input:focus { border-color: var(--gold-primary); }
+.row{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:15px;
+}
 
-    .btn-primary {
-      background: linear-gradient(135deg, #d4af37, #aa8c2c);
-      color: #09130d;
-      border: none;
-      padding: 9px 18px;
-      border-radius: 30px;
-      font-weight: 700;
-      cursor: pointer;
-      font-size: 13.5px;
-    }
-    .btn-primary:hover { background: linear-gradient(135deg, #e6c555, #d4af37); }
+input{
+padding:14px;
+border:1px solid #ddd;
+border-radius:10px;
+width:100%;
+}
 
-    .table-container { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; text-align: left; }
-    th { background: rgba(10, 20, 14, 0.8); color: var(--gold-light); padding: 14px 16px; font-size: 13.5px; border-bottom: 1px solid var(--glass-border); }
-    td { padding: 14px 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-size: 13.5px; }
-    tr:hover td { background: rgba(255, 255, 255, 0.02); }
+button{
+padding:13px 20px;
+border:none;
+border-radius:10px;
+cursor:pointer;
+font-weight:bold;
+}
 
-    /* ป้ายสถานะการส่งข้าว */
-    .badge-sent { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); padding: 5px 12px; border-radius: 20px; font-weight: 600; font-size: 12px; cursor: pointer; }
-    .badge-notsent { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); padding: 5px 12px; border-radius: 20px; font-weight: 600; font-size: 12px; cursor: pointer; }
-    .badge-sent:hover, .badge-notsent:hover { opacity: 0.8; transform: scale(1.05); }
+.btn-save{
+background:#198754;
+color:#fff;
+}
 
-    .badge-status { padding: 4px 10px; border-radius: 15px; font-size: 11.5px; font-weight: 600; display: inline-block; background: rgba(255,255,255,0.08); color: var(--text-muted); }
+.btn-clear{
+background:#dc3545;
+color:#fff;
+}
 
-    .btn-action { background: none; border: none; cursor: pointer; font-size: 13px; font-weight: 600; padding: 4px 8px; border-radius: 6px; margin-right: 4px; }
-    .btn-edit { color: #60a5fa; background: rgba(96, 165, 250, 0.1); }
-    .btn-del { color: #f87171; background: rgba(248, 113, 113, 0.1); }
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+}
 
-    .modal { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 100; }
-    .modal.active { display: flex; }
-    .modal-content { background: #11261b; border: 1px solid var(--glass-border); border-radius: 24px; width: 100%; max-width: 450px; padding: 30px; box-shadow: var(--shadow-premium); }
-    .modal-content h3 { margin-top: 0; color: var(--gold-light); font-size: 20px; margin-bottom: 20px; }
+th{
+background:#198754;
+color:#fff;
+padding:14px;
+}
 
-    .form-group { margin-bottom: 15px; }
-    .form-group label { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 6px; }
-    .form-control { width: 100%; background: rgba(10, 20, 14, 0.8); border: 1px solid rgba(255, 255, 255, 0.15); padding: 10px 14px; border-radius: 12px; color: var(--text-main); font-size: 14px; outline: none; }
-    .form-control:focus { border-color: var(--gold-primary); }
+td{
+padding:12px;
+border-bottom:1px solid #eee;
+}
 
-    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 25px; }
-    .btn-secondary { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: var(--text-main); padding: 9px 16px; border-radius: 30px; font-weight: 600; cursor: pointer; }
+tr:hover{
+background:#f5fff8;
+}
 
-    .footer { background: rgba(10, 20, 14, 0.6); backdrop-filter: blur(15px); color: var(--text-muted); padding: 20px; border-radius: 16px; text-align: center; font-size: 13px; border: 1px solid rgba(255, 255, 255, 0.05); }
+.action button{
 
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-  </style>
+margin-right:5px;
+
+}
+
+</style>
+
 </head>
+
 <body>
 
 <div class="container">
 
-  <div class="top-bar">
-    <a href="แดชบอร์ด.html" class="back-btn">⬅️ กลับหน้าหลัก</a>
-    <div style="display: flex; gap: 8px;">
-      <button onclick="exportData()" class="action-btn">📥 สำรองข้อมูล</button>
-      <label class="action-btn" style="cursor: pointer;">
-        📤 กู้คืน <input type="file" id="importFile" accept=".json" onchange="importData(event)" style="display: none;">
-      </label>
-    </div>
-  </div>
+<div class="header">
 
-  <div class="header">
-    <div>
-      <h1>🌾 บันทึกการส่งข้าวสารประจำงวด</h1>
-      <p>ตรวจสอบครัวเรือนที่นำส่งแล้ว และติดตามผู้ที่ยังไม่ส่ง</p>
-    </div>
-    <button onclick="openModal()" class="btn-primary">➕ เพิ่มสมาชิกใหม่</button>
-  </div>
+<h1>
 
-  <!-- กล่องแสดงสถิติมุมมองด่วน -->
-  <div class="stats-grid">
-    <div class="stat-card">
-      <h4>สมาชิกทั้งหมด</h4>
-      <p class="number" id="statTotal">0</p>
-    </div>
-    <div class="stat-card">
-      <h4>✅ นำส่งข้าวแล้ว</h4>
-      <p class="number" id="statSent" style="color: #4ade80;">0</p>
-    </div>
-    <div class="stat-card">
-      <h4>❌ ยังไม่นำส่ง</h4>
-      <p class="number" id="statNotSent" style="color: #f87171;">0</p>
-    </div>
-  </div>
+👥 ทะเบียนสมาชิก
 
-  <div class="card">
-    <div class="controls-bar">
-      <!-- ปุ่มกรองข้อมูล -->
-      <div class="filter-group">
-        <button class="filter-btn active" onclick="setFilter('all', this)">ทั้งหมด</button>
-        <button class="filter-btn" onclick="setFilter('sent', this)">✅ ส่งแล้ว</button>
-        <button class="filter-btn" onclick="setFilter('notsent', this)">❌ ยังไม่ส่ง</button>
-      </div>
+</h1>
 
-      <input type="text" id="searchInput" onkeyup="filterMembers()" placeholder="🔍 ค้นหาบ้านเลขที่ หรือชื่อ..." class="search-input">
-    </div>
+<p>
 
-    <div class="table-container">
-      <table>
-        <thead>
-          <tr>
-            <th style="width: 70px;">ลำดับ</th>
-            <th style="width: 100px;">บ้านเลขที่</th>
-            <th>ชื่อ - นามสกุล</th>
-            <th style="width: 130px;">สถานะครัวเรือน</th>
-            <th style="width: 150px; text-align: center;">สถานะส่งข้าวสาร</th>
-            <th style="text-align: center; width: 110px;">จัดการ</th>
-          </tr>
-        </thead>
-        <tbody id="memberTableBody"></tbody>
-      </table>
-    </div>
-  </div>
+กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
+
+</p>
 
 </div>
 
-<!-- Modal เพิ่ม/แก้ไข -->
-<div id="memberModal" class="modal">
-  <div class="modal-content">
-    <h3 id="modalTitle">เพิ่มสมาชิกใหม่</h3>
-    <form id="memberForm" onsubmit="saveMember(event)">
-      <input type="hidden" id="memberIndex">
-      <div class="form-group">
-        <label>บ้านเลขที่</label>
-        <input type="text" id="houseNo" required class="form-control" placeholder="เช่น 1 หรือ 91/1">
-      </div>
-      <div class="form-group">
-        <label>ชื่อ (รวมคำนำหน้า)</label>
-        <input type="text" id="firstName" required class="form-control" placeholder="เช่น นายศักรนนทน์">
-      </div>
-      <div class="form-group">
-        <label>นามสกุล</label>
-        <input type="text" id="lastName" required class="form-control" placeholder="เช่น ขัติย์วงศ์">
-      </div>
-      <div class="form-group">
-        <label>สถานะครัวเรือนทั่วไป</label>
-        <select id="status" class="form-control">
-          <option value="ปกติ">ปกติ</option>
-          <option value="ค้าง 1 ครั้ง">ค้าง 1 ครั้ง</option>
-          <option value="ตัดสิทธิ์">ตัดสิทธิ์</option>
-        </select>
-      </div>
-      <div class="modal-actions">
-        <button type="button" onclick="closeModal()" class="btn-secondary">ยกเลิก</button>
-        <button type="submit" class="btn-primary">บันทึกข้อมูล</button>
-      </div>
-    </form>
-  </div>
+<div class="card">
+
+<h2>
+
+เพิ่มสมาชิก
+
+</h2>
+
+<br>
+
+<div class="row">
+
+<input
+id="memberHouse"
+placeholder="บ้านเลขที่">
+
+<input
+id="memberName"
+placeholder="ชื่อ-สกุล">
+
+<input
+id="memberPhone"
+placeholder="เบอร์โทร">
+
+<div>
+
+<button
+class="btn-save"
+onclick="addMember()">
+
+💾 บันทึก
+
+</button>
+
+<button
+class="btn-clear"
+onclick="clearMemberForm()">
+
+ล้าง
+
+</button>
+
 </div>
 
-<div class="footer container">
-  <div><strong>ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</strong></div>
-  <div style="margin-top: 4px; opacity: 0.8;">พัฒนาโดย นายศักรนนทน์ ขัติย์วงศ์ (ผู้ใหญ่บ้าน)</div>
 </div>
+
+</div>
+
+<div class="card">
+
+<input
+
+id="searchMember"
+
+placeholder="🔍 ค้นหาสมาชิก"
+
+onkeyup="searchMember()">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>ลำดับ</th>
+
+<th>บ้านเลขที่</th>
+
+<th>ชื่อ</th>
+
+<th>โทรศัพท์</th>
+
+<th>ส่งแล้ว</th>
+
+<th>ค้างส่ง</th>
+
+<th>จัดการ</th>
+
+</tr>
+
+</thead>
+
+<tbody id="memberTable">
+
+</tbody>
+
+</table>
+  </div>
+
+<a href="index.html"
+style="
+display:block;
+text-align:center;
+margin-top:25px;
+text-decoration:none;
+font-weight:bold;
+color:#666;
+">
+
+🏠 กลับหน้าหลัก
+
+</a>
+
+</div>
+
+<!-- Modal QR -->
+
+<div id="qrModal"
+style="
+display:none;
+position:fixed;
+left:0;
+top:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.6);
+z-index:999;
+">
+
+<div
+style="
+background:#fff;
+width:350px;
+margin:60px auto;
+padding:20px;
+border-radius:15px;
+text-align:center;
+">
+
+<h2>
+
+📱 QR Code สมาชิก
+
+</h2>
+
+<br>
+
+<div id="qrcode"></div>
+
+<br>
+
+<button
+class="btn-save"
+onclick="printQR()">
+
+🖨️ พิมพ์
+
+</button>
+
+<button
+class="btn-clear"
+onclick="closeQR()">
+
+ปิด
+
+</button>
+
+</div>
+
+</div>
+
+<script src="js/app.js"></script>
+
+<script src="js/members.js"></script>
+
+<script src="js/qr.js"></script>
 
 <script>
-  // โหลดข้อมูล (เพิ่มฟิลด์ riceStatus: 'sent' หรือ 'notsent' สำหรับเช็คการส่งข้าว)
-  let members = JSON.parse(localStorage.getItem('rongkhem_members_rice')) || [
-      { house: "1", firstName: "นายศักรนนทน์", lastName: "ขัติย์วงศ์", status: "ปกติ", riceStatus: "sent" },
-      { house: "91/1", firstName: "นายวุฒิภัทร", lastName: "เตชะวงค์", status: "ค้าง 1 ครั้ง", riceStatus: "notsent" },
-      { house: "114", firstName: "นายต่วน", lastName: "ทาทอง", status: "ค้าง 1 ครั้ง", riceStatus: "notsent" },
-      { house: "120", firstName: "นายประหยัด", lastName: "ปิงเมือง", status: "ตัดสิทธิ์", riceStatus: "notsent" }
-  ];
 
-  let currentFilter = 'all';
+window.onload=function(){
 
-  function saveToStorage() { localStorage.setItem('rongkhem_members_rice', JSON.stringify(members)); }
+loadMembers();
 
-  function updateStats() {
-      const total = members.length;
-      const sent = members.filter(m => m.riceStatus === 'sent').length;
-      const notSent = total - sent;
+}
 
-      document.getElementById('statTotal').innerText = total;
-      document.getElementById('statSent').innerText = sent;
-      document.getElementById('statNotSent').innerText = notSent;
-  }
+function closeQR(){
 
-  function renderTable(data = members) {
-      const tbody = document.getElementById('memberTableBody');
-      tbody.innerHTML = '';
-      updateStats();
+document.getElementById("qrModal").style.display="none";
 
-      if(data.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 30px;">ไม่พบข้อมูลสมาชิกในเงื่อนไขนี้</td></tr>`;
-          return;
-      }
+}
 
-      data.forEach((member, index) => {
-          // หา index จริงในอาเรย์หลัก เพื่อเวลาคลิกจะได้แก้ถูกตัว
-          const realIndex = members.findIndex(m => m === member);
-
-          let riceBadge = member.riceStatus === 'sent' 
-              ? `<span class="badge-sent" onclick="toggleRiceStatus(${realIndex})">✅ ส่งแล้ว (คลิกเปลี่ยน)</span>` 
-              : `<span class="badge-notsent" onclick="toggleRiceStatus(${realIndex})">❌ ยังไม่ส่ง (คลิกเปลี่ยน)</span>`;
-
-          tbody.innerHTML += `
-              <tr>
-                  <td style="color: var(--text-muted);">${index + 1}</td>
-                  <td style="font-weight: 600; color: var(--gold-light);">${member.house}</td>
-                  <td>${member.firstName} ${member.lastName}</td>
-                  <td><span class="badge-status">${member.status}</span></td>
-                  <td style="text-align: center;">${riceBadge}</td>
-                  <td style="text-align: center;">
-                      <button onclick="editMember(${realIndex})" class="btn-action btn-edit">แก้ไข</button>
-                      <button onclick="deleteMember(${realIndex})" class="btn-action btn-del">ลบ</button>
-                  </td>
-              </tr>
-          `;
-      });
-  }
-
-  // กดสลับสถานะส่งข้าวทันทีจากตาราง
-  function toggleRiceStatus(index) {
-      members[index].riceStatus = members[index].riceStatus === 'sent' ? 'notsent' : 'sent';
-      saveToStorage();
-      applyFilterAndSearch();
-  }
-
-  function setFilter(filterType, btnElement) {
-      currentFilter = filterType;
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btnElement.classList.add('active');
-      applyFilterAndSearch();
-  }
-
-  function filterMembers() {
-      applyFilterAndSearch();
-  }
-
-  function applyFilterAndSearch() {
-      const keyword = document.getElementById('searchInput').value.toLowerCase();
-      
-      let filtered = members.filter(m => {
-          const matchKeyword = m.house.toLowerCase().includes(keyword) || 
-                               m.firstName.toLowerCase().includes(keyword) || 
-                               m.lastName.toLowerCase().includes(keyword);
-          
-          if (currentFilter === 'sent') return matchKeyword && m.riceStatus === 'sent';
-          if (currentFilter === 'notsent') return matchKeyword && m.riceStatus === 'notsent';
-          return matchKeyword;
-      });
-
-      renderTable(filtered);
-  }
-
-  function openModal() {
-      document.getElementById('modalTitle').innerText = 'เพิ่มสมาชิกใหม่';
-      document.getElementById('memberForm').reset();
-      document.getElementById('memberIndex').value = '';
-      document.getElementById('memberModal').classList.add('active');
-  }
-
-  function closeModal() { document.getElementById('memberModal').classList.remove('active'); }
-
-  function saveMember(event) {
-      event.preventDefault();
-      const index = document.getElementById('memberIndex').value;
-      const house = document.getElementById('houseNo').value;
-      const firstName = document.getElementById('firstName').value;
-      const lastName = document.getElementById('lastName').value;
-      const status = document.getElementById('status').value;
-
-      if (index === '') { 
-          members.push({ house, firstName, lastName, status, riceStatus: 'notsent' }); 
-      } else { 
-          members[index].house = house;
-          members[index].firstName = firstName;
-          members[index].lastName = lastName;
-          members[index].status = status;
-      }
-
-      saveToStorage();
-      applyFilterAndSearch();
-      closeModal();
-  }
-
-  function editMember(index) {
-      const m = members[index];
-      document.getElementById('modalTitle').innerText = 'แก้ไขข้อมูลสมาชิก';
-      document.getElementById('memberIndex').value = index;
-      document.getElementById('houseNo').value = m.house;
-      document.getElementById('firstName').value = m.firstName;
-      document.getElementById('lastName').value = m.lastName;
-      document.getElementById('status').value = m.status;
-      document.getElementById('memberModal').classList.add('active');
-  }
-
-  function deleteMember(index) {
-      if(confirm('ท่านผู้ใหญ่ต้องการลบสมาชิกลำดับที่ ' + (index + 1) + ' ใช่หรือไม่?')) {
-          members.splice(index, 1);
-          saveToStorage();
-          applyFilterAndSearch();
-      }
-  }
-
-  function exportData() {
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(members, null, 2));
-      const downloadAnchor = document.createElement('a');
-      downloadAnchor.setAttribute("href", dataStr);
-      downloadAnchor.setAttribute("download", "backup_rice_rongkhem.json");
-      document.body.appendChild(downloadAnchor);
-      downloadAnchor.click();
-      downloadAnchor.remove();
-  }
-
-  function importData(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(e) {
-          try {
-              members = JSON.parse(e.target.result);
-              saveToStorage();
-              applyFilterAndSearch();
-              alert('กู้คืนข้อมูลสำเร็จ!');
-          } catch (err) { alert('ไฟล์ไม่ถูกต้อง'); }
-      };
-      reader.readAsText(file);
-  }
-
-  applyFilterAndSearch();
 </script>
 
 </body>
+
 </html>
-<div id="qrcode"></div>
 
-<button onclick="printQR()">
-
-🖨️ พิมพ์ QR
-
-</button>
-
-<button onclick="downloadQR()">
-
-📥 ดาวน์โหลด QR
-
-</button>
+</div>
