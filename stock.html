@@ -1,158 +1,343 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>คลังข้าวสาร - กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
-  <style>
-    body { font-family: 'Sarabun', sans-serif; background-color: #f4f7f6; margin: 0; padding: 15px; color: #333; }
-    .container { max-width: 800px; margin: auto; }
-    .header { background: #2c3e50; color: white; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 20px; }
-    
-    /* สรุปยอดคลัง */
-    .stock-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
-    .stock-card { background: white; padding: 15px; border-radius: 10px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-    .stock-card h3 { margin: 0; font-size: 24px; }
-    .stock-card p { margin: 5px 0 0 0; color: #7f8c8d; font-size: 13px; }
 
-    /* ฟอร์มเบิก-จ่าย */
-    .card { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-    .card h3 { margin-top: 0; color: #2c3e50; border-bottom: 2px solid #ecf0f1; padding-bottom: 10px; }
+<meta charset="UTF-8">
 
-    .form-group { margin-bottom: 15px; }
-    .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
-    .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    .btn { padding: 10px 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; font-size: 15px; }
-    .btn-primary { background: #27ae60; color: white; }
-    .btn-primary:hover { background: #219150; }
+<title>🌾 คลังข้าวสาร</title>
 
-    /* ประวัติรายการ */
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-    th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; font-size: 14px; }
-    th { background: #f8f9fa; color: #2c3e50; }
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-    .badge-in { color: #27ae60; font-weight: bold; }
-    .badge-out { color: #e74c3c; font-weight: bold; }
+<style>
 
-    .btn-back { display: block; text-align: center; margin-top: 20px; color: #7f8c8d; text-decoration: none; font-weight: bold; }
-  </style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Sarabun',sans-serif;
+}
+
+body{
+background:#eef2f5;
+}
+
+.container{
+max-width:1200px;
+margin:auto;
+padding:20px;
+}
+
+.header{
+
+background:linear-gradient(135deg,#0f5132,#198754);
+
+color:#fff;
+
+padding:25px;
+
+border-radius:20px;
+
+margin-bottom:20px;
+
+}
+
+.grid{
+
+display:grid;
+
+grid-template-columns:repeat(4,1fr);
+
+gap:20px;
+
+margin-bottom:20px;
+
+}
+
+.card{
+
+background:#fff;
+
+padding:20px;
+
+border-radius:15px;
+
+box-shadow:0 8px 20px rgba(0,0,0,.08);
+
+text-align:center;
+
+}
+
+.card h2{
+
+font-size:18px;
+
+margin-bottom:10px;
+
+}
+
+.number{
+
+font-size:40px;
+
+font-weight:bold;
+
+color:#198754;
+
+}
+
+table{
+
+width:100%;
+
+border-collapse:collapse;
+
+background:#fff;
+
+border-radius:15px;
+
+overflow:hidden;
+
+}
+
+th{
+
+background:#198754;
+
+color:#fff;
+
+padding:15px;
+
+}
+
+td{
+
+padding:12px;
+
+border-bottom:1px solid #eee;
+
+}
+
+.btn{
+
+padding:12px 18px;
+
+border:none;
+
+border-radius:10px;
+
+cursor:pointer;
+
+font-weight:bold;
+
+margin:5px;
+
+}
+
+.btn-green{
+
+background:#198754;
+
+color:white;
+
+}
+
+.btn-red{
+
+background:#dc3545;
+
+color:white;
+
+}
+
+</style>
+
 </head>
+
 <body>
 
 <div class="container">
-  <div class="header">
-    <h2 style="margin: 0;">📦 บัญชีคลังข้าวสาร</h2>
-    <small>กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</small>
-  </div>
 
-  <!-- ยอดสรุปคลังข้าว -->
-  <div class="stock-summary">
-    <div class="stock-card" style="border-top: 4px solid #27ae60;">
-      <h3 style="color: #27ae60;">182 ถัง</h3>
-      <p>รับเข้าทั้งหมด</p>
-    </div>
-    <div class="stock-card" style="border-top: 4px solid #e74c3c;">
-      <h3 style="color: #e74c3c;">180 ถัง</h3>
-      <p>จ่ายออกงานศพ</p>
-    </div>
-    <div class="stock-card" style="border-top: 4px solid #f39c12;">
-      <h3 style="color: #f39c12;">2 ถัง</h3>
-      <p>คงเหลือในคลัง</p>
-    </div>
-  </div>
+<div class="header">
 
-  <!-- บันทึกรายการ เบิก/จ่าย -->
-  <div class="card">
-    <h3>➕ บันทึกการรับเข้า - เบิกจ่ายข้าวสาร</h3>
-    <form id="stockForm">
-      <div class="form-group">
-        <label>ประเภทรายการ</label>
-        <select id="type">
-          <option value="in">🌾 รับข้าวสารเข้าคลัง (จากการจัดเก็บสมาชิก)</option>
-          <option value="out">⚰️ เบิกจ่ายช่วยเหลือ (งานศพ)</option>
-        </select>
-      </div>
+<h1>
 
-      <div class="form-group">
-        <label>จำนวน (ถัง)</label>
-        <input type="number" id="amount" placeholder="ระบุจำนวนถัง" required min="1">
-      </div>
+🌾 คลังข้าวสาร
 
-      <div class="form-group">
-        <label>รายละเอียด / หมายเหตุ</label>
-        <input type="text" id="note" placeholder="เช่น งานศพ นายเกษมสุข ใฝ่ใจ" required>
-      </div>
+</h1>
 
-      <button type="button" class="btn btn-primary" onclick="addTransaction()">บันทึกรายการ</button>
-    </form>
-  </div>
+<p>
 
-  <!-- ประวัติการทำรายการ -->
-  <div class="card">
-    <h3>📜 ประวัติการรับเข้า - เบิกจ่ายล่าสุด</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>วันที่</th>
-          <th>รายการ</th>
-          <th>รายละเอียด</th>
-          <th>จำนวน</th>
-        </tr>
-      </thead>
-      <tbody id="historyTable">
-        <tr>
-          <td>02/08/2569</td>
-          <td><span class="badge-out">จ่ายออก</span></td>
-          <td>มอบเจ้าภาพ งานศพ นายเกษมสุข ใฝ่ใจ</td>
-          <td style="color:red; font-weight:bold;">-180 ถัง</td>
-        </tr>
-        <tr>
-          <td>01/08/2569</td>
-          <td><span class="badge-in">รับเข้า</span></td>
-          <td>รับจากสมาชิก (182 ราย)</td>
-          <td style="color:green; font-weight:bold;">+182 ถัง</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
 
-  <a href="index.html" class="btn-back">← กลับหน้าหลัก</a>
+</p>
+
 </div>
 
-<script>
-  function addTransaction() {
-    const type = document.getElementById('type').value;
-    const amount = document.getElementById('amount').value;
-    const note = document.getElementById('note').value;
+<div class="grid">
 
-    if(!amount || !note) {
-      alert('กรุณากรอกข้อมูลให้ครบถ้วน');
-      return;
-    }
+<div class="card">
 
-    const table = document.getElementById('historyTable');
-    const newRow = table.insertRow(0);
+<h2>
 
-    const today = new Date();
-    const dateStr = today.getDate().toString().padStart(2, '0') + '/' + 
-                    (today.getMonth()+1).toString().padStart(2, '0') + '/' + 
-                    (today.getFullYear() + 543);
+รับเข้าทั้งหมด
 
-    const typeBadge = type === 'in' ? '<span class="badge-in">รับเข้า</span>' : '<span class="badge-out">จ่ายออก</span>';
-    const amountText = type === 'in' ? `<span style="color:green; font-weight:bold;">+${amount} ถัง</span>` : `<span style="color:red; font-weight:bold;">-${amount} ถัง</span>`;
+</h2>
 
-    newRow.innerHTML = `
-      <td>${dateStr}</td>
-      <td>${typeBadge}</td>
-      <td>${note}</td>
-      <td>${amountText}</td>
-    `;
+<div
 
-    alert('บันทึกรายการสำเร็จ!');
-    document.getElementById('stockForm').reset();
-  }
-</script>
+class="number"
+
+id="totalRice">
+
+0
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>
+
+จ่ายออก
+
+</h2>
+
+<div
+
+class="number"
+
+id="outRice">
+
+0
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>
+
+คงเหลือ
+
+</h2>
+
+<div
+
+class="number"
+
+id="stockRice">
+
+0
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>
+
+งานศพ
+
+</h2>
+
+<div
+
+class="number"
+
+id="funeralCount">
+
+0
+
+</div>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<button
+
+class="btn btn-green"
+
+onclick="addStock()">
+
+📥 รับเข้าคลัง
+
+</button>
+
+<button
+
+class="btn btn-red"
+
+onclick="outStock()">
+
+📤 เบิกออก
+
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>
+
+ประวัติคลังข้าวสาร
+
+</h2>
+
+<br>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>วันที่</th>
+
+<th>รายการ</th>
+
+<th>จำนวน</th>
+
+<th>คงเหลือ</th>
+
+</tr>
+
+</thead>
+
+<tbody id="stockTable">
+
+</tbody>
+
+</table>
+
+</div>
+</div>
+
+<a href="index.html"
+style="
+display:block;
+margin-top:25px;
+text-align:center;
+text-decoration:none;
+font-weight:bold;
+color:#666;
+">
+
+🏠 กลับหน้าหลัก
+
+</a>
+
+</div>
+
+<script src="js/app.js"></script>
+<script src="js/stock.js"></script>
 
 </body>
 </html>
