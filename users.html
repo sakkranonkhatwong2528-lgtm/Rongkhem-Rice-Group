@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,initial-scale=1.0">
+
+<title>👤 ผู้ใช้งานระบบ</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Sarabun,sans-serif;
+}
+
+body{
+background:#eef2f5;
+}
+
+.container{
+max-width:1200px;
+margin:auto;
+padding:20px;
+}
+
+.header{
+
+background:linear-gradient(135deg,#0f5132,#198754);
+
+padding:25px;
+
+border-radius:20px;
+
+color:white;
+
+margin-bottom:20px;
+
+}
+
+.card{
+
+background:white;
+
+padding:20px;
+
+border-radius:15px;
+
+margin-bottom:20px;
+
+box-shadow:0 8px 20px rgba(0,0,0,.08);
+
+}
+
+.grid{
+
+display:grid;
+
+grid-template-columns:repeat(4,1fr);
+
+gap:15px;
+
+}
+
+input,select{
+
+width:100%;
+
+padding:12px;
+
+border:1px solid #ddd;
+
+border-radius:10px;
+
+}
+
+button{
+
+padding:12px 20px;
+
+border:none;
+
+border-radius:10px;
+
+cursor:pointer;
+
+font-weight:bold;
+
+}
+
+.btn-save{
+
+background:#198754;
+
+color:white;
+
+}
+
+.btn-delete{
+
+background:#dc3545;
+
+color:white;
+
+}
+
+table{
+
+width:100%;
+
+border-collapse:collapse;
+
+margin-top:20px;
+
+}
+
+th{
+
+background:#198754;
+
+color:white;
+
+padding:14px;
+
+}
+
+td{
+
+padding:12px;
+
+border-bottom:1px solid #eee;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+
+<h1>
+
+👤 ผู้ใช้งานระบบ
+
+</h1>
+
+<p>
+
+จัดการบัญชีผู้ใช้งาน
+
+</p>
+
+</div>
+
+<div class="card">
+
+<div class="grid">
+
+<input
+id="userName"
+placeholder="ชื่อผู้ใช้">
+
+<input
+id="userPassword"
+placeholder="รหัสผ่าน">
+
+<input
+id="fullName"
+placeholder="ชื่อ-สกุล">
+
+<select id="role">
+
+<option value="admin">
+
+ผู้ดูแลระบบ
+
+</option>
+
+<option value="committee">
+
+คณะกรรมการ
+
+</option>
+
+<option value="member">
+
+สมาชิก
+
+</option>
+
+</select>
+
+</div>
+
+<br>
+
+<button
+
+class="btn-save"
+
+onclick="addUser()">
+
+➕ เพิ่มผู้ใช้
+
+</button>
+
+</div>
+
+<div class="card">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>ชื่อผู้ใช้</th>
+
+<th>ชื่อ</th>
+
+<th>สิทธิ์</th>
+
+<th>จัดการ</th>
+
+</tr>
+
+</thead>
+
+<tbody id="userTable">
+
+</tbody>
+
+</table>
+
+</div>
+</div>
+
+<a href="index.html"
+style="
+display:block;
+text-align:center;
+margin-top:25px;
+text-decoration:none;
+font-weight:bold;
+color:#666;
+">
+
+🏠 กลับหน้าหลัก
+
+</a>
+
+</div>
+
+<script src="js/app.js"></script>
+<script src="js/users.js"></script>
+
+</body>
+</html>
