@@ -6,10 +6,16 @@
     <title>ระบบฌาปนกิจสงเคราะห์ข้าวสาร</title>
     <!-- โหลด Tailwind CSS ผ่าน CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- โหลด Font Prompt จาก Google Fonts ให้หน้าเว็บดูสวยงาม -->
+    <!-- โหลด Font Prompt จาก Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Prompt', sans-serif; }
+        /* สไตล์สำหรับซ่อนส่วนเมนูเวลากดพิมพ์เอกสาร A4 */
+        @media print {
+            header, aside, .no-print { display: none !important; }
+            main { width: 100% !important; margin: 0 !important; padding: 0 !important; }
+            .print-only { display: block !important; }
+        }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen text-gray-800">
@@ -31,19 +37,19 @@
         <!-- Sidebar เมนูด้านข้าง -->
         <aside class="w-full md:w-64 bg-white p-4 rounded-xl shadow-sm h-fit">
             <nav class="flex flex-col gap-2">
-                <button class="w-full text-left px-4 py-3 rounded-lg bg-emerald-50 text-emerald-700 font-semibold border-l-4 border-emerald-600 flex items-center gap-2">
+                <button onclick="switchTab('dashboard')" id="btn-dashboard" class="menu-btn w-full text-left px-4 py-3 rounded-lg bg-emerald-50 text-emerald-700 font-semibold border-l-4 border-emerald-600 flex items-center gap-2">
                     📊 สรุปภาพรวม
                 </button>
-                <button class="w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 text-gray-600 transition flex items-center gap-2">
+                <button onclick="switchTab('record')" id="btn-record" class="menu-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 text-gray-600 transition flex items-center gap-2">
                     🌾 บันทึกรับข้าวสาร
                 </button>
-                <button class="w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 text-gray-600 transition flex items-center gap-2">
+                <button onclick="switchTab('funeral')" id="btn-funeral" class="menu-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 text-gray-600 transition flex items-center gap-2">
                     🕊️ จัดการงานศพ
                 </button>
-                <button class="w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 text-gray-600 transition flex items-center gap-2">
+                <button onclick="switchTab('tracking')" id="btn-tracking" class="menu-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 text-gray-600 transition flex items-center gap-2">
                     ⚠️ สมาชิกที่ต้องติดตาม
                 </button>
-                <button class="w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 text-gray-600 transition flex items-center gap-2">
+                <button onclick="switchTab('members')" id="btn-members" class="menu-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 text-gray-600 transition flex items-center gap-2">
                     👥 ทะเบียนสมาชิก
                 </button>
             </nav>
@@ -52,73 +58,411 @@
         <!-- Main Content Area (พื้นที่แสดงเนื้อหาหลัก) -->
         <main class="flex-1 flex flex-col gap-6">
 
-            <!-- 1. แบนเนอร์แจ้งงานศพปัจจุบัน -->
-            <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-xl shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-                <div>
-                    <div class="flex items-center gap-2 text-amber-800 font-bold text-lg">
-                        <span>🕊️ งานศพปัจจุบัน:</span>
-                        <span>นายเกษมสุข ใฝ่ใจ</span>
+            <!-- ==================== 1. เมนู: สรุปภาพรวม (Dashboard) ==================== -->
+            <div id="tab-dashboard" class="tab-content flex flex-col gap-6">
+                <!-- แบนเนอร์แจ้งงานศพปัจจุบัน -->
+                <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-xl shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                    <div>
+                        <div class="flex items-center gap-2 text-amber-800 font-bold text-lg">
+                            <span>🕊️ งานศพปัจจุบัน:</span>
+                            <span id="dash-deceased-name">นายเกษมสุข ใฝ่ใจ</span>
+                        </div>
+                        <p class="text-sm text-amber-700 mt-1">
+                            📅 วันฌาปนกิจ: <span id="dash-funeral-date">10 สิงหาคม 2026</span>
+                        </p>
                     </div>
-                    <p class="text-sm text-amber-700 mt-1">
-                        📅 วันฌาปนกิจ: 10 สิงหาคม 2026
-                    </p>
+                    <span id="dash-status-badge" class="inline-block bg-amber-200 text-amber-800 text-xs px-3 py-1 rounded-full font-medium">
+                        กำลังเปิดรับบันทึก
+                    </span>
                 </div>
-                <span class="inline-block bg-amber-200 text-amber-800 text-xs px-3 py-1 rounded-full font-medium">
-                    กำลังเปิดรับบันทึก
-                </span>
+
+                <!-- การ์ดสรุปยอดอัตโนมัติ -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-500 font-medium">สมาชิกทั้งหมด</p>
+                            <h3 class="text-2xl font-bold text-gray-800 mt-1"><span id="stat-total-members">0</span> <span class="text-sm font-normal text-gray-500">คน</span></h3>
+                        </div>
+                        <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center text-xl font-bold">👥</div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-500 font-medium">ส่งข้าวสารแล้ว</p>
+                            <h3 class="text-2xl font-bold text-emerald-600 mt-1"><span id="stat-delivered">0</span> <span class="text-sm font-normal text-gray-500">ถุง</span></h3>
+                        </div>
+                        <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center text-xl font-bold">✓</div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-500 font-medium">จำนวนค้างส่ง</p>
+                            <h3 class="text-2xl font-bold text-rose-500 mt-1"><span id="stat-pending">0</span> <span class="text-sm font-normal text-gray-500">คน</span></h3>
+                        </div>
+                        <div class="w-12 h-12 bg-rose-50 text-rose-500 rounded-full flex items-center justify-center text-xl font-bold">⏳</div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-500 font-medium">ติดตามสะสม (≥2 งาน)</p>
+                            <h3 class="text-2xl font-bold text-amber-600 mt-1"><span id="stat-tracking">0</span> <span class="text-sm font-normal text-gray-500">คน</span></h3>
+                        </div>
+                        <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-full flex items-center justify-center text-xl font-bold">🔴</div>
+                    </div>
+                </div>
             </div>
 
-            <!-- 2. การ์ดสรุปยอดอัตโนมัติ (Dashboard Cards) -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                
-                <!-- Card 1: สมาชิกทั้งหมด -->
-                <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
-                    <div>
-                        <p class="text-sm text-gray-500 font-medium">สมาชิกทั้งหมด</p>
-                        <h3 class="text-2xl font-bold text-gray-800 mt-1">150 <span class="text-sm font-normal text-gray-500">คน</span></h3>
+            <!-- ==================== 2. เมนู: บันทึกรับข้าวสาร ==================== -->
+            <div id="tab-record" class="tab-content hidden flex-col gap-4">
+                <div class="bg-white p-5 rounded-xl shadow-sm flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <div class="w-full sm:w-1/2">
+                        <input type="text" id="search-input" onkeyup="filterMembers()" placeholder="🔍 ค้นหารวดเร็ว (พิมพ์ชื่อ หรือ บ้านเลขที่)..." class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm">
                     </div>
-                    <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center text-xl font-bold">
-                        👥
-                    </div>
+                    <button onclick="markAllDelivered()" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-4 py-3 rounded-lg text-sm transition">
+                        ✓ เลือกรวม (ส่งครบทุกคน)
+                    </button>
                 </div>
 
-                <!-- Card 2: ส่งข้าวสารแล้ว -->
-                <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
+                <!-- ตารางรายชื่อสมาชิกสำหรับกดบันทึก -->
+                <div class="bg-white rounded-xl shadow-sm overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-gray-50 border-b">
+                            <tr>
+                                <th class="p-4 text-sm font-semibold text-gray-600">บ้านเลขที่</th>
+                                <th class="p-4 text-sm font-semibold text-gray-600">ชื่อ - นามสกุล</th>
+                                <th class="p-4 text-sm font-semibold text-gray-600 text-center">สถานะการส่งข้าวสาร (1 ถุง)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="member-record-table" class="divide-y">
+                            <!-- JS จะวาดแถวข้อมูลตรงนี้ -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ==================== 3. เมนู: จัดการงานศพ ==================== -->
+            <div id="tab-funeral" class="tab-content hidden flex-col gap-6">
+                <div class="bg-white p-5 rounded-xl shadow-sm flex flex-col gap-4">
+                    <h2 class="text-lg font-bold text-gray-800">🕊️ เพิ่มงานศพใหม่</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <input type="text" id="new-deceased-name" placeholder="ชื่อผู้เสียชีวิต" class="p-3 border rounded-lg text-sm">
+                        <input type="date" id="new-funeral-date" class="p-3 border rounded-lg text-sm">
+                    </div>
+                    <button onclick="addNewFuneral()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-6 rounded-lg text-sm w-fit transition">
+                        + เพิ่มและเปิดบันทึกงานศพนี้
+                    </button>
+                </div>
+            </div>
+
+            <!-- ==================== 4. เมนู: สมาชิกที่ต้องติดตาม ==================== -->
+            <div id="tab-tracking" class="tab-content hidden flex-col gap-4">
+                <div class="bg-white p-5 rounded-xl shadow-sm flex justify-between items-center">
                     <div>
-                        <p class="text-sm text-gray-500 font-medium">ส่งข้าวสารแล้ว</p>
-                        <h3 class="text-2xl font-bold text-emerald-600 mt-1">120 <span class="text-sm font-normal text-gray-500">ถุง</span></h3>
+                        <h2 class="text-lg font-bold text-gray-800">⚠️ รายชื่อสมาชิกค้างส่งสะสม (≥ 2 งาน)</h2>
+                        <p class="text-xs text-gray-500 mt-1">เสนอพิจารณาต่อคณะกรรมการหมู่บ้าน</p>
                     </div>
-                    <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center text-xl font-bold">
-                        ✓
-                    </div>
+                    <button onclick="window.print()" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold px-4 py-2 rounded-lg text-sm no-print">
+                        🖨️ พิมพ์รายงาน
+                    </button>
                 </div>
 
-                <!-- Card 3: ค้างส่ง -->
-                <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
-                    <div>
-                        <p class="text-sm text-gray-500 font-medium">จำนวนค้างส่ง</p>
-                        <h3 class="text-2xl font-bold text-rose-500 mt-1">30 <span class="text-sm font-normal text-gray-500">คน</span></h3>
+                <div class="bg-white rounded-xl shadow-sm overflow-x-auto p-4">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-rose-50 border-b border-rose-100">
+                            <tr>
+                                <th class="p-3 text-sm font-semibold text-rose-800">บ้านเลขที่</th>
+                                <th class="p-3 text-sm font-semibold text-rose-800">ชื่อ - นามสกุล</th>
+                                <th class="p-3 text-sm font-semibold text-rose-800 text-center">จำนวนงานที่ค้างส่ง</th>
+                                <th class="p-3 text-sm font-semibold text-rose-800 text-center">สถานะ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tracking-table" class="divide-y">
+                            <!-- JS จะวาดข้อมูลตรงนี้ -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ==================== 5. เมนู: ทะเบียนสมาชิก ==================== -->
+            <div id="tab-members" class="tab-content hidden flex-col gap-6">
+                <div class="bg-white p-5 rounded-xl shadow-sm flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <div class="flex gap-2 w-full sm:w-auto">
+                        <input type="text" id="add-house-no" placeholder="บ้านเลขที่" class="p-2 border rounded-lg text-sm w-1/3">
+                        <input type="text" id="add-member-name" placeholder="ชื่อ-นามสกุล" class="p-2 border rounded-lg text-sm w-2/3">
+                        <button onclick="addNewMember()" class="bg-emerald-600 text-white font-semibold px-4 py-2 rounded-lg text-sm whitespace-nowrap">
+                            + เพิ่มสมาชิก
+                        </button>
                     </div>
-                    <div class="w-12 h-12 bg-rose-50 text-rose-500 rounded-full flex items-center justify-center text-xl font-bold">
-                        ⏳
-                    </div>
+                    <button onclick="resetDataToDefault()" class="text-xs text-rose-600 hover:underline">
+                        🔄 รีเซ็ตข้อมูลเริ่มต้น (สำหรับทดสอบ)
+                    </button>
                 </div>
 
-                <!-- Card 4: ต้องติดตามสะสม -->
-                <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
-                    <div>
-                        <p class="text-sm text-gray-500 font-medium">ติดตามสะสม (≥2 งาน)</p>
-                        <h3 class="text-2xl font-bold text-amber-600 mt-1">5 <span class="text-sm font-normal text-gray-500">คน</span></h3>
-                    </div>
-                    <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-full flex items-center justify-center text-xl font-bold">
-                        🔴
-                    </div>
+                <div class="bg-white rounded-xl shadow-sm overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-gray-50 border-b">
+                            <tr>
+                                <th class="p-4 text-sm font-semibold text-gray-600">บ้านเลขที่</th>
+                                <th class="p-4 text-sm font-semibold text-gray-600">ชื่อ - นามสกุล</th>
+                                <th class="p-4 text-sm font-semibold text-gray-600 text-center">จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="master-members-table" class="divide-y">
+                            <!-- JS จะวาดข้อมูลตรงนี้ -->
+                        </tbody>
+                    </table>
                 </div>
-
             </div>
 
         </main>
     </div>
 
+    <!-- ==================== JAVASCRIPT LOGIC ==================== -->
+    <script>
+        // ข้อมูลตัวอย่างตั้งต้น
+        const defaultMembers = [
+            { id: "M001", name: "นายสมชาย ใจดี", house_no: "12/1", status: "active" },
+            { id: "M002", name: "นางสมศรี สุขใจ", house_no: "15", status: "active" },
+            { id: "M003", name: "นายบุญมี มีทรัพย์", house_no: "88/2", status: "active" },
+            { id: "M004", name: "นางมาลี มีโชค", house_no: "104", status: "active" },
+            { id: "M005", name: "นายวิชัย รวยเจริญ", house_no: "45", status: "active" }
+        ];
+
+        const defaultFunerals = [
+            { id: "F001", deceased_name: "นายเกษมสุข ใฝ่ใจ", funeral_date: "2026-08-10", is_active: true }
+        ];
+
+        const defaultDeliveries = [
+            { funeral_id: "F001", member_id: "M001", status: "delivered" }
+        ];
+
+        // 1. ระบบจัดการ LocalStorage
+        function initData() {
+            if (!localStorage.getItem("members")) localStorage.setItem("members", JSON.stringify(defaultMembers));
+            if (!localStorage.getItem("funerals")) localStorage.setItem("funerals", JSON.stringify(defaultFunerals));
+            if (!localStorage.getItem("deliveries")) localStorage.setItem("deliveries", JSON.stringify(defaultDeliveries));
+        }
+
+        function getData(key) { return JSON.parse(localStorage.getItem(key)) || []; }
+        function saveData(key, data) { localStorage.setItem(key, JSON.stringify(data)); }
+
+        // 2. สลับหน้าเมนู
+        function switchTab(tabName) {
+            document.querySelectorAll(".tab-content").forEach(el => el.classList.add("hidden"));
+            document.querySelectorAll(".menu-btn").forEach(btn => {
+                btn.classList.remove("bg-emerald-50", "text-emerald-700", "font-semibold", "border-l-4", "border-emerald-600");
+                btn.classList.add("text-gray-600");
+            });
+
+            document.getElementById(`tab-${tabName}`).classList.remove("hidden");
+            const activeBtn = document.getElementById(`btn-${tabName}`);
+            activeBtn.classList.add("bg-emerald-50", "text-emerald-700", "font-semibold", "border-l-4", "border-emerald-600");
+
+            renderAll();
+        }
+
+        // 3. วาดการ์ดสรุปยอด & ข้อมูลในหน้าต่างๆ (Render)
+        function renderAll() {
+            const members = getData("members").filter(m => m.status === 'active');
+            const funerals = getData("funerals");
+            const deliveries = getData("deliveries");
+            const activeFuneral = funerals.find(f => f.is_active);
+
+            // 3.1 อัปเดต Dashboard
+            document.getElementById("stat-total-members").innerText = members.length;
+
+            if (activeFuneral) {
+                document.getElementById("dash-deceased-name").innerText = activeFuneral.deceased_name;
+                document.getElementById("dash-funeral-date").innerText = activeFuneral.funeral_date;
+                
+                const deliveredCount = deliveries.filter(d => d.funeral_id === activeFuneral.id && d.status === "delivered").length;
+                document.getElementById("stat-delivered").innerText = deliveredCount;
+                document.getElementById("stat-pending").innerText = members.length - deliveredCount;
+            } else {
+                document.getElementById("dash-deceased-name").innerText = "ไม่มีงานศพที่เปิดอยู่";
+                document.getElementById("dash-funeral-date").innerText = "-";
+                document.getElementById("stat-delivered").innerText = 0;
+                document.getElementById("stat-pending").innerText = 0;
+            }
+
+            // 3.2 วาดตารางบันทึกรับข้าวสาร (Record Table)
+            const recordTable = document.getElementById("member-record-table");
+            recordTable.innerHTML = "";
+
+            members.forEach(m => {
+                const isDelivered = activeFuneral && deliveries.some(d => d.funeral_id === activeFuneral.id && d.member_id === m.id && d.status === "delivered");
+                
+                const tr = document.createElement("tr");
+                tr.className = "hover:bg-gray-50 border-b";
+                tr.innerHTML = `
+                    <td class="p-4 font-semibold text-gray-700">${m.house_no}</td>
+                    <td class="p-4">${m.name}</td>
+                    <td class="p-4 text-center">
+                        <button onclick="toggleDelivery('${m.id}')" 
+                            class="px-4 py-2 rounded-lg font-medium text-sm transition ${isDelivered ? 'bg-emerald-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}">
+                            ${isDelivered ? '✓ บันทึกแล้ว (1 ถุง)' : 'กดบันทึกรับข้าวสาร'}
+                        </button>
+                    </td>
+                `;
+                recordTable.appendChild(tr);
+            });
+
+            // 3.3 วาดตารางทะเบียนสมาชิก
+            const masterTable = document.getElementById("master-members-table");
+            masterTable.innerHTML = "";
+            members.forEach(m => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td class="p-4">${m.house_no}</td>
+                    <td class="p-4">${m.name}</td>
+                    <td class="p-4 text-center">
+                        <button onclick="deleteMember('${m.id}')" class="text-rose-500 hover:underline text-sm">ลบ</button>
+                    </td>
+                `;
+                masterTable.appendChild(tr);
+            });
+
+            // 3.4 คำนวณรายชื่อติดตามสะสม (≥ 2 งาน)
+            renderTracking(members, funerals, deliveries);
+        }
+
+        // 4. สลับสถานะบันทึกรับข้าวสาร (กดแล้วเปลี่ยนสีเขียวทันที)
+        function toggleDelivery(memberId) {
+            const funerals = getData("funerals");
+            const activeFuneral = funerals.find(f => f.is_active);
+            if (!activeFuneral) return alert("กรุณาเปิดงานศพก่อนบันทึกข้าวสาร!");
+
+            let deliveries = getData("deliveries");
+            const index = deliveries.findIndex(d => d.funeral_id === activeFuneral.id && d.member_id === memberId);
+
+            if (index > -1) {
+                // ถ้าเคยส่งแล้ว กดอีกครั้งเพื่อยกเลิก
+                deliveries.splice(index, 1);
+            } else {
+                // บันทึกใหม่
+                deliveries.push({ funeral_id: activeFuneral.id, member_id: memberId, status: "delivered" });
+            }
+
+            saveData("deliveries", deliveries);
+            renderAll();
+        }
+
+        // 5. ปุ่มส่งครบทุกคน
+        function markAllDelivered() {
+            const funerals = getData("funerals");
+            const activeFuneral = funerals.find(f => f.is_active);
+            if (!activeFuneral) return alert("กรุณาเปิดงานศพก่อน!");
+
+            const members = getData("members").filter(m => m.status === 'active');
+            let deliveries = getData("deliveries");
+
+            members.forEach(m => {
+                if (!deliveries.some(d => d.funeral_id === activeFuneral.id && d.member_id === m.id)) {
+                    deliveries.push({ funeral_id: activeFuneral.id, member_id: m.id, status: "delivered" });
+                }
+            });
+
+            saveData("deliveries", deliveries);
+            renderAll();
+        }
+
+        // 6. ระบบค้นหาสแกนเร็ว
+        function filterMembers() {
+            const query = document.getElementById("search-input").value.toLowerCase();
+            const rows = document.getElementById("member-record-table").getElementsByTagName("tr");
+
+            for (let row of rows) {
+                const text = row.innerText.toLowerCase();
+                row.style.display = text.includes(query) ? "" : "none";
+            }
+        }
+
+        // 7. เพิ่มงานศพใหม่
+        function addNewFuneral() {
+            const name = document.getElementById("new-deceased-name").value;
+            const date = document.getElementById("new-funeral-date").value;
+            if (!name || !date) return alert("กรอกข้อมูลให้ครบถ้วน");
+
+            let funerals = getData("funerals");
+            // ปิดงานศพเก่าทั้งหมดก่อน
+            funerals.forEach(f => f.is_active = false);
+
+            funerals.push({ id: "F" + Date.now(), deceased_name: name, funeral_date: date, is_active: true });
+            saveData("funerals", funerals);
+
+            document.getElementById("new-deceased-name").value = "";
+            document.getElementById("new-funeral-date").value = "";
+
+            alert("เปิดงานศพใหม่เรียบร้อย!");
+            switchTab("record");
+        }
+
+        // 8. สมาชิกที่ต้องติดตาม (สะสม ≥ 2 งาน)
+        function renderTracking(members, funerals, deliveries) {
+            const trackingTable = document.getElementById("tracking-table");
+            trackingTable.innerHTML = "";
+            let trackingCount = 0;
+
+            members.forEach(m => {
+                let pendingCount = 0;
+                funerals.forEach(f => {
+                    const isDelivered = deliveries.some(d => d.funeral_id === f.id && d.member_id === m.id && d.status === "delivered");
+                    if (!isDelivered) pendingCount++;
+                });
+
+                if (pendingCount >= 2) {
+                    trackingCount++;
+                    const tr = document.createElement("tr");
+                    tr.className = "bg-rose-50/50";
+                    tr.innerHTML = `
+                        <td class="p-3 font-semibold">${m.house_no}</td>
+                        <td class="p-3">${m.name}</td>
+                        <td class="p-3 text-center text-rose-600 font-bold">${pendingCount} งาน</td>
+                        <td class="p-3 text-center"><span class="bg-rose-100 text-rose-700 text-xs px-2 py-1 rounded-full font-bold">🔴 เสนอพิจารณา</span></td>
+                    `;
+                    trackingTable.appendChild(tr);
+                }
+            });
+
+            document.getElementById("stat-tracking").innerText = trackingCount;
+        }
+
+        // 9. เพิ่ม/ลบ สมาชิก
+        function addNewMember() {
+            const houseNo = document.getElementById("add-house-no").value;
+            const name = document.getElementById("add-member-name").value;
+            if (!houseNo || !name) return alert("กรุณากรอกข้อมูลให้ครบ");
+
+            let members = getData("members");
+            members.push({ id: "M" + Date.now(), house_no: houseNo, name: name, status: "active" });
+            saveData("members", members);
+
+            document.getElementById("add-house-no").value = "";
+            document.getElementById("add-member-name").value = "";
+            renderAll();
+        }
+
+        function deleteMember(id) {
+            if (!confirm("ยืนยันลบรายชื่อนี้?")) return;
+            let members = getData("members");
+            members = members.filter(m => m.id !== id);
+            saveData("members", members);
+            renderAll();
+        }
+
+        function resetDataToDefault() {
+            if (confirm("ต้องการคืนค่าเริ่มต้นทั้งหมดใช่หรือไม่?")) {
+                localStorage.clear();
+                initData();
+                renderAll();
+            }
+        }
+
+        // เริ่มต้นการทำงานเมื่อโหลดหน้า
+        document.addEventListener("DOMContentLoaded", () => {
+            initData();
+            renderAll();
+        });
+    </script>
 </body>
 </html>
