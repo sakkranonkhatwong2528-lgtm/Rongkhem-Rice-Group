@@ -593,3 +593,110 @@ function renderReportTab(container) {
 
 // สตาร์ทระบบเมื่อเปิดหน้าเว็บ
 document.addEventListener('DOMContentLoaded', updateDashboardStats);
+// ==========================================
+// ฟังก์ชัน บันทึกรับข้าวสาร + พิมพ์สลิป
+// ==========================================
+
+// 1. ฟังก์ชันพิมพ์สลิป/ใบรับข้าวสาร
+function printReceipt(memberName, houseNo, funeralName) {
+    const receiptWindow = window.open('', '', 'width=400,height=600');
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
+    const timeStr = now.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
+
+    receiptWindow.document.write(`
+        <!DOCTYPE html>
+        <html lang="th">
+        <head>
+            <meta charset="UTF-8">
+            <title>ใบรับข้าวสาร</title>
+            <style>
+                body { font-family: 'Prompt', sans-serif; padding: 20px; text-align: center; color: #333; }
+                .ticket { border: 1px dashed #444; padding: 15px; border-radius: 8px; }
+                h2 { margin: 0 0 5px 0; font-size: 18px; color: #064e3b; }
+                p { margin: 3px 0; font-size: 13px; }
+                .highlight { font-weight: bold; font-size: 15px; color: #000; margin: 10px 0; }
+                .footer { font-size: 11px; color: #777; margin-top: 15px; border-top: 1px solid #eee; padding-top: 5px; }
+            </style>
+        </head>
+        <body>
+            <div class="ticket">
+                <h2>🌾 กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ 6</h2>
+                <p><b>ใบรับข้าวสาร (ฌาปนกิจสงเคราะห์)</b></p>
+                <hr>
+                <p class="highlight">งานศพ: ${funeralName}</p>
+                <p><b>ผู้ส่งข้าวสาร:</b> ${memberName}</p>
+                <p><b>บ้านเลขที่:</b> ${houseNo}</p>
+                <p><b>จำนวน:</b> 1 ถุง</p>
+                <hr>
+                <p><b>วันที่บันทึก:</b> ${dateStr} (${timeStr} น.)</p>
+                <p class="footer">ขอบคุณที่ร่วมทำบุญสงเคราะห์สมาชิกกลุ่ม</p>
+            </div>
+            <script>
+                window.onload = function() { window.print(); window.close(); }
+            <\/script>
+        </body>
+        </html>
+    `);
+    receiptWindow.document.close();
+}
+
+// 2. ฟังก์ชันกรองรายชื่อสมาชิกในหน้าบันทึกรับข้าวสาร
+function filterReceiveList() {
+    const activeFuneral = funerals.find(f => f.is_active);
+    if (!activeFuneral) return;
+
+    const searchInput = document.getElementById('search-member');
+    const query = (searchInput ? searchInput.value : '').toLowerCase();
+    const listBox = document.getElementById('receive-list-box');
+    if (!listBox) return;
+
+    const deliveredSet = new Set(
+        deliveries.filter(d => d.funeralId === activeFuneral.id).map(d => d.memberId)
+    );
+
+    const filtered = members.filter(m => 
+        m.name.toLowerCase().includes(query) || (m.houseNo && m.houseNo.toLowerCase().includes(query))
+    );
+
+    listBox.innerHTML = filtered.map(m => {
+        const isDelivered = deliveredSet.has(m.id);
+        return `
+            <div class="p-2.5 flex justify-between items-center text-sm border-b">
+                <div>
+                    <span class="font-medium ${isDelivered ? 'text-gray-400 line-through' : 'text-gray-800'}">${m.name}</span>
+                    <span class="text-xs text-gray-400 block">บ้านเลขที่ ${m.houseNo}</span>
+                </div>
+                ${isDelivered 
+                    ? '<span class="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded">✓ ส่งแล้ว</span>' 
+                    : `<button onclick="recordDelivery(${m.id})" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg font-semibold">บันทึกรับข้าว</button>`}
+            </div>
+        `;
+    }).join('');
+}
+
+// 3. ฟังก์ชันบันทึกการส่งข้าวสาร
+function recordDelivery(memberId) {
+    const activeFuneral = funerals.find(f => f.is_active);
+    if (!activeFuneral) {
+        alert("กรุณาเปิดงานศพก่อนบันทึกรับข้าวสารครับ");
+        return;
+    }
+
+    const member = members.find(m => m.id === memberId);
+    if (!member) return;
+
+    deliveries.push({
+        funeralId: activeFuneral.id,
+        memberId: memberId,
+        date: new Date().toISOString()
+    });
+
+    saveData('app_deliveries', deliveries);
+    filterReceiveList();
+
+    // ถามเพื่อพิมพ์สลิป
+    if (confirm(`บันทึกรับข้าวสารจาก "${member.name}" เรียบร้อยแล้ว!\n\nคุณต้องการพิมพ์ใบรับข้าวสารหรือไม่?`)) {
+        printReceipt(member.name, member.houseNo, activeFuneral.name);
+    }
+}
