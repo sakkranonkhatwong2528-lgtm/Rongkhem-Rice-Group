@@ -1,23 +1,24 @@
 // ==========================================
-// funeral.js
-// ระบบงานศพ V4.0
+// funeral.js V5.0
+// ระบบงานศพ
 // ==========================================
 
 // โหลดรายการงานศพ
 function loadFunerals(){
 
-const tbody=document.getElementById("funeralTable");
+    const tbody=document.getElementById("funeralTable");
 
-if(!tbody)return;
+    if(!tbody) return;
 
-tbody.innerHTML="";
+    tbody.innerHTML="";
 
-db.funerals
-.slice()
-.reverse()
-.forEach((f,index)=>{
+    db.funerals.forEach((f,index)=>{
 
-tbody.innerHTML+=`
+        let status=f.active
+            ? '<span class="status-open">🟢 เปิดรับข้าวสาร</span>'
+            : '<span class="status-close">⚪ ปิดงานแล้ว</span>';
+
+        tbody.innerHTML+=`
 
 <tr>
 
@@ -27,48 +28,43 @@ tbody.innerHTML+=`
 
 <td>${f.houseNo}</td>
 
-<td>${f.age}</td>
-
 <td>${f.deathDate}</td>
 
 <td>${f.cremationDate}</td>
 
-<td>
-
-${
-f.active
-
-?
-
-'<span class="status normal">กำลังเปิด</span>'
-
-:
-
-'<span class="status pending">ปิดแล้ว</span>'
-
-}
-
-</td>
+<td>${status}</td>
 
 <td>
 
 <button
+class="btn btn-success"
+onclick="openFuneral('${f.id}')">
 
-class="btn btn-info"
-
-onclick="editFuneral('${f.id}')">
-
-✏️
+เปิด
 
 </button>
 
 <button
+class="btn btn-warning"
+onclick="closeFuneral('${f.id}')">
 
+ปิด
+
+</button>
+
+<button
+class="btn btn-info"
+onclick="printFuneral('${f.id}')">
+
+พิมพ์
+
+</button>
+
+<button
 class="btn btn-danger"
-
 onclick="deleteFuneral('${f.id}')">
 
-🗑️
+ลบ
 
 </button>
 
@@ -78,9 +74,7 @@ onclick="deleteFuneral('${f.id}')">
 
 `;
 
-});
-
-updateDashboard();
+    });
 
 }
 
@@ -90,290 +84,301 @@ updateDashboard();
 
 function addFuneral(){
 
-const first=document.getElementById("firstName").value;
+    const name=document.getElementById("funeralName").value.trim();
 
-const last=document.getElementById("lastName").value;
+    const house=document.getElementById("funeralHouse").value.trim();
 
-const age=document.getElementById("age").value;
+    const death=document.getElementById("deathDate").value;
 
-const house=document.getElementById("houseNo").value;
+    const cremation=document.getElementById("cremationDate").value;
 
-const death=document.getElementById("deathDate").value;
+    if(name==""){
 
-const cremation=document.getElementById("cremationDate").value;
+        alert("กรุณากรอกชื่อผู้เสียชีวิต");
 
+        return;
 
+    }
 
-if(first==""){
+    db.funerals.push({
 
-notify("กรุณากรอกชื่อ");
+        id:Date.now().toString(),
 
-return;
+        name:name,
+
+        houseNo:house,
+
+        deathDate:death,
+
+        cremationDate:cremation,
+
+        active:false
+
+    });
+
+    saveDB();
+
+    loadFunerals();
+
+    clearFuneralForm();
+
+}
+// ==========================================
+// เปิดงานศพ
+// ==========================================
+
+function openFuneral(id){
+
+    // ปิดงานศพเดิมทั้งหมด
+    db.funerals.forEach(f=>{
+
+        f.active=false;
+
+    });
+
+    // เปิดงานใหม่
+    const funeral=db.funerals.find(f=>f.id==id);
+
+    if(!funeral) return;
+
+    funeral.active=true;
+
+    addActivity("เปิดงานศพ : "+funeral.name);
+
+    saveDB();
+
+    loadFunerals();
+
+    updateDashboard();
+
+    alert("เปิดรับข้าวสารเรียบร้อย");
 
 }
 
 
 
-// ปิดงานศพเดิมทั้งหมด
-
-db.funerals.forEach(f=>{
-
-f.active=false;
-
-});
-
-
-
-const funeral={
-
-id:Date.now().toString(),
-
-name:first+" "+last,
-
-houseNo:house,
-
-age:age,
-
-deathDate:death,
-
-cremationDate:cremation,
-
-active:true
-
-};
-
-
-
-db.funerals.push(funeral);
-
-
-
-addActivity(
-
-"เปิดงานศพ "+funeral.name
-
-);
-
-
-
-saveDB();
-
-loadFunerals();
-
-clearFuneralForm();
-
-notify("เปิดงานศพสำเร็จ");
-
-}
-
-
-
-// แก้ไข
-
-function editFuneral(id){
-
-const f=db.funerals.find(
-
-x=>x.id==id
-
-);
-
-if(!f)return;
-
-document.getElementById("funeralId").value=f.id;
-
-const fullname=f.name.split(" ");
-
-document.getElementById("firstName").value=fullname[0];
-
-document.getElementById("lastName").value=fullname.slice(1).join(" ");
-
-document.getElementById("age").value=f.age;
-
-document.getElementById("houseNo").value=f.houseNo;
-
-document.getElementById("deathDate").value=f.deathDate;
-
-document.getElementById("cremationDate").value=f.cremationDate;
-
-}
-
-
-
-// บันทึกแก้ไข
-
-function updateFuneral(){
-
-const id=document.getElementById("funeralId").value;
-
-const f=db.funerals.find(
-
-x=>x.id==id
-
-);
-
-if(!f)return;
-
-
-
-f.name=
-
-document.getElementById("firstName").value+
-
-" "+
-
-document.getElementById("lastName").value;
-
-
-
-f.age=
-
-document.getElementById("age").value;
-
-
-
-f.houseNo=
-
-document.getElementById("houseNo").value;
-
-
-
-f.deathDate=
-
-document.getElementById("deathDate").value;
-
-
-
-f.cremationDate=
-
-document.getElementById("cremationDate").value;
-
-
-
-addActivity(
-
-"แก้ไขงานศพ "+f.name
-
-);
-
-
-
-saveDB();
-
-loadFunerals();
-
-clearFuneralForm();
-
-}
-
-
-
-// ลบ
-
-function deleteFuneral(id){
-
-if(!confirm("ลบงานศพนี้ใช่หรือไม่"))
-
-return;
-
-
-
-db.funerals=
-
-db.funerals.filter(
-
-x=>x.id!=id
-
-);
-
-
-
-saveDB();
-
-loadFunerals();
-
-notify("ลบข้อมูลสำเร็จ");
-
-}
-
-
-
+// ==========================================
 // ปิดงานศพ
+// ==========================================
 
 function closeFuneral(id){
 
-const f=db.funerals.find(
+    if(!confirm("ต้องการปิดงานศพนี้ใช่หรือไม่?"))
 
-x=>x.id==id
+        return;
 
-);
+    const funeral=db.funerals.find(f=>f.id==id);
 
-if(!f)return;
+    if(!funeral) return;
 
+    funeral.active=false;
 
+    addActivity("ปิดงานศพ : "+funeral.name);
 
-if(confirm("ปิดงานศพนี้ใช่หรือไม่")){
+    saveDB();
 
-f.active=false;
+    loadFunerals();
 
-saveDB();
-
-loadFunerals();
-
-addActivity(
-
-"ปิดงานศพ "+f.name
-
-);
-
-}
+    updateDashboard();
 
 }
 
 
 
-// งานศพปัจจุบัน
+// ==========================================
+// ลบงานศพ
+// ==========================================
 
-function getActiveFuneral(){
+function deleteFuneral(id){
 
-return db.funerals.find(
+    if(!confirm("ต้องการลบข้อมูลนี้ใช่หรือไม่?"))
 
-x=>x.active
+        return;
 
-);
+    db.funerals=db.funerals.filter(f=>f.id!=id);
+
+    saveDB();
+
+    loadFunerals();
 
 }
 
 
 
+// ==========================================
+// พิมพ์รายงานงานศพ
+// ==========================================
+
+function printFuneral(id){
+
+    const funeral=db.funerals.find(f=>f.id==id);
+
+    if(!funeral) return;
+
+    const win=window.open("","","width=800,height=900");
+
+    win.document.write(`
+
+    <html>
+
+    <head>
+
+    <title>รายงานงานศพ</title>
+
+    <style>
+
+    body{
+
+        font-family:Sarabun;
+
+        padding:40px;
+
+        line-height:1.8;
+
+    }
+
+    h2{
+
+        color:#198754;
+
+        text-align:center;
+
+    }
+
+    table{
+
+        width:100%;
+
+        border-collapse:collapse;
+
+    }
+
+    td{
+
+        border:1px solid #ddd;
+
+        padding:10px;
+
+    }
+
+    </style>
+
+    </head>
+
+    <body>
+
+    <h2>
+
+    รายงานงานศพ
+
+    </h2>
+
+    <table>
+
+    <tr>
+
+    <td>ชื่อผู้เสียชีวิต</td>
+
+    <td>${funeral.name}</td>
+
+    </tr>
+
+    <tr>
+
+    <td>บ้านเลขที่</td>
+
+    <td>${funeral.houseNo}</td>
+
+    </tr>
+
+    <tr>
+
+    <td>วันที่เสียชีวิต</td>
+
+    <td>${funeral.deathDate}</td>
+
+    </tr>
+
+    <tr>
+
+    <td>วันฌาปนกิจ</td>
+
+    <td>${funeral.cremationDate}</td>
+
+    </tr>
+
+    <tr>
+
+    <td>สถานะ</td>
+
+    <td>
+
+    ${funeral.active ? "กำลังเปิดรับข้าวสาร" : "ปิดงานแล้ว"}
+
+    </td>
+
+    </tr>
+
+    </table>
+
+    <br><br>
+
+    <div style="text-align:center;">
+
+    ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
+
+    </div>
+
+    </body>
+
+    </html>
+
+    `);
+
+    win.document.close();
+
+    win.print();
+
+}
+
+
+
+// ==========================================
 // ล้างฟอร์ม
+// ==========================================
 
 function clearFuneralForm(){
 
-document.getElementById("funeralId").value="";
+    document.getElementById("funeralName").value="";
 
-document.getElementById("firstName").value="";
+    document.getElementById("funeralHouse").value="";
 
-document.getElementById("lastName").value="";
+    document.getElementById("deathDate").value="";
 
-document.getElementById("age").value="";
-
-document.getElementById("houseNo").value="";
-
-document.getElementById("deathDate").value="";
-
-document.getElementById("cremationDate").value="";
+    document.getElementById("cremationDate").value="";
 
 }
 
 
 
-// โหลดเมื่อเปิดหน้า
+// ==========================================
+// งานศพที่กำลังเปิด
+// ==========================================
 
-window.addEventListener(
+function getActiveFuneral(){
 
-"load",
+    return db.funerals.find(f=>f.active);
 
-loadFunerals
+}
 
-);
+
+
+// ==========================================
+// โหลดระบบ
+// ==========================================
+
+window.addEventListener("load",function(){
+
+    loadFunerals();
+
+});
