@@ -1,27 +1,3 @@
-<!-- ปรับแถบเมนูด้านบน โดยเพิ่มปุ่มรีเซ็ตสถานะ -->
-<div style="display: flex; gap: 10px; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap;">
-  <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-    <input type="text" id="searchMember" placeholder="🔍 ค้นหา ชื่อ-นามสกุล / บ้านเลขที่..." onkeyup="filterMembers()" style="padding: 8px 12px; width: 220px; border: 1px solid #ccc; border-radius: 4px;">
-    
-    <select id="statusFilter" onchange="filterMembers()" style="padding: 8px 12px; border: 1px solid #ccc; border-radius: 4px;">
-      <option value="all">-- แสดงสถานะทั้งหมด --</option>
-      <option value="sent">🟢 ส่งแล้ว</option>
-      <option value="pending">🔴 ยังไม่ส่ง</option>
-    </select>
-  </div>
-
-  <div style="display: flex; gap: 10px;">
-    <!-- ปุ่มรีเซ็ตเริ่มรอบใหม่ (สีส้ม/เตือนภัย) -->
-    <button onclick="resetAllMemberStatus()" style="background: #fd7e14; color: white; border: none; padding: 10px 14px; border-radius: 4px; cursor: pointer; font-weight: bold;">
-      🔄 เริ่มรอบใหม่ (รีเซ็ตทั้งหมด)
-    </button>
-
-    <!-- ปุ่มเพิ่มสมาชิก -->
-    <button onclick="openMemberModal()" style="background: #28a745; color: white; border: none; padding: 10px 14px; border-radius: 4px; cursor: pointer; font-weight: bold;">
-      + เพิ่มสมาชิกใหม่
-    </button>
-  </div>
-</div>
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -41,10 +17,10 @@
   <div class="container" style="padding: 20px; max-width: 1100px; margin: 0 auto;">
     <h2>👥 ทะเบียนสมาชิกกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ 6</h2>
 
-    <!-- ส่วนแถบค้นหา ตัวกรองสถานะ และปุ่มเพิ่มสมาชิก -->
+    <!-- แถบเมนูด้านบน: ค้นหา / ตัวกรอง / ปุ่มรีเซ็ต / ปุ่มเพิ่มสมาชิก -->
     <div style="display: flex; gap: 10px; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap;">
-      <div style="display: flex; gap: 10px;">
-        <input type="text" id="searchMember" placeholder="🔍 ค้นหา ชื่อ-นามสกุล / บ้านเลขที่..." onkeyup="filterMembers()" style="padding: 8px 12px; width: 250px; border: 1px solid #ccc; border-radius: 4px;">
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <input type="text" id="searchMember" placeholder="🔍 ค้นหา ชื่อ-นามสกุล / บ้านเลขที่..." onkeyup="filterMembers()" style="padding: 8px 12px; width: 230px; border: 1px solid #ccc; border-radius: 4px;">
         
         <select id="statusFilter" onchange="filterMembers()" style="padding: 8px 12px; border: 1px solid #ccc; border-radius: 4px;">
           <option value="all">-- แสดงสถานะทั้งหมด --</option>
@@ -53,9 +29,17 @@
         </select>
       </div>
 
-      <button onclick="openMemberModal()" style="background: #28a745; color: white; border: none; padding: 10px 16px; border-radius: 4px; cursor: pointer; font-weight: bold;">
-        + เพิ่มสมาชิกใหม่
-      </button>
+      <div style="display: flex; gap: 10px;">
+        <!-- ปุ่มรีเซ็ตเริ่มรอบใหม่ -->
+        <button onclick="resetAllMemberStatus()" style="background: #fd7e14; color: white; border: none; padding: 10px 14px; border-radius: 4px; cursor: pointer; font-weight: bold;">
+          🔄 เริ่มรอบใหม่ (รีเซ็ตทั้งหมด)
+        </button>
+
+        <!-- ปุ่มเพิ่มสมาชิก -->
+        <button onclick="openMemberModal()" style="background: #28a745; color: white; border: none; padding: 10px 16px; border-radius: 4px; cursor: pointer; font-weight: bold;">
+          + เพิ่มสมาชิกใหม่
+        </button>
+      </div>
     </div>
 
     <!-- ตารางแสดงทะเบียนสมาชิก -->
