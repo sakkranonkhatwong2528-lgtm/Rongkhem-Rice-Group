@@ -30,15 +30,31 @@
       </div>
 
       <div style="display: flex; gap: 10px;">
-        <!-- ปุ่มรีเซ็ตเริ่มรอบใหม่ -->
         <button onclick="resetAllMemberStatus()" style="background: #fd7e14; color: white; border: none; padding: 10px 14px; border-radius: 4px; cursor: pointer; font-weight: bold;">
           🔄 เริ่มรอบใหม่ (รีเซ็ตทั้งหมด)
         </button>
 
-        <!-- ปุ่มเพิ่มสมาชิก -->
-        <button onclick="openMemberModal()" style="background: #28a745; color: white; border: none; padding: 10px 16px; border-radius: 4px; cursor: pointer; font-weight: bold;">
+        <button onclick="openMemberModal()" style="background: #28a745; color: white; border: none; padding: 10px 14px; border-radius: 4px; cursor: pointer; font-weight: bold;">
           + เพิ่มสมาชิกใหม่
         </button>
+      </div>
+    </div>
+
+    <!-- แถบสรุปจำนวนสมาชิก (Summary Cards) -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
+      <div style="background: #ffffff; border-left: 5px solid #0d6efd; padding: 15px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.08);">
+        <div style="color: #6c757d; font-size: 0.9rem; font-weight: bold;">👥 สมาชิกทั้งหมด</div>
+        <div id="totalCount" style="font-size: 1.8rem; font-weight: bold; color: #0d6efd; margin-top: 5px;">0 คน</div>
+      </div>
+
+      <div style="background: #ffffff; border-left: 5px solid #198754; padding: 15px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.08);">
+        <div style="color: #6c757d; font-size: 0.9rem; font-weight: bold;">🟢 ส่งแล้ว</div>
+        <div id="sentCount" style="font-size: 1.8rem; font-weight: bold; color: #198754; margin-top: 5px;">0 คน</div>
+      </div>
+
+      <div style="background: #ffffff; border-left: 5px solid #dc3545; padding: 15px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.08);">
+        <div style="color: #6c757d; font-size: 0.9rem; font-weight: bold;">🔴 ยังไม่ส่ง</div>
+        <div id="pendingCount" style="font-size: 1.8rem; font-weight: bold; color: #dc3545; margin-top: 5px;">0 คน</div>
       </div>
     </div>
 
