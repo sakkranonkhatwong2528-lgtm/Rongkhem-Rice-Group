@@ -1,321 +1,498 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>👥 ทะเบียนสมาชิก - กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Sarabun', sans-serif;
+        }
 
-<meta charset="UTF-8">
+        body {
+            background: #eef2f5;
+            color: #333;
+        }
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+        .container {
+            max-width: 1400px;
+            margin: auto;
+            padding: 20px;
+        }
 
-<title>👥 ทะเบียนสมาชิก</title>
+        .header {
+            background: linear-gradient(135deg, #0f5132, #198754);
+            padding: 25px;
+            color: #fff;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(25, 135, 84, 0.2);
+        }
 
-<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 5px;
+        }
 
-<style>
+        /* Dashboards Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Sarabun',sans-serif;
-}
+        .stat-card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border-left: 5px solid #198754;
+        }
 
-body{
-background:#eef2f5;
-}
+        .stat-card.danger {
+            border-left-color: #dc3545;
+        }
 
-.container{
-max-width:1400px;
-margin:auto;
-padding:20px;
-}
+        .stat-card.info {
+            border-left-color: #0d6efd;
+        }
 
-.header{
-background:linear-gradient(135deg,#0f5132,#198754);
-padding:25px;
-color:#fff;
-border-radius:20px;
-margin-bottom:20px;
-}
+        .stat-card h3 {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
 
-.header h1{
-font-size:34px;
-}
+        .stat-card .number {
+            font-size: 28px;
+            font-weight: 700;
+        }
 
-.card{
-background:#fff;
-padding:20px;
-border-radius:18px;
-box-shadow:0 10px 25px rgba(0,0,0,.08);
-margin-bottom:20px;
-}
+        .card {
+            background: #fff;
+            padding: 25px;
+            border-radius: 18px;
+            box-shadow: 0 10px 25px rgba(0,0,0,.08);
+            margin-bottom: 20px;
+        }
 
-.row{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:15px;
-}
+        .card h2 {
+            font-size: 20px;
+            color: #0f5132;
+            margin-bottom: 15px;
+        }
 
-input{
-padding:14px;
-border:1px solid #ddd;
-border-radius:10px;
-width:100%;
-}
+        /* Form Grid */
+        .row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            align-items: end;
+        }
 
-button{
-padding:13px 20px;
-border:none;
-border-radius:10px;
-cursor:pointer;
-font-weight:bold;
-}
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
 
-.btn-save{
-background:#198754;
-color:#fff;
-}
+        .form-group label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #444;
+        }
 
-.btn-clear{
-background:#dc3545;
-color:#fff;
-}
+        input, select {
+            padding: 12px 14px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            width: 100%;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.2s;
+        }
 
-table{
-width:100%;
-border-collapse:collapse;
-margin-top:20px;
-}
+        input:focus, select:focus {
+            border-color: #198754;
+            box-shadow: 0 0 0 3px rgba(25, 135, 84, 0.15);
+        }
 
-th{
-background:#198754;
-color:#fff;
-padding:14px;
-}
+        .btn-group {
+            display: flex;
+            gap: 10px;
+        }
 
-td{
-padding:12px;
-border-bottom:1px solid #eee;
-}
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 15px;
+            transition: opacity 0.2s;
+        }
 
-tr:hover{
-background:#f5fff8;
-}
+        button:hover {
+            opacity: 0.9;
+        }
 
-.action button{
+        .btn-save {
+            background: #198754;
+            color: #fff;
+            flex: 2;
+        }
 
-margin-right:5px;
+        .btn-clear {
+            background: #6c757d;
+            color: #fff;
+            flex: 1;
+        }
 
-}
+        .btn-delete {
+            background: #dc3545;
+            color: #fff;
+            padding: 6px 12px;
+            font-size: 13px;
+        }
 
-</style>
+        .btn-edit {
+            background: #ffc107;
+            color: #000;
+            padding: 6px 12px;
+            font-size: 13px;
+        }
 
+        /* Table Design */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th {
+            background: #198754;
+            color: #fff;
+            padding: 14px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 14px;
+            border-bottom: 1px solid #eee;
+            vertical-align: middle;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        /* Badges Status */
+        .badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .badge-success {
+            background-color: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .badge-danger {
+            background-color: #f8d7da;
+            color: #842029;
+        }
+
+        /* Toast Alert Notice */
+        #toastNotice {
+            visibility: hidden;
+            min-width: 280px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 10px;
+            padding: 14px 20px;
+            position: fixed;
+            z-index: 1000;
+            right: 30px;
+            bottom: 30px;
+            font-size: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            opacity: 0;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        #toastNotice.show {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
-
 <body>
 
 <div class="container">
 
-<div class="header">
+    <div class="header">
+        <h1>👥 ทะเบียนสมาชิก</h1>
+        <p>กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</p>
+    </div>
 
-<h1>
+    <!-- สรุปสถานะอัตโนมัติ -->
+    <div class="stats-grid">
+        <div class="stat-card info">
+            <h3>สมาชิกทั้งหมด (เป้าหมาย 185 ครัวเรือน)</h3>
+            <div class="number" id="statTotal">0 / 185</div>
+        </div>
+        <div class="stat-card">
+            <h3>🟢 นำส่งแล้ว</h3>
+            <div class="number" id="statDelivered">0</div>
+        </div>
+        <div class="stat-card danger">
+            <h3>🔴 ยังไม่ได้ส่ง</h3>
+            <div class="number" id="statPending">0</div>
+        </div>
+    </div>
 
-👥 ทะเบียนสมาชิก
+    <!-- ฟอร์มกรอกข้อมูล -->
+    <div class="card">
+        <h2>➕ เพิ่ม / แก้ไขข้อมูลสมาชิก</h2>
+        <input type="hidden" id="editIndex" value="-1">
+        
+        <div class="row">
+            <div class="form-group">
+                <label>บ้านเลขที่</label>
+                <input id="memberHouse" placeholder="เช่น 12/3">
+            </div>
 
-</h1>
+            <div class="form-group">
+                <label>ชื่อ</label>
+                <input id="memberName" placeholder="ชื่อ">
+            </div>
 
-<p>
+            <div class="form-group">
+                <label>นามสกุล</label>
+                <input id="memberLastName" placeholder="นามสกุล">
+            </div>
 
-กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
+            <div class="form-group">
+                <label>เบอร์โทรศัพท์</label>
+                <input id="memberPhone" placeholder="เบอร์โทร">
+            </div>
 
-</p>
+            <div class="form-group">
+                <label>สถานะการนำส่ง</label>
+                <select id="memberStatus">
+                    <option value="pending">🔴 ยังไม่ได้ส่ง</option>
+                    <option value="delivered">🟢 นำส่งแล้ว</option>
+                </select>
+            </div>
 
+            <div class="btn-group">
+                <button class="btn-save" onclick="addMember()">💾 บันทึก</button>
+                <button class="btn-clear" onclick="clearMemberForm()">ล้าง</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- รายการตาราง -->
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+            <h2>📋 รายชื่อสมาชิก</h2>
+            <input id="searchMember" placeholder="🔍 ค้นหา ชื่อ, นามสกุล, บ้านเลขที่..." onkeyup="searchMember()" style="max-width: 300px;">
+        </div>
+
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 60px;">ลำดับ</th>
+                        <th>บ้านเลขที่</th>
+                        <th>ชื่อ - นามสกุล</th>
+                        <th>เบอร์โทรศัพท์</th>
+                        <th>สถานะการนำส่ง</th>
+                        <th style="width: 150px; text-align: center;">จัดการ</th>
+                    </tr>
+                </thead>
+                <tbody id="memberTable">
+                    <!-- ข้อมูลจะโหลดเข้าตรงนี้อัตโนมัติ -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <a href="index.html" style="display:block; text-align:center; margin-top:25px; text-decoration:none; font-weight:bold; color:#666;">
+        🏠 กลับหน้าหลัก
+    </a>
 </div>
 
-<div class="card">
-
-<h2>
-
-เพิ่มสมาชิก
-
-</h2>
-
-<br>
-
-<div class="row">
-
-<input
-id="memberHouse"
-placeholder="บ้านเลขที่">
-
-<input
-id="memberName"
-placeholder="ชื่อ-สกุล">
-
-<input
-id="memberPhone"
-placeholder="เบอร์โทร">
-
-<div>
-
-<button
-class="btn-save"
-onclick="addMember()">
-
-💾 บันทึก
-
-</button>
-
-<button
-class="btn-clear"
-onclick="clearMemberForm()">
-
-ล้าง
-
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-<div class="card">
-
-<input
-
-id="searchMember"
-
-placeholder="🔍 ค้นหาสมาชิก"
-
-onkeyup="searchMember()">
-
-<table>
-
-<thead>
-
-<tr>
-
-<th>ลำดับ</th>
-
-<th>บ้านเลขที่</th>
-
-<th>ชื่อ</th>
-
-<th>โทรศัพท์</th>
-
-<th>ส่งแล้ว</th>
-
-<th>ค้างส่ง</th>
-
-<th>จัดการ</th>
-
-</tr>
-
-</thead>
-
-<tbody id="memberTable">
-
-</tbody>
-
-</table>
-  </div>
-
-<a href="index.html"
-style="
-display:block;
-text-align:center;
-margin-top:25px;
-text-decoration:none;
-font-weight:bold;
-color:#666;
-">
-
-🏠 กลับหน้าหลัก
-
-</a>
-
-</div>
-
-<!-- Modal QR -->
-
-<div id="qrModal"
-style="
-display:none;
-position:fixed;
-left:0;
-top:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,.6);
-z-index:999;
-">
-
-<div
-style="
-background:#fff;
-width:350px;
-margin:60px auto;
-padding:20px;
-border-radius:15px;
-text-align:center;
-">
-
-<h2>
-
-📱 QR Code สมาชิก
-
-</h2>
-
-<br>
-
-<div id="qrcode"></div>
-
-<br>
-
-<button
-class="btn-save"
-onclick="printQR()">
-
-🖨️ พิมพ์
-
-</button>
-
-<button
-class="btn-clear"
-onclick="closeQR()">
-
-ปิด
-
-</button>
-
-</div>
-
-</div>
-
-<script src="js/app.js"></script>
-
-<script src="js/members.js"></script>
-
-<script src="js/qr.js"></script>
+<!-- กล่องแจ้งเตือน Toast -->
+<div id="toastNotice">บันทึกข้อมูลเรียบร้อยแล้ว</div>
 
 <script>
+    // ดึงข้อมูลจาก LocalStorage
+    let members = JSON.parse(localStorage.getItem('riceMembers')) || [];
 
-window.onload=function(){
+    window.onload = function() {
+        renderTable(members);
+    }
 
-loadMembers();
+    // ฟังก์ชันเพิ่ม/แก้ไขสมาชิก
+    function addMember() {
+        const house = document.getElementById("memberHouse").value.trim();
+        const name = document.getElementById("memberName").value.trim();
+        const lastName = document.getElementById("memberLastName").value.trim();
+        const phone = document.getElementById("memberPhone").value.trim();
+        const status = document.getElementById("memberStatus").value;
+        const editIndex = parseInt(document.getElementById("editIndex").value);
 
-}
+        if (!house || !name || !lastName) {
+            showToast("⚠️ กรุณากรอกบ้านเลขที่ ชื่อ และนามสกุล ให้ครบถ้วน");
+            return;
+        }
 
-function closeQR(){
+        const memberData = { house, name, lastName, phone, status };
 
-document.getElementById("qrModal").style.display="none";
+        if (editIndex === -1) {
+            // เพิ่มใหม่
+            members.push(memberData);
+            showToast("✅ บันทึกข้อมูลสมาชิกใหม่สำเร็จ!");
+        } else {
+            // แก้ไขข้อมูลเดิม
+            members[editIndex] = memberData;
+            document.getElementById("editIndex").value = "-1";
+            showToast("✏️ อัปเดตข้อมูลสำเร็จ!");
+        }
 
-}
+        saveAndRefresh();
+        clearMemberForm();
+    }
 
+    // สลับสถานะ นำส่งแล้ว/ยังไม่ได้ส่ง โดยคลิกที่ Badge
+    function toggleStatus(index) {
+        members[index].status = members[index].status === 'delivered' ? 'pending' : 'delivered';
+        const statusText = members[index].status === 'delivered' ? '🟢 นำส่งแล้ว' : '🔴 ยังไม่ได้ส่ง';
+        showToast(`อัปเดตสถานะบ้านเลขที่ ${members[index].house} เป็น "${statusText}"`);
+        saveAndRefresh();
+    }
+
+    // แก้ไขข้อมูล
+    function editMember(index) {
+        const m = members[index];
+        document.getElementById("memberHouse").value = m.house;
+        document.getElementById("memberName").value = m.name;
+        document.getElementById("memberLastName").value = m.lastName;
+        document.getElementById("memberPhone").value = m.phone || '';
+        document.getElementById("memberStatus").value = m.status;
+        document.getElementById("editIndex").value = index;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ลบข้อมูล
+    function deleteMember(index) {
+        if (confirm(`คุณต้องการลบข้อมูลของคุณ ${members[index].name} ${members[index].lastName} ใช่หรือไม่?`)) {
+            members.splice(index, 1);
+            showToast("🗑️ ลบข้อมูลเรียบร้อยแล้ว");
+            saveAndRefresh();
+        }
+    }
+
+    // ล้างฟอร์ม
+    function clearMemberForm() {
+        document.getElementById("memberHouse").value = "";
+        document.getElementById("memberName").value = "";
+        document.getElementById("memberLastName").value = "";
+        document.getElementById("memberPhone").value = "";
+        document.getElementById("memberStatus").value = "pending";
+        document.getElementById("editIndex").value = "-1";
+    }
+
+    // ค้นหาสมาชิก
+    function searchMember() {
+        const keyword = document.getElementById("searchMember").value.toLowerCase();
+        const filtered = members.filter(m => 
+            m.house.toLowerCase().includes(keyword) ||
+            m.name.toLowerCase().includes(keyword) ||
+            m.lastName.toLowerCase().includes(keyword) ||
+            (m.phone && m.phone.includes(keyword))
+        );
+        renderTable(filtered);
+    }
+
+    // บันทึกลง Storage และ อัปเดตหน้าจอ
+    function saveAndRefresh() {
+        localStorage.setItem('riceMembers', JSON.stringify(members));
+        renderTable(members);
+    }
+
+    // วาดตารางและสรุปสถิติ
+    function renderTable(dataList) {
+        const tbody = document.getElementById("memberTable");
+        tbody.innerHTML = "";
+
+        if (dataList.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#888; padding:20px;">ไม่พบข้อมูลสมาชิก</td></tr>`;
+        } else {
+            dataList.forEach((m, index) => {
+                const originalIndex = members.indexOf(m);
+                const isDelivered = m.status === 'delivered';
+                const statusBadge = isDelivered 
+                    ? `<span class="badge badge-success" onclick="toggleStatus(${originalIndex})">🟢 นำส่งแล้ว</span>` 
+                    : `<span class="badge badge-danger" onclick="toggleStatus(${originalIndex})">🔴 ยังไม่ได้ส่ง</span>`;
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td><strong>${m.house}</strong></td>
+                        <td>${m.name} ${m.lastName}</td>
+                        <td>${m.phone || '-'}</td>
+                        <td>${statusBadge}</td>
+                        <td style="text-align:center;">
+                            <button class="btn-edit" onclick="editMember(${originalIndex})">แก้ไข</button>
+                            <button class="btn-delete" onclick="deleteMember(${originalIndex})">ลบ</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        // อัปเดตยอด Dashboard
+        const deliveredCount = members.filter(m => m.status === 'delivered').length;
+        const pendingCount = members.filter(m => m.status === 'pending').length;
+
+        document.getElementById("statTotal").innerText = `${members.length} / 185`;
+        document.getElementById("statDelivered").innerText = deliveredCount;
+        document.getElementById("statPending").innerText = pendingCount;
+    }
+
+    // ระบบ Toast แจ้งเตือนอัตโนมัติ
+    function showToast(message) {
+        const toast = document.getElementById("toastNotice");
+        toast.innerText = message;
+        toast.classList.add("show");
+        setTimeout(() => {
+            toast.classList.remove("show");
+        }, 3000);
+    }
 </script>
 
 </body>
-
 </html>
-
-</div>
