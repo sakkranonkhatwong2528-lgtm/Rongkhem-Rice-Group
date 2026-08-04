@@ -57,7 +57,7 @@
       color: #09130d;
     }
 
-    /* กล่องฟอร์มกรอกข้อมูล (สำหรับผู้ใหญ่บ้านระบุข้อมูล) */
+    /* กล่องฟอร์มกรอกข้อมูล */
     .form-box {
       background: rgba(10, 20, 14, 0.7);
       border: 1px solid var(--glass-border);
@@ -71,12 +71,19 @@
     
     .form-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr 120px;
+      grid-template-columns: 2fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .form-grid-full {
+      display: grid;
+      grid-template-columns: 1fr 120px;
       gap: 10px;
     }
 
     @media(max-width: 600px) {
-      .form-grid { grid-template-columns: 1fr; }
+      .form-grid, .form-grid-full { grid-template-columns: 1fr; }
     }
 
     .form-control {
@@ -87,6 +94,7 @@
       color: var(--text-main);
       font-size: 14px;
       outline: none;
+      width: 100%;
     }
     .form-control:focus { border-color: var(--gold-primary); }
 
@@ -102,7 +110,7 @@
     }
     .btn-update:hover { background: #e6c555; }
 
-    /* การ์ดไว้อาลัยอนิเมชั่นหรูหรา */
+    /* การ์ดไว้อาลัย */
     .condolence-card {
       background: var(--glass-surface);
       backdrop-filter: blur(20px);
@@ -144,6 +152,18 @@
       font-weight: 600;
       text-shadow: 0 2px 4px rgba(0,0,0,0.5);
       min-height: 60px;
+    }
+
+    .details-box {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px dashed rgba(212, 175, 55, 0.3);
+      color: var(--gold-light);
+      font-size: 15px;
+      text-align: left;
+      display: inline-block;
+      width: 100%;
+      max-width: 500px;
     }
 
     .signature {
@@ -191,17 +211,20 @@
     <div style="font-size: 13px; color: var(--gold-light);">🕯️ ระบบแจ้งข่าวและไว้อาลัย</div>
   </div>
 
-  <!-- ส่วนผู้ใหญ่บ้านกรอกข้อมูลผู้เสียชีวิต -->
+  <!-- ส่วนบันทึกข้อมูลผู้เสียชีวิต -->
   <div class="form-box">
-    <h3>📝 บันทึกข้อมูลผู้เสียชีวิต (สำหรับแสดงผลหน้าจอ)</h3>
+    <h3>📝 บันทึกข้อมูลผู้เสียชีวิตและกำหนดการ</h3>
     <div class="form-grid">
       <input type="text" id="inputName" class="form-control" placeholder="ชื่อ - นามสกุล ผู้เสียชีวิต">
       <input type="text" id="inputAge" class="form-control" placeholder="อายุ (เช่น 72 ปี)">
+    </div>
+    <div class="form-grid-full">
+      <input type="text" id="inputSchedule" class="form-control" placeholder="กำหนดการฌาปนกิจ / วัด / สถานที่ตั้งศพ (ถ้ามี)">
       <button onclick="updateCondolence()" class="btn-update">แสดงผล 📢</button>
     </div>
   </div>
 
-  <!-- การ์ดไว้อาลัยอนิเมชั่นหรูหรา -->
+  <!-- การ์ดแสดงผลไว้อาลัย -->
   <div class="condolence-card">
     <div class="ribbon">🕯️</div>
     <div class="title-anim">ด้วยความอาลัยและเสียใจอย่างยิ่ง</div>
@@ -210,6 +233,7 @@
       <div id="typingText" class="marquee-text">
         กำลังโหลดข้อมูล...
       </div>
+      <div id="scheduleDisplay" class="details-box" style="display: none;"></div>
     </div>
 
     <div class="signature">
@@ -225,41 +249,55 @@
 </div>
 
 <script>
-  // โหลดข้อมูลล่าสุดจาก localStorage (ถ้ามี)
+  let timer = null;
+
   window.onload = function() {
     const savedName = localStorage.getItem('funeral_name') || "คุณพ่อ/คุณแม่ (ตัวอย่าง)";
     const savedAge = localStorage.getItem('funeral_age') || "75 ปี";
+    const savedSchedule = localStorage.getItem('funeral_schedule') || "";
     
     document.getElementById('inputName').value = savedName === "คุณพ่อ/คุณแม่ (ตัวอย่าง)" ? "" : savedName;
     document.getElementById('inputAge').value = savedAge === "75 ปี" ? "" : savedAge;
+    document.getElementById('inputSchedule').value = savedSchedule;
     
-    displayMessage(savedName, savedAge);
+    displayMessage(savedName, savedAge, savedSchedule);
   };
 
   function updateCondolence() {
     const name = document.getElementById('inputName').value.trim() || "ผู้วายชนม์";
     const age = document.getElementById('inputAge').value.trim() || "";
+    const schedule = document.getElementById('inputSchedule').value.trim() || "";
     
-    // บันทึกเก็บไว้
     localStorage.setItem('funeral_name', name);
     localStorage.setItem('funeral_age', age);
+    localStorage.setItem('funeral_schedule', schedule);
     
-    displayMessage(name, age);
+    displayMessage(name, age, schedule);
   }
 
-  function displayMessage(name, age) {
+  function displayMessage(name, age, schedule) {
+    if (timer) clearTimeout(timer);
+
     const textElement = document.getElementById("typingText");
+    const scheduleElement = document.getElementById("scheduleDisplay");
+    
     let ageText = age ? ` อายุ ${age}` : "";
     const message = `ขอแสดงความเสียใจกับครอบครัว ต่อการจากไปของ ${name}${ageText} ขอให้ดวงวิญญาณไปสู่สุคติในสัมปรายภพอันสงบสุขร่มเย็นเบื้องสรวงสวรรค์`;
     
     textElement.innerHTML = "";
-    let i = 0;
+    scheduleElement.style.display = "none";
     
+    let i = 0;
     function typeWriter() {
       if (i < message.length) {
         textElement.innerHTML += message.charAt(i);
         i++;
-        setTimeout(typeWriter, 50);
+        timer = setTimeout(typeWriter, 40);
+      } else {
+        if (schedule) {
+          scheduleElement.innerHTML = `📍 <strong>กำหนดการ:</strong> ${schedule}`;
+          scheduleElement.style.display = "block";
+        }
       }
     }
     typeWriter();
