@@ -8,13 +8,15 @@
 body{margin:0;background:#0f5132;color:#fff;font-family:Tahoma,sans-serif;padding:20px}
 .container{max-width:1200px;margin:auto}
 .box{background:#1f6b4a;border-radius:16px;padding:20px;margin-bottom:20px;box-shadow:0 5px 15px #0004}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:20px}
 .stat{background:#2d8a5b;padding:20px;border-radius:12px;text-align:center}
 .stat b{font-size:36px;color:#ffe082}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
 .menu{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}
-.menu a{background:#2d8a5b;color:white;padding:15px;text-align:center;text-decoration:none;border-radius:10px}
-h2{color:#ffe082}
+.menu a{background:#2d8a5b;color:white;padding:15px;text-align:center;text-decoration:none;border-radius:10px;font-weight:bold;transition:0.2s}
+.menu a:hover{background:#d4af37;color:#09130d}
+h2{color:#ffe082;margin-top:0}
+.funeral-active{background:rgba(212,175,55,0.15);border:1px solid #d4af37;padding:15px;border-radius:12px}
 @media(max-width:800px){.stats,.grid,.menu{grid-template-columns:1fr}}
 </style>
 </head>
@@ -34,11 +36,14 @@ h2{color:#ffe082}
 </div>
 
 <div class="grid">
-<div class="box"><h2>⚰️ งานศพที่กำลังเปิด</h2><p id="funeralBox">🕊️ ยังไม่มีงานศพ</p></div>
+<div class="box">
+  <h2>⚰️ งานศพที่กำลังเปิด</h2>
+  <div id="funeralBox">🕊️ ยังไม่มีงานศพ</div>
+</div>
 
 <div class="box">
 <h2>🕊️ ขอแสดงความเสียใจ</h2>
-<p style="line-height:1.8;text-align:center">
+<p id="condolenceBox" style="line-height:1.8;text-align:center">
 คณะกรรมการและสมาชิก <b>กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</b><br>
 ขอแสดงความเสียใจอย่างสุดซึ้งต่อการจากไปของผู้วายชนม์<br><br>
 ขอเป็นกำลังใจให้ครอบครัวและญาติผู้สูญเสีย<br>
@@ -46,7 +51,7 @@ h2{color:#ffe082}
 </p>
 </div>
 
-<div class="box"><h2>📢 ข่าวประชาสัมพันธ์</h2><p>🌾 ระบบกลุ่มข้าวสาร Version 7</p></div>
+<div class="box"><h2>📢 ข่าวประชาสัมพันธ์</h2><p>🌾 ระบบกลุ่มข้าวสาร Version 7 พร้อมใช้งาน</p></div>
 
 <div class="box"><h2>⚠️ สมาชิกค้างส่ง</h2><p id="pending">0 ครัวเรือน</p></div>
 </div>
@@ -67,13 +72,49 @@ h2{color:#ffe082}
 
 <div class="box" style="text-align:center">
 <h3>Rongkhem Rice Group V7</h3>
-<p>จัดทำและพัฒนาโดย นายศักรนนทน์ ขัติย์วงศ์</p>
+<p>จัดทำและพัฒนาโดย นายศักรนนทน์ ขัติย์วงศ์ (ผู้ใหญ่บ้าน)</p>
 </div>
 </div>
 
 <script>
 function clock(){document.getElementById('clock').innerHTML=new Date().toLocaleString('th-TH')}
 setInterval(clock,1000);clock();
+
+// ดึงข้อมูลงานศพจาก localStorage มาแสดงที่ Dashboard
+function loadDashboardData() {
+  const name = localStorage.getItem('funeral_name');
+  const age = localStorage.getItem('funeral_age');
+  const schedule = localStorage.getItem('funeral_schedule');
+  const status = localStorage.getItem('funeral_status');
+
+  const funeralCountEl = document.getElementById('funeral');
+  const funeralBoxEl = document.getElementById('funeralBox');
+  const condolenceBoxEl = document.getElementById('condolenceBox');
+
+  if (name && status !== "closed") {
+    funeralCountEl.innerText = "1";
+    let ageText = age ? ` (อายุ ${age})` : "";
+    
+    funeralBoxEl.innerHTML = `
+      <div class="funeral-active">
+        <h3 style="margin:0 0 8px 0;color:#ffe082;">🕯️ ${name}${ageText}</h3>
+        <p style="margin:0;font-size:14px;">${schedule ? '📍 ' + schedule : 'กำลังดำเนินการแจ้งข่าวสาร'}</p>
+      </div>
+    `;
+
+    condolenceBoxEl.innerHTML = `
+      คณะกรรมการและสมาชิก <b>กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</b><br>
+      ขอแสดงความเสียใจอย่างสุดซึ้งต่อการจากไปของ<br>
+      <b style="color:#ffe082;font-size:18px;">${name}${ageText}</b><br><br>
+      ขอให้ดวงวิญญาณไปสู่สุคติในสัมปรายภพ
+    `;
+  } else {
+    funeralCountEl.innerText = "0";
+    funeralBoxEl.innerHTML = "🕊️ ยังไม่มีงานศพ";
+  }
+}
+
+window.onload = loadDashboardData;
 </script>
 </body>
 </html>
