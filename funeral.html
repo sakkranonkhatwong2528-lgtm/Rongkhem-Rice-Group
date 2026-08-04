@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>แจ้งผู้เสียชีวิตและไว้อาลัย - ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
+  <title>แจ้งผู้เสียชีวิตและเปิดงานศพใหม่ - ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -15,6 +15,8 @@
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --shadow-premium: 0 20px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      --danger: #ef4444;
+      --success: #10b981;
     }
 
     * { box-sizing: border-box; font-family: 'Sarabun', 'Plus Jakarta Sans', sans-serif; transition: all 0.3s ease; }
@@ -30,7 +32,7 @@
       justify-content: space-between;
     }
 
-    .container { max-width: 800px; margin: auto; width: 100%; }
+    .container { max-width: 900px; margin: auto; width: 100%; }
 
     .top-bar {
       display: flex;
@@ -62,28 +64,40 @@
       background: rgba(10, 20, 14, 0.7);
       border: 1px solid var(--glass-border);
       border-radius: 20px;
-      padding: 20px;
-      margin-bottom: 20px;
+      padding: 24px;
+      margin-bottom: 25px;
       box-shadow: var(--shadow-premium);
     }
 
-    .form-box h3 { margin: 0 0 12px 0; font-size: 16px; color: var(--gold-light); }
-    
+    .form-box h3 { margin: 0 0 16px 0; font-size: 18px; color: var(--gold-light); display: flex; align-items: center; gap: 8px; }
+
     .form-grid {
       display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 10px;
-      margin-bottom: 10px;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
     }
 
-    .form-grid-full {
+    .form-grid-2 {
       display: grid;
-      grid-template-columns: 1fr 120px;
-      gap: 10px;
+      grid-template-columns: 1fr 2fr;
+      gap: 12px;
+      margin-bottom: 16px;
     }
 
-    @media(max-width: 600px) {
-      .form-grid, .form-grid-full { grid-template-columns: 1fr; }
+    @media(max-width: 768px) {
+      .form-grid, .form-grid-2 { grid-template-columns: 1fr; }
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-size: 13px;
+      color: var(--gold-light);
     }
 
     .form-control {
@@ -96,19 +110,36 @@
       outline: none;
       width: 100%;
     }
+
     .form-control:focus { border-color: var(--gold-primary); }
 
-    .btn-update {
-      background: linear-gradient(135deg, #d4af37, #aa8c2c);
-      color: #09130d;
-      border: none;
-      padding: 10px;
+    .btn-group {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn {
+      padding: 10px 20px;
       border-radius: 12px;
       font-weight: 700;
       cursor: pointer;
       font-size: 14px;
+      border: none;
+      flex: 1;
     }
-    .btn-update:hover { background: #e6c555; }
+
+    .btn-save {
+      background: linear-gradient(135deg, #d4af37, #aa8c2c);
+      color: #09130d;
+    }
+    .btn-save:hover { background: #e6c555; }
+
+    .btn-cancel {
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid var(--danger);
+      color: #fca5a5;
+    }
+    .btn-cancel:hover { background: var(--danger); color: #fff; }
 
     /* การ์ดไว้อาลัย */
     .condolence-card {
@@ -121,6 +152,7 @@
       text-align: center;
       position: relative;
       overflow: hidden;
+      margin-bottom: 25px;
       animation: fadeIn 1s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
@@ -175,6 +207,55 @@
       animation: pulseGlow 2.5s infinite;
     }
 
+    /* ตารางบันทึกประวัติ */
+    .history-card {
+      background: rgba(10, 20, 14, 0.7);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: var(--shadow-premium);
+    }
+
+    .history-card h3 { margin: 0 0 15px 0; font-size: 16px; color: var(--gold-light); }
+
+    .table-responsive { overflow-x: auto; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    th { color: var(--gold-primary); font-weight: 600; }
+
+    .badge {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      display: inline-block;
+      cursor: pointer;
+    }
+
+    .badge-active { background: rgba(212, 175, 55, 0.2); color: var(--gold-light); border: 1px solid var(--gold-primary); }
+    .badge-done { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid var(--success); }
+
+    .btn-delete {
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid var(--danger);
+      color: #fca5a5;
+      padding: 4px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .btn-delete:hover { background: var(--danger); color: #fff; }
+
     .footer {
       background: rgba(10, 20, 14, 0.6);
       backdrop-filter: blur(15px);
@@ -184,8 +265,29 @@
       text-align: center;
       font-size: 13px;
       border: 1px solid rgba(255, 255, 255, 0.05);
-      margin-top: 20px;
+      margin-top: 25px;
     }
+
+    #toastNotice {
+      visibility: hidden;
+      min-width: 250px;
+      background-color: var(--glass-surface);
+      color: var(--gold-light);
+      border: 1px solid var(--glass-border);
+      text-align: center;
+      border-radius: 12px;
+      padding: 12px 20px;
+      position: fixed;
+      z-index: 1000;
+      right: 20px;
+      bottom: 20px;
+      font-size: 14px;
+      box-shadow: var(--shadow-premium);
+      opacity: 0;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+
+    #toastNotice.show { visibility: visible; opacity: 1; }
 
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
@@ -207,20 +309,45 @@
 
   <!-- แถบบน -->
   <div class="top-bar">
-    <a href="แดชบอร์ด.html" class="back-btn">⬅️ กลับหน้าหลัก</a>
-    <div style="font-size: 13px; color: var(--gold-light);">🕯️ ระบบแจ้งข่าวและไว้อาลัย</div>
+    <a href="index.html" class="back-btn">⬅️ กลับหน้าหลัก</a>
+    <div style="font-size: 13px; color: var(--gold-light);">🕯️ ระบบแจ้งข่าวและเปิดงานศพใหม่</div>
   </div>
 
   <!-- ส่วนบันทึกข้อมูลผู้เสียชีวิต -->
   <div class="form-box">
-    <h3>📝 บันทึกข้อมูลผู้เสียชีวิตและกำหนดการ</h3>
+    <h3>📝 บันทึกเปิดงานศพใหม่และข้อมูลกำหนดการ</h3>
+    
     <div class="form-grid">
-      <input type="text" id="inputName" class="form-control" placeholder="ชื่อ - นามสกุล ผู้เสียชีวิต">
-      <input type="text" id="inputAge" class="form-control" placeholder="อายุ (เช่น 72 ปี)">
+      <div class="form-group">
+        <label>ชื่อ - นามสกุล ผู้เสียชีวิต *</label>
+        <input type="text" id="inputName" class="form-control" placeholder="ระบุชื่อ-นามสกุล">
+      </div>
+      <div class="form-group">
+        <label>อายุ (ปี) *</label>
+        <input type="number" id="inputAge" class="form-control" placeholder="เช่น 75">
+      </div>
+      <div class="form-group">
+        <label>วันเสียชีวิต *</label>
+        <input type="date" id="inputDate" class="form-control">
+      </div>
     </div>
-    <div class="form-grid-full">
-      <input type="text" id="inputSchedule" class="form-control" placeholder="กำหนดการฌาปนกิจ / วัด / สถานที่ตั้งศพ (ถ้ามี)">
-      <button onclick="updateCondolence()" class="btn-update">แสดงผล 📢</button>
+
+    <div class="form-grid-2">
+      <div class="form-group">
+        <label>เจ้าภาพ / เลือกบ้านเลขที่ *</label>
+        <select id="hostSelect" class="form-control">
+          <option value="">-- เลือกเจ้าภาพจากสมาชิก --</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>กำหนดการฌาปนกิจ / สถานที่</label>
+        <input type="text" id="inputSchedule" class="form-control" placeholder="เช่น วันที่ 12 ก.ย. ณ ฌาปนสถานบ้านร่องเข็ม">
+      </div>
+    </div>
+
+    <div class="btn-group">
+      <button onclick="saveFuneral()" class="btn btn-save">⚰️ เปิดงานศพ & แสดงผล 📢</button>
+      <button onclick="resetForm()" class="btn btn-cancel">ยกเลิก</button>
     </div>
   </div>
 
@@ -241,7 +368,32 @@
     </div>
   </div>
 
+  <!-- รายการประวัติงานศพ -->
+  <div class="history-card">
+    <h3>📋 ประวัติรายการงานศพที่บันทึกไว้</h3>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>ผู้เสียชีวิต</th>
+            <th>อายุ</th>
+            <th>วันเสียชีวิต</th>
+            <th>เจ้าภาพ / บ้านเลขที่</th>
+            <th>กำหนดการ</th>
+            <th>สถานะ</th>
+            <th>จัดการ</th>
+          </tr>
+        </thead>
+        <tbody id="funeralTable">
+          <!-- แสดงรายการผ่าน JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
 </div>
+
+<div id="toastNotice">แจ้งเตือน</div>
 
 <div class="footer container">
   <div><strong>ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</strong></div>
@@ -250,29 +402,64 @@
 
 <script>
   let timer = null;
+  let members = JSON.parse(localStorage.getItem('riceMembers')) || [];
+  let funeralLogs = JSON.parse(localStorage.getItem('riceFuneralLogs')) || [];
 
   window.onload = function() {
-    const savedName = localStorage.getItem('funeral_name') || "คุณพ่อ/คุณแม่ (ตัวอย่าง)";
-    const savedAge = localStorage.getItem('funeral_age') || "75 ปี";
-    const savedSchedule = localStorage.getItem('funeral_schedule') || "";
-    
-    document.getElementById('inputName').value = savedName === "คุณพ่อ/คุณแม่ (ตัวอย่าง)" ? "" : savedName;
-    document.getElementById('inputAge').value = savedAge === "75 ปี" ? "" : savedAge;
-    document.getElementById('inputSchedule').value = savedSchedule;
-    
-    displayMessage(savedName, savedAge, savedSchedule);
+    document.getElementById('inputDate').valueAsDate = new Date();
+    loadHostDropdown();
+    renderTable();
+
+    // แสดงผลข้อมูลรายการล่าสุด (ถ้ามี)
+    if (funeralLogs.length > 0) {
+      const latest = funeralLogs[0];
+      displayMessage(latest.name, latest.age ? latest.age + " ปี" : "", latest.schedule);
+    } else {
+      displayMessage("คุณพ่อ/คุณแม่ (ตัวอย่าง)", "75 ปี", "กำหนดการจะแจ้งให้ทราบภายหลัง");
+    }
   };
 
-  function updateCondolence() {
-    const name = document.getElementById('inputName').value.trim() || "ผู้วายชนม์";
-    const age = document.getElementById('inputAge').value.trim() || "";
-    const schedule = document.getElementById('inputSchedule').value.trim() || "";
-    
-    localStorage.setItem('funeral_name', name);
-    localStorage.setItem('funeral_age', age);
-    localStorage.setItem('funeral_schedule', schedule);
-    
-    displayMessage(name, age, schedule);
+  function loadHostDropdown() {
+    const select = document.getElementById('hostSelect');
+    select.innerHTML = '<option value="">-- เลือกเจ้าภาพจากสมาชิก --</option>';
+
+    members.forEach((m) => {
+      const opt = document.createElement('option');
+      opt.value = `บ้านเลขที่ ${m.house} (${m.name} ${m.lastName})`;
+      opt.innerText = `บ้านเลขที่ ${m.house} - ${m.name} ${m.lastName}`;
+      select.appendChild(opt);
+    });
+  }
+
+  function saveFuneral() {
+    const name = document.getElementById('inputName').value.trim();
+    const age = document.getElementById('inputAge').value.trim();
+    const date = document.getElementById('inputDate').value;
+    const host = document.getElementById('hostSelect').value;
+    const schedule = document.getElementById('inputSchedule').value.trim();
+
+    if (!name || !age || !host) {
+      showToast("⚠️ กรุณากรอกชื่อผู้เสียชีวิต อายุ และเลือกเจ้าภาพ");
+      return;
+    }
+
+    const newRecord = {
+      id: Date.now(),
+      name: name,
+      age: age,
+      date: date,
+      host: host,
+      schedule: schedule || '-',
+      status: 'active'
+    };
+
+    funeralLogs.unshift(newRecord);
+    localStorage.setItem('riceFuneralLogs', JSON.stringify(funeralLogs));
+
+    displayMessage(name, age ? age + " ปี" : "", schedule);
+    renderTable();
+    showToast("✅ บันทึกและเปิดงานศพใหม่สำเร็จ!");
+    resetForm();
   }
 
   function displayMessage(name, age, schedule) {
@@ -294,13 +481,78 @@
         i++;
         timer = setTimeout(typeWriter, 40);
       } else {
-        if (schedule) {
+        if (schedule && schedule !== '-') {
           scheduleElement.innerHTML = `📍 <strong>กำหนดการ:</strong> ${schedule}`;
           scheduleElement.style.display = "block";
         }
       }
     }
     typeWriter();
+  }
+
+  function toggleFuneralStatus(id) {
+    funeralLogs = funeralLogs.map(item => {
+      if (item.id === id) {
+        item.status = item.status === 'active' ? 'completed' : 'active';
+      }
+      return item;
+    });
+    localStorage.setItem('riceFuneralLogs', JSON.stringify(funeralLogs));
+    renderTable();
+    showToast("✏️ อัปเดตสถานะงานศพเรียบร้อยแล้ว");
+  }
+
+  function deleteFuneral(id) {
+    if (confirm("คุณต้องการลบข้อมูลงานศพนี้ใช่หรือไม่?")) {
+      funeralLogs = funeralLogs.filter(item => item.id !== id);
+      localStorage.setItem('riceFuneralLogs', JSON.stringify(funeralLogs));
+      renderTable();
+      showToast("🗑️ ลบข้อมูลเรียบร้อยแล้ว");
+    }
+  }
+
+  function resetForm() {
+    document.getElementById('inputName').value = "";
+    document.getElementById('inputAge').value = "";
+    document.getElementById('hostSelect').value = "";
+    document.getElementById('inputSchedule').value = "";
+  }
+
+  function renderTable() {
+    const tbody = document.getElementById('funeralTable');
+    tbody.innerHTML = "";
+
+    if (funeralLogs.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--text-muted); padding:15px;">ยังไม่มีข้อมูลงานศพในระบบ</td></tr>`;
+      return;
+    }
+
+    funeralLogs.forEach((log) => {
+      const statusBadge = log.status === 'active' 
+        ? `<span class="badge badge-active" onclick="toggleFuneralStatus(${log.id})">🟡 กำลังจัดงาน</span>` 
+        : `<span class="badge badge-done" onclick="toggleFuneralStatus(${log.id})">🟢 เสร็จสิ้น</span>`;
+
+      tbody.innerHTML += `
+        <tr>
+          <td><strong>${log.name}</strong></td>
+          <td>${log.age} ปี</td>
+          <td>${log.date}</td>
+          <td>${log.host}</td>
+          <td>${log.schedule}</td>
+          <td>${statusBadge}</td>
+          <td>
+            <button class="btn-delete" onclick="deleteFuneral(${log.id})">ลบ</button>
+          </td>
+        </tr>
+      `;
+    });
+  }
+
+  function showToast(msg) {
+    const toast = document.getElementById("toastNotice");
+    toast.innerText = msg;
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 3000);
   }
 </script>
 
