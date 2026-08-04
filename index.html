@@ -1,766 +1,467 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌾 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
 
-<title>🌾 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
+    <!-- Google Fonts & Tailwind CSS & Chart.js -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-<script src="https://cdn.tailwindcss.com"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Prompt',sans-serif;
-}
-
-body{
-background:#f4f7f6;
-}
-
-.hero{
-background:linear-gradient(135deg,#0f5132,#198754,#28a745);
-}
-
-.card{
-background:#fff;
-border-radius:22px;
-box-shadow:0 10px 30px rgba(0,0,0,.08);
-transition:.3s;
-}
-
-.card:hover{
-transform:translateY(-6px);
-box-shadow:0 20px 40px rgba(0,0,0,.18);
-}
-
-.menu-card{
-background:#fff;
-border-radius:20px;
-padding:30px;
-text-align:center;
-cursor:pointer;
-transition:.3s;
-box-shadow:0 10px 25px rgba(0,0,0,.08);
-}
-
-.menu-card:hover{
-background:#198754;
-color:#fff;
-transform:scale(1.03);
-}
-
-.menu-card:hover h3{
-color:#fff;
-}
-
-footer{
-background:#0f5132;
-color:#fff;
-}
-
-</style>
-
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Prompt', sans-serif;
+        }
+        body {
+            background: #f4f7f6;
+        }
+        .hero {
+            background: linear-gradient(135deg, #0f5132, #198754, #28a745);
+        }
+        .card {
+            background: #fff;
+            border-radius: 22px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+            transition: .3s;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, .12);
+        }
+        .menu-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: .3s;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .08);
+        }
+        .menu-card:hover {
+            background: #198754;
+            color: #fff;
+            transform: scale(1.03);
+        }
+        .menu-card:hover h3 {
+            color: #fff;
+        }
+        footer {
+            background: #0f5132;
+            color: #fff;
+        }
+        /* Modal Transition Animation */
+        .modal {
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal-active {
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+    </style>
 </head>
 
-<body>
-
-<!-- HEADER -->
-
-<header class="hero shadow-xl">
-
-<div class="max-w-7xl mx-auto p-6">
-
-<div class="flex flex-col lg:flex-row justify-between items-center">
-
-<div class="flex items-center gap-5">
-
-<div class="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-xl text-5xl">
-
-🌾
-
-</div>
-
-<div>
-
-<h1 class="text-4xl font-bold text-white">
-
-ระบบกลุ่มข้าวสาร
-
-</h1>
-
-<p class="text-green-100 text-lg">
-
-บ้านร่องเข็ม หมู่ที่ 6
-
-</p>
-
-<p class="text-green-200">
-
-ตำบลจำป่าหวาย อำเภอเมือง จังหวัดพะเยา
-
-</p>
-
-</div>
-
-</div>
-
-<div class="mt-5 lg:mt-0">
-
-<div class="bg-white/20 rounded-2xl backdrop-blur-lg p-5 text-white text-center">
-
-<div id="clock" class="text-3xl font-bold">
-
-00:00:00
-
-</div>
-
-<div id="today">
-
--
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</header>
-
-
-
-<!-- HERO -->
-
-<section class="max-w-7xl mx-auto px-5 mt-8">
-
-<div class="hero rounded-3xl overflow-hidden">
-
-<div class="grid lg:grid-cols-2">
-
-<div class="p-10">
-
-<div class="inline-block bg-white/20 text-white px-4 py-2 rounded-full">
-
-🌾 Rongkhem Rice Group
-
-</div>
-
-<h2 class="text-5xl font-bold text-white mt-6">
-
-ระบบบริหารกลุ่มข้าวสาร
-
-</h2>
-
-<p class="text-green-100 mt-5 leading-8">
-
-ระบบบริหารจัดการสมาชิก
-
-รับข้าวสาร
-
-งานศพ
-
-คลังข้าวสาร
-
-รายงานข้อมูล
-
-แบบครบวงจร
-
-</p>
-
-<div class="mt-8 flex gap-4">
-
-<button class="bg-white text-green-700 px-6 py-3 rounded-xl font-bold">
-
-📥 รับข้าวสาร
-
-</button>
-
-<button class="bg-yellow-400 text-black px-6 py-3 rounded-xl font-bold">
-
-⚰️ แจ้งงานศพ
-
-</button>
-
-</div>
-
-</div>
-
-<div class="flex justify-center items-center">
-
-<div class="text-[180px] animate-bounce">
-
-🌾
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-
-
-<!-- DASHBOARD -->
-
-<section class="max-w-7xl mx-auto px-5 mt-10">
-
-<div class="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
-
-<div class="card p-6">
-
-<div class="flex justify-between">
-
-<div>
-
-<p class="text-gray-500">
-
-สมาชิกทั้งหมด
-
-</p>
-
-<h2 id="stat-members" class="text-5xl font-bold text-blue-600">
-
-185
-
-</h2>
-
-<p class="text-gray-400">
-
-ครัวเรือน
-
-</p>
-
-</div>
-
-<div class="text-6xl">
-
-👥
-
-</div>
-
-</div>
-
-</div>
-
-<div class="card p-6">
-
-<div class="flex justify-between">
-
-<div>
-
-<p class="text-gray-500">
-
-งานศพ
-
-</p>
-
-<h2 id="stat-funerals" class="text-5xl font-bold text-red-600">
-
-0
-
-</h2>
-
-<p class="text-gray-400">
-
-งาน
-
-</p>
-
-</div>
-
-<div class="text-6xl">
-
-⚰️
-
-</div>
-
-</div>
-
-</div>
-
-<div class="card p-6">
-
-<div class="flex justify-between">
-
-<div>
-
-<p class="text-gray-500">
-
-รับข้าวสาร
-
-</p>
-
-<h2 id="stat-rice" class="text-5xl font-bold text-green-600">
-
-0
-
-</h2>
-
-<p class="text-gray-400">
-
-ถุง
-
-</p>
-
-</div>
-
-<div class="text-6xl">
-
-🌾
-
-</div>
-
-</div>
-
-</div>
-
-<div class="card p-6">
-
-<div class="flex justify-between">
-
-<div>
-
-<p class="text-gray-500">
-
-สมาชิกค้างส่ง
-
-</p>
-
-<h2 id="stat-pending" class="text-5xl font-bold text-orange-500">
-
-0
-
-</h2>
-
-<p class="text-gray-400">
-
-ครัวเรือน
-
-</p>
-
-</div>
-
-<div class="text-6xl">
-
-⚠️
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-
-
-<!-- MENU -->
-
-<section class="max-w-7xl mx-auto px-5 mt-10">
-
-<h2 class="text-3xl font-bold mb-5">
-
-⚡ เมนูหลัก
-
-</h2>
-
-<div class="grid grid-cols-2 md:grid-cols-4 gap-5">
-
-<div class="menu-card">
-
-<div class="text-6xl">
-
-👥
-
-</div>
-
-<h3 class="text-xl font-bold mt-4">
-
-ทะเบียนสมาชิก
-
-</h3>
-
-</div>
-
-<div class="menu-card">
-
-<div class="text-6xl">
-
-⚰️
-
-</div>
-
-<h3 class="text-xl font-bold mt-4">
-
-งานศพ
-
-</h3>
-
-</div>
-
-<div class="menu-card">
-
-<div class="text-6xl">
-
-📥
-
-</div>
-
-<h3 class="text-xl font-bold mt-4">
-
-รับข้าวสาร
-
-</h3>
-
-</div>
-
-<div class="menu-card">
-
-<div class="text-6xl">
-
-🌾
-
-</div>
-
-<h3 class="text-xl font-bold mt-4">
-
-คลังข้าวสาร
-
-</h3>
-
-</div>
-<!-- ================= ข่าว + งานศพ ================= -->
-
-<section class="max-w-7xl mx-auto px-5 mt-10">
-
-<div class="grid lg:grid-cols-2 gap-6">
-
-<div class="card p-6">
-
-<h2 class="text-2xl font-bold text-red-600 mb-5">
-
-⚰️ งานศพที่กำลังเปิด
-
-</h2>
-
-<div id="activeFuneral">
-
-<div class="text-center py-10">
-
-<div class="text-7xl">
-
-🕊️
-
-</div>
-
-<h3 class="text-xl font-bold mt-4">
-
-ยังไม่มีงานศพ
-
-</h3>
-
-<p class="text-gray-500">
-
-เมื่อเปิดงานศพ ระบบจะแสดงข้อมูลที่นี่
-
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-
-
-<div class="card p-6">
-
-<h2 class="text-2xl font-bold text-green-700 mb-5">
-
-📢 ข่าวประชาสัมพันธ์
-
-</h2>
-
-<div class="space-y-4">
-
-<div class="border-l-4 border-green-600 pl-4">
-
-<h4 class="font-bold">
-
-🌾 ระบบกลุ่มข้าวสาร Version 4.0
-
-</h4>
-
-<p class="text-gray-500">
-
-พร้อมใช้งานแล้ว
-
-</p>
-
-</div>
-
-<div class="border-l-4 border-yellow-500 pl-4">
-
-<h4 class="font-bold">
-
-📅 ประชุมคณะกรรมการ
-
-</h4>
-
-<p class="text-gray-500">
-
-ติดตามประกาศของหมู่บ้าน
-
-</p>
-
-</div>
-
-<div class="border-l-4 border-red-500 pl-4">
-
-<h4 class="font-bold">
-
-⚠️ สมาชิกค้างส่ง
-
-</h4>
-
-<p class="text-gray-500">
-
-ตรวจสอบได้จากเมนูรายงาน
-
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-
-
-<!-- ================= กิจกรรมล่าสุด ================= -->
-
-<section class="max-w-7xl mx-auto px-5 mt-10">
-
-<div class="card p-6">
-
-<h2 class="text-2xl font-bold mb-5">
-
-📋 กิจกรรมล่าสุด
-
-</h2>
-
-<div id="activityList">
-
-<div class="flex items-center gap-4 border-b py-3">
-
-<div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
-
-📥
-
-</div>
-
-<div>
-
-<h4 class="font-bold">
-
-ยังไม่มีกิจกรรม
-
-</h4>
-
-<p class="text-gray-500">
-
-ระบบจะแสดงรายการล่าสุดอัตโนมัติ
-
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-
-
-<!-- ================= กราฟ ================= -->
-
-<section class="max-w-7xl mx-auto px-5 mt-10">
-
-<div class="card p-6">
-
-<h2 class="text-2xl font-bold mb-5">
-
-📊 สถิติการรับข้าวสาร
-
-</h2>
-
-<canvas id="myChart"></canvas>
-
-</div>
-
-</section>
-
-
-
-<!-- ================= FOOTER ================= -->
-
-<footer class="mt-12">
-
-<div class="max-w-7xl mx-auto p-8">
-
-<div class="grid lg:grid-cols-2 gap-8">
-
-<div>
-
-<h2 class="text-3xl font-bold">
-
-🌾 ระบบกลุ่มข้าวสาร
-
-</h2>
-
-<p class="mt-3">
-
-บ้านร่องเข็ม หมู่ที่ 6
-
-</p>
-
-<p>
-
-ตำบลจำป่าหวาย อำเภอเมือง จังหวัดพะเยา
-
-</p>
-
-</div>
-
-<div class="text-right">
-
-<h3 class="font-bold">
-
-จัดทำและพัฒนาระบบโดย
-
-</h3>
-
-<h2 class="text-3xl font-bold mt-3">
-
-นายศักรนนทน์ ขัติย์วงศ์
-
-</h2>
-
-<p>
-
-ผู้ใหญ่บ้าน บ้านร่องเข็ม หมู่ที่ 6
-
-</p>
-
-<p class="text-green-200 mt-2">
-
-Rongkhem Rice Group V4.0
-
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-</footer>
-
-
-
-<script>
-
-function updateClock(){
-
-const now=new Date();
-
-document.getElementById("clock").innerHTML=
-
-now.toLocaleTimeString("th-TH");
-
-document.getElementById("today").innerHTML=
-
-now.toLocaleDateString("th-TH",{
-
-weekday:"long",
-
-day:"numeric",
-
-month:"long",
-
-year:"numeric"
-
-});
-
-}
-
-setInterval(updateClock,1000);
-
-updateClock();
-
-
-
-const ctx=document.getElementById('myChart');
-
-new Chart(ctx,{
-
-type:'bar',
-
-data:{
-
-labels:['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.'],
-
-datasets:[{
-
-label:'รับข้าวสาร',
-
-data:[20,18,25,30,28,35],
-
-backgroundColor:'#16a34a'
-
-}]
-
-},
-
-options:{
-
-responsive:true,
-
-plugins:{
-
-legend:{display:false}
-
-}
-
-}
-
-});
-
-</script>
-
+<body class="relative min-h-screen">
+
+    <!-- HEADER -->
+    <header class="hero shadow-xl">
+        <div class="max-w-7xl mx-auto p-6">
+            <div class="flex flex-col lg:flex-row justify-between items-center">
+                <div class="flex items-center gap-5">
+                    <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-xl text-5xl">
+                        🌾
+                    </div>
+                    <div>
+                        <h1 class="text-4xl font-bold text-white">ระบบกลุ่มข้าวสาร</h1>
+                        <p class="text-green-100 text-lg">บ้านร่องเข็ม หมู่ที่ 6</p>
+                        <p class="text-green-200">ตำบลจำป่าหวาย อำเภอเมือง จังหวัดพะเยา</p>
+                    </div>
+                </div>
+                <div class="mt-5 lg:mt-0">
+                    <div class="bg-white/20 rounded-2xl backdrop-blur-lg p-5 text-white text-center border border-white/20">
+                        <div id="clock" class="text-3xl font-bold">00:00:00</div>
+                        <div id="today">-</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="max-w-7xl mx-auto px-5 mt-8">
+        <div class="hero rounded-3xl overflow-hidden shadow-2xl">
+            <div class="grid lg:grid-cols-2">
+                <div class="p-8 lg:p-12 flex flex-col justify-center">
+                    <div class="inline-block bg-white/20 text-white px-4 py-1.5 rounded-full w-max text-sm font-medium">
+                        🌾 Rongkhem Rice Group V4.0
+                    </div>
+                    <h2 class="text-4xl lg:text-5xl font-bold text-white mt-4">ระบบบริหารกลุ่มข้าวสาร</h2>
+                    <p class="text-green-100 mt-4 leading-relaxed">
+                        ระบบบริหารจัดการสมาชิก รับข้าวสาร งานศพ คลังข้าวสาร รายงานข้อมูล แบบครบวงจร
+                    </p>
+                    <div class="mt-8 flex flex-wrap gap-4">
+                        <button onclick="openModal('riceModal')" class="bg-white text-green-700 px-6 py-3 rounded-xl font-bold hover:bg-green-50 transition shadow-lg flex items-center gap-2">
+                            📥 รับข้าวสาร
+                        </button>
+                        <button onclick="openModal('funeralModal')" class="bg-yellow-400 text-black px-6 py-3 rounded-xl font-bold hover:bg-yellow-300 transition shadow-lg flex items-center gap-2">
+                            ⚰️ แจ้งงานศพ
+                        </button>
+                    </div>
+                </div>
+                <div class="hidden lg:flex justify-center items-center p-10">
+                    <div class="text-[160px] animate-bounce select-none">🌾</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DASHBOARD STATS -->
+    <section class="max-w-7xl mx-auto px-5 mt-10">
+        <div class="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
+            <div class="card p-6">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p class="text-gray-500 font-medium">สมาชิกทั้งหมด</p>
+                        <h2 id="stat-members" class="text-4xl font-bold text-blue-600 my-1">185</h2>
+                        <p class="text-gray-400 text-sm">ครัวเรือน</p>
+                    </div>
+                    <div class="text-5xl">👥</div>
+                </div>
+            </div>
+            <div class="card p-6">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p class="text-gray-500 font-medium">งานศพที่เปิด</p>
+                        <h2 id="stat-funerals" class="text-4xl font-bold text-red-600 my-1">0</h2>
+                        <p class="text-gray-400 text-sm">งาน</p>
+                    </div>
+                    <div class="text-5xl">⚰️</div>
+                </div>
+            </div>
+            <div class="card p-6">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p class="text-gray-500 font-medium">รับข้าวสารรวม</p>
+                        <h2 id="stat-rice" class="text-4xl font-bold text-green-600 my-1">0</h2>
+                        <p class="text-gray-400 text-sm">ถุง</p>
+                    </div>
+                    <div class="text-5xl">🌾</div>
+                </div>
+            </div>
+            <div class="card p-6">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p class="text-gray-500 font-medium">สมาชิกค้างส่ง</p>
+                        <h2 id="stat-pending" class="text-4xl font-bold text-orange-500 my-1">0</h2>
+                        <p class="text-gray-400 text-sm">ครัวเรือน</p>
+                    </div>
+                    <div class="text-5xl">⚠️</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAIN MENU -->
+    <section class="max-w-7xl mx-auto px-5 mt-10">
+        <h2 class="text-2xl font-bold mb-5 text-gray-800">⚡ เมนูหลัก</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
+            <div class="menu-card" onclick="alert('ระบบทะเบียนสมาชิกกำลังพัฒนา')">
+                <div class="text-5xl">👥</div>
+                <h3 class="text-lg font-bold mt-3 text-gray-700">ทะเบียนสมาชิก</h3>
+            </div>
+            <div class="menu-card" onclick="openModal('funeralModal')">
+                <div class="text-5xl">⚰️</div>
+                <h3 class="text-lg font-bold mt-3 text-gray-700">แจ้งงานศพ</h3>
+            </div>
+            <div class="menu-card" onclick="openModal('riceModal')">
+                <div class="text-5xl">📥</div>
+                <h3 class="text-lg font-bold mt-3 text-gray-700">รับข้าวสาร</h3>
+            </div>
+            <div class="menu-card" onclick="alert('ระบบคลังข้าวสารกำลังพัฒนา')">
+                <div class="text-5xl">🌾</div>
+                <h3 class="text-lg font-bold mt-3 text-gray-700">คลังข้าวสาร</h3>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEWS & ACTIVE FUNERAL -->
+    <section class="max-w-7xl mx-auto px-5 mt-10">
+        <div class="grid lg:grid-cols-2 gap-6">
+            <div class="card p-6">
+                <h2 class="text-xl font-bold text-red-600 mb-4 flex items-center gap-2">
+                    <span>⚰️</span> งานศพที่กำลังเปิดอยู่
+                </h2>
+                <div id="activeFuneral">
+                    <div class="text-center py-8 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
+                        <div class="text-6xl mb-2">🕊️</div>
+                        <h3 class="text-lg font-bold text-gray-700">ยังไม่มีงานศพในระบบ</h3>
+                        <p class="text-gray-500 text-sm mt-1">เมื่อมีการเปิดแจ้งงานศพ ข้อมูลจะแสดงที่นี่ทันที</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card p-6">
+                <h2 class="text-xl font-bold text-green-700 mb-4 flex items-center gap-2">
+                    <span>📢</span> ข่าวประชาสัมพันธ์
+                </h2>
+                <div class="space-y-3">
+                    <div class="border-l-4 border-green-600 bg-green-50/50 p-3 rounded-r-xl">
+                        <h4 class="font-bold text-gray-800">🌾 ระบบกลุ่มข้าวสาร Version 4.0</h4>
+                        <p class="text-gray-600 text-sm">อัปเดตระบบรองรับการบันทึกข้อมูลรับข้าวสารแบบเรียลไทม์แล้ว</p>
+                    </div>
+                    <div class="border-l-4 border-yellow-500 bg-yellow-50/50 p-3 rounded-r-xl">
+                        <h4 class="font-bold text-gray-800">📅 ประชุมคณะกรรมการกลุ่ม</h4>
+                        <p class="text-gray-600 text-sm">ขอเชิญกรรมการร่วมประชุมสรุปยอดประจำเดือน ณ ศาลากลางหมู่บ้าน</p>
+                    </div>
+                    <div class="border-l-4 border-red-500 bg-red-50/50 p-3 rounded-r-xl">
+                        <h4 class="font-bold text-gray-800">⚠️ สมาชิกค้างส่ง</h4>
+                        <p class="text-gray-600 text-sm">ตรวจสอบรายชื่อครัวเรือนค้างส่งข้าวสารประจำงวดได้ที่คณะกรรมการ</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- RECENT ACTIVITIES & CHARTS -->
+    <section class="max-w-7xl mx-auto px-5 mt-10 space-y-10">
+        <div class="card p-6">
+            <h2 class="text-xl font-bold mb-4 text-gray-800">📋 กิจกรรมล่าสุด</h2>
+            <div id="activityList" class="divide-y divide-gray-100">
+                <div class="flex items-center gap-4 py-3 text-gray-500">
+                    <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-xl">📥</div>
+                    <div>
+                        <h4 class="font-medium text-gray-700">ยังไม่มีรายการกิจกรรมวันนี้</h4>
+                        <p class="text-xs text-gray-400">รายการรับส่งข้าวสารและเปิดงานศพจะแสดงขึ้นที่นี่</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card p-6">
+            <h2 class="text-xl font-bold mb-4 text-gray-800">📊 สถิติการรับข้าวสารประจำเดือน</h2>
+            <div class="w-full h-72">
+                <canvas id="myChart"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="mt-16">
+        <div class="max-w-7xl mx-auto p-8 lg:p-12">
+            <div class="grid lg:grid-cols-2 gap-8 items-center">
+                <div>
+                    <h2 class="text-2xl font-bold">🌾 ระบบกลุ่มข้าวสาร</h2>
+                    <p class="mt-2 text-green-100">บ้านร่องเข็ม หมู่ที่ 6</p>
+                    <p class="text-green-200 text-sm">ตำบลจำป่าหวาย อำเภอเมือง จังหวัดพะเยา</p>
+                </div>
+                <div class="lg:text-right border-t lg:border-t-0 pt-6 lg:pt-0 border-green-700">
+                    <h3 class="text-sm font-medium text-green-200">จัดทำและพัฒนาระบบโดย</h3>
+                    <h2 class="text-2xl font-bold mt-1">นายศักรนนทน์ ขัติย์วงศ์</h2>
+                    <p class="text-green-100 text-sm">ผู้ใหญ่บ้าน บ้านร่องเข็ม หมู่ที่ 6</p>
+                    <p class="text-green-300 text-xs mt-2">Rongkhem Rice Group V4.0</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ================= MODAL: ฟอร์มรับข้าวสาร ================= -->
+    <div id="riceModal" class="modal opacity-0 invisible fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl transform transition-all scale-95" id="riceModalCard">
+            <div class="flex justify-between items-center border-b pb-4">
+                <h3 class="text-xl font-bold text-green-700 flex items-center gap-2">
+                    <span>📥</span> บันทึกรับข้าวสาร
+                </h3>
+                <button onclick="closeModal('riceModal')" class="text-gray-400 hover:text-gray-600 text-2xl font-bold">&times;</button>
+            </div>
+            <form id="riceForm" onsubmit="submitRice(event)" class="mt-4 space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">เลือกบ้านเลขที่ / สมาชิก</label>
+                    <select required id="riceMember" class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none">
+                        <option value="">-- เลือกครัวเรือน --</option>
+                        <option value="บ้านเลขที่ 1 (นายสมชาย ดีมาก)">บ้านเลขที่ 1 (นายสมชาย ดีมาก)</option>
+                        <option value="บ้านเลขที่ 12 (นางสมศรี ใจดี)">บ้านเลขที่ 12 (นางสมศรี ใจดี)</option>
+                        <option value="บ้านเลขที่ 25 (นายบุญมี มีสุข)">บ้านเลขที่ 25 (นายบุญมี มีสุข)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">จำนวนข้าวสาร (ถุง/ถัง)</label>
+                    <input type="number" id="riceAmount" min="1" value="1" required class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">หมายเหตุ</label>
+                    <input type="text" id="riceNote" placeholder="ส่งต่องานศพ หรือ คลังประจำเดือน" class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none">
+                </div>
+                <div class="flex gap-3 pt-3">
+                    <button type="button" onclick="closeModal('riceModal')" class="w-1/2 py-3 border border-gray-300 text-gray-700 rounded-xl font-bold hover:bg-gray-50">ยกเลิก</button>
+                    <button type="submit" class="w-1/2 py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700">บันทึกข้อมูล</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ================= MODAL: ฟอร์มแจ้งงานศพ ================= -->
+    <div id="funeralModal" class="modal opacity-0 invisible fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl transform transition-all scale-95" id="funeralModalCard">
+            <div class="flex justify-between items-center border-b pb-4">
+                <h3 class="text-xl font-bold text-red-600 flex items-center gap-2">
+                    <span>⚰️</span> แจ้งเปิดงานศพใหม่
+                </h3>
+                <button onclick="closeModal('funeralModal')" class="text-gray-400 hover:text-gray-600 text-2xl font-bold">&times;</button>
+            </div>
+            <form id="funeralForm" onsubmit="submitFuneral(event)" class="mt-4 space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">ชื่อผู้เสียชีวิต</label>
+                    <input type="text" id="deceasedName" required placeholder="เช่น นายดี ใจงาม" class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-red-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">เจ้าภาพ / บ้านเลขที่</label>
+                    <input type="text" id="hostHouse" required placeholder="เช่น บ้านเลขที่ 45 หมู่ 6" class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-red-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">กำหนดการฌาปนกิจ</label>
+                    <input type="date" id="funeralDate" required class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-red-500 focus:outline-none">
+                </div>
+                <div class="flex gap-3 pt-3">
+                    <button type="button" onclick="closeModal('funeralModal')" class="w-1/2 py-3 border border-gray-300 text-gray-700 rounded-xl font-bold hover:bg-gray-50">ยกเลิก</button>
+                    <button type="submit" class="w-1/2 py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700">เปิดงานศพ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT SYSTEM -->
+    <script>
+        // State Management
+        let totalRiceReceived = 0;
+        let activeFuneralsCount = 0;
+
+        // Clock Update
+        function updateClock() {
+            const now = new Date();
+            document.getElementById("clock").innerHTML = now.toLocaleTimeString("th-TH");
+            document.getElementById("today").innerHTML = now.toLocaleDateString("th-TH", {
+                weekday: "long",
+                day: "numeric",
+                month: "long",
+                year: "numeric"
+            });
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Chart Initialization
+        const ctx = document.getElementById('myChart');
+        const chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.'],
+                datasets: [{
+                    label: 'รับข้าวสาร (ถุง)',
+                    data: [20, 18, 25, 30, 28, 35, 15, 0],
+                    backgroundColor: '#16a34a',
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+
+        // Modal Controls
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.add('modal-active');
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.remove('modal-active');
+        }
+
+        // Add Activity Log
+        function logActivity(icon, title, desc) {
+            const list = document.getElementById('activityList');
+            const now = new Date().toLocaleTimeString("th-TH", { hour: '2-digit', minute: '2-digit' });
+            
+            const itemHTML = `
+                <div class="flex items-center gap-4 py-3 border-b border-gray-100 last:border-0">
+                    <div class="w-10 h-10 rounded-full bg-green-100 text-green-700 flex items-center justify-center text-xl font-bold">${icon}</div>
+                    <div class="flex-1">
+                        <h4 class="font-bold text-gray-800">${title}</h4>
+                        <p class="text-xs text-gray-500">${desc}</p>
+                    </div>
+                    <span class="text-xs text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full">${now} น.</span>
+                </div>
+            `;
+            
+            // Clear default text if exists
+            if (list.innerText.includes("ยังไม่มีรายการกิจกรรมวันนี้")) {
+                list.innerHTML = "";
+            }
+            
+            list.insertAdjacentHTML('afterbegin', itemHTML);
+        }
+
+        // Form Submit: Rice
+        function submitRice(event) {
+            event.preventDefault();
+            const member = document.getElementById('riceMember').value;
+            const amount = parseInt(document.getElementById('riceAmount').value);
+            const note = document.getElementById('riceNote').value || "รับข้าวสารตามปกติ";
+
+            totalRiceReceived += amount;
+            document.getElementById('stat-rice').innerText = totalRiceReceived;
+
+            // Update Chart Current Month (ส.ค.)
+            chart.data.datasets[0].data[7] += amount;
+            chart.update();
+
+            logActivity('📥', `รับข้าวสาร ${amount} ถุง`, `${member} (${note})`);
+
+            document.getElementById('riceForm').reset();
+            closeModal('riceModal');
+            alert(`บันทึกรับข้าวสารจำนวน ${amount} ถุง เรียบร้อยแล้ว`);
+        }
+
+        // Form Submit: Funeral
+        function submitFuneral(event) {
+            event.preventDefault();
+            const name = document.getElementById('deceasedName').value;
+            const house = document.getElementById('hostHouse').value;
+            const date = document.getElementById('funeralDate').value;
+
+            activeFuneralsCount++;
+            document.getElementById('stat-funerals').innerText = activeFuneralsCount;
+
+            const activeFuneralContainer = document.getElementById('activeFuneral');
+            activeFuneralContainer.innerHTML = `
+                <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-2xl">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="bg-red-100 text-red-700 text-xs px-2.5 py-1 rounded-full font-bold">กำลังดำเนินงาน</span>
+                            <h3 class="text-xl font-bold text-gray-800 mt-2">ผู้วายชนม์: ${name}</h3>
+                            <p class="text-gray-600 text-sm mt-1">เจ้าภาพ: ${house}</p>
+                            <p class="text-red-600 text-sm font-medium mt-1">📅 กำหนดการฌาปนกิจ: ${date}</p>
+                        </div>
+                        <span class="text-4xl">🕊️</span>
+                    </div>
+                </div>
+            `;
+
+            logActivity('⚰️', `เปิดแจ้งงานศพใหม่`, `ผู้วายชนม์: ${name} (${house})`);
+
+            document.getElementById('funeralForm').reset();
+            closeModal('funeralModal');
+            alert(`บันทึกข้อมูลการเปิดงานศพของคุณ ${name} เรียบร้อยแล้ว`);
+        }
+    </script>
 </body>
-
 </html>
