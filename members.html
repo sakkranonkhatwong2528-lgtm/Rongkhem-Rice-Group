@@ -60,7 +60,6 @@
       color: #09130d;
     }
 
-    /* สรุปสถิติด้านบน */
     .summary-card {
       background: var(--glass-surface);
       border: 1px solid var(--glass-border);
@@ -106,7 +105,7 @@
       color: var(--text-muted);
     }
 
-    /* ฟอร์มกรอกข้อมูลสมาชิก */
+    /* ฟอร์มกรอกข้อมูล */
     .form-box {
       background: rgba(10, 20, 14, 0.7);
       border: 1px solid var(--glass-border);
@@ -175,7 +174,7 @@
 
     .btn-add:hover { background: #e6c555; }
 
-    /* ค้นหาและตาราง */
+    /* ตารางรายการสมาชิก */
     .table-box {
       background: rgba(10, 20, 14, 0.7);
       border: 1px solid var(--glass-border);
@@ -277,10 +276,10 @@
 
 <div class="container">
 
-  <!-- แถบบน -->
+  <!-- ด้านบน -->
   <div class="top-bar">
     <a href="index.html" class="back-btn">⬅️ กลับหน้าหลัก</a>
-    <div style="font-size: 13px; color: var(--gold-light);">👥 ระบบทะเบียนสมาชิก</div>
+    <div style="font-size: 13px; color: var(--gold-light);">👥 ระบบทะเบียนสมาชิก V4.0</div>
   </div>
 
   <!-- การ์ดสรุป -->
@@ -295,9 +294,9 @@
     </div>
   </div>
 
-  <!-- ฟอร์มเพิ่ม / เพิ่มเติมข้อมูลสมาชิก -->
+  <!-- ฟอร์มเพิ่ม/กรอกสมาชิก -->
   <div class="form-box">
-    <h3>➕ เพิ่ม / บันทึกข้อมูลสมาชิกใหม่</h3>
+    <h3>➕ บันทึกข้อมูลสมาชิกใหม่</h3>
     <div class="form-grid">
       <div class="form-group">
         <label>บ้านเลขที่ *</label>
@@ -323,7 +322,7 @@
     </div>
   </div>
 
-  <!-- ตารางแสดงสมาชิก -->
+  <!-- ตารางรายชื่อ -->
   <div class="table-box">
     <div class="table-header">
       <h3 style="margin: 0; color: var(--gold-light); font-size: 16px;">📋 รายชื่อสมาชิกในระบบ</h3>
@@ -334,15 +333,14 @@
       <table>
         <thead>
           <tr>
-            <th style="width: 80px;">ลำดับ</th>
+            <th style="width: 70px;">ลำดับ</th>
             <th>บ้านเลขที่</th>
             <th>ชื่อ - นามสกุล</th>
             <th>สถานะการส่งข้าวสาร (คลิกเพื่อเปลี่ยน)</th>
-            <th style="width: 80px;">จัดการ</th>
+            <th style="width: 70px;">จัดการ</th>
           </tr>
         </thead>
         <tbody id="memberTable">
-          <!-- โหลดข้อมูลด้วย JS -->
         </tbody>
       </table>
     </div>
@@ -354,13 +352,12 @@
 
 <div class="footer container">
   <div><strong>ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</strong></div>
-  <div style="margin-top: 4px; opacity: 0.8;">พัฒนาโดย นายศักรนนทน์ ขัติย์วงศ์ (ผู้ใหญ่บ้าน)</div>
+  <div style="margin-top: 4px; opacity: 0.8;">จัดทำและพัฒนาระบบโดย นายศักรนนทน์ ขัติย์วงศ์ (ผู้ใหญ่บ้าน)</div>
 </div>
 
 <script>
   let members = JSON.parse(localStorage.getItem('riceMembers')) || [];
 
-  // สร้างข้อมูลตัวอย่าง 185 รายการ หากระบบเปิดใช้งานครั้งแรก
   window.onload = function() {
     if (members.length === 0) {
       initSampleMembers();
@@ -368,15 +365,16 @@
     renderTable();
   };
 
+  // สร้างรายชื่อตั้งต้น 185 ครัวเรือนหากเปิดระบบครั้งแรก
   function initSampleMembers() {
     members = [];
     for (let i = 1; i <= 185; i++) {
       members.push({
         id: Date.now() + i,
         house: `${i}`,
-        name: `ตัวอย่างชื่อที่`,
+        name: `ครัวเรือนที่`,
         lastName: `${i}`,
-        status: i % 10 === 0 ? 'ค้างส่ง' : 'ส่งแล้ว'
+        status: i % 12 === 0 ? 'ค้างส่ง' : 'ส่งแล้ว'
       });
     }
     localStorage.setItem('riceMembers', JSON.stringify(members));
@@ -437,7 +435,6 @@
     members.unshift(newMember);
     localStorage.setItem('riceMembers', JSON.stringify(members));
 
-    // ล้างช่องกรอก
     document.getElementById('addHouse').value = "";
     document.getElementById('addName').value = "";
     document.getElementById('addLastName').value = "";
@@ -457,7 +454,7 @@
     });
     localStorage.setItem('riceMembers', JSON.stringify(members));
     renderTable();
-    showToast("✏️ อัปเดตสถานะเรียบร้อยแล้ว");
+    showToast("✏️ อัปเดตสถานะการส่งข้าวสารแล้ว");
   }
 
   function deleteMember(id) {
