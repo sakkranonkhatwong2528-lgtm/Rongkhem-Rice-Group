@@ -1,515 +1,143 @@
-// ==========================================
-// members.js
-// Rongkhem Rice Group V5.0
-// ==========================================
+// เรียกทำงานเมื่อโหลดหน้าเว็บ
+document.addEventListener('DOMContentLoaded', function () {
+  renderMemberList();
+});
 
-// โหลดสมาชิก
-function loadMembers() {
+// ฟังก์ชันดึงและบันทึกข้อมูลฟอร์ม
+const memberForm = document.getElementById('memberForm');
 
-    const tbody = document.getElementById("memberTable");
+if (memberForm) {
+  memberForm.addEventListener('submit', function (e) {
+    e.preventDefault();
 
-    if (!tbody) return;
+    const memberName = document.getElementById('memberName').value.trim();
+    const address = document.getElementById('address').value.trim();
+    const initialStatus = document.getElementById('initialStatus').value;
 
-    tbody.innerHTML = "";
-
-    const members = db.members.sort((a,b)=>{
-
-        return Number(a.houseNo)-Number(b.houseNo);
-
-    });
-
-    members.forEach((member,index)=>{
-
-        let status = '<span class="status normal">ปกติ</span>';
-
-        if(member.pending>=1){
-
-            status=`<span class="status pending">
-            ค้าง ${member.pending} ครั้ง
-            </span>`;
-
-        }
-
-        if(member.pending>=2){
-
-            status=`<span class="status danger">
-            ค้าง ${member.pending} ครั้ง
-            </span>`;
-
-        }
-
-        tbody.innerHTML+=`
-
-<tr>
-
-<td>${index+1}</td>
-
-<td>${member.houseNo}</td>
-
-<td>${member.name}</td>
-
-<td>${member.phone||"-"}</td>
-
-<td>${member.sent||0}</td>
-
-<td>${member.pending||0}</td>
-
-<td>${status}</td>
-
-<td>
-
-<button
-class="btn btn-success"
-onclick="showQR('${member.id}')">
-
-📱 QR
-
-</button>
-
-<button
-class="btn btn-info"
-onclick="editMember('${member.id}')">
-
-✏️
-
-</button>
-
-<button
-class="btn btn-danger"
-onclick="deleteMember('${member.id}')">
-
-🗑️
-
-</button>
-
-</td>
-
-</tr>
-
-`;
-
-    });
-
-    updateDashboard();
-
-}
-
-
-
-// เพิ่มสมาชิก
-
-function addMember(){
-
-    const name=document.getElementById("memberName").value.trim();
-
-    const house=document.getElementById("memberHouse").value.trim();
-
-    const phone=document.getElementById("memberPhone").value.trim();
-
-    if(name==""){
-
-        alert("กรุณากรอกชื่อสมาชิก");
-
-        return;
-
+    if (!memberName || !address) {
+      alert('กรุณากรอกชื่อ-นามสกุล และบ้านเลขที่ให้ครบถ้วน');
+      return;
     }
 
-    db.members.push({
-
-        id:Date.now().toString(),
-
-        houseNo:house,
-
-        name:name,
-
-        phone:phone,
-
-        sent:0,
-
-        pending:0
-
-    });
-
-    addActivity("เพิ่มสมาชิก "+name);
-
-    saveDB();
-
-    loadMembers();
-
-    clearMemberForm();
-
-}
-
-
-
-// แก้ไขสมาชิก
-
-function editMember(id){
-
-    const member=db.members.find(x=>x.id==id);
-
-    if(!member) return;
-
-    document.getElementById("memberId").value=member.id;
-
-    document.getElementById("memberHouse").value=member.houseNo;
-
-    document.getElementById("memberName").value=member.name;
-
-    document.getElementById("memberPhone").value=member.phone;
-
-}
-
-
-
-// บันทึกการแก้ไข
-
-function updateMember(){
-
-    const id=document.getElementById("memberId").value;
-
-    const member=db.members.find(x=>x.id==id);
-
-    if(!member) return;
-
-    member.houseNo=document.getElementById("memberHouse").value;
-
-    member.name=document.getElementById("memberName").value;
-
-    member.phone=document.getElementById("memberPhone").value;
-
-    addActivity("แก้ไขสมาชิก "+member.name);
-
-    saveDB();
-
-    loadMembers();
-
-    clearMemberForm();
-
-}
-
-
-
-// ลบสมาชิก
-
-function deleteMember(id){
-
-    if(!confirm("ต้องการลบสมาชิกใช่หรือไม่?"))
-
-        return;
-
-    db.members=db.members.filter(x=>x.id!=id);
-
-    saveDB();
-
-    loadMembers();
-
-}
-
-
-
-// ล้างฟอร์ม
-
-function clearMemberForm(){
-
-    document.getElementById("memberId").value="";
-
-    document.getElementById("memberHouse").value="";
-
-    document.getElementById("memberName").value="";
-
-    document.getElementById("memberPhone").value="";
-
-}
-// ===============================
-// ค้นหาสมาชิก
-// ===============================
-
-function searchMember(){
-
-    const keyword = document
-        .getElementById("searchMember")
-        .value
-        .toLowerCase();
-
-    const tbody = document.getElementById("memberTable");
-
-    tbody.innerHTML = "";
-
-    const result = db.members.filter(member=>{
-
-        return (
-            member.name.toLowerCase().includes(keyword) ||
-            member.houseNo.toLowerCase().includes(keyword) ||
-            (member.phone||"").includes(keyword)
-        );
-
-    });
-
-    result.forEach((member,index)=>{
-
-        let status = '<span class="status normal">ปกติ</span>';
-
-        if(member.pending>=1){
-
-            status=`<span class="status pending">
-            ค้าง ${member.pending} ครั้ง
-            </span>`;
-
-        }
-
-        if(member.pending>=2){
-
-            status=`<span class="status danger">
-            ค้าง ${member.pending} ครั้ง
-            </span>`;
-
-        }
-
-        tbody.innerHTML += `
-
-<tr>
-
-<td>${index+1}</td>
-
-<td>${member.houseNo}</td>
-
-<td>${member.name}</td>
-
-<td>${member.phone||"-"}</td>
-
-<td>${member.sent||0}</td>
-
-<td>${member.pending||0}</td>
-
-<td>${status}</td>
-
-<td>
-
-<button
-class="btn btn-success"
-onclick="showQR('${member.id}')">
-
-📱 QR
-
-</button>
-
-<button
-class="btn btn-info"
-onclick="editMember('${member.id}')">
-
-✏️
-
-</button>
-
-<button
-class="btn btn-danger"
-onclick="deleteMember('${member.id}')">
-
-🗑️
-
-</button>
-
-</td>
-
-</tr>
-
-`;
-
-    });
-
-}
-
-
-
-// ===============================
-// Export สมาชิก
-// ===============================
-
-function exportMembers(){
-
-    const blob = new Blob(
-
-        [JSON.stringify(db.members,null,2)],
-
-        {type:"application/json"}
-
-    );
-
-    const a=document.createElement("a");
-
-    a.href=URL.createObjectURL(blob);
-
-    a.download="members.json";
-
-    a.click();
-
-}
-
-
-
-// ===============================
-// Import สมาชิก
-// ===============================
-
-function importMembers(file){
-
-    const reader=new FileReader();
-
-    reader.onload=function(e){
-
-        db.members=JSON.parse(e.target.result);
-
-        saveDB();
-
-        loadMembers();
-
-        alert("นำเข้าข้อมูลสำเร็จ");
-
+    const newMember = {
+      id: 'MEM-' + String(Date.now()).slice(-4),
+      name: memberName,
+      address: address,
+      status: initialStatus, // 'sent' หรือ 'pending'
+      updatedAt: new Date().toISOString()
     };
 
-    reader.readAsText(file);
+    try {
+      let memberList = JSON.parse(localStorage.getItem('Rongkhem_Members')) || [];
+      memberList.push(newMember);
+      localStorage.setItem('Rongkhem_Members', JSON.stringify(memberList));
 
-}
+      alert('✅ บันทึกสมาชิกเรียบร้อยแล้ว!');
 
+      memberForm.reset();
+      closeMemberModal();
+      renderMemberList();
 
-
-// ===============================
-// QR Code
-// ===============================
-
-function showQR(id){
-
-    const member=db.members.find(x=>x.id==id);
-
-    if(!member){
-
-        alert("ไม่พบสมาชิก");
-
-        return;
-
+    } catch (error) {
+      console.error('Error saving member:', error);
+      alert('❌ เกิดข้อผิดพลาดในการบันทึกข้อมูล');
     }
-
-    document.getElementById("qrModal").style.display="flex";
-
-    const qr=document.getElementById("qrcode");
-
-    qr.innerHTML="";
-
-    new QRCode(qr,{
-
-        text:JSON.stringify({
-
-            id:member.id,
-
-            houseNo:member.houseNo,
-
-            name:member.name,
-
-            phone:member.phone||""
-
-        }),
-
-        width:220,
-
-        height:220,
-
-        colorDark:"#198754",
-
-        colorLight:"#ffffff",
-
-        correctLevel:QRCode.CorrectLevel.H
-
-    });
-
-    document.getElementById("qrMemberName").textContent=member.name;
-
-    document.getElementById("qrHouseNo").textContent=member.houseNo;
-
+  });
 }
 
+// ฟังก์ชันแสดงรายการลงตาราง
+function renderMemberList(dataToDisplay = null) {
+  const tableBody = document.getElementById('memberTableBody');
+  if (!tableBody) return;
 
+  const memberList = dataToDisplay || JSON.parse(localStorage.getItem('Rongkhem_Members')) || [];
 
-// ===============================
-// ปิด QR
-// ===============================
+  if (memberList.length === 0) {
+    tableBody.innerHTML = `
+      <tr>
+        <td colspan="6" style="text-align: center; padding: 20px; color: #888;">
+          ไม่พบข้อมูลสมาชิก
+        </td>
+      </tr>
+    `;
+    return;
+  }
 
-function closeQR(){
-
-    document.getElementById("qrModal").style.display="none";
-
+  tableBody.innerHTML = memberList.map((item, index) => {
+    const isSent = item.status === 'sent';
+    return `
+      <tr style="border-bottom: 1px solid #eee;">
+        <td style="padding: 12px;">${index + 1}</td>
+        <td style="padding: 12px;"><strong>${item.id}</strong></td>
+        <td style="padding: 12px;">${escapeHtml(item.name)}</td>
+        <td style="padding: 12px;">${escapeHtml(item.address)}</td>
+        <td style="padding: 12px;">
+          <span class="status-badge ${isSent ? 'status-paid' : 'status-pending'}">
+            ${isSent ? '🟢 ส่งแล้ว' : '🔴 ยังไม่ส่ง'}
+          </span>
+        </td>
+        <td style="padding: 12px;">
+          <button class="btn-status" onclick="toggleStatus('${item.id}')" style="background: ${isSent ? '#ffc107' : '#198754'}; color: ${isSent ? '#000' : '#fff'};">
+            ${isSent ? 'เปลี่ยนเป็น: ยังไม่ส่ง' : 'เปลี่ยนเป็น: ส่งแล้ว'}
+          </button>
+          <button onclick="deleteMember('${item.id}')" style="background: #dc3545; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.8rem;">ลบ</button>
+        </td>
+      </tr>
+    `;
+  }).join('');
 }
 
-
-
-// ===============================
-// พิมพ์ QR
-// ===============================
-
-function printQR(){
-
-    const win=window.open("","","width=500,height=700");
-
-    win.document.write(`
-
-    <html>
-
-    <head>
-
-    <title>QR สมาชิก</title>
-
-    <style>
-
-    body{
-
-        font-family:Sarabun;
-
-        text-align:center;
-
-        padding:30px;
-
+// ฟังก์ชันกดเปลี่ยนสถานะ (ส่งแล้ว <-> ยังไม่ส่ง)
+function toggleStatus(id) {
+  let memberList = JSON.parse(localStorage.getItem('Rongkhem_Members')) || [];
+  
+  memberList = memberList.map(member => {
+    if (member.id === id) {
+      member.status = member.status === 'sent' ? 'pending' : 'sent';
+      member.updatedAt = new Date().toISOString();
     }
+    return member;
+  });
 
-    h2{
-
-        color:#198754;
-
-    }
-
-    </style>
-
-    </head>
-
-    <body>
-
-        <h2>กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</h2>
-
-        ${document.getElementById("qrcode").innerHTML}
-
-        <h3>${document.getElementById("qrMemberName").textContent}</h3>
-
-        <p>บ้านเลขที่ ${document.getElementById("qrHouseNo").textContent}</p>
-
-    </body>
-
-    </html>
-
-    `);
-
-    win.document.close();
-
-    win.print();
-
+  localStorage.setItem('Rongkhem_Members', JSON.stringify(memberList));
+  filterMembers(); // อัปเดตการแสดงผลตาราง
 }
 
+// ฟังก์ชันค้นหาและกรองข้อมูล
+function filterMembers() {
+  const keyword = document.getElementById('searchMember').value.toLowerCase();
+  const statusFilter = document.getElementById('statusFilter').value;
+  const memberList = JSON.parse(localStorage.getItem('Rongkhem_Members')) || [];
 
+  const filtered = memberList.filter(member => {
+    const matchText = member.name.toLowerCase().includes(keyword) || member.address.toLowerCase().includes(keyword);
+    const matchStatus = statusFilter === 'all' || member.status === statusFilter;
+    return matchText && matchStatus;
+  });
 
-// ===============================
-// โหลดระบบ
-// ===============================
+  renderMemberList(filtered);
+}
 
-window.addEventListener("load",function(){
+// ฟังก์ชันลบสมาชิก
+function deleteMember(id) {
+  if (confirm('คุณต้องการลบรายชื่อสมาชิกนี้หรือไม่?')) {
+    let memberList = JSON.parse(localStorage.getItem('Rongkhem_Members')) || [];
+    memberList = memberList.filter(item => item.id !== id);
+    localStorage.setItem('Rongkhem_Members', JSON.stringify(memberList));
+    filterMembers();
+  }
+}
 
-    loadMembers();
+// ฟังก์ชัน ปิด/เปิด Modal
+function openMemberModal() {
+  document.getElementById('memberModal').style.display = 'block';
+}
 
-});
+function closeMemberModal() {
+  document.getElementById('memberModal').style.display = 'none';
+}
+
+function escapeHtml(text) {
+  if (!text) return '';
+  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
