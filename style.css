@@ -59,3 +59,45 @@
 .btn-delete:hover {
   background-color: #c82333;
 }
+/* แถบตัวอักษรวิ่ง - สไตล์โทนสำรวม */
+.condolence-ticker {
+  width: 100%;
+  background: linear-gradient(90deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+  color: #f1f1f1;
+  padding: 12px 0;
+  overflow: hidden;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  border-bottom: 2px solid #444;
+}
+
+.condolence-ticker .ticker-content {
+  display: inline-block;
+  padding-left: 100%;
+  animation: marqueeTicker 22s linear infinite; /* ความเร็วในการวิ่ง */
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+}
+
+.condolence-ticker span {
+  color: #ffde59; /* สีทองสำหรับชื่อผู้เสียชีวิต */
+  font-weight: bold;
+  text-decoration: underline;
+  padding: 0 4px;
+}
+
+/* เอฟเฟกต์การวิ่งขวาไปซ้าย */
+@keyframes marqueeTicker {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(-100%, 0);
+  }
+}
+
+/* เมื่อเอาเมาส์วาง แถบวิ่งจะหยุดชั่วคราวเพื่อให้เปิดอ่านได้ง่ายขึ้น */
+.condolence-ticker:hover .ticker-content {
+  animation-play-state: paused;
+  cursor: pointer;
+}
