@@ -289,7 +289,7 @@
       <p>บ้านร่องเข็ม หมู่ที่ 6 ตำบลจำป่าหวาย อำเภอเมือง จังหวัดพะเยา</p>
     </div>
     <div class="stat-badge">
-      <div class="count" id="totalCount"></div>
+      <div class="count" id="totalCount">0</div>
       <div class="unit">ครัวเรือนทั้งหมด</div>
     </div>
   </div>
@@ -359,26 +359,8 @@
   let members = JSON.parse(localStorage.getItem('riceMembers')) || [];
 
   window.onload = function() {
-    if (members.length === 0) {
-      initSampleMembers();
-    }
     renderTable();
   };
-
-  // สร้างรายชื่อตั้งต้น ครัวเรือนหากเปิดระบบครั้งแรก
-  function initSampleMembers() {
-    members = [];
-    for (let i = 1; i <= 185; i++) {
-      members.push({
-        id: Date.now() + i,
-        house: `${i}`,
-        name: `ครัวเรือนที่`,
-        lastName: `${i}`,
-        status: i % 12 === 0 ? 'ค้างส่ง' : 'ส่งแล้ว'
-      });
-    }
-    localStorage.setItem('riceMembers', JSON.stringify(members));
-  }
 
   function renderTable(data = members) {
     const tbody = document.getElementById('memberTable');
