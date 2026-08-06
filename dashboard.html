@@ -17,6 +17,14 @@ body{margin:0;background:#0f5132;color:#fff;font-family:Tahoma,sans-serif;paddin
 .menu a:hover{background:#d4af37;color:#09130d}
 h2{color:#ffe082;margin-top:0}
 .funeral-active{background:rgba(212,175,55,0.15);border:1px solid #d4af37;padding:15px;border-radius:12px}
+.news-card{background:#2d8a5b;padding:15px;border-radius:12px;margin-bottom:12px;border:1px solid #36a36c}
+.btn-action{padding:6px 12px;border-radius:6px;border:none;cursor:pointer;font-weight:bold;font-size:12px;transition:0.2s}
+.btn-copy{background:#4caf50;color:#fff}
+.btn-copy:hover{background:#43a047}
+.btn-edit{background:#ff9800;color:#fff}
+.btn-edit:hover{background:#f57c00}
+.btn-del{background:#f44336;color:#fff}
+.btn-del:hover{background:#d32f2f}
 @media(max-width:800px){.stats,.grid,.menu{grid-template-columns:1fr}}
 </style>
 </head>
@@ -51,7 +59,16 @@ h2{color:#ffe082;margin-top:0}
 </p>
 </div>
 
-<div class="box"><h2>📢 ข่าวประชาสัมพันธ์</h2><p>🌾 ระบบกลุ่มข้าวสาร Version 7 พร้อมใช้งาน</p></div>
+<!-- 📢 ข่าวประชาสัมพันธ์ (ระบบจัดการสมบูรณ์) -->
+<div class="box">
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+    <h2 style="margin:0;">📢 ข่าวประชาสัมพันธ์</h2>
+    <button onclick="openAddModal()" style="background:#d4af37; color:#09130d; border:none; padding:8px 14px; border-radius:8px; cursor:pointer; font-weight:bold; font-size:13px;">➕ เพิ่มประกาศ</button>
+</div>
+<div id="newsListContainer" style="max-height:350px; overflow-y:auto;">
+    <!-- รายการข่าวจะแสดงที่นี่ -->
+</div>
+</div>
 
 <div class="box"><h2>⚠️ สมาชิกค้างส่ง</h2><p id="pending">0 ครัวเรือน</p></div>
 </div>
@@ -76,11 +93,119 @@ h2{color:#ffe082;margin-top:0}
 </div>
 </div>
 
+<!-- Modal สำหรับเพิ่ม/แก้ไขข่าว -->
+<div id="newsModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); align-items:center; justify-content:center; padding:20px; z-index:1000;">
+    <div style="background:#1f6b4a; padding:25px; border-radius:16px; width:100%; max-width:550px; border:1px solid #d4af37; box-shadow:0 10px 25px #0008;">
+        <h3 id="modalTitle" style="color:#ffe082; margin-top:0;">📢 เพิ่มประกาศใหม่</h3>
+        <form onsubmit="saveNews(event)">
+            <input type="hidden" id="editIndex" value="-1">
+            <textarea id="modalNewsContent" rows="6" required style="width:100%; padding:12px; border-radius:8px; border:1px solid #2d8a5b; background:#0f5132; color:#fff; font-family:Tahoma,sans-serif; box-sizing:border-box; outline:none; font-size:14px; line-height:1.6;" placeholder="พิมพ์ข้อความข่าวประชาสัมพันธ์..."></textarea>
+            <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:15px;">
+                <button type="button" onclick="closeModal()" style="background:#2d8a5b; color:#fff; border:none; padding:10px 16px; border-radius:8px; cursor:pointer; font-weight:bold;">ยกเลิก</button>
+                <button type="submit" style="background:#d4af37; color:#09130d; border:none; padding:10px 16px; border-radius:8px; cursor:pointer; font-weight:bold;">บันทึกข้อความ</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
 function clock(){document.getElementById('clock').innerHTML=new Date().toLocaleString('th-TH')}
 setInterval(clock,1000);clock();
 
-// ดึงข้อมูลงานศพจาก localStorage มาแสดงที่ Dashboard
+// --- ระบบจัดการข่าวประชาสัมพันธ์ ---
+const defaultNews = [
+    "📢\nข่าวประชาสัมพันธ์\n🌾 ระบบกลุ่มข้าวสาร Version 7 พร้อมใช้งาน\nอัปเดตระบบรองรับการบันทึกข้อมูลและจัดการประกาศภายในชุมชน"
+];
+
+function getNews() {
+    const stored = localStorage.getItem('rongkhem_news');
+    if (!stored) {
+        localStorage.setItem('rongkhem_news', JSON.stringify(defaultNews));
+        return defaultNews;
+    }
+    return JSON.parse(stored);
+}
+
+function renderNewsList() {
+    const newsList = getNews();
+    const container = document.getElementById('newsListContainer');
+
+    if (newsList.length === 0) {
+        container.innerHTML = `<p style="text-align:center; color:#a3e4d7; font-size:14px;">ยังไม่มีประกาศข่าวในขณะนี้</p>`;
+        return;
+    }
+
+    container.innerHTML = newsList.map((item, index) => `
+        <div class="news-card">
+            <div style="white-space:pre-line; font-size:14px; line-height:1.6; margin-bottom:12px;">${escapeHtml(item)}</div>
+            <div style="display:flex; justify-content:flex-end; gap:8px; border-top:1px solid rgba(255,255,255,0.1); padding-top:10px;">
+                <button onclick="copyNews(${index})" class="btn-action btn-copy">📋 คัดลอก</button>
+                <button onclick="openEditModal(${index})" class="btn-action btn-edit">✏️ แก้ไข</button>
+                <button onclick="deleteNews(${index})" class="btn-action btn-del">🗑️ ลบ</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function openAddModal() {
+    document.getElementById('editIndex').value = "-1";
+    document.getElementById('modalNewsContent').value = "";
+    document.getElementById('modalTitle').innerText = "📢 เพิ่มประกาศใหม่";
+    document.getElementById('newsModal').style.display = "flex";
+}
+
+function openEditModal(index) {
+    const newsList = getNews();
+    document.getElementById('editIndex').value = index;
+    document.getElementById('modalNewsContent').value = newsList[index];
+    document.getElementById('modalTitle').innerText = "✏️ แก้ไขประกาศ";
+    document.getElementById('newsModal').style.display = "flex";
+}
+
+function closeModal() {
+    document.getElementById('newsModal').style.display = "none";
+}
+
+function saveNews(event) {
+    event.preventDefault();
+    const content = document.getElementById('modalNewsContent').value.trim();
+    const editIndex = parseInt(document.getElementById('editIndex').value);
+    let newsList = getNews();
+
+    if (!content) return;
+
+    if (editIndex === -1) {
+        newsList.unshift(content); // เพิ่มใหม่ไว้บนสุด
+    } else {
+        newsList[editIndex] = content; // แก้ไขของเดิม
+    }
+
+    localStorage.setItem('rongkhem_news', JSON.stringify(newsList));
+    closeModal();
+    renderNewsList();
+}
+
+function deleteNews(index) {
+    if (confirm("คุณแน่ใจหรือไม่ว่าต้องการลบประกาศนี้?")) {
+        let newsList = getNews();
+        newsList.splice(index, 1);
+        localStorage.setItem('rongkhem_news', JSON.stringify(newsList));
+        renderNewsList();
+    }
+}
+
+function copyNews(index) {
+    const newsList = getNews();
+    navigator.clipboard.writeText(newsList[index]).then(() => {
+        alert("คัดลอกข้อความประชาสัมพันธ์เรียบร้อยแล้ว!");
+    });
+}
+
+function escapeHtml(str) {
+    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+}
+
+// --- ดึงข้อมูลงานศพและข้อมูลแดชบอร์ด ---
 function loadDashboardData() {
   const name = localStorage.getItem('funeral_name');
   const age = localStorage.getItem('funeral_age');
@@ -112,6 +237,9 @@ function loadDashboardData() {
     funeralCountEl.innerText = "0";
     funeralBoxEl.innerHTML = "🕊️ ยังไม่มีงานศพ";
   }
+
+  // โหลดรายการข่าว
+  renderNewsList();
 }
 
 window.onload = loadDashboardData;
