@@ -106,11 +106,14 @@
                         <p class="text-green-200">ตำบลจำป่าหวาย อำเภอเมือง จังหวัดพะเยา</p>
                     </div>
                 </div>
-                <div class="mt-5 lg:mt-0">
+                <div class="mt-5 lg:mt-0 flex flex-col sm:flex-row items-center gap-4">
                     <div class="bg-white/20 rounded-2xl backdrop-blur-lg p-5 text-white text-center border border-white/20">
                         <div id="clock" class="text-3xl font-bold">00:00:00</div>
                         <div id="today">-</div>
                     </div>
+                    <button onclick="logout()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl text-sm font-bold shadow transition flex items-center gap-2">
+                        🚪 ออกจากระบบ
+                    </button>
                 </div>
             </div>
         </div>
@@ -321,7 +324,7 @@
         </div>
     </footer>
 
-    <!-- ================= MODAL: ประวัติงานศพย้อนหลัง (เพิ่มปุ่มลบ + เรียงตามวันที่) ================= -->
+    <!-- ================= MODAL: ประวัติงานศพย้อนหลัง ================= -->
     <div id="funeralHistoryModal" class="modal opacity-0 invisible fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
         <div class="bg-white rounded-3xl max-w-4xl w-full p-6 shadow-2xl max-h-[90vh] flex flex-col transform transition-all scale-95" id="printableFuneralHistory">
             <div class="flex justify-between items-center border-b pb-4">
@@ -511,7 +514,8 @@
         </div>
     </div>
 
-    <!-- ดึงไฟล์ members.js -->
+    <!-- ดึงไฟล์ auth.js และ members.js -->
+    <script src="js/auth.js"></script>
     <script src="members.js"></script>
 
     <!-- JAVASCRIPT SYSTEM -->
@@ -525,7 +529,10 @@
                     try { return JSON.parse(stored); } catch(e){}
                 }
             }
-            return (typeof DEFAULT_MEMBERS !== 'undefined') ? DEFAULT_MEMBERS : [];
+            return (typeof DEFAULT_MEMBERS !== 'undefined') ? DEFAULT_MEMBERS : [
+                { id: "RK001", name: "นายศักรนนทน์ ขัติย์วงศ์", houseNo: "1 หมู่ 6", status: "pending" },
+                { id: "RK002", name: "นายสมชาย ใจดี", houseNo: "2 หมู่ 6", status: "sent" }
+            ];
         }
 
         const DEFAULT_FUNERALS = [
@@ -590,12 +597,12 @@
 
         function openModal(modalId) {
             const modal = document.getElementById(modalId);
-            modal.classList.add('modal-active');
+            if (modal) modal.classList.add('modal-active');
         }
 
         function closeModal(modalId) {
             const modal = document.getElementById(modalId);
-            modal.classList.remove('modal-active');
+            if (modal) modal.classList.remove('modal-active');
         }
 
         function startScanner() {
@@ -626,208 +633,31 @@
         }
 
         function onScanSuccess(decodedText) {
-            const scannedCode = decodedText.trim();
-            const matchedMember = memberData.find(m => 
-                m.id.toLowerCase() === scannedCode.toLowerCase() ||
-                m.name.includes(scannedCode)
-            );
-
             stopScanner();
-
-            if (matchedMember) {
-                openRiceForMember(matchedMember);
+            const member = memberData.find(m => m.id === decodedText || m.name.includes(decodedText));
+            if (member) {
+                openModal('riceModal');
+                const select = document.getElementById('riceMember');
+                select.value = member.id;
             } else {
-                alert(`สแกนสำเร็จ: "${scannedCode}" แต่ไม่พบข้อมูลในระบบสมาชิก`);
+                alert("ค้นหาไม่พบรหัสสมาชิก: " + decodedText);
             }
         }
 
-        function openRiceForMember(memberObj) {
-            closeModal('pendingModal');
-            closeModal('memberModal');
-            closeModal('funeralHistoryModal');
-            const riceSelect = document.getElementById('riceMember');
-            const targetValue = `${memberObj.address} (${memberObj.name})`;
-            riceSelect.value = targetValue;
-            openModal('riceModal');
-        }
+        function updateDashboard() {
+            memberData = getMembersData();
+            funeralData = getFuneralData();
 
-        function getPendingMembers() {
-            return memberData.filter(m => m.status === 'pending');
-        }
-
-        function formatThaiDate(dateStr) {
-            if(!dateStr) return "-";
-            const d = new Date(dateStr);
-            return d.toLocaleDateString("th-TH", { day: 'numeric', month: 'short', year: 'numeric' });
-        }
-
-        // ฟังก์ชันจัดเรียงงานศพตาม วัน/เดือน/ปี เสียชีวิต (ใหม่ไปเก่า)
-        function sortFuneralsByDate(list) {
-            return [...list].sort((a, b) => new Date(b.deathDate) - new Date(a.deathDate));
-        }
-
-        // แสดงประวัติงานศพพร้อมปุ่มลบ
-        function renderFuneralHistory(list) {
-            const container = document.getElementById('funeralHistoryContainer');
-            const totalElement = document.getElementById('modalFuneralTotal');
-            container.innerHTML = '';
-            
-            const sortedList = sortFuneralsByDate(list);
-            totalElement.innerText = sortedList.length;
-
-            if (sortedList.length === 0) {
-                container.innerHTML = '<div class="text-center py-10 text-gray-400">ไม่พบประวัติงานศพในระบบ</div>';
-                return;
-            }
-
-            sortedList.forEach(f => {
-                const card = document.createElement('div');
-                card.className = 'p-5 border rounded-2xl bg-gray-50/80 hover:bg-white hover:shadow-md transition flex flex-col md:flex-row justify-between items-start md:items-center gap-4';
-                card.innerHTML = `
-                    <div class="space-y-1">
-                        <div class="flex items-center gap-2">
-                            <span class="text-xs font-bold px-2.5 py-0.5 rounded-full ${f.status === 'active' ? 'bg-red-100 text-red-700' : 'bg-gray-200 text-gray-700'}">
-                                ${f.status === 'active' ? 'กำลังดำเนินงาน' : 'เสร็จสิ้น'}
-                            </span>
-                            <span class="text-xs text-gray-400">รหัสงาน: ${f.id}</span>
-                        </div>
-                        <h4 class="text-lg font-bold text-gray-800">ผู้วายชนม์: ${f.name} (อายุ ${f.age} ปี)</h4>
-                        <p class="text-sm text-gray-600">🏠 เจ้าภาพ: ${f.host}</p>
-                        <p class="text-xs text-gray-500">🕊️ วันเสียชีวิต: ${formatThaiDate(f.deathDate)} | 📅 กำหนดฌาปนกิจ: ${formatThaiDate(f.funeralDate)}</p>
-                    </div>
-                    <div class="flex flex-wrap gap-2 no-print w-full md:w-auto">
-                        <button onclick="showFuneralPendingReport('${f.name}')" class="bg-orange-500 hover:bg-orange-600 text-white px-3 py-2 rounded-xl text-xs font-bold shadow flex-1 md:flex-initial text-center">
-                            ⚠️ ดูผู้ค้างส่ง
-                        </button>
-                        <button onclick="deleteFuneral('${f.id}', '${f.name}')" class="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-2 rounded-xl text-xs font-bold transition flex-1 md:flex-initial text-center border border-red-200">
-                            🗑️ ลบประวัติ
-                        </button>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        // ฟังก์ชันลบประวัติงานศพ
-        function deleteFuneral(id, name) {
-            if (confirm(`คุณต้องการลบประวัติงานศพของคุณ "${name}" (รหัส: ${id}) ใช่หรือไม่?`)) {
-                funeralData = funeralData.filter(f => f.id !== id);
-                localStorage.setItem(FUNERAL_STORAGE_KEY, JSON.stringify(funeralData));
-                
-                logActivity('🗑️', `ลบประวัติงานศพ`, `ผู้วายชนม์: ${name} (${id})`);
-                initMemberSystem();
-                alert(`ลบประวัติงานศพของคุณ ${name} เรียบร้อยแล้ว`);
-            }
-        }
-
-        function filterFuneralHistory() {
-            const query = document.getElementById('funeralSearchInput').value.toLowerCase().trim();
-            const filtered = funeralData.filter(f => 
-                f.name.toLowerCase().includes(query) ||
-                f.host.toLowerCase().includes(query) ||
-                f.id.toLowerCase().includes(query)
-            );
-            renderFuneralHistory(filtered);
-        }
-
-        function showFuneralPendingReport(funeralDeceasedName) {
-            closeModal('funeralHistoryModal');
-            document.getElementById('pendingReportSubtitle').innerText = `รายงานค้างส่งข้าวสารเฉพาะงานศพ: คุณ${funeralDeceasedName}`;
-            openModal('pendingModal');
-        }
-
-        function renderPendingReport(pendingList) {
-            const tbody = document.getElementById('pendingTableBody');
-            const totalCount = document.getElementById('modalPendingTotal');
-            
-            tbody.innerHTML = '';
-            totalCount.innerText = pendingList.length;
-
-            if (pendingList.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-gray-400">🎉 ไม่มีสมาชิกค้างส่งข้าวสารในขณะนี้</td></tr>`;
-                return;
-            }
-
-            pendingList.forEach(m => {
-                const tr = document.createElement('tr');
-                tr.className = 'hover:bg-orange-50/50';
-                tr.innerHTML = `
-                    <td class="p-3 font-bold text-orange-600">${m.id}</td>
-                    <td class="p-3 font-medium text-gray-800">${m.name}</td>
-                    <td class="p-3 text-gray-600">${m.address}</td>
-                    <td class="p-3 text-center">
-                        <span class="text-xs bg-orange-100 text-orange-700 px-2.5 py-1 rounded-full font-bold">ค้างส่ง</span>
-                    </td>
-                    <td class="p-3 text-right no-print">
-                        <button onclick='openRiceForMember(${JSON.stringify(m)})' class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg text-xs font-bold shadow">
-                            📥 รับข้าวสาร
-                        </button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function filterPendingModal() {
-            const query = document.getElementById('pendingSearchInput').value.toLowerCase().trim();
-            const pendingList = getPendingMembers();
-            const filtered = pendingList.filter(m => 
-                m.id.toLowerCase().includes(query) ||
-                m.name.toLowerCase().includes(query) ||
-                m.address.toLowerCase().includes(query)
-            );
-            renderPendingReport(filtered);
-        }
-
-        function renderActiveFuneralCard() {
-            const activeFuneralContainer = document.getElementById('activeFuneral');
-            // เลือกงานศพ active ล่าสุดตามวันเสียชีวิต
-            const sorted = sortFuneralsByDate(funeralData);
-            const activeFuneral = sorted.find(f => f.status === 'active');
-
-            if (activeFuneral) {
-                activeFuneralContainer.innerHTML = `
-                    <div class="bg-red-50 border-l-4 border-red-500 p-5 rounded-r-2xl shadow-sm">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <span class="bg-red-100 text-red-700 text-xs px-2.5 py-1 rounded-full font-bold">กำลังดำเนินงาน</span>
-                                <h3 class="text-xl font-bold text-gray-800 mt-2">ผู้วายชนม์: ${activeFuneral.name} (อายุ ${activeFuneral.age} ปี)</h3>
-                                <p class="text-gray-600 text-sm mt-1">🏠 เจ้าภาพ: ${activeFuneral.host}</p>
-                                <div class="mt-2 space-y-0.5">
-                                    <p class="text-gray-600 text-sm font-medium">🕊️ วันเสียชีวิต: ${formatThaiDate(activeFuneral.deathDate)}</p>
-                                    <p class="text-red-600 text-sm font-bold">📅 กำหนดการฌาปนกิจ: ${formatThaiDate(activeFuneral.funeralDate)}</p>
-                                </div>
-                            </div>
-                            <span class="text-4xl">🕊️</span>
-                        </div>
-
-                        <div class="mt-4 pt-3 border-t border-red-200/60 text-center">
-                            <p class="text-sm font-medium text-red-800 leading-relaxed">
-                                🖤 ทางผู้นำหมู่บ้านร่องเข็มและสมาชิกกลุ่มข้าวสารบ้านร่องเข็ม ขอแสดงความเสียใจกับครอบครัวของคุณ <strong>${activeFuneral.name}</strong> มา ณ ที่นี้
-                            </p>
-                        </div>
-                    </div>
-                `;
-            } else {
-                activeFuneralContainer.innerHTML = `
-                    <div class="text-center py-8 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
-                        <div class="text-6xl mb-2">🕊️</div>
-                        <h3 class="text-lg font-bold text-gray-700">ยังไม่มีงานศพในระบบ</h3>
-                        <p class="text-gray-500 text-sm mt-1">เมื่อมีการเปิดแจ้งงานศพ ข้อมูลจะแสดงที่นี่ทันที</p>
-                    </div>
-                `;
-            }
-        }
-
-        function initMemberSystem() {
             document.getElementById('stat-members').innerText = memberData.length;
             document.getElementById('stat-funerals').innerText = funeralData.length;
+            document.getElementById('modalFuneralTotal').innerText = funeralData.length;
 
-            const pendingMembers = getPendingMembers();
+            const pendingMembers = memberData.filter(m => m.status === 'pending');
             const pendingCount = pendingMembers.length;
             
             document.getElementById('stat-pending').innerText = pendingCount;
             document.getElementById('alertPendingCount').innerText = pendingCount;
+            document.getElementById('modalPendingTotal').innerText = pendingCount;
 
             const alertSection = document.getElementById('pendingAlertSection');
             if (pendingCount === 0) {
@@ -836,142 +666,272 @@
                 alertSection.style.display = 'block';
             }
 
-            const riceSelect = document.getElementById('riceMember');
-            riceSelect.innerHTML = '<option value="">-- เลือกครัวเรือน --</option>';
-            memberData.forEach(m => {
-                const opt = document.createElement('option');
-                opt.value = `${m.address} (${m.name})`;
-                opt.innerText = `${m.id} - ${m.name} (${m.address})`;
-                riceSelect.appendChild(opt);
-            });
-
-            renderMemberModalList(memberData);
-            renderPendingReport(pendingMembers);
-            renderFuneralHistory(funeralData);
-            renderActiveFuneralCard();
+            renderPendingTable(pendingMembers);
+            renderFuneralHistory();
+            renderActiveFuneral();
+            populateRiceSelect();
+            renderMemberListModal();
         }
 
-        function renderMemberModalList(list) {
-            const container = document.getElementById('modalMemberList');
-            container.innerHTML = '';
-
-            if (list.length === 0) {
-                container.innerHTML = '<div class="col-span-full text-center py-8 text-gray-400">ไม่พบรายชื่อสมาชิก</div>';
+        function renderPendingTable(pendingList) {
+            const tbody = document.getElementById('pendingTableBody');
+            if (pendingList.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-gray-400">🎉 ไม่มีสมาชิกค้างส่งข้าวสาร</td></tr>`;
                 return;
             }
 
-            list.forEach(m => {
-                const item = document.createElement('div');
-                item.className = 'p-3 border rounded-xl bg-gray-50 flex justify-between items-center';
-                item.innerHTML = `
-                    <div>
-                        <span class="text-xs font-bold text-blue-600 bg-blue-100 px-2 py-0.5 rounded-full">${m.id}</span>
-                        <h4 class="font-bold text-gray-800 text-sm mt-1">${m.name}</h4>
-                        <p class="text-xs text-gray-500">📍 ${m.address}</p>
-                    </div>
-                    <span class="text-xs px-2 py-1 rounded-full ${m.status === 'pending' ? 'bg-orange-100 text-orange-600 font-bold' : 'bg-green-100 text-green-600'}">
-                        ${m.status === 'pending' ? 'ค้างส่ง' : 'ปกติ'}
-                    </span>
-                `;
-                container.appendChild(item);
-            });
+            tbody.innerHTML = pendingList.map(m => `
+                <tr class="hover:bg-orange-50/50 transition">
+                    <td class="p-3 font-bold text-gray-800">${m.id}</td>
+                    <td class="p-3 font-medium">${m.name}</td>
+                    <td class="p-3">${m.houseNo || m.address || '-'}</td>
+                    <td class="p-3 text-center">
+                        <span class="bg-orange-100 text-orange-800 px-2.5 py-1 rounded-full text-xs font-bold">ค้างส่ง</span>
+                    </td>
+                    <td class="p-3 text-right no-print">
+                        <button onclick="quickReceiveRice('${m.id}')" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg text-xs font-bold transition">
+                            📥 รับข้าวสาร
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
         }
 
-        function filterMembersModal() {
-            const query = document.getElementById('memberSearchInput').value.toLowerCase().trim();
-            const filtered = memberData.filter(m => 
-                m.id.toLowerCase().includes(query) ||
-                m.name.toLowerCase().includes(query) ||
-                m.address.toLowerCase().includes(query)
-            );
-            renderMemberModalList(filtered);
-        }
-
-        function logActivity(icon, title, desc) {
-            const list = document.getElementById('activityList');
-            const now = new Date().toLocaleTimeString("th-TH", { hour: '2-digit', minute: '2-digit' });
-            
-            const itemHTML = `
-                <div class="flex items-center gap-4 py-3 border-b border-gray-100 last:border-0">
-                    <div class="w-10 h-10 rounded-full bg-green-100 text-green-700 flex items-center justify-center text-xl font-bold">${icon}</div>
-                    <div class="flex-1">
-                        <h4 class="font-bold text-gray-800">${title}</h4>
-                        <p class="text-xs text-gray-500">${desc}</p>
-                    </div>
-                    <span class="text-xs text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full">${now} น.</span>
-                </div>
-            `;
-            
-            if (list.innerText.includes("ยังไม่มีรายการกิจกรรมวันนี้")) {
-                list.innerHTML = "";
+        function renderFuneralHistory() {
+            const container = document.getElementById('funeralHistoryContainer');
+            if (funeralData.length === 0) {
+                container.innerHTML = `<div class="text-center py-8 text-gray-400">ยังไม่มีประวัติงานศพในระบบ</div>`;
+                return;
             }
-            
-            list.insertAdjacentHTML('afterbegin', itemHTML);
+
+            // Sort by deathDate descending
+            const sorted = [...funeralData].sort((a, b) => new Date(b.deathDate) - new Date(a.deathDate));
+
+            container.innerHTML = sorted.map(f => `
+                <div class="border border-red-100 bg-red-50/30 p-4 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-lg">⚰️</span>
+                            <h4 class="font-bold text-gray-800 text-base">${f.name} (อายุ ${f.age} ปี)</h4>
+                        </div>
+                        <p class="text-xs text-gray-600 mt-1">เจ้าภาพ: ${f.host}</p>
+                        <p class="text-xs text-gray-500 mt-0.5">วันเสียชีวิต: ${f.deathDate} | วันฌาปนกิจ: ${f.funeralDate}</p>
+                    </div>
+                    <div class="flex items-center gap-2 no-print">
+                        <button onclick="deleteFuneral('${f.id}')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold transition">
+                            🗑️ ลบประวัติ
+                        </button>
+                    </div>
+                </div>
+            `).join('');
         }
 
-        function submitRice(event) {
-            event.preventDefault();
-            const memberStr = document.getElementById('riceMember').value;
-            const amount = parseInt(document.getElementById('riceAmount').value);
-            const note = document.getElementById('riceNote').value || "รับข้าวสารตามปกติ";
+        function renderActiveFuneral() {
+            const container = document.getElementById('activeFuneral');
+            const active = funeralData.find(f => f.status === 'active');
 
-            const matchedMember = memberData.find(m => memberStr.includes(m.name));
-            if (matchedMember) {
-                matchedMember.status = 'approved';
+            if (!active) {
+                container.innerHTML = `
+                    <div class="text-center py-8 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
+                        <div class="text-6xl mb-2">🕊️</div>
+                        <h3 class="text-lg font-bold text-gray-700">ยังไม่มีงานศพในระบบ</h3>
+                        <p class="text-gray-500 text-sm mt-1">เมื่อมีการเปิดแจ้งงานศพ ข้อมูลจะแสดงที่นี่ทันที</p>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="bg-red-50 border border-red-200 p-5 rounded-2xl">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="bg-red-600 text-white px-2.5 py-0.5 rounded-full text-xs font-bold">กำลังเปิดรับข้าวสาร</span>
+                            <h3 class="text-xl font-bold text-gray-800 mt-2">${active.name} (อายุ ${active.age} ปี)</h3>
+                            <p class="text-sm text-gray-600 mt-1">เจ้าภาพ: ${active.host}</p>
+                            <p class="text-xs text-gray-500 mt-1">📅 กำหนดฌาปนกิจ: ${active.funeralDate}</p>
+                        </div>
+                        <button onclick="closeFuneral('${active.id}')" class="bg-gray-700 hover:bg-gray-800 text-white px-3 py-1.5 rounded-xl text-xs font-bold transition">
+                            🔒 ปิดงานศพ
+                        </button>
+                    </div>
+                </div>`;
+        }
+
+        function populateRiceSelect() {
+            const select = document.getElementById('riceMember');
+            select.innerHTML = '<option value="">-- เลือกสมาชิก --</option>' + 
+                memberData.map(m => `<option value="${m.id}">${m.id} - ${m.name} (${m.houseNo || m.address || ''})</option>`).join('');
+        }
+
+        function renderMemberListModal() {
+            const container = document.getElementById('modalMemberList');
+            container.innerHTML = memberData.map(m => `
+                <div class="border p-3 rounded-xl flex justify-between items-center bg-gray-50/50">
+                    <div>
+                        <div class="font-bold text-sm text-gray-800">${m.id} - ${m.name}</div>
+                        <div class="text-xs text-gray-500">${m.houseNo || m.address || '-'}</div>
+                    </div>
+                    <span class="px-2 py-1 rounded-full text-xs font-bold ${m.status === 'sent' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'}">
+                        ${m.status === 'sent' ? 'ส่งแล้ว' : 'ค้างส่ง'}
+                    </span>
+                </div>
+            `).join('');
+        }
+
+        function quickReceiveRice(memberId) {
+            closeModal('pendingModal');
+            openModal('riceModal');
+            document.getElementById('riceMember').value = memberId;
+        }
+
+        function submitRice(e) {
+            e.preventDefault();
+            const memberId = document.getElementById('riceMember').value;
+            const amount = parseInt(document.getElementById('riceAmount').value) || 1;
+            const note = document.getElementById('riceNote').value;
+
+            const member = memberData.find(m => m.id === memberId);
+            if (member) {
+                member.status = 'sent';
+                totalRiceReceived += amount;
+                document.getElementById('stat-rice').innerText = totalRiceReceived;
+
                 if (typeof STORAGE_KEY !== 'undefined') {
                     localStorage.setItem(STORAGE_KEY, JSON.stringify(memberData));
                 }
+
+                addActivity(`📥 รับข้าวสารจาก ${member.name} จำนวน ${amount} ถุง (${note || 'ไม่มีหมายเหตุ'})`);
+                alert(`✅ บันทึกการรับข้าวสารจาก ${member.name} เรียบร้อยแล้ว`);
+                closeModal('riceModal');
+                document.getElementById('riceForm').reset();
+                updateDashboard();
             }
-
-            totalRiceReceived += amount;
-            document.getElementById('stat-rice').innerText = totalRiceReceived;
-
-            chart.data.datasets[0].data[7] += amount;
-            chart.update();
-
-            logActivity('📥', `รับข้าวสาร ${amount} ถุง`, `${memberStr} (${note})`);
-
-            document.getElementById('riceForm').reset();
-            closeModal('riceModal');
-            
-            initMemberSystem();
-            alert(`บันทึกรับข้าวสารจำนวน ${amount} ถุง เรียบร้อยแล้ว`);
         }
 
-        function submitFuneral(event) {
-            event.preventDefault();
-            const name = document.getElementById('deceasedName').value;
-            const age = document.getElementById('deceasedAge').value;
-            const house = document.getElementById('hostHouse').value;
-            const dDate = document.getElementById('deathDate').value;
-            const fDate = document.getElementById('funeralDate').value;
-
-            funeralData.forEach(f => f.status = 'completed');
-
+        function submitFuneral(e) {
+            e.preventDefault();
             const newFuneral = {
-                id: `FN-${new Date().getFullYear()}-${String(funeralData.length + 1).padStart(3, '0')}`,
-                name: name,
-                age: age,
-                host: house,
-                deathDate: dDate,
-                funeralDate: fDate,
+                id: "FN-" + Date.now(),
+                name: document.getElementById('deceasedName').value,
+                age: document.getElementById('deceasedAge').value,
+                host: document.getElementById('hostHouse').value,
+                deathDate: document.getElementById('deathDate').value,
+                funeralDate: document.getElementById('funeralDate').value,
                 status: "active"
             };
 
             funeralData.push(newFuneral);
             localStorage.setItem(FUNERAL_STORAGE_KEY, JSON.stringify(funeralData));
 
-            logActivity('⚰️', `เปิดแจ้งงานศพใหม่`, `ผู้วายชนม์: ${name} (${house})`);
-
-            document.getElementById('funeralForm').reset();
+            addActivity(`⚰️ เปิดแจ้งงานศพใหม่: ${newFuneral.name} (เจ้าภาพ ${newFuneral.host})`);
+            alert("✅ บันทึกเปิดงานศพเรียบร้อยแล้ว");
             closeModal('funeralModal');
+            document.getElementById('funeralForm').reset();
+            updateDashboard();
+        }
 
-            initMemberSystem();
-            alert(`บันทึกข้อมูลการเปิดงานศพของคุณ ${name} เรียบร้อยแล้ว`);
+        function deleteFuneral(id) {
+            if (confirm("คุณแน่ใจหรือไม่ว่าต้องการลบประวัติงานศพนี้?")) {
+                funeralData = funeralData.filter(f => f.id !== id);
+                localStorage.setItem(FUNERAL_STORAGE_KEY, JSON.stringify(funeralData));
+                updateDashboard();
+            }
+        }
+
+        function closeFuneral(id) {
+            if (confirm("ต้องการปิดการรับข้าวสารสำหรับงานศพนี้ใช่หรือไม่?")) {
+                const f = funeralData.find(item => item.id === id);
+                if (f) f.status = 'closed';
+                localStorage.setItem(FUNERAL_STORAGE_KEY, JSON.stringify(funeralData));
+                updateDashboard();
+            }
+        }
+
+        function addActivity(text) {
+            const list = document.getElementById('activityList');
+            const now = new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
+            
+            if (list.innerText.includes("ยังไม่มีรายการกิจกรรมวันนี้")) {
+                list.innerHTML = "";
+            }
+
+            const item = document.createElement('div');
+            item.className = "flex items-center gap-4 py-3";
+            item.innerHTML = `
+                <div class="w-10 h-10 rounded-full bg-green-100 text-green-700 flex items-center justify-center text-xl">🔔</div>
+                <div>
+                    <h4 class="font-medium text-gray-800 text-sm">${text}</h4>
+                    <p class="text-xs text-gray-400">เวลา ${now} น.</p>
+                </div>`;
+            list.prepend(item);
+        }
+
+        function filterPendingModal() {
+            const query = document.getElementById('pendingSearchInput').value.toLowerCase();
+            const filtered = memberData.filter(m => m.status === 'pending' && (
+                m.name.toLowerCase().includes(query) || 
+                m.id.toLowerCase().includes(query) || 
+                (m.houseNo && m.houseNo.toLowerCase().includes(query))
+            ));
+            renderPendingTable(filtered);
+        }
+
+        function filterFuneralHistory() {
+            const query = document.getElementById('funeralSearchInput').value.toLowerCase();
+            const container = document.getElementById('funeralHistoryContainer');
+            const filtered = funeralData.filter(f => 
+                f.name.toLowerCase().includes(query) || 
+                f.host.toLowerCase().includes(query)
+            );
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="text-center py-8 text-gray-400">ไม่พบข้อมูลงานศพที่ค้นหา</div>`;
+                return;
+            }
+
+            const sorted = [...filtered].sort((a, b) => new Date(b.deathDate) - new Date(a.deathDate));
+            container.innerHTML = sorted.map(f => `
+                <div class="border border-red-100 bg-red-50/30 p-4 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-lg">⚰️</span>
+                            <h4 class="font-bold text-gray-800 text-base">${f.name} (อายุ ${f.age} ปี)</h4>
+                        </div>
+                        <p class="text-xs text-gray-600 mt-1">เจ้าภาพ: ${f.host}</p>
+                        <p class="text-xs text-gray-500 mt-0.5">วันเสียชีวิต: ${f.deathDate} | วันฌาปนกิจ: ${f.funeralDate}</p>
+                    </div>
+                    <div class="flex items-center gap-2 no-print">
+                        <button onclick="deleteFuneral('${f.id}')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold transition">
+                            🗑️ ลบประวัติ
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterMembersModal() {
+            const query = document.getElementById('memberSearchInput').value.toLowerCase();
+            const filtered = memberData.filter(m => 
+                m.name.toLowerCase().includes(query) || 
+                m.id.toLowerCase().includes(query) || 
+                (m.houseNo && m.houseNo.toLowerCase().includes(query))
+            );
+            
+            const container = document.getElementById('modalMemberList');
+            container.innerHTML = filtered.map(m => `
+                <div class="border p-3 rounded-xl flex justify-between items-center bg-gray-50/50">
+                    <div>
+                        <div class="font-bold text-sm text-gray-800">${m.id} - ${m.name}</div>
+                        <div class="text-xs text-gray-500">${m.houseNo || m.address || '-'}</div>
+                    </div>
+                    <span class="px-2 py-1 rounded-full text-xs font-bold ${m.status === 'sent' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'}">
+                        ${m.status === 'sent' ? 'ส่งแล้ว' : 'ค้างส่ง'}
+                    </span>
+                </div>
+            `).join('');
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            initMemberSystem();
+            updateDashboard();
         });
     </script>
 </body>
