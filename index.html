@@ -9,6 +9,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- HTML5-QRCode Library for Camera Scanning -->
+    <script src="https://unpkg.com/html5-qrcode"></script>
 
     <style>
         * {
@@ -62,6 +64,10 @@
             opacity: 1 !important;
             visibility: visible !important;
         }
+        #reader video {
+            border-radius: 16px;
+            object-fit: cover;
+        }
     </style>
 </head>
 
@@ -104,6 +110,9 @@
                         ระบบบริหารจัดการสมาชิก รับข้าวสาร งานศพ คลังข้าวสาร รายงานข้อมูล แบบครบวงจร
                     </p>
                     <div class="mt-8 flex flex-wrap gap-4">
+                        <button onclick="startScanner()" class="bg-blue-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-blue-700 transition shadow-lg flex items-center gap-2">
+                            📷 สแกน QR Code
+                        </button>
                         <button onclick="openModal('riceModal')" class="bg-white text-green-700 px-6 py-3 rounded-xl font-bold hover:bg-green-50 transition shadow-lg flex items-center gap-2">
                             📥 รับข้าวสาร
                         </button>
@@ -169,6 +178,10 @@
     <section class="max-w-7xl mx-auto px-5 mt-10">
         <h2 class="text-2xl font-bold mb-5 text-gray-800">⚡ เมนูหลัก</h2>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
+            <div class="menu-card" onclick="startScanner()">
+                <div class="text-5xl">📷</div>
+                <h3 class="text-lg font-bold mt-3 text-gray-700">สแกน QR Code</h3>
+            </div>
             <div class="menu-card" onclick="openModal('memberModal')">
                 <div class="text-5xl">👥</div>
                 <h3 class="text-lg font-bold mt-3 text-gray-700">ทะเบียนสมาชิก</h3>
@@ -180,10 +193,6 @@
             <div class="menu-card" onclick="openModal('riceModal')">
                 <div class="text-5xl">📥</div>
                 <h3 class="text-lg font-bold mt-3 text-gray-700">รับข้าวสาร</h3>
-            </div>
-            <div class="menu-card" onclick="alert('ระบบคลังข้าวสารกำลังพัฒนา')">
-                <div class="text-5xl">🌾</div>
-                <h3 class="text-lg font-bold mt-3 text-gray-700">คลังข้าวสาร</h3>
             </div>
         </div>
     </section>
@@ -267,6 +276,25 @@
             </div>
         </div>
     </footer>
+
+    <!-- ================= MODAL: สแกน QR CODE ================= -->
+    <div id="scannerModal" class="modal opacity-0 invisible fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl transform transition-all scale-95">
+            <div class="flex justify-between items-center border-b pb-4">
+                <h3 class="text-xl font-bold text-blue-700 flex items-center gap-2">
+                    <span>📷</span> สแกน QR Code / บาร์โค้ด
+                </h3>
+                <button onclick="stopScanner()" class="text-gray-400 hover:text-gray-600 text-2xl font-bold">&times;</button>
+            </div>
+            <div class="mt-4">
+                <div id="reader" class="w-full overflow-hidden"></div>
+                <p class="text-xs text-center text-gray-500 mt-3">วาง QR Code รหัสสมาชิก (เช่น RK001) ให้อยู่ในกรอบ</p>
+            </div>
+            <div class="pt-4">
+                <button type="button" onclick="stopScanner()" class="w-full py-3 border border-gray-300 text-gray-700 rounded-xl font-bold hover:bg-gray-50">ปิดกล้อง</button>
+            </div>
+        </div>
+    </div>
 
     <!-- ================= MODAL: ทะเบียนสมาชิก ================= -->
     <div id="memberModal" class="modal opacity-0 invisible fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
@@ -371,6 +399,7 @@
         // State Management
         let totalRiceReceived = 0;
         let activeFuneralsCount = 0;
+        let html5QrCode = null;
 
         // Clock Update
         function updateClock() {
@@ -417,6 +446,56 @@
         function closeModal(modalId) {
             const modal = document.getElementById(modalId);
             modal.classList.remove('modal-active');
+        }
+
+        // QR Code Scanner Controls
+        function startScanner() {
+            openModal('scannerModal');
+            if (!html5QrCode) {
+                html5QrCode = new Html5Qrcode("reader");
+            }
+            const config = { fps: 10, qrbox: { width: 220, height: 220 } };
+            
+            html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess)
+            .catch(err => {
+                alert("ไม่สามารถเปิดกล้องได้: " + err);
+                closeModal('scannerModal');
+            });
+        }
+
+        function stopScanner() {
+            if (html5QrCode && html5QrCode.isScanning) {
+                html5QrCode.stop().then(() => {
+                    closeModal('scannerModal');
+                }).catch(err => {
+                    console.error("Failed to stop scanner", err);
+                    closeModal('scannerModal');
+                });
+            } else {
+                closeModal('scannerModal');
+            }
+        }
+
+        function onScanSuccess(decodedText) {
+            const scannedCode = decodedText.trim();
+            // Search member by ID or Name
+            const matchedMember = memberData.find(m => 
+                m.id.toLowerCase() === scannedCode.toLowerCase() ||
+                m.name.includes(scannedCode)
+            );
+
+            stopScanner();
+
+            if (matchedMember) {
+                // Open Rice Modal and auto-select member
+                const riceSelect = document.getElementById('riceMember');
+                const targetValue = `${matchedMember.address} (${matchedMember.name})`;
+                riceSelect.value = targetValue;
+                
+                openModal('riceModal');
+            } else {
+                alert(`สแกนสำเร็จ: "${scannedCode}" แต่ไม่พบข้อมูลในระบบสมาชิก`);
+            }
         }
 
         // Member Data Integration Functionality
