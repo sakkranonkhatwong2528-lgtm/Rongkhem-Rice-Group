@@ -273,7 +273,7 @@
         </div>
     </section>
 
-    <!-- NEWS & ACTIVE FUNERAL -->
+    <!-- NEWS & ACTIVE FUNERAL & RULES -->
     <section class="max-w-7xl mx-auto px-5 mt-10">
         <div class="grid lg:grid-cols-2 gap-6">
             <div class="card p-6">
@@ -294,22 +294,28 @@
                 </div>
             </div>
 
-            <div class="card p-6">
-                <h2 class="text-xl font-bold text-green-700 mb-4 flex items-center gap-2">
-                    <span>📢</span> ข่าวประชาสัมพันธ์
+            <div class="card p-6 space-y-4">
+                <h2 class="text-xl font-bold text-green-700 flex items-center gap-2">
+                    <span>📢</span> ข่าวประชาสัมพันธ์ & กติกาการเป็นสมาชิก
                 </h2>
                 <div class="space-y-3">
+                    <!-- 🚨 เพิ่มการ์ดกติกาพ้นสภาพการเป็นสมาชิก -->
+                    <div class="border-l-4 border-red-600 bg-red-50 p-3.5 rounded-r-xl shadow-sm">
+                        <h4 class="font-bold text-red-800 flex items-center gap-1.5 text-sm sm:text-base">
+                            <span>🚨</span> กติกาและข้อบังคับการเป็นสมาชิกกลุ่ม
+                        </h4>
+                        <p class="text-red-700 text-xs sm:text-sm mt-1 leading-relaxed">
+                            หากสมาชิกกลุ่มข้าวสาร <strong>ไม่นำส่งข้าวสารเกิน 2 ครั้ง</strong> คณะกรรมการจะพิจารณา <strong><span class="underline decoration-red-500 font-extrabold text-red-900">ตัดสิทธิ์การเป็นสมาชิกทันที</span></strong> โดยไม่ต้องแจ้งให้ทราบล่วงหน้า
+                        </p>
+                    </div>
+
                     <div class="border-l-4 border-green-600 bg-green-50/50 p-3 rounded-r-xl">
-                        <h4 class="font-bold text-gray-800">🌾 ระบบกลุ่มข้าวสาร Version 4.0</h4>
-                        <p class="text-gray-600 text-sm">อัปเดตระบบรองรับการบันทึกข้อมูลรับข้าวสารแบบเรียลไทม์แล้ว</p>
+                        <h4 class="font-bold text-gray-800 text-sm">🌾 ระบบกลุ่มข้าวสาร Version 4.0</h4>
+                        <p class="text-gray-600 text-xs sm:text-sm">อัปเดตระบบรองรับการบันทึกข้อมูลรับข้าวสารแบบเรียลไทม์แล้ว</p>
                     </div>
                     <div class="border-l-4 border-yellow-500 bg-yellow-50/50 p-3 rounded-r-xl">
-                        <h4 class="font-bold text-gray-800">📅 ประชุมคณะกรรมการกลุ่ม</h4>
-                        <p class="text-gray-600 text-sm">ขอเชิญกรรมการร่วมประชุมสรุปยอดประจำเดือน ณ ศาลากลางหมู่บ้าน</p>
-                    </div>
-                    <div class="border-l-4 border-red-500 bg-red-50/50 p-3 rounded-r-xl">
-                        <h4 class="font-bold text-gray-800">⚠️ สมาชิกค้างส่ง</h4>
-                        <p class="text-gray-600 text-sm">สามารถกดตรวจดูรายชื่อผู้ค้างส่งและพิมพ์เอกสารติดตามได้จากเมนูหลัก</p>
+                        <h4 class="font-bold text-gray-800 text-sm">📅 ประชุมคณะกรรมการกลุ่ม</h4>
+                        <p class="text-gray-600 text-xs sm:text-sm">ขอเชิญกรรมการร่วมประชุมสรุปยอดประจำเดือน ณ ศาลากลางหมู่บ้าน</p>
                     </div>
                 </div>
             </div>
@@ -410,6 +416,11 @@
                         🖨️ พิมพ์รายงาน / PDF
                     </button>
                 </div>
+            </div>
+
+            <!-- ข้อความเตือนกติกาตัดสิทธิ์ใต้รายงานค้างส่ง -->
+            <div class="bg-red-50 border-l-4 border-red-500 p-3 rounded-lg mb-4 text-xs text-red-800 font-medium">
+                🚨 <strong>ข้อบังคับกลุ่ม:</strong> หากไม่ส่งข้าวสารเกิน 2 ครั้ง คณะกรรมการจะตัดสิทธิ์การเป็นสมาชิกทันที
             </div>
 
             <div class="overflow-y-auto flex-1 pr-1">
