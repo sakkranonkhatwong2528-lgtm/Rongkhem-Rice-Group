@@ -68,6 +68,25 @@
             border-radius: 16px;
             object-fit: cover;
         }
+
+        /* Print Style for Pending Report */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #printableReport, #printableReport * {
+                visibility: visible;
+            }
+            #printableReport {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 
@@ -161,16 +180,32 @@
                     <div class="text-5xl">🌾</div>
                 </div>
             </div>
-            <div class="card p-6">
+            <div class="card p-6 cursor-pointer hover:border-orange-500 border border-transparent" onclick="openModal('pendingModal')">
                 <div class="flex justify-between items-center">
                     <div>
                         <p class="text-gray-500 font-medium">สมาชิกค้างส่ง</p>
                         <h2 id="stat-pending" class="text-4xl font-bold text-orange-500 my-1">0</h2>
-                        <p class="text-gray-400 text-sm">ครัวเรือน</p>
+                        <p class="text-orange-600 text-xs font-semibold underline mt-1">คลิกเพื่อดูรายชื่อ ➔</p>
                     </div>
                     <div class="text-5xl">⚠️</div>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- DASHBOARD WARNING BANNER (แจ้งเตือนผู้ค้างส่ง) -->
+    <section class="max-w-7xl mx-auto px-5 mt-6" id="pendingAlertSection">
+        <div class="bg-orange-50 border-l-4 border-orange-500 p-4 rounded-2xl shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div class="flex items-center gap-3">
+                <span class="text-3xl">⚠️</span>
+                <div>
+                    <h4 class="font-bold text-orange-800">แจ้งเตือน: รายการสมาชิกค้างส่งข้าวสาร</h4>
+                    <p class="text-sm text-orange-700">ขณะนี้มีสมาชิกค้างส่งอยู่จำนวน <strong id="alertPendingCount" class="text-base">0</strong> ครัวเรือน กรุณาติดตามและอัปเดตข้อมูล</p>
+                </div>
+            </div>
+            <button onclick="openModal('pendingModal')" class="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-xl text-sm font-bold shadow transition whitespace-nowrap">
+                📋 ดูรายชื่อค้างส่งทั้งหมด
+            </button>
         </div>
     </section>
 
@@ -186,9 +221,9 @@
                 <div class="text-5xl">👥</div>
                 <h3 class="text-lg font-bold mt-3 text-gray-700">ทะเบียนสมาชิก</h3>
             </div>
-            <div class="menu-card" onclick="openModal('funeralModal')">
-                <div class="text-5xl">⚰️</div>
-                <h3 class="text-lg font-bold mt-3 text-gray-700">แจ้งงานศพ</h3>
+            <div class="menu-card" onclick="openModal('pendingModal')">
+                <div class="text-5xl">⚠️</div>
+                <h3 class="text-lg font-bold mt-3 text-gray-700">รายงานค้างส่ง</h3>
             </div>
             <div class="menu-card" onclick="openModal('riceModal')">
                 <div class="text-5xl">📥</div>
@@ -228,7 +263,7 @@
                     </div>
                     <div class="border-l-4 border-red-500 bg-red-50/50 p-3 rounded-r-xl">
                         <h4 class="font-bold text-gray-800">⚠️ สมาชิกค้างส่ง</h4>
-                        <p class="text-gray-600 text-sm">ตรวจสอบรายชื่อครัวเรือนค้างส่งข้าวสารประจำงวดได้ที่คณะกรรมการ</p>
+                        <p class="text-gray-600 text-sm">สามารถกดตรวจดูรายชื่อผู้ค้างส่งและพิมพ์เอกสารติดตามได้จากเมนูหลัก</p>
                     </div>
                 </div>
             </div>
@@ -276,6 +311,52 @@
             </div>
         </div>
     </footer>
+
+    <!-- ================= MODAL: รายงานสมาชิกค้างส่ง ================= -->
+    <div id="pendingModal" class="modal opacity-0 invisible fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl max-w-4xl w-full p-6 shadow-2xl max-h-[90vh] flex flex-col transform transition-all scale-95" id="printableReport">
+            <div class="flex justify-between items-center border-b pb-4">
+                <div>
+                    <h3 class="text-xl font-bold text-orange-600 flex items-center gap-2">
+                        <span>⚠️</span> สรุปรายงานสมาชิกค้างส่งข้าวสาร
+                    </h3>
+                    <p class="text-xs text-gray-500 mt-1">บ้านร่องเข็ม หมู่ที่ 6 ต.จำป่าหวาย อ.เมือง จ.พะเยา</p>
+                </div>
+                <button onclick="closeModal('pendingModal')" class="no-print text-gray-400 hover:text-gray-600 text-2xl font-bold">&times;</button>
+            </div>
+            
+            <div class="my-4 flex flex-col sm:flex-row gap-3 justify-between items-center no-print">
+                <input type="text" id="pendingSearchInput" onkeyup="filterPendingModal()" placeholder="🔍 ค้นหาผู้ค้างส่ง..." class="w-full sm:w-80 p-2.5 border rounded-xl focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm">
+                <div class="flex gap-2 w-full sm:w-auto">
+                    <button onclick="window.print()" class="bg-gray-800 text-white px-4 py-2 rounded-xl text-sm font-bold hover:bg-gray-700 transition flex items-center gap-1 justify-center w-full">
+                        🖨️ พิมพ์รายงาน / PDF
+                    </button>
+                </div>
+            </div>
+
+            <div class="overflow-y-auto flex-1 pr-1">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-orange-50 border-b border-orange-200 text-orange-900 text-xs sm:text-sm">
+                            <th class="p-3">รหัส</th>
+                            <th class="p-3">ชื่อ - นามสกุล</th>
+                            <th class="p-3">บ้านเลขที่ / ที่อยู่</th>
+                            <th class="p-3 text-center">สถานะ</th>
+                            <th class="p-3 text-right no-print">การดำเนินการ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pendingTableBody" class="divide-y divide-gray-100 text-sm text-gray-700">
+                        <!-- Rows rendered via JS -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="border-t pt-3 mt-2 flex justify-between items-center text-xs text-gray-500">
+                <span>ยอดรวมผู้ค้างส่ง: <strong id="modalPendingTotal" class="text-orange-600 font-bold text-sm">0</strong> ราย</span>
+                <span class="no-print">กดปุ่ม "รับข้าวสาร" เพื่อบันทึกข้อมูลเมื่อได้รับแล้ว</span>
+            </div>
+        </div>
+    </div>
 
     <!-- ================= MODAL: สแกน QR CODE ================= -->
     <div id="scannerModal" class="modal opacity-0 invisible fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
@@ -394,7 +475,7 @@
             return (typeof DEFAULT_MEMBERS !== 'undefined') ? DEFAULT_MEMBERS : [];
         }
 
-        const memberData = getMembersData();
+        let memberData = getMembersData();
 
         // State Management
         let totalRiceReceived = 0;
@@ -478,7 +559,6 @@
 
         function onScanSuccess(decodedText) {
             const scannedCode = decodedText.trim();
-            // Search member by ID or Name
             const matchedMember = memberData.find(m => 
                 m.id.toLowerCase() === scannedCode.toLowerCase() ||
                 m.name.includes(scannedCode)
@@ -487,15 +567,67 @@
             stopScanner();
 
             if (matchedMember) {
-                // Open Rice Modal and auto-select member
-                const riceSelect = document.getElementById('riceMember');
-                const targetValue = `${matchedMember.address} (${matchedMember.name})`;
-                riceSelect.value = targetValue;
-                
-                openModal('riceModal');
+                openRiceForMember(matchedMember);
             } else {
                 alert(`สแกนสำเร็จ: "${scannedCode}" แต่ไม่พบข้อมูลในระบบสมาชิก`);
             }
+        }
+
+        function openRiceForMember(memberObj) {
+            closeModal('pendingModal');
+            closeModal('memberModal');
+            const riceSelect = document.getElementById('riceMember');
+            const targetValue = `${memberObj.address} (${memberObj.name})`;
+            riceSelect.value = targetValue;
+            openModal('riceModal');
+        }
+
+        // Pending Member System & Reports
+        function getPendingMembers() {
+            return memberData.filter(m => m.status === 'pending');
+        }
+
+        function renderPendingReport(pendingList) {
+            const tbody = document.getElementById('pendingTableBody');
+            const totalCount = document.getElementById('modalPendingTotal');
+            
+            tbody.innerHTML = '';
+            totalCount.innerText = pendingList.length;
+
+            if (pendingList.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-gray-400">🎉 ไม่มีสมาชิกค้างส่งข้าวสารในขณะนี้</td></tr>`;
+                return;
+            }
+
+            pendingList.forEach(m => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-orange-50/50';
+                tr.innerHTML = `
+                    <td class="p-3 font-bold text-orange-600">${m.id}</td>
+                    <td class="p-3 font-medium text-gray-800">${m.name}</td>
+                    <td class="p-3 text-gray-600">${m.address}</td>
+                    <td class="p-3 text-center">
+                        <span class="text-xs bg-orange-100 text-orange-700 px-2.5 py-1 rounded-full font-bold">ค้างส่ง</span>
+                    </td>
+                    <td class="p-3 text-right no-print">
+                        <button onclick='openRiceForMember(${JSON.stringify(m)})' class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg text-xs font-bold shadow">
+                            📥 รับข้าวสาร
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function filterPendingModal() {
+            const query = document.getElementById('pendingSearchInput').value.toLowerCase().trim();
+            const pendingList = getPendingMembers();
+            const filtered = pendingList.filter(m => 
+                m.id.toLowerCase().includes(query) ||
+                m.name.toLowerCase().includes(query) ||
+                m.address.toLowerCase().includes(query)
+            );
+            renderPendingReport(filtered);
         }
 
         // Member Data Integration Functionality
@@ -503,8 +635,19 @@
             // Update Stat Dashboard
             document.getElementById('stat-members').innerText = memberData.length;
 
-            const pendingCount = memberData.filter(m => m.status === 'pending').length;
+            const pendingMembers = getPendingMembers();
+            const pendingCount = pendingMembers.length;
+            
             document.getElementById('stat-pending').innerText = pendingCount;
+            document.getElementById('alertPendingCount').innerText = pendingCount;
+
+            // Hide warning alert if zero pending
+            const alertSection = document.getElementById('pendingAlertSection');
+            if (pendingCount === 0) {
+                alertSection.style.display = 'none';
+            } else {
+                alertSection.style.display = 'block';
+            }
 
             // Populate Select Options in Rice Modal
             const riceSelect = document.getElementById('riceMember');
@@ -518,6 +661,9 @@
 
             // Render Member Cards in Modal
             renderMemberModalList(memberData);
+            
+            // Render Pending Report Modal
+            renderPendingReport(pendingMembers);
         }
 
         function renderMemberModalList(list) {
@@ -538,8 +684,8 @@
                         <h4 class="font-bold text-gray-800 text-sm mt-1">${m.name}</h4>
                         <p class="text-xs text-gray-500">📍 ${m.address}</p>
                     </div>
-                    <span class="text-xs px-2 py-1 rounded-full ${m.status === 'pending' ? 'bg-orange-100 text-orange-600' : 'bg-green-100 text-green-600'}">
-                        ${m.status === 'pending' ? 'รอดำเนินการ' : 'ปกติ'}
+                    <span class="text-xs px-2 py-1 rounded-full ${m.status === 'pending' ? 'bg-orange-100 text-orange-600 font-bold' : 'bg-green-100 text-green-600'}">
+                        ${m.status === 'pending' ? 'ค้างส่ง' : 'ปกติ'}
                     </span>
                 `;
                 container.appendChild(item);
@@ -582,9 +728,18 @@
         // Form Submit: Rice
         function submitRice(event) {
             event.preventDefault();
-            const member = document.getElementById('riceMember').value;
+            const memberStr = document.getElementById('riceMember').value;
             const amount = parseInt(document.getElementById('riceAmount').value);
             const note = document.getElementById('riceNote').value || "รับข้าวสารตามปกติ";
+
+            // Update status in memberData array
+            const matchedMember = memberData.find(m => memberStr.includes(m.name));
+            if (matchedMember) {
+                matchedMember.status = 'approved';
+                if (typeof STORAGE_KEY !== 'undefined') {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(memberData));
+                }
+            }
 
             totalRiceReceived += amount;
             document.getElementById('stat-rice').innerText = totalRiceReceived;
@@ -592,10 +747,13 @@
             chart.data.datasets[0].data[7] += amount;
             chart.update();
 
-            logActivity('📥', `รับข้าวสาร ${amount} ถุง`, `${member} (${note})`);
+            logActivity('📥', `รับข้าวสาร ${amount} ถุง`, `${memberStr} (${note})`);
 
             document.getElementById('riceForm').reset();
             closeModal('riceModal');
+            
+            // Refresh systems (Stats & Pending lists)
+            initMemberSystem();
             alert(`บันทึกรับข้าวสารจำนวน ${amount} ถุง เรียบร้อยแล้ว`);
         }
 
