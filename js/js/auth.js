@@ -258,3 +258,65 @@ window.addEventListener("load", () => {
     checkPermission();
 
 });
+// สร้างผู้ใช้เริ่มต้น (Default Admin) หากยังไม่มีข้อมูลในระบบ
+function initDefaultUser() {
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    
+    if (users.length === 0) {
+        const defaultAdmin = {
+            userName: "admin",
+            userPassword: "1234",
+            fullName: "ผู้ดูแลระบบ",
+            role: "admin"
+        };
+        users.push(defaultAdmin);
+        localStorage.setItem("users", JSON.stringify(users));
+        console.log("สร้างบัญชี Admin เริ่มต้นเรียบร้อย (admin / 1234)");
+    }
+}
+
+// ฟังก์ชันเข้าสู่ระบบ
+function handleLogin(event) {
+    event.preventDefault(); // ป้องกันการ Refresh หน้า
+
+    const usernameInput = document.getElementById("username").value.trim();
+    const passwordInput = document.getElementById("password").value.trim();
+    const errorMsg = document.getElementById("errorMsg");
+
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+
+    // ค้นหาผู้ใช้ที่ Username และ Password ตรงกัน
+    const foundUser = users.find(
+        u => u.userName === usernameInput && u.userPassword === passwordInput
+    );
+
+    if (foundUser) {
+        // บันทึกสถานะการเข้าสู่ระบบลง Session
+        sessionStorage.setItem("currentUser", JSON.stringify(foundUser));
+        sessionStorage.setItem("isLoggedIn", "true");
+
+        // ย้ายไปยังหน้าหลัก
+        window.location.href = "index.html";
+    } else {
+        errorMsg.innerText = "❌ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง";
+        errorMsg.style.display = "block";
+    }
+}
+
+// ตรวจสอบสถานะการเข้าสู่ระบบ (สำหรับใส่ไว้ในหน้า index.html หรือหน้าอื่นๆ ที่ต้องล็อกอินก่อนเข้า)
+function checkAuth() {
+    const isLoggedIn = sessionStorage.getItem("isLoggedIn");
+    if (!isLoggedIn || isLoggedIn !== "true") {
+        window.location.href = "login.html";
+    }
+}
+
+// ออกจากระบบ
+function logout() {
+    sessionStorage.removeItem("currentUser");
+    sessionStorage.removeItem("isLoggedIn");
+    window.location.href = "login.html";
+}
+
+// เรียกทำงานอัตโนมัติเมื่อโหลดสคริปต์
+initDefaultUser();
