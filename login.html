@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เข้าสู่ระบบ - กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts (Sarabun) -->
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Sarabun', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-amber-50 min-h-screen flex items-center justify-center p-4">
+
+    <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md border border-amber-200">
+        <!-- หัวข้อและโลโก้ -->
+        <div class="text-center mb-6">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-amber-100 rounded-full mb-3 text-amber-700">
+                <!-- Icon ข้าว -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v18m0-18l-4 4m4-4l4 4m-4 5l-4 4m4-4l4 4" />
+                </svg>
+            </div>
+            <h1 class="text-2xl font-bold text-gray-800">เข้าสู่ระบบ</h1>
+            <p class="text-sm text-gray-600 mt-1">กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</p>
+        </div>
+
+        <!-- กล่องแจ้งเตือนข้อผิดพลาด -->
+        <div id="error-message" class="hidden mb-4 p-3 bg-red-100 border border-red-400 text-red-700 text-sm rounded-lg text-center">
+            ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง!
+        </div>
+
+        <!-- ฟอร์มเข้าสู่ระบบ -->
+        <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
+            <div>
+                <label for="username" class="block text-sm font-medium text-gray-700 mb-1">ชื่อผู้ใช้งาน (Username)</label>
+                <input type="text" id="username" required
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition"
+                    placeholder="กรอกชื่อผู้ใช้งาน">
+            </div>
+
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">รหัสผ่าน (Password)</label>
+                <input type="password" id="password" required
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition"
+                    placeholder="กรอกรหัสผ่าน">
+            </div>
+
+            <button type="submit"
+                class="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2.5 rounded-lg shadow-md hover:shadow-lg transition duration-200">
+                เข้าสู่ระบบ
+            </button>
+        </form>
+
+        <!-- ท้ายการ์ด -->
+        <div class="mt-6 text-center text-xs text-gray-500">
+            พัฒนาโดย นายศักรนนทน์ ขัติย์วงศ์ (ผู้ใหญ่บ้าน)
+        </div>
+    </div>
+
+    <!-- Script จัดการการเข้าสู่ระบบ -->
+    <script>
+        // ตรวจสอบว่าเคยเข้าสู่ระบบไว้แล้วหรือยัง
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentUser = localStorage.getItem('currentUser');
+            if (currentUser) {
+                // ถ้าล็อกอินแล้ว ให้เด้งไปหน้าหลัก
+                window.location.href = 'index.html';
+            }
+        });
+
+        function handleLogin(event) {
+            event.preventDefault();
+
+            const usernameInput = document.getElementById('username').value.trim();
+            const passwordInput = document.getElementById('password').value.trim();
+            const errorDiv = document.getElementById('error-message');
+
+            // ฐานข้อมูลผู้ใช้งานในระบบ
+            const users = [
+                { username: 'admin', password: 'admin1234', role: 'ผู้ดูแลระบบ' },
+                { username: 'admin', password: '123456', role: 'ผู้ดูแลระบบ (รหัสเดิม)' },
+                { username: 'user', password: '1234', role: 'กรรมการ' }
+            ];
+
+            // ตรวจสอบข้อมูลเข้าสู่ระบบ
+            const matchedUser = users.find(u => u.username === usernameInput && u.password === passwordInput);
+
+            if (matchedUser) {
+                // บันทึกข้อมูล Session ใน LocalStorage
+                const sessionData = {
+                    username: matchedUser.username,
+                    role: matchedUser.role,
+                    loginTime: new Date().toISOString()
+                };
+                localStorage.setItem('currentUser', JSON.stringify(sessionData));
+
+                // นำผู้ใช้ไปยังหน้าหลัก (index.html)
+                window.location.href = 'index.html';
+            } else {
+                // แสดงข้อความแจ้งเตือนเมื่อรหัสผ่านผิด
+                errorDiv.classList.remove('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
