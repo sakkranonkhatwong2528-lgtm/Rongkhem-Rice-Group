@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>จัดการข่าวประชาสัมพันธ์ - กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts (Sarabun) -->
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Sarabun', sans-serif; }
+    </style>
+</head>
+<body class="bg-amber-50 min-h-screen p-4 sm:p-6">
+
+    <div class="max-w-3xl mx-auto space-y-6">
+        
+        <!-- Header & ปุ่มย้อนกลับ -->
+        <div class="flex items-center justify-between bg-white p-4 rounded-xl shadow-sm border border-amber-200">
+            <div>
+                <h1 class="text-xl font-bold text-gray-800">📢 จัดการข่าวประชาสัมพันธ์</h1>
+                <p class="text-xs text-gray-500">กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</p>
+            </div>
+            <a href="index.html" class="px-3 py-1.5 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition">
+                ← กลับหน้าหลัก
+            </a>
+        </div>
+
+        <!-- ฟอร์ม เพิ่ม / แก้ไข ประกาศ -->
+        <div class="bg-white p-6 rounded-xl shadow-md border border-amber-200">
+            <h2 id="formTitle" class="text-lg font-semibold text-gray-800 mb-3">➕ เพิ่มประกาศใหม่</h2>
+            
+            <form id="newsForm" onsubmit="saveNews(event)" class="space-y-4">
+                <input type="hidden" id="editIndex" value="-1">
+                
+                <div>
+                    <label for="newsContent" class="block text-sm font-medium text-gray-700 mb-1">เนื้อหาข่าวประชาสัมพันธ์</label>
+                    <textarea id="newsContent" rows="5" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none text-sm"
+                        placeholder="พิมพ์ข้อความแจ้งข่าวสารที่นี่..."></textarea>
+                </div>
+
+                <div class="flex gap-2">
+                    <button type="submit" id="submitBtn"
+                        class="flex-1 bg-amber-600 hover:bg-amber-700 text-white font-medium py-2 rounded-lg transition shadow">
+                        บันทึกประกาศ
+                    </button>
+                    <button type="button" id="cancelBtn" onclick="resetForm()"
+                        class="hidden px-4 bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 rounded-lg transition">
+                        ยกเลิก
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- รายการข่าวประชาสัมพันธ์ -->
+        <div class="bg-white p-6 rounded-xl shadow-md border border-amber-200">
+            <h2 class="text-lg font-semibold text-gray-800 mb-4">📋 รายการประกาศทั้งหมด</h2>
+            <div id="newsList" class="space-y-4">
+                <!-- ข้อมูลข่าวจะถูกแสดงที่นี่ผ่าน JavaScript -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- JavaScript จัดการระบบข่าว -->
+    <script>
+        // ข้อความเริ่มต้นของระบบ
+        const defaultNews = [
+            "📢\nข่าวประชาสัมพันธ์\n🌾 ระบบกลุ่มข้าวสาร Version 4.0\nอัปเดตระบบรองรับการบันทึกข้อมูลรับข้าวสารแบบเรียลไทม์แล้ว\n📅 ประชุมคณะกรรมการกลุ่ม\nขอเชิญกรรมการร่วมประชุมสรุปยอดประจำเดือน ณ ศาลากลางหมู่บ้าน\n⚠️ สมาชิกค้างส่ง\nสามารถกดตรวจดูรายชื่อผู้ค้างส่งและพิมพ์เอกสารติดตามได้จากเมนูหลัก"
+        ];
+
+        // โหลดข้อมูลข่าวจาก LocalStorage หรือตั้งค่าเริ่มต้น
+        function getNews() {
+            const stored = localStorage.getItem('rongkhem_news');
+            if (!stored) {
+                localStorage.setItem('rongkhem_news', JSON.stringify(defaultNews));
+                return defaultNews;
+            }
+            return JSON.parse(stored);
+        }
+
+        // แสดงรายการข่าวบนหน้าเว็บ
+        function renderNews() {
+            const newsList = getNews();
+            const container = document.getElementById('newsList');
+
+            if (newsList.length === 0) {
+                container.innerHTML = `<p class="text-gray-400 text-center py-6">ไม่มีรายการข่าวประชาสัมพันธ์</p>`;
+                return;
+            }
+
+            container.innerHTML = newsList.map((item, index) => `
+                <div class="p-4 rounded-xl border border-amber-100 bg-amber-50/50 space-y-3">
+                    <div class="text-gray-800 whitespace-pre-line text-sm leading-relaxed">${escapeHtml(item)}</div>
+                    
+                    <!-- ปุ่มเครื่องมือ: คัดลอก, แก้ไข, ลบ -->
+                    <div class="flex items-center justify-end gap-2 pt-2 border-t border-amber-200/60 text-xs">
+                        <button onclick="copyNews(${index})" class="px-3 py-1.5 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-md transition flex items-center gap-1">
+                            📋 คัดลอกข้อความ
+                        </button>
+                        <button onclick="editNews(${index})" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition flex items-center gap-1">
+                            ✏️ แก้ไข
+                        </button>
+                        <button onclick="deleteNews(${index})" class="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-md transition flex items-center gap-1">
+                            🗑️ ลบ
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // บันทึก / อัปเดต ข้อมูลข่าว
+        function saveNews(event) {
+            event.preventDefault();
+            const content = document.getElementById('newsContent').value.trim();
+            const editIndex = parseInt(document.getElementById('editIndex').value);
+            let newsList = getNews();
+
+            if (!content) return;
+
+            if (editIndex === -1) {
+                // เพิ่มข่าวใหม่ไว้บนสุด
+                newsList.unshift(content);
+            } else {
+                // แก้ไขข่าวเดิม
+                newsList[editIndex] = content;
+            }
+
+            localStorage.setItem('rongkhem_news', JSON.stringify(newsList));
+            resetForm();
+            renderNews();
+        }
+
+        // เตรียมข้อมูลสำหรับการแก้ไข
+        function editNews(index) {
+            const newsList = getNews();
+            document.getElementById('newsContent').value = newsList[index];
+            document.getElementById('editIndex').value = index;
+            
+            document.getElementById('formTitle').innerText = "✏️ แก้ไขข้อความประชาสัมพันธ์";
+            document.getElementById('submitBtn').innerText = "อัปเดตข้อความ";
+            document.getElementById('submitBtn').className = "flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-lg transition shadow";
+            document.getElementById('cancelBtn').classList.remove('hidden');
+            
+            // เลื่อนจอไปที่ฟอร์ม
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ลบข่าว
+        function deleteNews(index) {
+            if (confirm("คุณแน่ใจหรือไม่ว่าต้องการลบข้อความแจ้งข่าวสารนี้?")) {
+                let newsList = getNews();
+                newsList.splice(index, 1);
+                localStorage.setItem('rongkhem_news', JSON.stringify(newsList));
+                renderNews();
+            }
+        }
+
+        // คัดลอกข้อความลง Clipboard
+        function copyNews(index) {
+            const newsList = getNews();
+            navigator.clipboard.writeText(newsList[index]).then(() => {
+                alert("คัดลอกข้อความประชาสัมพันธ์เรียบร้อยแล้ว!");
+            });
+        }
+
+        // รีเซ็ตฟอร์มกลับเป็นสภาวะปกติ
+        function resetForm() {
+            document.getElementById('newsForm').reset();
+            document.getElementById('editIndex').value = "-1";
+            document.getElementById('formTitle').innerText = "➕ เพิ่มประกาศใหม่";
+            document.getElementById('submitBtn').innerText = "บันทึกประกาศ";
+            document.getElementById('submitBtn').className = "flex-1 bg-amber-600 hover:bg-amber-700 text-white font-medium py-2 rounded-lg transition shadow";
+            document.getElementById('cancelBtn').classList.add('hidden');
+        }
+
+        // ฟังก์ชันช่วยหลีกเลี่ยง XSS
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+
+        // เริ่มต้นการแสดงผลเมื่อโหลดหน้าเว็บ
+        document.addEventListener('DOMContentLoaded', renderNews);
+    </script>
+</body>
+</html>
