@@ -92,28 +92,30 @@
 
 <body class="relative min-h-screen">
 
+    <!-- 🔴 ปุ่มออกจากระบบ ลอยค้างมุมขวาบนตลอดเวลา -->
+    <button onclick="handleLogout()" class="fixed top-4 right-4 z-50 bg-red-600 hover:bg-red-700 active:scale-95 text-white px-4 py-2.5 rounded-2xl text-sm font-bold shadow-2xl transition-all flex items-center gap-2 border-2 border-white/80 backdrop-blur-md">
+        🚪 ออกจากระบบ
+    </button>
+
     <!-- HEADER -->
     <header class="hero shadow-xl">
         <div class="max-w-7xl mx-auto p-6">
-            <div class="flex flex-col lg:flex-row justify-between items-center">
+            <div class="flex flex-col lg:flex-row justify-between items-center pr-28 lg:pr-0">
                 <div class="flex items-center gap-5">
                     <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-xl text-5xl">
                         🌾
                     </div>
                     <div>
-                        <h1 class="text-4xl font-bold text-white">ระบบกลุ่มข้าวสาร</h1>
-                        <p class="text-green-100 text-lg">บ้านร่องเข็ม หมู่ที่ 6</p>
-                        <p class="text-green-200">ตำบลจำป่าหวาย อำเภอเมือง จังหวัดพะเยา</p>
+                        <h1 class="text-3xl sm:text-4xl font-bold text-white">ระบบกลุ่มข้าวสาร</h1>
+                        <p class="text-green-100 text-base sm:text-lg">บ้านร่องเข็ม หมู่ที่ 6</p>
+                        <p class="text-green-200 text-xs sm:text-sm">ตำบลจำป่าหวาย อำเภอเมือง จังหวัดพะเยา</p>
                     </div>
                 </div>
-                <div class="mt-5 lg:mt-0 flex flex-col sm:flex-row items-center gap-4">
-                    <div class="bg-white/20 rounded-2xl backdrop-blur-lg p-5 text-white text-center border border-white/20">
-                        <div id="clock" class="text-3xl font-bold">00:00:00</div>
-                        <div id="today">-</div>
+                <div class="mt-5 lg:mt-0 flex items-center gap-4">
+                    <div class="bg-white/20 rounded-2xl backdrop-blur-lg p-4 sm:p-5 text-white text-center border border-white/20">
+                        <div id="clock" class="text-2xl sm:text-3xl font-bold">00:00:00</div>
+                        <div id="today" class="text-xs sm:text-sm">-</div>
                     </div>
-                    <button onclick="handleLogout()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl text-sm font-bold shadow transition flex items-center gap-2">
-                        🚪 ออกจากระบบ
-                    </button>
                 </div>
             </div>
         </div>
@@ -513,11 +515,11 @@
         </div>
     </div>
 
-    <!-- ดึงไฟล์ auth.js และ members.js -->
+    <!-- ดึงไฟล์ JS ภายนอก (หากไม่มี จะมี fallback ในระบบ) -->
     <script src="js/auth.js"></script>
     <script src="members.js"></script>
 
-    <!-- JAVASCRIPT SYSTEM -->
+    <!-- JAVASCRIPT SYSTEM ENGINE -->
     <script>
         const FUNERAL_STORAGE_KEY = 'rongkhem_funerals_v4';
 
@@ -645,7 +647,6 @@
         function renderDashboard() {
             const totalMembers = memberData.length;
             const pendingMembers = memberData.filter(m => m.status === 'pending').length;
-            const activeFunerals = funeralData.filter(f => f.status === 'active').length;
 
             document.getElementById('stat-members').innerText = totalMembers;
             document.getElementById('stat-pending').innerText = pendingMembers;
@@ -831,6 +832,63 @@
             `).join('');
         }
 
+        function filterMembersModal() {
+            const q = document.getElementById('memberSearchInput').value.toLowerCase();
+            const filtered = memberData.filter(m => m.name.toLowerCase().includes(q) || m.id.toLowerCase().includes(q) || m.houseNo.toLowerCase().includes(q));
+            const container = document.getElementById('modalMemberList');
+            container.innerHTML = filtered.map(m => `
+                <div class="p-3 border rounded-xl flex justify-between items-center ${m.status === 'pending' ? 'bg-orange-50/40 border-orange-200' : 'bg-green-50/40 border-green-200'}">
+                    <div>
+                        <span class="text-xs font-bold text-gray-500">${m.id}</span>
+                        <h4 class="font-bold text-gray-800 text-sm">${m.name}</h4>
+                        <p class="text-xs text-gray-500">${m.houseNo}</p>
+                    </div>
+                    <span class="text-xs font-bold px-2 py-1 rounded-md ${m.status === 'pending' ? 'bg-orange-100 text-orange-700' : 'bg-green-100 text-green-700'}">
+                        ${m.status === 'pending' ? 'ค้างส่ง' : 'ส่งแล้ว'}
+                    </span>
+                </div>
+            `).join('');
+        }
+
+        function filterPendingModal() {
+            const q = document.getElementById('pendingSearchInput').value.toLowerCase();
+            const pending = memberData.filter(m => m.status === 'pending' && (m.name.toLowerCase().includes(q) || m.id.toLowerCase().includes(q) || m.houseNo.toLowerCase().includes(q)));
+            const tbody = document.getElementById('pendingTableBody');
+            tbody.innerHTML = pending.map(m => `
+                <tr class="hover:bg-orange-50/50 transition">
+                    <td class="p-3 font-bold text-gray-600">${m.id}</td>
+                    <td class="p-3 font-semibold text-gray-800">${m.name}</td>
+                    <td class="p-3 text-gray-600">${m.houseNo}</td>
+                    <td class="p-3 text-center"><span class="bg-orange-100 text-orange-700 text-xs px-2.5 py-1 rounded-full font-bold">ค้างส่ง</span></td>
+                    <td class="p-3 text-right no-print">
+                        <button onclick="quickReceive('${m.id}')" class="bg-green-600 hover:bg-green-700 text-white text-xs px-3 py-1.5 rounded-lg font-bold shadow">
+                            รับข้าวสาร
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function filterFuneralHistory() {
+            const q = document.getElementById('funeralSearchInput').value.toLowerCase();
+            const filtered = funeralData.filter(f => f.name.toLowerCase().includes(q) || f.host.toLowerCase().includes(q));
+            const container = document.getElementById('funeralHistoryContainer');
+            container.innerHTML = filtered.map(f => `
+                <div class="border rounded-2xl p-4 flex justify-between items-center bg-gray-50">
+                    <div>
+                        <span class="text-xs ${f.status === 'active' ? 'bg-red-100 text-red-700' : 'bg-gray-200 text-gray-700'} px-2.5 py-0.5 rounded-full font-bold">
+                            ${f.status === 'active' ? 'กำลังดำเนินการ' : 'เสร็จสิ้นแล้ว'}
+                        </span>
+                        <h4 class="font-bold text-gray-800 text-lg mt-1">${f.name} (อายุ ${f.age} ปี)</h4>
+                        <p class="text-xs text-gray-600">เจ้าภาพ: ${f.host} | วันเสียชีวิต: ${f.deathDate}</p>
+                    </div>
+                    <button onclick="deleteFuneral('${f.id}')" class="no-print text-red-500 hover:text-red-700 text-xs font-bold p-2">
+                        🗑️ ลบประวัติ
+                    </button>
+                </div>
+            `).join('');
+        }
+
         function saveData() {
             localStorage.setItem(FUNERAL_STORAGE_KEY, JSON.stringify(funeralData));
             if (typeof STORAGE_KEY !== 'undefined') {
@@ -838,7 +896,7 @@
             }
         }
 
-        // Initialize App
+        // Initialize App Dashboard
         renderDashboard();
     </script>
 </body>
