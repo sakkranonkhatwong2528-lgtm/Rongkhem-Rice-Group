@@ -116,7 +116,7 @@
         </div>
     </header>
 
-    <!-- 1. DASHBOARD STATS (บนสุด) -->
+    <!-- 1. DASHBOARD STATS -->
     <section class="max-w-7xl mx-auto px-5 mt-8">
         <div class="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
             <div class="card p-6 cursor-pointer" onclick="openModal('memberModal')">
@@ -209,7 +209,7 @@
         </div>
     </section>
 
-    <!-- MAIN MENU (เพิ่มปุ่มดูประวัติงานศพ) -->
+    <!-- MAIN MENU -->
     <section class="max-w-7xl mx-auto px-5 mt-10">
         <h2 class="text-2xl font-bold mb-5 text-gray-800">⚡ เมนูหลัก</h2>
         <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
@@ -321,13 +321,13 @@
         </div>
     </footer>
 
-    <!-- ================= MODAL: ประวัติงานศพย้อนหลัง (เพิ่มใหม่) ================= -->
+    <!-- ================= MODAL: ประวัติงานศพย้อนหลัง (เพิ่มปุ่มลบ + เรียงตามวันที่) ================= -->
     <div id="funeralHistoryModal" class="modal opacity-0 invisible fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
         <div class="bg-white rounded-3xl max-w-4xl w-full p-6 shadow-2xl max-h-[90vh] flex flex-col transform transition-all scale-95" id="printableFuneralHistory">
             <div class="flex justify-between items-center border-b pb-4">
                 <div>
                     <h3 class="text-xl font-bold text-red-600 flex items-center gap-2">
-                        <span>📜</span> คลังประวัติงานศพย้อนหลัง
+                        <span>📜</span> คลังประวัติงานศพ (เรียงตามวันที่เสียชีวิต)
                     </h3>
                     <p class="text-xs text-gray-500 mt-1">บ้านร่องเข็ม หมู่ที่ 6 ต.จำป่าหวาย อ.เมือง จ.พะเยา</p>
                 </div>
@@ -343,13 +343,13 @@
 
             <div class="overflow-y-auto flex-1 pr-1">
                 <div id="funeralHistoryContainer" class="space-y-4">
-                    <!-- Cards will be populated here via JavaScript -->
+                    <!-- Cards populated via JS -->
                 </div>
             </div>
             
             <div class="border-t pt-3 mt-2 flex justify-between items-center text-xs text-gray-500">
                 <span>จำนวนงานศพทั้งหมด: <strong id="modalFuneralTotal" class="text-red-600 font-bold text-sm">0</strong> รายการ</span>
-                <span class="no-print">กดปุ่ม "ดูผู้ค้างส่ง" เพื่อตรวจสอบรายชื่อครัวเรือนค้างส่งของงานศพนั้นๆ</span>
+                <span class="no-print">กดปุ่ม "ลบประวัติ" เพื่อลบข้อมูลงานศพที่ไม่ต้องการออก</span>
             </div>
         </div>
     </div>
@@ -528,7 +528,6 @@
             return (typeof DEFAULT_MEMBERS !== 'undefined') ? DEFAULT_MEMBERS : [];
         }
 
-        // ตัวอย่างประวัติงานศพเริ่มต้น
         const DEFAULT_FUNERALS = [
             {
                 id: "FN-2026-001",
@@ -662,19 +661,26 @@
             return d.toLocaleDateString("th-TH", { day: 'numeric', month: 'short', year: 'numeric' });
         }
 
-        // ระบบคลังประวัติงานศพ
+        // ฟังก์ชันจัดเรียงงานศพตาม วัน/เดือน/ปี เสียชีวิต (ใหม่ไปเก่า)
+        function sortFuneralsByDate(list) {
+            return [...list].sort((a, b) => new Date(b.deathDate) - new Date(a.deathDate));
+        }
+
+        // แสดงประวัติงานศพพร้อมปุ่มลบ
         function renderFuneralHistory(list) {
             const container = document.getElementById('funeralHistoryContainer');
             const totalElement = document.getElementById('modalFuneralTotal');
             container.innerHTML = '';
-            totalElement.innerText = list.length;
+            
+            const sortedList = sortFuneralsByDate(list);
+            totalElement.innerText = sortedList.length;
 
-            if (list.length === 0) {
+            if (sortedList.length === 0) {
                 container.innerHTML = '<div class="text-center py-10 text-gray-400">ไม่พบประวัติงานศพในระบบ</div>';
                 return;
             }
 
-            list.forEach(f => {
+            sortedList.forEach(f => {
                 const card = document.createElement('div');
                 card.className = 'p-5 border rounded-2xl bg-gray-50/80 hover:bg-white hover:shadow-md transition flex flex-col md:flex-row justify-between items-start md:items-center gap-4';
                 card.innerHTML = `
@@ -690,13 +696,28 @@
                         <p class="text-xs text-gray-500">🕊️ วันเสียชีวิต: ${formatThaiDate(f.deathDate)} | 📅 กำหนดฌาปนกิจ: ${formatThaiDate(f.funeralDate)}</p>
                     </div>
                     <div class="flex flex-wrap gap-2 no-print w-full md:w-auto">
-                        <button onclick="showFuneralPendingReport('${f.name}')" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-xl text-xs font-bold shadow flex-1 md:flex-initial text-center">
-                            ⚠️ ดูผู้ค้างส่งงานนี้
+                        <button onclick="showFuneralPendingReport('${f.name}')" class="bg-orange-500 hover:bg-orange-600 text-white px-3 py-2 rounded-xl text-xs font-bold shadow flex-1 md:flex-initial text-center">
+                            ⚠️ ดูผู้ค้างส่ง
+                        </button>
+                        <button onclick="deleteFuneral('${f.id}', '${f.name}')" class="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-2 rounded-xl text-xs font-bold transition flex-1 md:flex-initial text-center border border-red-200">
+                            🗑️ ลบประวัติ
                         </button>
                     </div>
                 `;
                 container.appendChild(card);
             });
+        }
+
+        // ฟังก์ชันลบประวัติงานศพ
+        function deleteFuneral(id, name) {
+            if (confirm(`คุณต้องการลบประวัติงานศพของคุณ "${name}" (รหัส: ${id}) ใช่หรือไม่?`)) {
+                funeralData = funeralData.filter(f => f.id !== id);
+                localStorage.setItem(FUNERAL_STORAGE_KEY, JSON.stringify(funeralData));
+                
+                logActivity('🗑️', `ลบประวัติงานศพ`, `ผู้วายชนม์: ${name} (${id})`);
+                initMemberSystem();
+                alert(`ลบประวัติงานศพของคุณ ${name} เรียบร้อยแล้ว`);
+            }
         }
 
         function filterFuneralHistory() {
@@ -760,7 +781,9 @@
 
         function renderActiveFuneralCard() {
             const activeFuneralContainer = document.getElementById('activeFuneral');
-            const activeFuneral = funeralData.find(f => f.status === 'active');
+            // เลือกงานศพ active ล่าสุดตามวันเสียชีวิต
+            const sorted = sortFuneralsByDate(funeralData);
+            const activeFuneral = sorted.find(f => f.status === 'active');
 
             if (activeFuneral) {
                 activeFuneralContainer.innerHTML = `
@@ -915,7 +938,6 @@
             alert(`บันทึกรับข้าวสารจำนวน ${amount} ถุง เรียบร้อยแล้ว`);
         }
 
-        // บันทึกเปิดงานศพใหม่ลงคลังประวัติ
         function submitFuneral(event) {
             event.preventDefault();
             const name = document.getElementById('deceasedName').value;
@@ -924,7 +946,6 @@
             const dDate = document.getElementById('deathDate').value;
             const fDate = document.getElementById('funeralDate').value;
 
-            // เคลียร์สถานะ active ของงานเก่าก่อน
             funeralData.forEach(f => f.status = 'completed');
 
             const newFuneral = {
@@ -937,7 +958,7 @@
                 status: "active"
             };
 
-            funeralData.unshift(newFuneral);
+            funeralData.push(newFuneral);
             localStorage.setItem(FUNERAL_STORAGE_KEY, JSON.stringify(funeralData));
 
             logActivity('⚰️', `เปิดแจ้งงานศพใหม่`, `ผู้วายชนม์: ${name} (${house})`);
