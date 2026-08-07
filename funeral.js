@@ -1,18 +1,21 @@
+// Import ระบบคลาวด์ Firebase
+import { saveData, loadData, deleteData } from './database.js';
+
 // ==========================================
 // 1. เรียกทำงานเมื่อโหลดหน้าเว็บเรียบร้อย
 // ==========================================
-document.addEventListener('DOMContentLoaded', function () {
-  renderFuneralList();
-  updateCondolenceTicker();
+document.addEventListener('DOMContentLoaded', async function () {
+  await renderFuneralList();
+  await updateCondolenceTicker();
 });
 
 // ==========================================
-// 2. ระบบบันทึกข้อมูลแจ้งเปิดงานศพใหม่
+// 2. ระบบบันทึกข้อมูลแจ้งเปิดงานศพใหม่ (ลง Cloud)
 // ==========================================
 const funeralForm = document.getElementById('funeralForm');
 
 if (funeralForm) {
-  funeralForm.addEventListener('submit', function (e) {
+  funeralForm.addEventListener('submit', async function (e) {
     e.preventDefault(); // 🛑 ป้องกันหน้าเว็บ Refresh
 
     // ดึงค่าจากช่องกรอกข้อมูล
@@ -28,29 +31,29 @@ if (funeralForm) {
       return;
     }
 
-    // สร้าง Object ข้อมูลงานศพ
+    // สร้าง Object ข้อมูลงานศพ (รับค่าอายุเป็นตัวเลขจริง)
     const newFuneralData = {
-      id: 'FUN-' + Date.now(),
       deceasedName: deceasedName,
-      age: parseInt(age),
+      age: parseInt(age) || 0,
       hostInfo: hostInfo,
       deathDate: deathDate,
       cremationDate: cremationDate,
-      status: 'active', // สถานะเริ่มต้น: กำลังจัดงาน
-      createdAt: new Date().toISOString()
+      status: 'active' // สถานะเริ่มต้น: กำลังจัดงาน
     };
 
     try {
-      // บันทึกลง LocalStorage
-      saveFuneralToStorage(newFuneralData);
+      // บันทึกลง Cloud Firestore ผ่าน database.js
+      const result = await saveData('Rongkhem_Funerals', newFuneralData);
 
-      alert('✅ บันทึกแจ้งเปิดงานศพเรียบร้อยแล้ว!');
-
-      // ล้างฟอร์ม, ปิด Pop-up และอัปเดตหน้าจอ
-      funeralForm.reset();
-      closeFuneralModal();
-      renderFuneralList();
-      updateCondolenceTicker();
+      if (result.success) {
+        alert('✅ บันทึกแจ้งเปิดงานศพลง Cloud เรียบร้อยแล้ว!');
+        funeralForm.reset();
+        closeFuneralModal();
+        await renderFuneralList();
+        await updateCondolenceTicker();
+      } else {
+        alert('❌ ไม่สามารถบันทึกข้อมูลได้ กรุณาลองใหม่อีกครั้ง');
+      }
 
     } catch (error) {
       console.error('Error saving funeral record:', error);
@@ -59,21 +62,19 @@ if (funeralForm) {
   });
 }
 
-// ฟังก์ชันบันทึกลง LocalStorage
-function saveFuneralToStorage(data) {
-  let funeralList = JSON.parse(localStorage.getItem('Rongkhem_Funerals')) || [];
-  funeralList.push(data);
-  localStorage.setItem('Rongkhem_Funerals', JSON.stringify(funeralList));
-}
-
 // ==========================================
-// 3. ระบบแสดงตารางรายการงานศพ
+// 3. ระบบแสดงตารางรายการงานศพ + อัปเดตการ์ดหน้าแรก
 // ==========================================
-function renderFuneralList() {
+async function renderFuneralList() {
   const tableBody = document.getElementById('funeralTableBody');
-  if (!tableBody) return;
+  
+  // ดึงข้อมูลจริงจาก Cloud
+  const funeralList = await loadData('Rongkhem_Funerals');
 
-  const funeralList = JSON.parse(localStorage.getItem('Rongkhem_Funerals')) || [];
+  // 3.1 อัปเดตการ์ดงานศพที่กำลังเปิดอยู่ (แก้ปัญหาส่วนแสดงผลอายุ 72 ปี)
+  updateActiveFuneralCard(funeralList);
+
+  if (!tableBody) return;
 
   if (funeralList.length === 0) {
     tableBody.innerHTML = `
@@ -93,7 +94,7 @@ function renderFuneralList() {
       <tr>
         <td>${index + 1}</td>
         <td><strong>${escapeHtml(item.deceasedName)}</strong></td>
-        <td>${item.age || '-'}</td>
+        <td>${item.age ? item.age + ' ปี' : '-'}</td>
         <td>${escapeHtml(item.hostInfo)}</td>
         <td>${formatThaiDate(item.deathDate)}</td>
         <td>${formatThaiDate(item.cremationDate)}</td>
@@ -103,7 +104,7 @@ function renderFuneralList() {
           </span>
         </td>
         <td>
-          <button class="btn-toggle" onclick="toggleFuneralStatus('${item.id}')">
+          <button class="btn-toggle" onclick="toggleFuneralStatus('${item.id}', '${item.status}')">
             ${isActive ? 'ปิดงาน' : 'เปิดงาน'}
           </button>
           <button class="btn-delete" onclick="deleteFuneralRecord('${item.id}')">ลบ</button>
@@ -113,43 +114,54 @@ function renderFuneralList() {
   }).join('');
 }
 
-// ==========================================
-// 4. สลับสถานะ (กำลังจัดงาน <-> เสร็จสิ้น)
-// ==========================================
-function toggleFuneralStatus(id) {
-  let funeralList = JSON.parse(localStorage.getItem('Rongkhem_Funerals')) || [];
-  funeralList = funeralList.map(item => {
-    if (item.id === id) {
-      item.status = item.status === 'active' ? 'completed' : 'active';
-    }
-    return item;
-  });
+// ฟังก์ชันอัปเดตการ์ดโชว์งานศพหน้าแรกให้อายุตรงตามที่คีย์
+function updateActiveFuneralCard(funeralList) {
+  const activeFunerals = funeralList.filter(item => item.status === 'active');
+  const cardContainer = document.querySelector('.funeral-card') || document.getElementById('activeFuneralCard');
 
-  localStorage.setItem('Rongkhem_Funerals', JSON.stringify(funeralList));
-  renderFuneralList();
-  updateCondolenceTicker();
+  if (cardContainer && activeFunerals.length > 0) {
+    const latest = activeFunerals[activeFunerals.length - 1];
+    cardContainer.innerHTML = `
+      <div class="badge-status">กำลังเปิดรับข้าวสาร</div>
+      <h3>${escapeHtml(latest.deceasedName)} (อายุ ${latest.age || '-'} ปี)</h3>
+      <p><strong>เจ้าภาพ:</strong> ${escapeHtml(latest.hostInfo)}</p>
+      <p><strong>ฌาปนกิจ:</strong> ${formatThaiDate(latest.cremationDate)}</p>
+    `;
+  }
 }
 
 // ==========================================
-// 5. ระบบอัปเดตตัวอักษรวิ่งไว้อาลัย (แบบที่ 2)
+// 4. สลับสถานะงานศพ
 // ==========================================
-function updateCondolenceTicker() {
-  const funeralList = JSON.parse(localStorage.getItem('Rongkhem_Funerals')) || [];
+window.toggleFuneralStatus = async function(id, currentStatus) {
+  const newStatus = currentStatus === 'active' ? 'completed' : 'active';
+  
+  // อัปเดตลง Cloud
+  const { doc, updateDoc, getFirestore } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+  const db = getFirestore();
+  await updateDoc(doc(db, 'Rongkhem_Funerals', id), { status: newStatus });
+
+  await renderFuneralList();
+  await updateCondolenceTicker();
+};
+
+// ==========================================
+// 5. ระบบอัปเดตตัวอักษรวิ่งไว้อาลัย
+// ==========================================
+async function updateCondolenceTicker() {
+  const funeralList = await loadData('Rongkhem_Funerals');
   const nameElement = document.getElementById('tickerDeceasedName');
   const tickerContainer = document.querySelector('.condolence-ticker');
 
   if (!nameElement) return;
 
-  // กรองเอาเฉพาะงานศพที่กำลังจัดอยู่ (active)
   const activeFunerals = funeralList.filter(item => item.status === 'active');
 
   if (activeFunerals.length > 0) {
-    // ดึงชื่อคนที่เพิ่งแจ้งล่าสุด
     const latestDeceased = activeFunerals[activeFunerals.length - 1];
-    nameElement.textContent = latestDeceased.deceasedName;
+    nameElement.textContent = `${latestDeceased.deceasedName} (อายุ ${latestDeceased.age} ปี)`;
     if (tickerContainer) tickerContainer.style.display = 'block';
   } else {
-    // ถ้าไม่มีงานศพเปิดอยู่ ให้ซ่อนแถบวิ่ง
     if (tickerContainer) tickerContainer.style.display = 'none';
   }
 }
@@ -157,16 +169,13 @@ function updateCondolenceTicker() {
 // ==========================================
 // 6. ฟังก์ชันช่วยจัดการระบบ (Helpers)
 // ==========================================
-function deleteFuneralRecord(id) {
+window.deleteFuneralRecord = async function(id) {
   if (confirm('คุณต้องการลบรายการงานศพนี้ใช่หรือไม่?')) {
-    let funeralList = JSON.parse(localStorage.getItem('Rongkhem_Funerals')) || [];
-    funeralList = funeralList.filter(item => item.id !== id);
-    localStorage.setItem('Rongkhem_Funerals', JSON.stringify(funeralList));
-    
-    renderFuneralList();
-    updateCondolenceTicker();
+    await deleteData('Rongkhem_Funerals', id);
+    await renderFuneralList();
+    await updateCondolenceTicker();
   }
-}
+};
 
 function formatThaiDate(dateString) {
   if (!dateString) return '-';
@@ -191,12 +200,12 @@ function escapeHtml(text) {
     .replace(/'/g, "&#039;");
 }
 
-function openFuneralModal() {
+window.openFuneralModal = function() {
   const modal = document.getElementById('funeralModal');
   if (modal) modal.style.display = 'block';
-}
+};
 
-function closeFuneralModal() {
+window.closeFuneralModal = function() {
   const modal = document.getElementById('funeralModal');
   if (modal) modal.style.display = 'none';
-}
+};
