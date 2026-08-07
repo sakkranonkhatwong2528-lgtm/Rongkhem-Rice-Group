@@ -25,7 +25,7 @@
         .modal-active { opacity: 1 !important; visibility: visible !important; }
         @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
         .animate-marquee { display: inline-block; white-space: nowrap; animation: marquee 22s linear infinite; }
-        .admin-only { display: none; } /* ซ่อนไว้ก่อน แล้วแสดงผลผ่าน JS ตามสิทธิ์ */
+        .admin-only { display: none; }
     </style>
 </head>
 
@@ -80,7 +80,7 @@
     <!-- 1. DASHBOARD STATS -->
     <section class="max-w-7xl mx-auto px-5 mt-6">
         <div class="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
-            <div class="card p-6 cursor-pointer" onclick="openModal('memberModal')">
+            <div class="card p-6 cursor-pointer" onclick="openMemberModal('all')">
                 <div class="flex justify-between items-center">
                     <div>
                         <p class="text-gray-500 font-medium">สมาชิกทั้งหมด</p>
@@ -100,17 +100,20 @@
                     <div class="text-5xl">⚰️</div>
                 </div>
             </div>
-            <div class="card p-6 cursor-pointer" onclick="location.href='receive.html'">
+
+            <!-- สรุปการรับข้าวสารรวมต่องาน (ยอดรับจริงรอบปัจจุบัน) -->
+            <div class="card p-6 cursor-pointer border-2 border-green-200 hover:border-green-500" onclick="location.href='receive.html'">
                 <div class="flex justify-between items-center">
                     <div>
-                        <p class="text-gray-500 font-medium">รับข้าวสารรวม</p>
+                        <p class="text-gray-500 font-medium">รับข้าวสารรวม (งานปัจจุบัน)</p>
                         <h2 id="stat-rice" class="text-4xl font-bold text-green-600 my-1">0</h2>
-                        <p class="text-gray-400 text-sm">ถุง</p>
+                        <p class="text-gray-400 text-sm">ถุง (รับจริง)</p>
                     </div>
                     <div class="text-5xl">🌾</div>
                 </div>
             </div>
-            <div class="card p-6 cursor-pointer" onclick="openModal('memberModal')">
+
+            <div class="card p-6 cursor-pointer border-2 border-orange-200 hover:border-orange-500" onclick="openMemberModal('pending')">
                 <div class="flex justify-between items-center">
                     <div>
                         <p class="text-gray-500 font-medium">สมาชิกค้างส่ง</p>
@@ -130,39 +133,37 @@
                 <span class="text-3xl">⚠️</span>
                 <div>
                     <h4 class="font-bold text-orange-800">แจ้งเตือน: รายการสมาชิกค้างส่งข้าวสาร</h4>
-                    <p class="text-sm text-orange-700">ขณะนี้มีสมาชิกค้างส่งอยู่จำนวน <strong id="alertPendingCount">0</strong> ครัวเรือน</p>
+                    <p class="text-sm text-orange-700">ขณะนี้มีสมาชิกค้างส่งอยู่จำนวน <strong id="alertPendingCount" class="text-lg underline">0</strong> ครัวเรือน</p>
                 </div>
             </div>
-            <div class="flex items-center gap-2 admin-only">
-                <button onclick="importMembersDirectly()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-sm font-bold shadow transition flex items-center gap-1">
-                    🔄 ดึงรายชื่อสมาชิกเดิม (176 รายการ)
+            <div class="flex items-center gap-2">
+                <button onclick="openMemberModal('pending')" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-xl text-sm font-bold shadow transition flex items-center gap-1">
+                    📋 ดูรายชื่อผู้ค้างส่งทั้งหมด
                 </button>
             </div>
         </div>
     </section>
 
-    <!-- ⚰️ กล่องแจ้งงานศพ & บันทึกผู้เสียชีวิต -->
+    <!-- ⚰️ กล่องแจ้งงานศพ & สรุปยอดรับข้าวสารต่องาน -->
     <section id="funeralSection" class="max-w-7xl mx-auto px-5 mt-8">
         <div class="card p-6 border-t-4 border-red-600">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 border-b pb-4">
                 <div>
                     <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
-                        <span>⚰️</span> รายการงานศพ / แจ้งผู้วายชนม์
+                        <span>⚰️</span> รายการงานศพ / สรุปยอดรับข้าวสารต่องาน
                     </h2>
-                    <p class="text-sm text-gray-500">เรียงลำดับตามวันเสียชีวิตล่าสุด</p>
+                    <p class="text-sm text-gray-500">แสดงยอดการรับข้าวสารที่ได้รับจริงแยกตามงานศพแต่ละงาน</p>
                 </div>
                 <div class="flex flex-wrap items-center gap-2">
                     <button onclick="toggleFuneralView()" id="btnToggleFuneralView" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-xl text-sm font-bold border transition flex items-center gap-1">
                         📜 ดูงานศพย้อนหลังทั้งหมด
                     </button>
-                    <!-- ปุ่มเฉพาะผู้ใหญ่บ้าน -->
                     <button onclick="openFuneralModal()" class="admin-only bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl text-sm font-bold shadow transition items-center gap-1">
                         ➕ บันทึกแจ้งงานศพใหม่
                     </button>
                 </div>
             </div>
 
-            <!-- รายการการ์ดงานศพ -->
             <div id="funeralList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         </div>
     </section>
@@ -173,57 +174,48 @@
             <span>⚙️</span> เมนูหลักการทำงาน
         </h2>
         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4">
-            
-            <!-- เมนูสแกน QR (สมาชิกใช้งานได้) -->
             <div class="menu-card border-2 border-green-500 bg-green-50/50" onclick="location.href='receive.html?scan=true'">
                 <div class="text-4xl mb-2">📱</div>
                 <h3 class="font-bold text-lg text-green-800">สแกน QR รับข้าว</h3>
                 <p class="text-xs text-gray-500 mt-1">สแกนและบันทึกรับข้าวสาร</p>
             </div>
 
-            <!-- เมนูรับข้าวสาร (สมาชิกใช้งานได้) -->
             <div class="menu-card border-2 border-green-400 bg-green-50/20" onclick="location.href='receive.html'">
                 <div class="text-4xl mb-2">🌾</div>
                 <h3 class="font-bold text-lg text-green-900">รับข้าวสาร</h3>
                 <p class="text-xs text-gray-500 mt-1">บันทึก/แก้ไข การส่งข้าวสาร</p>
             </div>
 
-            <!-- เมนูข่าวประชาสัมพันธ์ -->
             <div class="menu-card border-2 border-blue-400 bg-blue-50/30" onclick="location.href='news.html'">
                 <div class="text-4xl mb-2">📢</div>
                 <h3 class="font-bold text-lg text-blue-900">ข่าวประชาสัมพันธ์</h3>
                 <p class="text-xs text-gray-500 mt-1">ประกาศและข่าวสารหมู่บ้าน</p>
             </div>
 
-            <!-- เมนูงานศพ -->
             <div class="menu-card" onclick="scrollToFuneralSection()">
                 <div class="text-4xl mb-2">⚰️</div>
                 <h3 class="font-bold text-lg">จัดการงานศพ</h3>
                 <p class="text-xs text-gray-500 mt-1">ดูและจัดการรอบงานศพ</p>
             </div>
 
-            <!-- เมนูสมาชิก -->
             <div class="menu-card" onclick="location.href='members.html'">
                 <div class="text-4xl mb-2">👥</div>
                 <h3 class="font-bold text-lg">รายชื่อสมาชิก</h3>
                 <p class="text-xs text-gray-500 mt-1">ตรวจสอบรายชื่อสมาชิก</p>
             </div>
 
-            <!-- เมนูคลังข้าว -->
             <div class="menu-card" onclick="location.href='stock.html'">
                 <div class="text-4xl mb-2">📦</div>
                 <h3 class="font-bold text-lg">คลังข้าวสาร</h3>
                 <p class="text-xs text-gray-500 mt-1">สรุปสต็อกและยอดรวม</p>
             </div>
 
-            <!-- เมนูรายงาน -->
             <div class="menu-card" onclick="location.href='report.html'">
                 <div class="text-4xl mb-2">📊</div>
                 <h3 class="font-bold text-lg">รายงาน/พิมพ์</h3>
                 <p class="text-xs text-gray-500 mt-1">ออกรายงานสรุปย้อนหลัง</p>
             </div>
 
-            <!-- เมนูตั้งค่า (เฉพาะผู้ใหญ่บ้าน) -->
             <div class="menu-card admin-only" onclick="location.href='settings.html'">
                 <div class="text-4xl mb-2">⚙️</div>
                 <h3 class="font-bold text-lg text-red-600">ตั้งค่าระบบ</h3>
@@ -251,17 +243,27 @@
     <div id="memberModal" class="modal opacity-0 invisible fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
         <div class="bg-white rounded-3xl max-w-4xl w-full p-6 shadow-2xl max-h-[90vh] flex flex-col">
             <div class="flex justify-between items-center border-b pb-4">
-                <h3 class="text-xl font-bold text-blue-700">👥 ทะเบียนสมาชิกบ้านร่องเข็ม</h3>
+                <div>
+                    <h3 id="modalMemberTitle" class="text-xl font-bold text-blue-700">👥 ทะเบียนสมาชิกบ้านร่องเข็ม</h3>
+                    <p class="text-xs text-gray-500 mt-0.5">สถานะค้างส่งจะอัปเดตให้อัตโนมัติตามการบันทึกรับข้าวสาร</p>
+                </div>
                 <button onclick="closeModal('memberModal')" class="text-gray-400 hover:text-gray-600 text-2xl font-bold">&times;</button>
             </div>
-            <div class="my-4">
-                <input type="text" id="memberSearch" onkeyup="searchMember()" placeholder="🔍 ค้นหาด้วย ชื่อ หรือ ที่อยู่..." class="w-full p-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+            <div class="flex gap-2 my-4 border-b pb-2">
+                <button onclick="filterMemberTab('pending')" id="tabBtnPending" class="px-4 py-2 rounded-xl text-sm font-bold bg-orange-100 text-orange-700">⚠️ ค้างส่ง (<span id="tabCountPending">0</span>)</button>
+                <button onclick="filterMemberTab('completed')" id="tabBtnCompleted" class="px-4 py-2 rounded-xl text-sm font-bold bg-gray-100 text-gray-600">✅ ส่งแล้ว (<span id="tabCountCompleted">0</span>)</button>
+                <button onclick="filterMemberTab('all')" id="tabBtnAll" class="px-4 py-2 rounded-xl text-sm font-bold bg-gray-100 text-gray-600">👥 ทั้งหมด (<span id="tabCountAll">0</span>)</button>
+            </div>
+
+            <div class="mb-4">
+                <input type="text" id="memberSearch" onkeyup="searchMember()" placeholder="🔍 ค้นหาด้วย ชื่อ หรือ บ้านเลขที่..." class="w-full p-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
             <div id="modalMemberList" class="overflow-y-auto flex-1 grid grid-cols-1 md:grid-cols-2 gap-3 pr-2"></div>
         </div>
     </div>
 
-    <!-- 📝 MODAL บันทึก / แก้ไข งานศพ (ผู้ใหญ่บ้าน) -->
+    <!-- 📝 MODAL บันทึก / แก้ไข งานศพ -->
     <div id="funeralInputModal" class="modal opacity-0 invisible fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
         <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl">
             <div class="flex justify-between items-center border-b pb-3 mb-4">
@@ -304,8 +306,10 @@
     <script>
         let membersData = [];
         let funeralData = [];
+        let receiveRecords = [];
+        let currentTabFilter = 'pending';
         let showAllFuneralHistory = false;
-        let currentUserRole = 'member'; // ค่าเริ่มต้น: สมาชิก ('admin' = ผู้ใหญ่บ้าน, 'member' = สมาชิก)
+        let currentUserRole = 'member';
 
         function updateClock() {
             const now = new Date();
@@ -316,7 +320,6 @@
         updateClock();
 
         function checkUserRole() {
-            // ดึงสิทธิ์จาก LocalStorage (ถ้าไม่มีตั้งเป็น member)
             const role = localStorage.getItem('Rongkhem_User_Role') || 'member';
             currentUserRole = role;
 
@@ -324,12 +327,10 @@
             if (role === 'admin') {
                 badge.innerHTML = '👑 สิทธิ์: <strong>ผู้ใหญ่บ้าน / ผู้ดูแล</strong>';
                 badge.classList.add('bg-amber-100', 'text-amber-800', 'border-amber-300');
-                // แสดงปุ่ม/เมนูของผู้ใหญ่บ้าน
-                document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'flex');
+                document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'inline-flex');
             } else {
                 badge.innerHTML = '👤 สิทธิ์: <strong>สมาชิกกลุ่มข้าวสาร</strong>';
                 badge.classList.add('bg-blue-100', 'text-blue-800', 'border-blue-300');
-                // ซ่อนส่วนของผู้ใหญ่บ้าน
                 document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
             }
         }
@@ -337,7 +338,6 @@
         function initSystem() {
             checkUserRole();
 
-            // ดึงข้อมูลสมาชิก
             const localData = localStorage.getItem('Rongkhem_Members_Local');
             if (localData) {
                 membersData = JSON.parse(localData);
@@ -346,17 +346,111 @@
                 localStorage.setItem('Rongkhem_Members_Local', JSON.stringify(membersData));
             }
 
-            // ดึงข้อมูลงานศพ
             const localFuneral = localStorage.getItem('Rongkhem_Funeral_Local');
-            if (localFuneral) {
-                funeralData = JSON.parse(localFuneral);
-            }
+            if (localFuneral) funeralData = JSON.parse(localFuneral);
 
+            const localReceive = localStorage.getItem('Rongkhem_Receive_Records');
+            if (localReceive) receiveRecords = JSON.parse(localReceive);
+
+            autoSyncPendingStatus();
             renderStats();
-            renderMembers();
             renderFunerals();
         }
 
+        // 📊 คำนวณสรุปยอดรับจริง
+        function autoSyncPendingStatus() {
+            const receivedMemberIds = new Set(receiveRecords.map(r => String(r.memberId || r.id)));
+
+            // คำนวณยอดรับข้าวสารรวมจริง
+            let totalReceivedRiceBags = 0;
+            receiveRecords.forEach(r => { totalReceivedRiceBags += Number(r.amount || 1); });
+            document.getElementById('stat-rice').innerText = totalReceivedRiceBags;
+
+            membersData.forEach(m => {
+                const isPaid = receivedMemberIds.has(String(m.id)) || m.isReceived === true;
+                m.status = isPaid ? 'completed' : 'pending';
+            });
+
+            localStorage.setItem('Rongkhem_Members_Local', JSON.stringify(membersData));
+        }
+
+        function renderStats() {
+            document.getElementById('stat-members').innerText = membersData.length;
+            document.getElementById('stat-funerals').innerText = funeralData.length;
+
+            const pendingCount = membersData.filter(m => m.status === 'pending').length;
+            document.getElementById('stat-pending').innerText = pendingCount;
+            document.getElementById('alertPendingCount').innerText = pendingCount;
+        }
+
+        function openMemberModal(tab = 'pending') {
+            currentTabFilter = tab;
+            openModal('memberModal');
+            filterMemberTab(tab);
+        }
+
+        function filterMemberTab(status) {
+            currentTabFilter = status;
+
+            ['pending', 'completed', 'all'].forEach(t => {
+                const btn = document.getElementById('tabBtn' + t.charAt(0).toUpperCase() + t.slice(1));
+                if (t === status) {
+                    btn.className = "px-4 py-2 rounded-xl text-sm font-bold bg-orange-500 text-white shadow";
+                } else {
+                    btn.className = "px-4 py-2 rounded-xl text-sm font-bold bg-gray-100 text-gray-600 hover:bg-gray-200";
+                }
+            });
+
+            document.getElementById('tabCountPending').innerText = membersData.filter(m => m.status === 'pending').length;
+            document.getElementById('tabCountCompleted').innerText = membersData.filter(m => m.status === 'completed').length;
+            document.getElementById('tabCountAll').innerText = membersData.length;
+
+            renderMembers();
+        }
+
+        function renderMembers() {
+            const container = document.getElementById('modalMemberList');
+            if (!container) return;
+
+            const kw = (document.getElementById('memberSearch').value || '').toLowerCase();
+            let filtered = membersData.filter(m => {
+                const matchKw = (m.name || '').toLowerCase().includes(kw) || (m.address || '').toLowerCase().includes(kw) || (m.id || '').toString().includes(kw);
+                if (currentTabFilter === 'all') return matchKw;
+                return matchKw && m.status === currentTabFilter;
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center py-8 text-gray-400">ไม่พบข้อมูลสมาชิกในหมวดนี้</div>`;
+                return;
+            }
+
+            container.innerHTML = filtered.map(m => `
+                <div class="p-3 border rounded-xl ${m.status === 'pending' ? 'bg-orange-50/60 border-orange-200' : 'bg-green-50/60 border-green-200'} flex justify-between items-center">
+                    <div>
+                        <div class="font-bold text-gray-800">${m.id} - ${m.name}</div>
+                        <div class="text-xs text-gray-500">บ้านเลขที่: ${m.address || '-'}</div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="px-2.5 py-1 text-xs font-bold rounded-lg ${m.status === 'pending' ? 'bg-orange-100 text-orange-700' : 'bg-green-100 text-green-700'}">
+                            ${m.status === 'pending' ? '⚠️ ค้างส่ง' : '✅ ส่งแล้ว'}
+                        </span>
+                        ${m.status === 'pending' ? `
+                            <button onclick="goToReceive('${m.id}')" class="text-xs bg-green-600 hover:bg-green-700 text-white font-bold px-2.5 py-1 rounded-lg shadow transition">
+                                🌾 รับข้าว
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function goToReceive(memberId) {
+            location.href = `receive.html?id=${memberId}`;
+        }
+
+        function searchMember() { renderMembers(); }
+
+        // --- ⚰️ คำนวณสรุปการรับข้าวสารต่องานจริง ---
         function renderFunerals() {
             const container = document.getElementById('funeralList');
             if (!container) return;
@@ -378,13 +472,19 @@
                 return;
             }
 
+            const totalMembers = membersData.length || 176;
+
             container.innerHTML = displayList.map(f => {
                 const isFinished = f.burnDate < today;
+                
+                // คำนวณจำนวนข้าวสารที่รับได้จริงต่องานนี้
+                const receivedForThisFuneral = receiveRecords.filter(r => String(r.funeralId) === String(f.id)).reduce((sum, r) => sum + Number(r.amount || 1), 0);
+                const percent = Math.min(100, Math.round((receivedForThisFuneral / totalMembers) * 100));
+
                 const statusBadge = isFinished 
                     ? `<span class="bg-gray-200 text-gray-700 text-xs px-2.5 py-1 rounded-full font-bold">⚪ เสร็จสิ้นแล้ว</span>`
                     : `<span class="bg-red-100 text-red-700 text-xs px-2.5 py-1 rounded-full font-bold animate-pulse">🔴 กำลังดำเนินการ</span>`;
 
-                // ปุ่มแก้ไข/ลบ จะเห็นเฉพาะผู้ใหญ่บ้าน (Admin)
                 const adminButtons = currentUserRole === 'admin' ? `
                     <div class="flex justify-end gap-2 mt-3 pt-2 border-t border-gray-100">
                         <button onclick="editFuneral('${f.id}')" class="text-xs text-blue-600 font-bold px-2 py-1 bg-blue-50 rounded-lg">✏️ แก้ไข</button>
@@ -393,18 +493,32 @@
                 ` : '';
 
                 return `
-                    <div class="p-4 border rounded-2xl bg-white shadow-sm hover:shadow-md transition border-l-4 ${isFinished ? 'border-l-gray-400' : 'border-l-red-500'}">
-                        <div class="flex justify-between items-start mb-2">
-                            <div>
-                                <h3 class="font-bold text-lg text-gray-800">${f.name}</h3>
-                                <p class="text-xs text-gray-500">อายุ: <strong class="text-gray-700">${f.age}</strong> ปี | บ้านเลขที่: ${f.house || '-'}</p>
+                    <div class="p-4 border rounded-2xl bg-white shadow-sm hover:shadow-md transition border-l-4 ${isFinished ? 'border-l-gray-400' : 'border-l-red-500'} flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <h3 class="font-bold text-lg text-gray-800">${f.name}</h3>
+                                    <p class="text-xs text-gray-500">อายุ: <strong class="text-gray-700">${f.age}</strong> ปี | บ้านเลขที่: ${f.house || '-'}</p>
+                                </div>
+                                ${statusBadge}
                             </div>
-                            ${statusBadge}
+                            <div class="bg-gray-50 p-2.5 rounded-xl my-2 text-xs text-gray-600 space-y-1">
+                                <div>✝️ เสียชีวิต: <strong>${formatThaiDate(f.deathDate)}</strong></div>
+                                <div>🔥 ฌาปนกิจ (เผา): <strong class="text-red-600">${formatThaiDate(f.burnDate)}</strong></div>
+                            </div>
+
+                            <!-- 🌾 แถบสรุปยอดรับจริงต่องาน -->
+                            <div class="bg-green-50/80 border border-green-200 p-2.5 rounded-xl mt-3">
+                                <div class="flex justify-between items-center text-xs font-bold text-green-800 mb-1">
+                                    <span>🌾 รับจริงต่องาน:</span>
+                                    <span class="text-sm">${receivedForThisFuneral} / ${totalMembers} ถุง (${percent}%)</span>
+                                </div>
+                                <div class="w-full bg-green-200 h-2 rounded-full overflow-hidden">
+                                    <div class="bg-green-600 h-full rounded-full transition-all duration-500" style="width: ${percent}%"></div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="bg-gray-50 p-2.5 rounded-xl my-2 text-xs text-gray-600 space-y-1">
-                            <div>✝️ เสียชีวิต: <strong>${formatThaiDate(f.deathDate)}</strong></div>
-                            <div>🔥 ฌาปนกิจ (เผา): <strong class="text-red-600">${formatThaiDate(f.burnDate)}</strong></div>
-                        </div>
+
                         ${adminButtons}
                     </div>
                 `;
@@ -413,7 +527,7 @@
 
         function openFuneralModal(editId = null) {
             if (currentUserRole !== 'admin') {
-                alert('⛔ สิทธิ์ไม่เพียงพอ! เฉพาะผู้ใหญ่บ้านเท่านั้นที่สามารถบันทึก/แก้ไขงานศพได้');
+                alert('⛔ เฉพาะผู้ใหญ่บ้านเท่านั้นที่สามารถบันทึก/แก้ไขงานศพได้');
                 return;
             }
             document.getElementById('funeralForm').reset();
@@ -486,44 +600,6 @@
             if (!dateStr) return '-';
             const d = new Date(dateStr);
             return d.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' });
-        }
-
-        function renderStats() {
-            document.getElementById('stat-members').innerText = membersData.length;
-            document.getElementById('stat-funerals').innerText = funeralData.length;
-            const pending = membersData.filter(m => m.status === 'pending' || m.status === 'ค้างส่ง').length;
-            document.getElementById('stat-pending').innerText = pending;
-            document.getElementById('alertPendingCount').innerText = pending;
-        }
-
-        function renderMembers() {
-            const container = document.getElementById('modalMemberList');
-            if (!container) return;
-            container.innerHTML = membersData.map(m => `
-                <div class="p-3 border rounded-xl bg-gray-50 flex justify-between items-center">
-                    <div>
-                        <div class="font-bold text-gray-800">${m.id} - ${m.name}</div>
-                        <div class="text-xs text-gray-500">บ้านเลขที่: ${m.address}</div>
-                    </div>
-                    <span class="px-2 py-1 text-xs rounded-lg ${m.status === 'pending' ? 'bg-orange-100 text-orange-700' : 'bg-green-100 text-green-700'}">
-                        ${m.status === 'pending' ? 'ค้างส่ง' : 'ปกติ'}
-                    </span>
-                </div>
-            `).join('');
-        }
-
-        function searchMember() {
-            const kw = document.getElementById('memberSearch').value.toLowerCase();
-            const filtered = membersData.filter(m => m.name.toLowerCase().includes(kw) || m.address.toLowerCase().includes(kw));
-            const container = document.getElementById('modalMemberList');
-            container.innerHTML = filtered.map(m => `
-                <div class="p-3 border rounded-xl bg-gray-50 flex justify-between items-center">
-                    <div>
-                        <div class="font-bold text-gray-800">${m.id} - ${m.name}</div>
-                        <div class="text-xs text-gray-500">บ้านเลขที่: ${m.address}</div>
-                    </div>
-                </div>
-            `).join('');
         }
 
         window.openModal = id => document.getElementById(id).classList.add('modal-active');
