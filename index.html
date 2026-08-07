@@ -19,8 +19,9 @@
         .hero { background: linear-gradient(135deg, #0f5132, #198754, #28a745); }
         .card { background: #fff; border-radius: 22px; box-shadow: 0 10px 30px rgba(0, 0, 0, .08); transition: .3s; }
         .card:hover { transform: translateY(-4px); box-shadow: 0 15px 35px rgba(0, 0, 0, .12); }
-        .menu-card { background: #fff; border-radius: 20px; padding: 25px; text-align: center; cursor: pointer; transition: .3s; box-shadow: 0 10px 25px rgba(0, 0, 0, .08); }
-        .menu-card:hover { background: #198754; color: #fff; transform: scale(1.03); }
+        .menu-card { background: #fff; border-radius: 22px; padding: 20px 15px; text-align: center; cursor: pointer; transition: all .3s ease; box-shadow: 0 10px 25px rgba(0, 0, 0, .06); border: 2px solid transparent; }
+        .menu-card:hover { background: #198754; color: #fff; transform: translateY(-5px); box-shadow: 0 15px 30px rgba(25, 135, 84, .25); }
+        .menu-card:hover p { color: rgba(255,255,255,0.8); }
         .modal { transition: opacity 0.3s ease, visibility 0.3s ease; }
         .modal-active { opacity: 1 !important; visibility: visible !important; }
         @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
@@ -84,17 +85,17 @@
                     <div class="text-5xl">👥</div>
                 </div>
             </div>
-            <div class="card p-6 cursor-pointer" onclick="openModal('funeralHistoryModal')">
+            <div class="card p-6 cursor-pointer" onclick="location.href='funeral.html'">
                 <div class="flex justify-between items-center">
                     <div>
                         <p class="text-gray-500 font-medium">งานศพทั้งหมด</p>
                         <h2 id="stat-funerals" class="text-4xl font-bold text-red-600 my-1">0</h2>
-                        <p class="text-red-600 text-xs font-semibold underline mt-1">คลิกดูประวัติ ➔</p>
+                        <p class="text-red-600 text-xs font-semibold underline mt-1">คลิกจัดการงานศพ ➔</p>
                     </div>
                     <div class="text-5xl">⚰️</div>
                 </div>
             </div>
-            <div class="card p-6">
+            <div class="card p-6 cursor-pointer" onclick="location.href='stock.html'">
                 <div class="flex justify-between items-center">
                     <div>
                         <p class="text-gray-500 font-medium">รับข้าวสารรวม</p>
@@ -104,7 +105,7 @@
                     <div class="text-5xl">🌾</div>
                 </div>
             </div>
-            <div class="card p-6 cursor-pointer" onclick="openModal('pendingModal')">
+            <div class="card p-6 cursor-pointer" onclick="openModal('memberModal')">
                 <div class="flex justify-between items-center">
                     <div>
                         <p class="text-gray-500 font-medium">สมาชิกค้างส่ง</p>
@@ -131,6 +132,64 @@
                 <button onclick="importMembersDirectly()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-sm font-bold shadow transition flex items-center gap-1">
                     🔄 ดึงรายชื่อสมาชิกเดิม (176 รายการ)
                 </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 📌 เมนูหลักระบบ (NAVIGATION MAIN MENU) -->
+    <section class="max-w-7xl mx-auto px-5 mt-8">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+            <span>⚙️</span> เมนูหลักการทำงาน
+        </h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-4">
+            
+            <!-- เมนูที่ 1: สแกน QR Code (เพิ่มใหม่) -->
+            <div class="menu-card border-2 border-green-500 bg-green-50/50" onclick="location.href='receive.html?scan=true'">
+                <div class="text-4xl mb-2">📱</div>
+                <h3 class="font-bold text-lg text-green-800">สแกน QR</h3>
+                <p class="text-xs text-gray-500 mt-1">สแกนรับข้าวสารด่วน</p>
+            </div>
+
+            <!-- เมนูที่ 2: งานศพ -->
+            <div class="menu-card" onclick="location.href='funeral.html'">
+                <div class="text-4xl mb-2">⚰️</div>
+                <h3 class="font-bold text-lg">จัดการงานศพ</h3>
+                <p class="text-xs text-gray-500 mt-1">บันทึกและเปิดรอบงานศพ</p>
+            </div>
+
+            <!-- เมนูที่ 3: รับข้าวสาร -->
+            <div class="menu-card" onclick="location.href='receive.html'">
+                <div class="text-4xl mb-2">🌾</div>
+                <h3 class="font-bold text-lg">รับข้าวสาร</h3>
+                <p class="text-xs text-gray-500 mt-1">บันทึกการส่งข้าวสารสมาชิก</p>
+            </div>
+
+            <!-- เมนูที่ 4: สมาชิก -->
+            <div class="menu-card" onclick="location.href='members.html'">
+                <div class="text-4xl mb-2">👥</div>
+                <h3 class="font-bold text-lg">จัดการสมาชิก</h3>
+                <p class="text-xs text-gray-500 mt-1">เพิ่ม/แก้ไข/ลบ รายชื่อ</p>
+            </div>
+
+            <!-- เมนูที่ 5: คลังข้าว -->
+            <div class="menu-card" onclick="location.href='stock.html'">
+                <div class="text-4xl mb-2">📦</div>
+                <h3 class="font-bold text-lg">คลังข้าวสาร</h3>
+                <p class="text-xs text-gray-500 mt-1">สรุปสต็อกและยอดรวม</p>
+            </div>
+
+            <!-- เมนูที่ 6: รายงาน -->
+            <div class="menu-card" onclick="location.href='report.html'">
+                <div class="text-4xl mb-2">📊</div>
+                <h3 class="font-bold text-lg">รายงาน/พิมพ์</h3>
+                <p class="text-xs text-gray-500 mt-1">ออกรายงานสรุปย้อนหลัง</p>
+            </div>
+
+            <!-- เมนูที่ 7: ตั้งค่า -->
+            <div class="menu-card" onclick="location.href='settings.html'">
+                <div class="text-4xl mb-2">⚙️</div>
+                <h3 class="font-bold text-lg">ตั้งค่าระบบ</h3>
+                <p class="text-xs text-gray-500 mt-1">สำรองข้อมูล/ตั้งค่ากลุ่ม</p>
             </div>
         </div>
     </section>
