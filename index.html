@@ -25,15 +25,21 @@
         .modal-active { opacity: 1 !important; visibility: visible !important; }
         @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
         .animate-marquee { display: inline-block; white-space: nowrap; animation: marquee 22s linear infinite; }
+        .admin-only { display: none; } /* ซ่อนไว้ก่อน แล้วแสดงผลผ่าน JS ตามสิทธิ์ */
     </style>
 </head>
 
 <body class="relative min-h-screen pb-12">
 
-    <!-- 🔴 ปุ่มออกจากระบบ -->
-    <button onclick="handleLogout()" class="fixed top-4 right-4 z-50 bg-red-600 hover:bg-red-700 text-white px-4 py-2.5 rounded-2xl text-sm font-bold shadow-2xl transition flex items-center gap-2 border-2 border-white">
-        🚪 ออกจากระบบ
-    </button>
+    <!-- 🔴 แถบข้อมูลผู้ใช้งาน & ปุ่มออกจากระบบ -->
+    <div class="fixed top-4 right-4 z-50 flex items-center gap-2">
+        <span id="userRoleBadge" class="bg-white/90 backdrop-blur-md px-3 py-2 rounded-2xl text-xs font-bold text-gray-700 shadow-lg border">
+            👤 สถานะ: กำลังโหลด...
+        </span>
+        <button onclick="handleLogout()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2.5 rounded-2xl text-sm font-bold shadow-2xl transition flex items-center gap-1 border-2 border-white">
+            🚪 ออกจากระบบ
+        </button>
+    </div>
 
     <!-- HEADER -->
     <header class="hero shadow-xl">
@@ -89,12 +95,12 @@
                     <div>
                         <p class="text-gray-500 font-medium">งานศพทั้งหมด</p>
                         <h2 id="stat-funerals" class="text-4xl font-bold text-red-600 my-1">0</h2>
-                        <p class="text-red-600 text-xs font-semibold underline mt-1">คลิกจัดการงานศพ ➔</p>
+                        <p class="text-red-600 text-xs font-semibold underline mt-1">คลิกดูรายละเอียด ➔</p>
                     </div>
                     <div class="text-5xl">⚰️</div>
                 </div>
             </div>
-            <div class="card p-6 cursor-pointer" onclick="location.href='stock.html'">
+            <div class="card p-6 cursor-pointer" onclick="location.href='receive.html'">
                 <div class="flex justify-between items-center">
                     <div>
                         <p class="text-gray-500 font-medium">รับข้าวสารรวม</p>
@@ -127,7 +133,7 @@
                     <p class="text-sm text-orange-700">ขณะนี้มีสมาชิกค้างส่งอยู่จำนวน <strong id="alertPendingCount">0</strong> ครัวเรือน</p>
                 </div>
             </div>
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2 admin-only">
                 <button onclick="importMembersDirectly()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-sm font-bold shadow transition flex items-center gap-1">
                     🔄 ดึงรายชื่อสมาชิกเดิม (176 รายการ)
                 </button>
@@ -135,30 +141,29 @@
         </div>
     </section>
 
-    <!-- ⚰️ กล่องแจ้งงานศพ & บันทึกผู้เสียชีวิต (เพิ่มใหม่) -->
+    <!-- ⚰️ กล่องแจ้งงานศพ & บันทึกผู้เสียชีวิต -->
     <section id="funeralSection" class="max-w-7xl mx-auto px-5 mt-8">
         <div class="card p-6 border-t-4 border-red-600">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 border-b pb-4">
                 <div>
                     <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
-                        <span>⚰️</span> แจ้งงานศพ / บันทึกผู้วายชนม์
+                        <span>⚰️</span> รายการงานศพ / แจ้งผู้วายชนม์
                     </h2>
-                    <p class="text-sm text-gray-500">เรียงลำดับตามวันเสียชีวิตล่าสุด สามารถบันทึก แก้ไข ลบ และดูย้อนหลังได้</p>
+                    <p class="text-sm text-gray-500">เรียงลำดับตามวันเสียชีวิตล่าสุด</p>
                 </div>
                 <div class="flex flex-wrap items-center gap-2">
                     <button onclick="toggleFuneralView()" id="btnToggleFuneralView" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-xl text-sm font-bold border transition flex items-center gap-1">
                         📜 ดูงานศพย้อนหลังทั้งหมด
                     </button>
-                    <button onclick="openFuneralModal()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl text-sm font-bold shadow transition flex items-center gap-1">
+                    <!-- ปุ่มเฉพาะผู้ใหญ่บ้าน -->
+                    <button onclick="openFuneralModal()" class="admin-only bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl text-sm font-bold shadow transition items-center gap-1">
                         ➕ บันทึกแจ้งงานศพใหม่
                     </button>
                 </div>
             </div>
 
             <!-- รายการการ์ดงานศพ -->
-            <div id="funeralList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <!-- ข้อมูลจะถูก render ผ่าน JavaScript -->
-            </div>
+            <div id="funeralList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         </div>
     </section>
 
@@ -168,52 +173,61 @@
             <span>⚙️</span> เมนูหลักการทำงาน
         </h2>
         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4">
+            
+            <!-- เมนูสแกน QR (สมาชิกใช้งานได้) -->
             <div class="menu-card border-2 border-green-500 bg-green-50/50" onclick="location.href='receive.html?scan=true'">
                 <div class="text-4xl mb-2">📱</div>
-                <h3 class="font-bold text-lg text-green-800">สแกน QR</h3>
-                <p class="text-xs text-gray-500 mt-1">สแกนรับข้าวสารด่วน</p>
+                <h3 class="font-bold text-lg text-green-800">สแกน QR รับข้าว</h3>
+                <p class="text-xs text-gray-500 mt-1">สแกนและบันทึกรับข้าวสาร</p>
             </div>
 
+            <!-- เมนูรับข้าวสาร (สมาชิกใช้งานได้) -->
+            <div class="menu-card border-2 border-green-400 bg-green-50/20" onclick="location.href='receive.html'">
+                <div class="text-4xl mb-2">🌾</div>
+                <h3 class="font-bold text-lg text-green-900">รับข้าวสาร</h3>
+                <p class="text-xs text-gray-500 mt-1">บันทึก/แก้ไข การส่งข้าวสาร</p>
+            </div>
+
+            <!-- เมนูข่าวประชาสัมพันธ์ -->
             <div class="menu-card border-2 border-blue-400 bg-blue-50/30" onclick="location.href='news.html'">
                 <div class="text-4xl mb-2">📢</div>
                 <h3 class="font-bold text-lg text-blue-900">ข่าวประชาสัมพันธ์</h3>
                 <p class="text-xs text-gray-500 mt-1">ประกาศและข่าวสารหมู่บ้าน</p>
             </div>
 
+            <!-- เมนูงานศพ -->
             <div class="menu-card" onclick="scrollToFuneralSection()">
                 <div class="text-4xl mb-2">⚰️</div>
                 <h3 class="font-bold text-lg">จัดการงานศพ</h3>
-                <p class="text-xs text-gray-500 mt-1">บันทึกและเปิดรอบงานศพ</p>
+                <p class="text-xs text-gray-500 mt-1">ดูและจัดการรอบงานศพ</p>
             </div>
 
-            <div class="menu-card" onclick="location.href='receive.html'">
-                <div class="text-4xl mb-2">🌾</div>
-                <h3 class="font-bold text-lg">รับข้าวสาร</h3>
-                <p class="text-xs text-gray-500 mt-1">บันทึกการส่งข้าวสารสมาชิก</p>
-            </div>
-
+            <!-- เมนูสมาชิก -->
             <div class="menu-card" onclick="location.href='members.html'">
                 <div class="text-4xl mb-2">👥</div>
-                <h3 class="font-bold text-lg">จัดการสมาชิก</h3>
-                <p class="text-xs text-gray-500 mt-1">เพิ่ม/แก้ไข/ลบ รายชื่อ</p>
+                <h3 class="font-bold text-lg">รายชื่อสมาชิก</h3>
+                <p class="text-xs text-gray-500 mt-1">ตรวจสอบรายชื่อสมาชิก</p>
             </div>
 
+            <!-- เมนูคลังข้าว -->
             <div class="menu-card" onclick="location.href='stock.html'">
                 <div class="text-4xl mb-2">📦</div>
                 <h3 class="font-bold text-lg">คลังข้าวสาร</h3>
                 <p class="text-xs text-gray-500 mt-1">สรุปสต็อกและยอดรวม</p>
             </div>
 
+            <!-- เมนูรายงาน -->
             <div class="menu-card" onclick="location.href='report.html'">
                 <div class="text-4xl mb-2">📊</div>
                 <h3 class="font-bold text-lg">รายงาน/พิมพ์</h3>
                 <p class="text-xs text-gray-500 mt-1">ออกรายงานสรุปย้อนหลัง</p>
             </div>
 
-            <div class="menu-card" onclick="location.href='settings.html'">
+            <!-- เมนูตั้งค่า (เฉพาะผู้ใหญ่บ้าน) -->
+            <div class="menu-card admin-only" onclick="location.href='settings.html'">
                 <div class="text-4xl mb-2">⚙️</div>
-                <h3 class="font-bold text-lg">ตั้งค่าระบบ</h3>
-                <p class="text-xs text-gray-500 mt-1">สำรองข้อมูล/ตั้งค่ากลุ่ม</p>
+                <h3 class="font-bold text-lg text-red-600">ตั้งค่าระบบ</h3>
+                <p class="text-xs text-gray-500 mt-1">จัดการสิทธิ์และสำรองข้อมูล</p>
             </div>
         </div>
     </section>
@@ -247,7 +261,7 @@
         </div>
     </div>
 
-    <!-- 📝 MODAL บันทึก / แก้ไข งานศพ -->
+    <!-- 📝 MODAL บันทึก / แก้ไข งานศพ (ผู้ใหญ่บ้าน) -->
     <div id="funeralInputModal" class="modal opacity-0 invisible fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
         <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl">
             <div class="flex justify-between items-center border-b pb-3 mb-4">
@@ -256,12 +270,10 @@
             </div>
             <form id="funeralForm" onsubmit="saveFuneral(event)">
                 <input type="hidden" id="funeralEditId">
-                
                 <div class="mb-3">
                     <label class="block text-sm font-semibold text-gray-700 mb-1">ชื่อ - นามสกุล ผู้วายชนม์</label>
                     <input type="text" id="funeralName" required placeholder="เช่น นายสมชาย ใจดี" class="w-full p-2.5 border rounded-xl focus:ring-2 focus:ring-red-500 outline-none">
                 </div>
-
                 <div class="grid grid-cols-2 gap-3 mb-3">
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-1">อายุ (ปี)</label>
@@ -272,17 +284,14 @@
                         <input type="text" id="funeralHouse" placeholder="เช่น 12/1 ม.6" class="w-full p-2.5 border rounded-xl focus:ring-2 focus:ring-red-500 outline-none">
                     </div>
                 </div>
-
                 <div class="mb-3">
                     <label class="block text-sm font-semibold text-gray-700 mb-1">วัน/เดือน/ปี ที่เสียชีวิต</label>
                     <input type="date" id="funeralDeathDate" required class="w-full p-2.5 border rounded-xl focus:ring-2 focus:ring-red-500 outline-none">
                 </div>
-
                 <div class="mb-4">
                     <label class="block text-sm font-semibold text-gray-700 mb-1">วัน/เดือน/ปี ที่ฌาปนกิจ (วันเผา)</label>
                     <input type="date" id="funeralBurnDate" required class="w-full p-2.5 border rounded-xl focus:ring-2 focus:ring-red-500 outline-none">
                 </div>
-
                 <div class="flex gap-2">
                     <button type="button" onclick="closeModal('funeralInputModal')" class="w-1/2 bg-gray-200 hover:bg-gray-300 text-gray-700 py-2.5 rounded-xl font-bold transition">ยกเลิก</button>
                     <button type="submit" class="w-1/2 bg-red-600 hover:bg-red-700 text-white py-2.5 rounded-xl font-bold transition">บันทึกข้อมูล</button>
@@ -296,6 +305,7 @@
         let membersData = [];
         let funeralData = [];
         let showAllFuneralHistory = false;
+        let currentUserRole = 'member'; // ค่าเริ่มต้น: สมาชิก ('admin' = ผู้ใหญ่บ้าน, 'member' = สมาชิก)
 
         function updateClock() {
             const now = new Date();
@@ -305,7 +315,28 @@
         setInterval(updateClock, 1000);
         updateClock();
 
+        function checkUserRole() {
+            // ดึงสิทธิ์จาก LocalStorage (ถ้าไม่มีตั้งเป็น member)
+            const role = localStorage.getItem('Rongkhem_User_Role') || 'member';
+            currentUserRole = role;
+
+            const badge = document.getElementById('userRoleBadge');
+            if (role === 'admin') {
+                badge.innerHTML = '👑 สิทธิ์: <strong>ผู้ใหญ่บ้าน / ผู้ดูแล</strong>';
+                badge.classList.add('bg-amber-100', 'text-amber-800', 'border-amber-300');
+                // แสดงปุ่ม/เมนูของผู้ใหญ่บ้าน
+                document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'flex');
+            } else {
+                badge.innerHTML = '👤 สิทธิ์: <strong>สมาชิกกลุ่มข้าวสาร</strong>';
+                badge.classList.add('bg-blue-100', 'text-blue-800', 'border-blue-300');
+                // ซ่อนส่วนของผู้ใหญ่บ้าน
+                document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
+            }
+        }
+
         function initSystem() {
+            checkUserRole();
+
             // ดึงข้อมูลสมาชิก
             const localData = localStorage.getItem('Rongkhem_Members_Local');
             if (localData) {
@@ -326,17 +357,13 @@
             renderFunerals();
         }
 
-        // --- ระบบงานศพ ---
         function renderFunerals() {
             const container = document.getElementById('funeralList');
             if (!container) return;
 
-            // เรียงลำดับงานศพตามวันเสียชีวิต (ล่าสุดขึ้นก่อน)
             funeralData.sort((a, b) => new Date(b.deathDate) - new Date(a.deathDate));
-
             const today = new Date().toISOString().split('T')[0];
             
-            // กรองรายการแสดงผล (ทั้งหมด หรือ เฉพาะที่ยังไม่เผา/เผาวันนี้)
             let displayList = funeralData;
             if (!showAllFuneralHistory) {
                 displayList = funeralData.filter(f => f.burnDate >= today);
@@ -345,7 +372,7 @@
             if (displayList.length === 0) {
                 container.innerHTML = `
                     <div class="col-span-full text-center py-8 text-gray-400 bg-gray-50 rounded-2xl border border-dashed">
-                        🕊️ ${showAllFuneralHistory ? 'ยังไม่มีประวัติงานศพในระบบ' : 'ขณะนี้ไม่มีรายการงานศพที่กำลังดำเนินการอยู่ (กด "ดูงานศพย้อนหลัง" เพื่อดูทั้งหมด)'}
+                        🕊️ ${showAllFuneralHistory ? 'ยังไม่มีประวัติงานศพในระบบ' : 'ขณะนี้ไม่มีรายการงานศพที่กำลังดำเนินการอยู่'}
                     </div>
                 `;
                 return;
@@ -357,8 +384,16 @@
                     ? `<span class="bg-gray-200 text-gray-700 text-xs px-2.5 py-1 rounded-full font-bold">⚪ เสร็จสิ้นแล้ว</span>`
                     : `<span class="bg-red-100 text-red-700 text-xs px-2.5 py-1 rounded-full font-bold animate-pulse">🔴 กำลังดำเนินการ</span>`;
 
+                // ปุ่มแก้ไข/ลบ จะเห็นเฉพาะผู้ใหญ่บ้าน (Admin)
+                const adminButtons = currentUserRole === 'admin' ? `
+                    <div class="flex justify-end gap-2 mt-3 pt-2 border-t border-gray-100">
+                        <button onclick="editFuneral('${f.id}')" class="text-xs text-blue-600 font-bold px-2 py-1 bg-blue-50 rounded-lg">✏️ แก้ไข</button>
+                        <button onclick="deleteFuneral('${f.id}')" class="text-xs text-red-600 font-bold px-2 py-1 bg-red-50 rounded-lg">🗑️ ลบ</button>
+                    </div>
+                ` : '';
+
                 return `
-                    <div class="p-4 border rounded-2xl bg-white shadow-sm hover:shadow-md transition relative border-l-4 ${isFinished ? 'border-l-gray-400' : 'border-l-red-500'}">
+                    <div class="p-4 border rounded-2xl bg-white shadow-sm hover:shadow-md transition border-l-4 ${isFinished ? 'border-l-gray-400' : 'border-l-red-500'}">
                         <div class="flex justify-between items-start mb-2">
                             <div>
                                 <h3 class="font-bold text-lg text-gray-800">${f.name}</h3>
@@ -370,16 +405,17 @@
                             <div>✝️ เสียชีวิต: <strong>${formatThaiDate(f.deathDate)}</strong></div>
                             <div>🔥 ฌาปนกิจ (เผา): <strong class="text-red-600">${formatThaiDate(f.burnDate)}</strong></div>
                         </div>
-                        <div class="flex justify-end gap-2 mt-3 pt-2 border-t border-gray-100">
-                            <button onclick="editFuneral('${f.id}')" class="text-xs text-blue-600 hover:text-blue-800 font-bold px-2 py-1 bg-blue-50 rounded-lg">✏️ แก้ไข</button>
-                            <button onclick="deleteFuneral('${f.id}')" class="text-xs text-red-600 hover:text-red-800 font-bold px-2 py-1 bg-red-50 rounded-lg">🗑️ ลบ</button>
-                        </div>
+                        ${adminButtons}
                     </div>
                 `;
             }).join('');
         }
 
         function openFuneralModal(editId = null) {
+            if (currentUserRole !== 'admin') {
+                alert('⛔ สิทธิ์ไม่เพียงพอ! เฉพาะผู้ใหญ่บ้านเท่านั้นที่สามารถบันทึก/แก้ไขงานศพได้');
+                return;
+            }
             document.getElementById('funeralForm').reset();
             document.getElementById('funeralEditId').value = '';
             document.getElementById('funeralModalTitle').innerText = '⚰️ บันทึกแจ้งงานศพ';
@@ -401,6 +437,8 @@
 
         function saveFuneral(e) {
             e.preventDefault();
+            if (currentUserRole !== 'admin') return;
+
             const editId = document.getElementById('funeralEditId').value;
             const name = document.getElementById('funeralName').value;
             const age = document.getElementById('funeralAge').value;
@@ -410,15 +448,9 @@
 
             if (editId) {
                 const index = funeralData.findIndex(f => f.id === editId);
-                if (index !== -1) {
-                    funeralData[index] = { id: editId, name, age, house, deathDate, burnDate };
-                }
+                if (index !== -1) funeralData[index] = { id: editId, name, age, house, deathDate, burnDate };
             } else {
-                const newFuneral = {
-                    id: 'F_' + Date.now(),
-                    name, age, house, deathDate, burnDate
-                };
-                funeralData.push(newFuneral);
+                funeralData.push({ id: 'F_' + Date.now(), name, age, house, deathDate, burnDate });
             }
 
             localStorage.setItem('Rongkhem_Funeral_Local', JSON.stringify(funeralData));
@@ -428,11 +460,10 @@
             alert('✅ บันทึกข้อมูลงานศพเรียบร้อยแล้ว');
         }
 
-        function editFuneral(id) {
-            openFuneralModal(id);
-        }
+        function editFuneral(id) { openFuneralModal(id); }
 
         function deleteFuneral(id) {
+            if (currentUserRole !== 'admin') return;
             if (confirm('คุณต้องการลบรายการงานศพนี้ใช่หรือไม่?')) {
                 funeralData = funeralData.filter(f => f.id !== id);
                 localStorage.setItem('Rongkhem_Funeral_Local', JSON.stringify(funeralData));
@@ -443,8 +474,7 @@
 
         function toggleFuneralView() {
             showAllFuneralHistory = !showAllFuneralHistory;
-            const btn = document.getElementById('btnToggleFuneralView');
-            btn.innerText = showAllFuneralHistory ? '📋 แสดงเฉพาะงานปัจจุบัน' : '📜 ดูงานศพย้อนหลังทั้งหมด';
+            document.getElementById('btnToggleFuneralView').innerText = showAllFuneralHistory ? '📋 แสดงเฉพาะงานปัจจุบัน' : '📜 ดูงานศพย้อนหลังทั้งหมด';
             renderFunerals();
         }
 
@@ -457,20 +487,6 @@
             const d = new Date(dateStr);
             return d.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' });
         }
-
-        // --- ระบบสถิติ & สมาชิก ---
-        window.importMembersDirectly = function() {
-            let list = window.DEFAULT_MEMBERS || typeof DEFAULT_MEMBERS !== 'undefined' ? DEFAULT_MEMBERS : null;
-            if (list && list.length > 0) {
-                membersData = list;
-                localStorage.setItem('Rongkhem_Members_Local', JSON.stringify(membersData));
-                alert(`✅ ดึงรายชื่อสมาชิกสำเร็จแล้วจำนวน ${list.length} ครัวเรือน!`);
-                renderStats();
-                renderMembers();
-            } else {
-                alert('❌ ยังไม่พบข้อมูลในไฟล์ members.js กรุณาเช็กไฟล์ members.js อีกครั้งครับ');
-            }
-        };
 
         function renderStats() {
             document.getElementById('stat-members').innerText = membersData.length;
@@ -514,7 +530,6 @@
         window.closeModal = id => document.getElementById(id).classList.remove('modal-active');
         window.handleLogout = () => { if(confirm('ต้องการออกจากระบบหรือไม่?')) location.href = 'login.html'; };
 
-        // เรียกทำงาน
         window.onload = initSystem;
     </script>
 </body>
