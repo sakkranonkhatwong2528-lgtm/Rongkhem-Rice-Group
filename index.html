@@ -579,133 +579,72 @@
 
         // 🔄 ดึงรายชื่อสมาชิกเดิมจาก members.js ขึ้น Cloud Firestore
         window.importOldMembersToCloud = async function() {
-            const oldMembers = (typeof DEFAULT_MEMBERS !== 'undefined') ? DEFAULT_MEMBERS : 
-                               (typeof membersData !== 'undefined') ? membersData : null;
+            let oldMembers = null;
+            if (typeof DEFAULT_MEMBERS !== 'undefined') oldMembers = DEFAULT_MEMBERS;
+            else if (typeof membersData !== 'undefined') oldMembers = membersData;
+            else if (typeof members !== 'undefined') oldMembers = members;
+            else if (window.DEFAULT_MEMBERS) oldMembers = window.DEFAULT_MEMBERS;
 
             if (!oldMembers || oldMembers.length === 0) {
-                alert('❌ ไม่พบข้อมูลสมาชิกในไฟล์ members.js');
+                alert('❌ ไม่พบข้อมูลสมาชิกในไฟล์ members.js ครับ');
                 return;
             }
 
             if (confirm(`พบรายชื่อสมาชิกเดิมจำนวน ${oldMembers.length} รายการ คุณต้องการดึงขึ้นระบบ Cloud หรือไม่?`)) {
-                let count = 0;
-                for (const member of oldMembers) {
-                    await saveData('Rongkhem_Members', member);
-                    count++;
+                try {
+                    let count = 0;
+                    for (const member of oldMembers) {
+                        const memberData = {
+                            id: member.id || member.code || `RK_${Date.now()}_${count}`,
+                            code: member.code || member.id || `RK${count+1}`,
+                            name: member.name || '',
+                            houseNo: member.houseNo || member.address || '',
+                            address: member.address || member.houseNo || '',
+                            status: member.status || 'ปกติ'
+                        };
+                        await saveData('Rongkhem_Members', memberData);
+                        count++;
+                    }
+                    alert(`✅ ดึงข้อมูลสมาชิกสำเร็จเรียบร้อยจำนวน ${count} รายการ!`);
+                    window.location.reload();
+                } catch (err) {
+                    alert('❌ เกิดข้อผิดพลาดขณะส่งข้อมูลขึ้น Cloud: ' + err.message);
                 }
-                alert(`✅ ดึงข้อมูลสมาชิกสำเร็จแล้วจำนวน ${count} รายการ!`);
-                loadAllCloudData();
             }
         };
 
-        // 3. แสดงผล Dashboard
+        // 3. ฟังก์ชัน Render Dashboard
         function renderDashboard() {
-            document.getElementById('stat-members').innerText = membersList.length || 0;
-            document.getElementById('stat-funerals').innerText = funeralsList.length || 0;
+            document.getElementById('stat-members').innerText = membersList.length;
+            document.getElementById('stat-funerals').innerText = funeralsList.length;
             
-            const totalRice = riceRecords.reduce((sum, r) => sum + (parseInt(r.amount) || 0), 0);
+            const totalRice = riceRecords.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
             document.getElementById('stat-rice').innerText = totalRice;
 
-            const activeFuneral = funeralsList.find(f => f.status === 'active');
-            const activeBox = document.getElementById('activeFuneral');
-
-            if (activeFuneral && activeBox) {
-                activeBox.innerHTML = `
-                    <div class="bg-red-50 p-6 rounded-2xl border border-red-200 shadow-sm relative">
-                        <div class="inline-block bg-red-600 text-white text-xs px-3 py-1 rounded-full font-bold mb-2">กำลังเปิดรับข้าวสาร</div>
-                        <h3 class="text-2xl font-bold text-gray-800">${activeFuneral.deceasedName || activeFuneral.name} (อายุ ${activeFuneral.age || '-'} ปี)</h3>
-                        <p class="text-gray-600 mt-2"><strong>เจ้าภาพ:</strong> ${activeFuneral.hostHouse || activeFuneral.host}</p>
-                        <p class="text-gray-600"><strong>วันเสียชีวิต:</strong> ${activeFuneral.deathDate || '-'}</p>
-                    </div>
-                `;
-            }
+            const pendingCount = membersList.filter(m => m.status === 'ค้างส่ง').length;
+            document.getElementById('stat-pending').innerText = pendingCount;
+            document.getElementById('alertPendingCount').innerText = pendingCount;
         }
 
-        // 4. แสดงทะเบียนสมาชิก
-        function renderMemberList() {
-            const container = document.getElementById('modalMemberList');
-            if (!container) return;
-            container.innerHTML = membersList.map(m => `
-                <div class="p-3 border rounded-xl flex justify-between items-center bg-gray-50">
-                    <div>
-                        <div class="font-bold text-gray-800">${m.name || m.memberName}</div>
-                        <div class="text-xs text-gray-500">รหัส: ${m.code || m.id || '-'} | บ้านเลขที่: ${m.houseNo || m.address || '-'}</div>
-                    </div>
-                    <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-md font-bold">ปกติ</span>
-                </div>
-            `).join('');
-        }
-
-        // 5. แสดงประวัติงานศพ
-        function renderFuneralHistory() {
-            const container = document.getElementById('funeralHistoryContainer');
-            if (!container) return;
-            document.getElementById('modalFuneralTotal').innerText = funeralsList.length;
-            container.innerHTML = funeralsList.map(f => `
-                <div class="p-4 border rounded-2xl bg-white shadow-sm flex justify-between items-center">
-                    <div>
-                        <div class="font-bold text-gray-800 text-lg">ผู้วายชนม์: ${f.deceasedName || f.name} (อายุ ${f.age || '-'} ปี)</div>
-                        <div class="text-sm text-gray-600">เจ้าภาพ: ${f.hostHouse || f.host}</div>
-                        <div class="text-xs text-gray-400 mt-1">วันที่: ${f.deathDate || '-'}</div>
-                    </div>
-                    <span class="text-xs ${f.status === 'active' ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-600'} px-3 py-1.5 rounded-xl font-bold">
-                        ${f.status === 'active' ? 'เปิดรับข้าวสาร' : 'เสร็จสิ้น'}
-                    </span>
-                </div>
-            `).join('');
-        }
-
-        // 6. แสดงรายงานสมาชิกค้างส่ง
-        function renderPendingReport() {
-            const tbody = document.getElementById('pendingTableBody');
-            if (!tbody) return;
-            tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-gray-400">ไม่มีรายการสมาชิกค้างส่ง</td></tr>`;
-        }
-
-        // 7. โหลดรายชื่อใส่ Dropdown รับข้าวสาร
-        function renderRiceDropdown() {
-            const select = document.getElementById('riceMember');
-            if (!select) return;
-            select.innerHTML = '<option value="">-- เลือกสมาชิก --</option>' + 
-                membersList.map(m => `<option value="${m.id || m.code}">${m.name || m.memberName} (${m.houseNo || m.address || '-'})</option>`).join('');
-        }
-
-        // 8. แสดงกราฟสถิติ
-        function renderChart() {
-            const ctx = document.getElementById('myChart');
-            if (!ctx) return;
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.'],
-                    datasets: [{
-                        label: 'จำนวนข้าวสาร (ถุง)',
-                        data: [12, 19, 3, 5, 2, 3],
-                        backgroundColor: '#198754'
-                    }]
-                },
-                options: { responsive: true, maintainAspectRatio: false }
-            });
-        }
-
-        // เปิด Modal และบันทึกข้อมูล
-        window.openModal = function(id) {
-            const modal = document.getElementById(id);
+        // 4. Modal Controller
+        window.openModal = function(modalId) {
+            const modal = document.getElementById(modalId);
             if (modal) modal.classList.add('modal-active');
         };
 
-        window.closeModal = function(id) {
-            const modal = document.getElementById(id);
+        window.closeModal = function(modalId) {
+            const modal = document.getElementById(modalId);
             if (modal) modal.classList.remove('modal-active');
         };
 
+        // 5. Logout Handler
         window.handleLogout = function() {
             if (confirm('คุณต้องการออกจากระบบใช่หรือไม่?')) {
                 window.location.href = 'login.html';
             }
         };
 
-        // เริ่มโหลดข้อมูลทันทีที่เปิดหน้า
+        // เริ่มทำงานระบบเมื่อโหลดหน้าเว็บ
         loadAllCloudData();
     </script>
 </body>
