@@ -6,7 +6,7 @@
 
 const STORAGE_KEY = "Rongkhem_Members";
 
-const DEFAULT_MEMBERS = [
+window.DEFAULT_MEMBERS = [
   { id: "RK001", name: "นายจักร์กวัส ประพลรัตนัง", address: "2 หมู่ 6", status: "pending" },
   { id: "RK002", name: "นางแสงเพียร วงค์ขัติย์", address: "6 หมู่ 6", status: "pending" },
   { id: "RK003", name: "นายยนต์ ปิงเมือง", address: "7 หมู่ 6", status: "pending" },
