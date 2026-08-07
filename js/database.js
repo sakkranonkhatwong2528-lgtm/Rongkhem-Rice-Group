@@ -1,87 +1,71 @@
-/* Rongkhem Rice Group V6.0
-   Central Database
-*/
+// Import สคริปต์ Firebase (เวอร์ชัน Web CDN ใช้งานบนมือถือได้ทันที)
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { 
+  getFirestore, 
+  collection, 
+  addDoc, 
+  getDocs, 
+  doc, 
+  updateDoc, 
+  deleteDoc 
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-const DB_KEY = "RONGKHEM_RICE_GROUP_V6";
-
-const DEFAULT_DB = {
-    version: "6.0",
-    createdAt: new Date().toISOString(),
-
-    members: [],
-    funerals: [],
-    receives: [],
-
-    stock: {
-        balance: 0,
-        history: []
-    },
-
-    settings: {
-        village: "บ้านร่องเข็ม",
-        updatedAt: null
-    }
+// รหัสเชื่อมต่อ Firebase ของกลุ่มข้าวรงเขม
+const firebaseConfig = {
+  apiKey: "AIzaSyCme8E32QPySbSetpZP9_yAyiHpSGmlxlc",
+  authDomain: "rongkhem-rice-group.firebaseapp.com",
+  projectId: "rongkhem-rice-group",
+  storageBucket: "rongkhem-rice-group.firebasestorage.app",
+  messagingSenderId: "114954787725",
+  appId: "1:114954787725:web:d18bb54ac53bc00db17bc4",
+  measurementId: "G-70Z00XXB8Y"
 };
 
-function loadDB() {
+// เริ่มต้นระบบ Firestore Database
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-    try {
+// -------------------------------------------------------------
+// ฟังก์ชันบันทึก / ดึง / ลบ ข้อมูลผ่าน Cloud Database
+// -------------------------------------------------------------
 
-        const raw = localStorage.getItem(DB_KEY);
-
-        if (!raw) {
-            saveDB(DEFAULT_DB);
-            return structuredClone(DEFAULT_DB);
-        }
-
-        return JSON.parse(raw);
-
-    } catch (e) {
-
-        console.error(e);
-
-        saveDB(DEFAULT_DB);
-
-        return structuredClone(DEFAULT_DB);
-
-    }
-
+// 1. บันทึกข้อมูลใหม่ (เช่น บันทึกสมาชิก, บันทึกงานศพ)
+export async function saveData(collectionName, data) {
+  try {
+    const docRef = await addDoc(collection(db, collectionName), {
+      ...data,
+      createdAt: new Date().toISOString()
+    });
+    console.log("บันทึกขึ้น Cloud เรียบร้อย ID:", docRef.id);
+    return { success: true, id: docRef.id };
+  } catch (error) {
+    console.error("เกิดข้อผิดพลาดในการบันทึก:", error);
+    return { success: false, error };
+  }
 }
 
-function saveDB(db) {
-
-    db.settings.updatedAt = new Date().toISOString();
-
-    localStorage.setItem(
-        DB_KEY,
-        JSON.stringify(db)
-    );
-
+// 2. ดึงข้อมูลทั้งหมด
+export async function loadData(collectionName) {
+  try {
+    const querySnapshot = await getDocs(collection(db, collectionName));
+    let list = [];
+    querySnapshot.forEach((doc) => {
+      list.push({ id: doc.id, ...doc.data() });
+    });
+    return list;
+  } catch (error) {
+    console.error("เกิดข้อผิดพลาดในการดึงข้อมูล:", error);
+    return [];
+  }
 }
 
-function resetDB() {
-
-    saveDB(structuredClone(DEFAULT_DB));
-
-}
-
-function backupDB() {
-
-    return JSON.stringify(loadDB(), null, 2);
-
-}
-
-function restoreDB(json) {
-
-    saveDB(JSON.parse(json));
-
-}
-
-function uid(prefix = "ID") {
-
-    return prefix + "_" +
-        Date.now() +
-        "_" +
-        Math.random().toString(36).substring(2,8);
-
+// 3. ลบข้อมูล
+export async function deleteData(collectionName, docId) {
+  try {
+    await deleteDoc(doc(db, collectionName, docId));
+    return { success: true };
+  } catch (error) {
+    console.error("เกิดข้อผิดพลาดในการลบ:", error);
+    return { success: false, error };
+  }
 }
