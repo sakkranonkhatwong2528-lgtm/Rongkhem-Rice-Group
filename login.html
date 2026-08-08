@@ -59,7 +59,7 @@
 
             <!-- ข้อความแจ้งเตือนข้อผิดพลาด -->
             <div id="errorMsg" class="hidden text-xs text-red-600 bg-red-50 border border-red-200 p-2.5 rounded-xl text-center font-bold">
-                ⚠️ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง!
+                ⚠️ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้องตามสิทธิ์ที่เลือก!
             </div>
 
             <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white py-3.5 rounded-2xl font-bold text-base shadow-lg transition flex items-center justify-center gap-2">
@@ -93,9 +93,10 @@
             const pass = document.getElementById('password').value.trim();
             const errorMsg = document.getElementById('errorMsg');
 
-            // ตรวจสอบสิทธิ์ผู้ใหญ่บ้าน (Admin)
-            if (selectedRole === 'admin' || user === 'admin') {
-                if ((user === 'admin' && pass === 'admin1234') || pass === '1234') {
+            // 1. ตรวจสอบกรณีเลือกสิทธิ์: ผู้ใหญ่บ้าน (Admin)
+            if (selectedRole === 'admin') {
+                // บังคับว่า Username ต้องเป็น admin และ Password ต้องเป็น admin1234 เท่านั้น
+                if (user === 'admin' && pass === 'admin1234') {
                     localStorage.setItem('Rongkhem_User_Role', 'admin');
                     localStorage.setItem('Rongkhem_User_Name', 'นายศักรนนทน์ ขัติย์วงศ์ (ผู้ใหญ่บ้าน)');
                     location.href = 'index.html';
@@ -103,9 +104,10 @@
                 }
             }
 
-            // ตรวจสอบสิทธิ์สมาชิก (Member)
-            if (selectedRole === 'member' || user === 'member') {
-                if (pass === '1234') {
+            // 2. ตรวจสอบกรณีเลือกสิทธิ์: สมาชิก / กรรมการ (Member)
+            if (selectedRole === 'member') {
+                // บังคับว่า Username ต้องเป็น member และ Password ต้องเป็น 1234 เท่านั้น
+                if (user === 'member' && pass === '1234') {
                     localStorage.setItem('Rongkhem_User_Role', 'member');
                     localStorage.setItem('Rongkhem_User_Name', 'สมาชิกกลุ่มข้าวสาร');
                     location.href = 'index.html';
@@ -113,7 +115,7 @@
                 }
             }
 
-            // หากใส่รหัสผิด
+            // 3. หากรหัสผ่านหรือผู้ใช้งานไม่ถูกต้องตามสิทธิ์ที่เลือก
             errorMsg.classList.remove('hidden');
         }
     </script>
