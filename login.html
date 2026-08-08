@@ -67,13 +67,6 @@
             </button>
         </form>
 
-        <!-- FOOTER INFO -->
-        <div class="mt-6 border-t pt-4 text-center">
-            <p class="text-xs text-gray-500">📌 <strong>รหัสทดสอบระบบ:</strong></p>
-            <p class="text-xs text-gray-400 mt-0.5">สมาชิก: <strong>member</strong> / <strong>1234</strong></p>
-            <p class="text-xs text-gray-400">ผู้ใหญ่บ้าน: <strong>admin</strong> / <strong>admin1234</strong></p>
-        </div>
-
     </div>
 
     <script>
@@ -83,22 +76,16 @@
             selectedRole = role;
             const btnMember = document.getElementById('btnRoleMember');
             const btnAdmin = document.getElementById('btnRoleAdmin');
-            const usernameInput = document.getElementById('username');
 
             if (role === 'member') {
                 btnMember.className = "py-2.5 rounded-xl font-bold text-xs transition bg-green-600 text-white shadow";
                 btnAdmin.className = "py-2.5 rounded-xl font-bold text-xs transition text-gray-600 hover:bg-gray-200";
-                usernameInput.value = 'member';
             } else {
                 btnAdmin.className = "py-2.5 rounded-xl font-bold text-xs transition bg-amber-500 text-white shadow";
                 btnMember.className = "py-2.5 rounded-xl font-bold text-xs transition text-gray-600 hover:bg-gray-200";
-                usernameInput.value = 'admin';
             }
             document.getElementById('errorMsg').classList.add('hidden');
         }
-
-        // ตั้งค่าเริ่มต้นใส่ username ให้อัตโนมัติเพื่อความสะดวก
-        document.getElementById('username').value = 'member';
 
         function handleLogin(e) {
             e.preventDefault();
