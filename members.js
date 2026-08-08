@@ -1,11 +1,12 @@
 /* ==========================================
    Rongkhem Rice Group
    members.js
-   Version 2.0
+   Version 2.0 (พร้อมฟังก์ชันจัดการข้อมูลจริง)
 ========================================== */
 
-const STORAGE_KEY = "Rongkhem_Members";
+const STORAGE_KEY = "Rongkhem_Members_Local";
 
+// รายชื่อสมาชิกเริ่มต้น 176 ครัวเรือน
 window.DEFAULT_MEMBERS = [
   { id: "RK001", name: "นายจักร์กวัส ประพลรัตนัง", address: "2 หมู่ 6", status: "pending" },
   { id: "RK002", name: "นางแสงเพียร วงค์ขัติย์", address: "6 หมู่ 6", status: "pending" },
@@ -184,3 +185,30 @@ window.DEFAULT_MEMBERS = [
   { id: "RK175", name: "นางหล้า วงค์ขัติย์", address: "348 หมู่ 6", status: "pending" },
   { id: "RK176", name: "นางญาฐิกา ถิ่นลำปาง", address: "365 หมู่ 6", status: "pending" }
 ];
+
+// ฟังก์ชันดึงข้อมูลสมาชิกทั้งหมด
+function getRongkhemMembers() {
+  const localData = localStorage.getItem(STORAGE_KEY);
+  if (localData) {
+    try {
+      return JSON.parse(localData);
+    } catch (e) {
+      console.error("Error parsing local storage members:", e);
+    }
+  }
+  // ถ้ายังไม่มีใน LocalStorage ให้บันทึกค่าเริ่มต้นเข้าไป
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(window.DEFAULT_MEMBERS));
+  return window.DEFAULT_MEMBERS;
+}
+
+// ฟังก์ชันค้นหาสมาชิกด้วย ID หรือ ชื่อ
+function findMemberByIdOrName(query) {
+  if (!query) return null;
+  const members = getRongkhemMembers();
+  const cleanQuery = query.trim().toLowerCase();
+
+  return members.find(m => 
+    m.id.toLowerCase() === cleanQuery || 
+    m.name.toLowerCase().includes(cleanQuery)
+  ) || null;
+}
