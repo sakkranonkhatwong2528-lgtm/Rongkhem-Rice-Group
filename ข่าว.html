@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>จัดการข่าวประชาสัมพันธ์ - กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .news-box {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .script-textarea {
+            width: 100%;
+            height: 320px;
+            font-family: 'Sarabun', sans-serif;
+            font-size: 15px;
+            line-height: 1.6;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            background-color: #fdfdfd;
+            resize: vertical;
+        }
+        .btn-action {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .btn-action:hover { background-color: #0056b3; }
+        .btn-clear { background-color: #dc3545; }
+        .btn-clear:hover { background-color: #bd2130; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>📢 จัดการข่าวประชาสัมพันธ์</h2>
+        <p><strong>กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</strong></p>
+        <a href="index.html">← กลับหน้าหลัก</a>
+
+        <div class="news-box">
+            <h3>📋 ประกาศแจ้งเตือนสมาชิก (พร้อมบทไว้อาลัย)</h3>
+            
+            <!-- กล่องแสดงข้อความสคริปต์ประกาศ -->
+            <textarea id="announcementScriptBox" class="script-textarea" readonly></textarea>
+
+            <br>
+            <!-- ปุ่มกดคัดลอกข้อความ -->
+            <button class="btn-action" onclick="copyAnnouncementText()">📋 คัดลอกข้อความ</button>
+            
+            <!-- ปุ่มทดสอบล้างค่าชื่อผู้เสียชีวิต (สำหรับทดสอบระบบ) -->
+            <button class="btn-action btn-clear" onclick="clearDeceasedData()">🗑️ รีเซ็ตชื่อผู้เสียชีวิต</button>
+        </div>
+    </div>
+
+    <!-- ดึงไฟล์ JS ของระบบมาใช้งาน -->
+    <script src="script.js"></script>
+    <script>
+        // เมื่อเปิดหน้า news.html ให้ดึงสคริปต์มาแสดงทันที
+        window.onload = function() {
+            renderAnnouncement();
+        };
+
+        function renderAnnouncement() {
+            const scriptBox = document.getElementById("announcementScriptBox");
+            if (scriptBox && typeof generateAnnouncementScript === "function") {
+                scriptBox.value = generateAnnouncementScript();
+            }
+        }
+
+        // ฟังก์ชันคัดลอกข้อความ
+        function copyAnnouncementText() {
+            const scriptBox = document.getElementById("announcementScriptBox");
+            scriptBox.select();
+            document.execCommand("copy");
+            alert("คัดลอกข้อความสคริปต์ประกาศเรียบร้อยแล้ว!");
+        }
+
+        // ฟังก์ชันสำหรับทดสอบล้างข้อมูลการตาย
+        function clearDeceasedData() {
+            localStorage.removeItem("latest_deceased_name");
+            renderAnnouncement();
+            alert("รีเซ็ตเป็นสถานะประกาศทั่วไปเรียบร้อยแล้ว");
+        }
+    </script>
+</body>
+</html>
