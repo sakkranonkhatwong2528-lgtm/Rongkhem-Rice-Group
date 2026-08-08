@@ -1,43 +1,29 @@
-// ฟังก์ชันสำหรับพิมพ์สลิป/ใบรับข้าวสารให้สมาชิก
-function printReceipt(memberName, houseNo, funeralName) {
-    const receiptWindow = window.open('', '', 'width=400,height=600');
-    const now = new Date();
-    const dateStr = now.toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
-    const timeStr = now.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
+// ฟังก์ชันสร้างสคริปต์ประกาศข่าวประชาสัมพันธ์พร้อมส่วนแสดงความไว้อาลัย
+function generateAnnouncementScript() {
+    // ดึงชื่อผู้เสียชีวิตล่าสุดจาก LocalStorage
+    const deceasedName = localStorage.getItem("latest_deceased_name");
+    
+    let condolenceText = "";
 
-    receiptWindow.document.write(`
-        <!DOCTYPE html>
-        <html lang="th">
-        <head>
-            <meta charset="UTF-8">
-            <title>ใบรับข้าวสาร</title>
-            <style>
-                body { font-family: 'Prompt', sans-serif; padding: 20px; text-align: center; color: #333; }
-                .ticket { border: 1px dashed #444; padding: 15px; border-radius: 8px; }
-                h2 { margin: 0 0 5px 0; font-size: 18px; color: #064e3b; }
-                p { margin: 3px 0; font-size: 13px; }
-                .highlight { font-weight: bold; font-size: 15px; color: #000; margin: 10px 0; }
-                .footer { font-size: 11px; color: #777; margin-top: 15px; border-top: 1px solid #eee; pt: 5px; }
-            </style>
-        </head>
-        <body>
-            <div class="ticket">
-                <h2>🌾 กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ 6</h2>
-                <p><b>ใบรับข้าวสาร (ฌาปนกิจสงเคราะห์)</b></p>
-                <hr>
-                <p class="highlight">งานศพ: ${funeralName}</p>
-                <p><b>ผู้ส่งข้าวสาร:</b> ${memberName}</p>
-                <p><b>บ้านเลขที่:</b> ${houseNo}</p>
-                <p><b>จำนวน:</b> 1 ถุง</p>
-                <hr>
-                <p><b>วันที่บันทึก:</b> ${dateStr} (${timeStr} น.)</p>
-                <p class="footer">ขอบคุณที่ร่วมทำบุญสงเคราะห์สมาชิกกลุ่ม</p>
-            </div>
-            <script>
-                window.onload = function() { window.print(); window.close(); }
-            <\/script>
-        </body>
-        </html>
-    `);
-    receiptWindow.document.close();
+    // ตรวจสอบเงื่อนไขการแจ้งตาย
+    if (deceasedName && deceasedName.trim() !== "") {
+        condolenceText = `"ก่อนเข้าสู่การแจ้งข่าวสารในวันนี้ ทางกลุ่มข้าวสารขอร่วมแสดงความอาลัยอย่างสุดซึ้ง ต่อการจากไปของ ${deceasedName} และขอส่งกำลังใจให้แก่ครอบครัวมา ณ ที่นี้ด้วยความเคารพครับ/ค่ะ"`;
+    } else {
+        condolenceText = `"ก่อนเข้าสู่การแจ้งข่าวสารในวันนี้ ทางกลุ่มข้าวสารขอร่วมแสดงความอาลัยและส่งกำลังใจแก่ครอบครัวผู้นำและสมาชิกที่สูญเสียบุคคลอันเป็นที่รักทุกท่าน มา ณ ที่นี้ด้วยความเคารพครับ/ค่ะ"`;
+    }
+
+    // ประกอบข้อความสคริปต์ทั้งหมด
+    return `[ช่วงที่ 1: แสดงความไว้อาลัย]
+"กราบเรียนสมาชิกกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6 ทุกท่าน..."
+${condolenceText}
+(เว้นจังหวะเงียบสงบประมาณ 2-3 วินาที)
+
+[ช่วงที่ 2: เนื้อหาประกาศแจ้งเตือนสมาชิก]
+"ในการนี้ คณะกรรมการมีเรื่องขอแจ้งเตือนสมาชิกทุกท่าน เพื่อให้การดำเนินงานของกลุ่มเป็นไปด้วยความเรียบร้อย มีความเป็นธรรม และช่วยเหลือกันได้อย่างต่อเนื่อง"
+
+"ขอแจ้งให้ทราบว่า สมาชิกที่ไม่ส่งข้าวสารตามระเบียบของกลุ่ม จำนวน 2 ครั้ง โดยไม่มีเหตุผลอันสมควร จะถูกตัดสิทธิ์การเป็นสมาชิก และไม่มีสิทธิ์ได้รับสวัสดิการของกลุ่ม จนกว่าจะมีการพิจารณาเป็นกรณีไป"
+
+"หากท่านใดมีเหตุจำเป็นไม่สามารถส่งได้ตามกำหนด กรุณาแจ้งคณะกรรมการล่วงหน้าเพื่อร่วมกันหาแนวทางแก้ไข"
+
+"จึงขอความร่วมมือจากทุกท่านในการปฏิบัติตามระเบียบเพื่อประโยชน์ส่วนรวม ขอขอบพระคุณทุกท่านที่ให้ความร่วมมือด้วยดีมาโดยตลอดครับ/ค่ะ"`;
 }
