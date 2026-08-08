@@ -27,6 +27,26 @@
             </a>
         </div>
 
+        <!-- กล่องสคริปต์ประกาศสำหรับเสียงอ่าน / หอกระจายข่าว (ผสานระบบไว้อาลัย) -->
+        <div class="bg-white p-6 rounded-xl shadow-md border border-amber-200 space-y-3">
+            <div class="flex items-center justify-between">
+                <h2 class="text-lg font-semibold text-gray-800">🎙️ บทประกาศเสียงอ่าน (พร้อมแสดงความไว้อาลัย)</h2>
+                <span id="deceasedStatusBadge" class="text-xs px-2.5 py-1 rounded-full bg-blue-100 text-blue-800 font-medium">
+                    กำลังดึงข้อมูล...
+                </span>
+            </div>
+            <p class="text-xs text-gray-500">บทประกาศนี้ดึงชื่อผู้เสียชีวิตล่าสุดจากระบบแจ้งตาย/งานศพ ให้อัตโนมัติ</p>
+
+            <textarea id="announcementScriptBox" rows="8" readonly
+                class="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg text-sm text-gray-800 leading-relaxed outline-none resize-vertical font-mono"></textarea>
+
+            <div class="flex gap-2">
+                <button onclick="copyAnnouncementScript()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium py-2 rounded-lg transition shadow flex items-center justify-center gap-1">
+                    📋 คัดลอกบทประกาศพร้อมคำไว้อาลัย
+                </button>
+            </div>
+        </div>
+
         <!-- ฟอร์ม เพิ่ม / แก้ไข ประกาศ -->
         <div class="bg-white p-6 rounded-xl shadow-md border border-amber-200">
             <h2 id="formTitle" class="text-lg font-semibold text-gray-800 mb-3">➕ เพิ่มประกาศใหม่</h2>
@@ -70,6 +90,51 @@
         const defaultNews = [
             "📢\nข่าวประชาสัมพันธ์\n🌾 ระบบกลุ่มข้าวสาร Version 4.0\nอัปเดตระบบรองรับการบันทึกข้อมูลรับข้าวสารแบบเรียลไทม์แล้ว\n📅 ประชุมคณะกรรมการกลุ่ม\nขอเชิญกรรมการร่วมประชุมสรุปยอดประจำเดือน ณ ศาลากลางหมู่บ้าน\n⚠️ สมาชิกค้างส่ง\nสามารถกดตรวจดูรายชื่อผู้ค้างส่งและพิมพ์เอกสารติดตามได้จากเมนูหลัก"
         ];
+
+        // สร้างสคริปต์ประกาศเสียงอ่านอัตโนมัติ
+        function generateScript() {
+            const deceasedName = localStorage.getItem('latest_deceased_name');
+            const badge = document.getElementById('deceasedStatusBadge');
+            let condolenceText = "";
+
+            if (deceasedName && deceasedName.trim() !== "") {
+                condolenceText = `"ก่อนเข้าสู่การแจ้งข่าวสารในวันนี้ ทางกลุ่มข้าวสารขอร่วมแสดงความอาลัยอย่างสุดซึ้ง ต่อการจากไปของ ${deceasedName.trim()} และขอส่งกำลังใจให้แก่ครอบครัวมา ณ ที่นี้ด้วยความเคารพครับ/ค่ะ"`;
+                badge.innerText = `🖤 มีรายการไว้อาลัย: ${deceasedName.trim()}`;
+                badge.className = "text-xs px-2.5 py-1 rounded-full bg-slate-800 text-white font-medium";
+            } else {
+                condolenceText = `"ก่อนเข้าสู่การแจ้งข่าวสารในวันนี้ ทางกลุ่มข้าวสารขอร่วมแสดงความอาลัยและส่งกำลังใจแก่ครอบครัวผู้นำและสมาชิกที่สูญเสียบุคคลอันเป็นที่รักทุกท่าน มา ณ ที่นี้ด้วยความเคารพครับ/ค่ะ"`;
+                badge.innerText = `📢 ประกาศทั่วไป (ไม่มีรายชื่อผู้เสียชีวิต)`;
+                badge.className = "text-xs px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 font-medium";
+            }
+
+            return `[ช่วงที่ 1: แสดงความไว้อาลัย]
+"กราบเรียนสมาชิกกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6 ทุกท่าน..."
+${condolenceText}
+(เว้นจังหวะเงียบสงบประมาณ 2-3 วินาที)
+
+[ช่วงที่ 2: เนื้อหาประกาศแจ้งเตือนสมาชิก]
+"ในการนี้ คณะกรรมการมีเรื่องขอแจ้งเตือนสมาชิกทุกท่าน เพื่อให้การดำเนินงานของกลุ่มเป็นไปด้วยความเรียบร้อย มีความเป็นธรรม และช่วยเหลือกันได้อย่างต่อเนื่อง"
+
+"ขอแจ้งให้ทราบว่า สมาชิกที่ไม่ส่งข้าวสารตามระเบียบของกลุ่ม จำนวน 2 ครั้ง โดยไม่มีเหตุผลอันสมควร จะถูกตัดสิทธิ์การเป็นสมาชิก และไม่มีสิทธิ์ได้รับสวัสดิการของกลุ่ม จนกว่าจะมีการพิจารณาเป็นกรณีไป"
+
+"หากท่านใดมีเหตุจำเป็นไม่สามารถส่งได้ตามกำหนด กรุณาแจ้งคณะกรรมการล่วงหน้าเพื่อร่วมกันหาแนวทางแก้ไข"
+
+"จึงขอความร่วมมือจากทุกท่านในการปฏิบัติตามระเบียบเพื่อประโยชน์ส่วนรวม ขอขอบพระคุณทุกท่านที่ให้ความร่วมมือด้วยดีมาโดยตลอดครับ/ค่ะ"`;
+        }
+
+        function renderScriptBox() {
+            const scriptBox = document.getElementById('announcementScriptBox');
+            if (scriptBox) {
+                scriptBox.value = generateScript();
+            }
+        }
+
+        function copyAnnouncementScript() {
+            const scriptBox = document.getElementById('announcementScriptBox');
+            navigator.clipboard.writeText(scriptBox.value).then(() => {
+                alert("คัดลอกบทประกาศพร้อมคำไว้อาลัยเรียบร้อยแล้ว!");
+            });
+        }
 
         // โหลดข้อมูลข่าวจาก LocalStorage หรือตั้งค่าเริ่มต้น
         function getNews() {
@@ -182,7 +247,10 @@
         }
 
         // เริ่มต้นการแสดงผลเมื่อโหลดหน้าเว็บ
-        document.addEventListener('DOMContentLoaded', renderNews);
+        document.addEventListener('DOMContentLoaded', () => {
+            renderScriptBox();
+            renderNews();
+        });
     </script>
 </body>
 </html>
