@@ -77,7 +77,7 @@
         </div>
     </section>
 
-    <!-- 📢 กล่องข่าวประชาสัมพันธ์สำคัญบน DASHBOARD (เพิ่มใหม่) -->
+    <!-- 📢 กล่องข่าวประชาสัมพันธ์สำคัญบน DASHBOARD -->
     <section class="max-w-7xl mx-auto px-5 mt-6">
         <div class="card p-6 border-t-4 border-blue-600 bg-gradient-to-br from-blue-50/50 via-white to-white">
             <div class="flex justify-between items-center border-b pb-3 mb-4">
@@ -196,7 +196,7 @@
             <span>⚙️</span> เมนูหลักการทำงาน
         </h2>
         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4">
-            <div class="menu-card border-2 border-green-500 bg-green-50/50" onclick="location.href='receive.html?scan=true'">
+            <div class="menu-card border-2 border-green-500 bg-green-50/50" onclick="location.href='scan.html'">
                 <div class="text-4xl mb-2">📱</div>
                 <h3 class="font-bold text-lg text-green-800">สแกน QR รับข้าว</h3>
                 <p class="text-xs text-gray-500 mt-1">สแกนและบันทึกรับข้าวสาร</p>
@@ -358,6 +358,19 @@
             }
         }
 
+        function handleLogout() {
+            if (confirm('คุณต้องการออกจากระบบหรือไม่?')) {
+                localStorage.removeItem('Rongkhem_User_Role');
+                location.href = 'login.html';
+            }
+        }
+
+        function formatThaiDate(dateStr) {
+            if (!dateStr) return '-';
+            const d = new Date(dateStr);
+            return d.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: '2-digit' });
+        }
+
         function initSystem() {
             checkUserRole();
 
@@ -375,16 +388,13 @@
             const localReceive = localStorage.getItem('Rongkhem_Receive_Records');
             if (localReceive) receiveRecords = JSON.parse(localReceive);
 
-            // โหลดข่าวสาร
             loadNewsData();
-
             autoSyncPendingStatus();
             renderStats();
             renderFunerals();
             renderDashboardNews();
         }
 
-        // 📢 โหลดและจัดการข้อมูลข่าวสาร
         function loadNewsData() {
             const localNews = localStorage.getItem('Rongkhem_News_Local');
             if (localNews) {
@@ -412,7 +422,7 @@
             }
 
             newsData.sort((a, b) => new Date(b.date) - new Date(a.date));
-            const latestNews = newsData.slice(0, 2); // แสดงข่าวล่าสุด 2 อันแรก
+            const latestNews = newsData.slice(0, 2);
 
             container.innerHTML = latestNews.map(n => `
                 <div class="bg-blue-50/60 border border-blue-200 p-3.5 rounded-2xl">
@@ -460,10 +470,12 @@
 
             ['pending', 'completed', 'all'].forEach(t => {
                 const btn = document.getElementById('tabBtn' + t.charAt(0).toUpperCase() + t.slice(1));
-                if (t === status) {
-                    btn.className = "px-4 py-2 rounded-xl text-sm font-bold bg-orange-500 text-white shadow";
-                } else {
-                    btn.className = "px-4 py-2 rounded-xl text-sm font-bold bg-gray-100 text-gray-600 hover:bg-gray-200";
+                if (btn) {
+                    if (t === status) {
+                        btn.className = "px-4 py-2 rounded-xl text-sm font-bold bg-orange-500 text-white shadow";
+                    } else {
+                        btn.className = "px-4 py-2 rounded-xl text-sm font-bold bg-gray-100 text-gray-600 hover:bg-gray-200";
+                    }
                 }
             });
 
@@ -573,84 +585,25 @@
                             <div class="bg-green-50/80 border border-green-200 p-2.5 rounded-xl mt-3">
                                 <div class="flex justify-between items-center text-xs font-bold text-green-800 mb-1">
                                     <span>🌾 รับจริงต่องาน:</span>
-                                    <span class="text-sm">${receivedForThisFuneral} / ${totalMembers} ถุง (${percent}%)</span>
+                                    <span class="text-sm">${receivedForThisFuneral} / ${totalMembers} ถุง</span>
                                 </div>
-                                <div class="w-full bg-green-200 h-2 rounded-full overflow-hidden">
-                                    <div class="bg-green-600 h-full rounded-full transition-all duration-500" style="width: ${percent}%"></div>
+                                <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                                    <div class="bg-green-600 h-2 rounded-full transition-all duration-500" style="width: ${percent}%"></div>
                                 </div>
                             </div>
                         </div>
-
                         ${adminButtons}
                     </div>
                 `;
             }).join('');
         }
 
-        function openFuneralModal(editId = null) {
-            if (currentUserRole !== 'admin') {
-                alert('⛔ เฉพาะผู้ใหญ่บ้านเท่านั้นที่สามารถบันทึก/แก้ไขงานศพได้');
-                return;
-            }
-            document.getElementById('funeralForm').reset();
-            document.getElementById('funeralEditId').value = '';
-            document.getElementById('funeralModalTitle').innerText = '⚰️ บันทึกแจ้งงานศพ';
-
-            if (editId) {
-                const f = funeralData.find(item => item.id === editId);
-                if (f) {
-                    document.getElementById('funeralModalTitle').innerText = '✏️ แก้ไขข้อมูลงานศพ';
-                    document.getElementById('funeralEditId').value = f.id;
-                    document.getElementById('funeralName').value = f.name;
-                    document.getElementById('funeralAge').value = f.age;
-                    document.getElementById('funeralHouse').value = f.house || '';
-                    document.getElementById('funeralDeathDate').value = f.deathDate;
-                    document.getElementById('funeralBurnDate').value = f.burnDate;
-                }
-            }
-            openModal('funeralInputModal');
-        }
-
-        function saveFuneral(e) {
-            e.preventDefault();
-            if (currentUserRole !== 'admin') return;
-
-            const editId = document.getElementById('funeralEditId').value;
-            const name = document.getElementById('funeralName').value;
-            const age = document.getElementById('funeralAge').value;
-            const house = document.getElementById('funeralHouse').value;
-            const deathDate = document.getElementById('funeralDeathDate').value;
-            const burnDate = document.getElementById('funeralBurnDate').value;
-
-            if (editId) {
-                const index = funeralData.findIndex(f => f.id === editId);
-                if (index !== -1) funeralData[index] = { id: editId, name, age, house, deathDate, burnDate };
-            } else {
-                funeralData.push({ id: 'F_' + Date.now(), name, age, house, deathDate, burnDate });
-            }
-
-            localStorage.setItem('Rongkhem_Funeral_Local', JSON.stringify(funeralData));
-            closeModal('funeralInputModal');
-            renderFunerals();
-            renderStats();
-            alert('✅ บันทึกข้อมูลงานศพเรียบร้อยแล้ว');
-        }
-
-        function editFuneral(id) { openFuneralModal(id); }
-
-        function deleteFuneral(id) {
-            if (currentUserRole !== 'admin') return;
-            if (confirm('คุณต้องการลบรายการงานศพนี้ใช่หรือไม่?')) {
-                funeralData = funeralData.filter(f => f.id !== id);
-                localStorage.setItem('Rongkhem_Funeral_Local', JSON.stringify(funeralData));
-                renderFunerals();
-                renderStats();
-            }
-        }
-
         function toggleFuneralView() {
             showAllFuneralHistory = !showAllFuneralHistory;
-            document.getElementById('btnToggleFuneralView').innerText = showAllFuneralHistory ? '📋 แสดงเฉพาะงานปัจจุบัน' : '📜 ดูงานศพย้อนหลังทั้งหมด';
+            const btn = document.getElementById('btnToggleFuneralView');
+            if (btn) {
+                btn.innerHTML = showAllFuneralHistory ? '📜 ซ่อนงานศพย้อนหลัง' : '📜 ดูงานศพย้อนหลังทั้งหมด';
+            }
             renderFunerals();
         }
 
@@ -658,17 +611,77 @@
             document.getElementById('funeralSection').scrollIntoView({ behavior: 'smooth' });
         }
 
-        function formatThaiDate(dateStr) {
-            if (!dateStr) return '-';
-            const d = new Date(dateStr);
-            return d.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' });
+        function openModal(id) {
+            const m = document.getElementById(id);
+            if (m) m.classList.add('modal-active');
         }
 
-        window.openModal = id => document.getElementById(id).classList.add('modal-active');
-        window.closeModal = id => document.getElementById(id).classList.remove('modal-active');
-        window.handleLogout = () => { if(confirm('ต้องการออกจากระบบหรือไม่?')) location.href = 'login.html'; };
+        function closeModal(id) {
+            const m = document.getElementById(id);
+            if (m) m.classList.remove('modal-active');
+        }
 
-        window.onload = initSystem;
+        function openFuneralModal() {
+            document.getElementById('funeralForm').reset();
+            document.getElementById('funeralEditId').value = '';
+            document.getElementById('funeralModalTitle').innerText = '⚰️ บันทึกแจ้งงานศพ';
+            openModal('funeralInputModal');
+        }
+
+        function saveFuneral(e) {
+            e.preventDefault();
+            const editId = document.getElementById('funeralEditId').value;
+            const name = document.getElementById('funeralName').value.trim();
+            const age = document.getElementById('funeralAge').value;
+            const house = document.getElementById('funeralHouse').value.trim();
+            const deathDate = document.getElementById('funeralDeathDate').value;
+            const burnDate = document.getElementById('funeralBurnDate').value;
+
+            if (editId) {
+                const idx = funeralData.findIndex(f => String(f.id) === String(editId));
+                if (idx !== -1) {
+                    funeralData[idx] = { ...funeralData[idx], name, age, house, deathDate, burnDate };
+                }
+            } else {
+                const newFuneral = {
+                    id: 'F_' + Date.now(),
+                    name, age, house, deathDate, burnDate
+                };
+                funeralData.push(newFuneral);
+            }
+
+            localStorage.setItem('Rongkhem_Funeral_Local', JSON.stringify(funeralData));
+            closeModal('funeralInputModal');
+            renderFunerals();
+            renderStats();
+        }
+
+        function editFuneral(id) {
+            const f = funeralData.find(item => String(item.id) === String(id));
+            if (!f) return;
+
+            document.getElementById('funeralEditId').value = f.id;
+            document.getElementById('funeralName').value = f.name;
+            document.getElementById('funeralAge').value = f.age;
+            document.getElementById('funeralHouse').value = f.house || '';
+            document.getElementById('funeralDeathDate').value = f.deathDate;
+            document.getElementById('funeralBurnDate').value = f.burnDate;
+            document.getElementById('funeralModalTitle').innerText = '✏️ แก้ไขข้อมูลงานศพ';
+
+            openModal('funeralInputModal');
+        }
+
+        function deleteFuneral(id) {
+            if (confirm('คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลงานศพนี้?')) {
+                funeralData = funeralData.filter(f => String(f.id) !== String(id));
+                localStorage.setItem('Rongkhem_Funeral_Local', JSON.stringify(funeralData));
+                renderFunerals();
+                renderStats();
+            }
+        }
+
+        // เริ่มการทำงานของระบบเมื่อโหลดหน้าเว็บเรียบร้อย
+        window.addEventListener('DOMContentLoaded', initSystem);
     </script>
 </body>
 </html>
