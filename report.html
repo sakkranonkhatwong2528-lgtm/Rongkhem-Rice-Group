@@ -1,127 +1,233 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>รายงานสรุป - กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
-  <style>
-    body { font-family: 'Sarabun', sans-serif; background: #f4f7f6; margin: 0; padding: 15px; color: #333; }
-    .container { max-width: 800px; margin: auto; }
-    .header { background: #2c3e50; color: white; padding: 20px; border-radius: 10px; text-align: center; margin-bottom: 20px; }
-    
-    .card { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-    .card h3 { margin-top: 0; color: #2c3e50; border-bottom: 2px solid #ecf0f1; padding-bottom: 10px; }
-
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-    th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
-    th { background: #f8f9fa; color: #2c3e50; }
-
-    .btn-print { background: #27ae60; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 15px; }
-    .btn-print:hover { background: #219150; }
-
-    .btn-back { display: block; text-align: center; margin-top: 20px; color: #7f8c8d; text-decoration: none; font-weight: bold; }
-
-    /* ตกแต่งเฉพาะเวลาสั่งพิมพ์ (Print Mode) */
-    @media print {
-      body { background: white; padding: 0; color: black; }
-      .btn-print, .btn-back, .no-print { display: none !important; }
-      .container { max-width: 100%; }
-      .card { box-shadow: none; padding: 0; margin-bottom: 30px; }
-      .header { background: none; color: black; padding: 0; text-align: center; border-bottom: 2px solid #000; border-radius: 0; }
-      th, td { border: 1px solid #000; padding: 6px; font-size: 14px; }
-      .print-header { display: block !important; text-align: center; margin-bottom: 20px; }
-    }
-    .print-header { display: none; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>รายงานและสรุปสถานะ - กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts (Sarabun) -->
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Sarabun', sans-serif; }
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white; padding: 0; }
+            .print-card { border: none !important; box-shadow: none !important; }
+        }
+    </style>
 </head>
-<body>
+<body class="bg-amber-50 min-h-screen p-4 sm:p-6">
 
-<div class="container">
+    <div class="max-w-5xl mx-auto space-y-6">
 
-  <!-- หัวกระดาษพิมพ์ -->
-  <div class="print-header">
-    <h2 style="margin:0;">รายงานสรุปติดตามสมาชิกค้างส่งข้าวสาร</h2>
-    <p style="margin:5px 0;">กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6 ตำบลจำป่าหวาย อำเภอเมือง จังหวัดพะเยา</p>
-    <hr style="border: 0.5px solid #000;">
-  </div>
+        <!-- Header & ปุ่มจัดการ (no-print) -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-amber-200 gap-4 print-card">
+            <div>
+                <h1 class="text-xl sm:text-2xl font-bold text-gray-800 flex items-center gap-2">
+                    📊 รายงานและสรุปสถานะการส่งข้าวสาร
+                </h1>
+                <p class="text-sm text-gray-500">กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</p>
+            </div>
+            <div class="flex items-center gap-2 no-print">
+                <button onclick="window.print()" class="px-4 py-2 text-sm bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition shadow flex items-center gap-1.5 cursor-pointer">
+                    🖨️ พิมพ์ใบรายงานสรุป (สำหรับแนบประชุม)
+                </button>
+                <a href="index.html" class="px-3 py-2 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg transition">
+                    ← กลับหน้าหลัก
+                </a>
+            </div>
+        </div>
 
-  <div class="header no-print">
-    <h2 style="margin: 0;">📊 รายงานและสรุปสถานะ</h2>
-    <small>กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</small>
-  </div>
+        <!-- Section 1: รายชื่อสมาชิกเสนอพิจารณาตัดสิทธิ์ (ค้างส่ง 2 ครั้งขึ้นไป) -->
+        <div class="bg-white rounded-xl shadow-md border border-red-200 overflow-hidden print-card">
+            <div class="bg-red-50 p-4 border-b border-red-200 flex items-center justify-between">
+                <div>
+                    <h2 class="text-lg font-bold text-red-700 flex items-center gap-2">
+                        🔴 รายชื่อสมาชิกเสนอพิจารณาตัดสิทธิ์
+                    </h2>
+                    <p class="text-xs text-red-600">สมาชิกที่ค้างส่งตั้งแต่ 2 ครั้งขึ้นไป (ตามระเบียบกลุ่ม)</p>
+                </div>
+                <span id="dangerBadge" class="px-3 py-1 bg-red-100 text-red-800 font-bold text-xs rounded-full border border-red-300">
+                    0 ราย
+                </span>
+            </div>
 
-  <!-- การ์ดรายการเสนอตัดสิทธิ์ -->
-  <div class="card">
-    <h3 style="color: #c0392b;">🔴 รายชื่อสมาชิกเสนอพิจารณาตัดสิทธิ์ (ค้างส่ง 2 ครั้งขึ้นไป)</h3>
-    <table>
-      <thead>
-        <tr>
-          <th style="width: 10%;">ลำดับ</th>
-          <th>ชื่อ - สกุล</th>
-          <th style="width: 20%;">บ้านเลขที่</th>
-          <th style="width: 20%;">ค้างส่ง (ครั้ง)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td>1</td><td>นายประหยัด ปิงเมือง</td><td>120</td><td style="color:red; font-weight:bold;">2</td></tr>
-        <tr><td>2</td><td>นายตื่น มิ่งขวัญ</td><td>176</td><td style="color:red; font-weight:bold;">2</td></tr>
-        <tr><td>3</td><td>น.ส.สำรอง มหาวรรณศรี</td><td>200</td><td style="color:red; font-weight:bold;">2</td></tr>
-        <tr><td>4</td><td>นายบรรพต อินวงค์</td><td>212</td><td style="color:red; font-weight:bold;">2</td></tr>
-        <tr><td>5</td><td>นางลวงทิพย์ ใฝ่จิต</td><td>315</td><td style="color:red; font-weight:bold;">2</td></tr>
-        <tr><td>6</td><td>นายประทุม ดาวกระจาย</td><td>328</td><td style="color:red; font-weight:bold;">2</td></tr>
-      </tbody>
-    </table>
-  </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left text-gray-700">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-200">
+                        <tr>
+                            <th class="px-4 py-3 text-center">ลำดับ</th>
+                            <th class="px-4 py-3">ชื่อ - สกุล</th>
+                            <th class="px-4 py-3 text-center">บ้านเลขที่</th>
+                            <th class="px-4 py-3 text-center">ค้างส่ง (ครั้ง)</th>
+                            <th class="px-4 py-3 text-center no-print">จัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dangerTableBody">
+                        <!-- Render จาก JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-  <!-- การ์ดรายการค้างส่งแจ้งเตือน -->
-  <div class="card">
-    <h3 style="color: #d35400;">🟡 รายชื่อสมาชิกค้างส่ง (ค้างส่ง 1 ครั้ง)</h3>
-    <table>
-      <thead>
-        <tr>
-          <th style="width: 10%;">ลำดับ</th>
-          <th>ชื่อ - สกุล</th>
-          <th style="width: 20%;">บ้านเลขที่</th>
-          <th style="width: 20%;">ค้างส่ง (ครั้ง)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td>1</td><td>นายวุฒิภัทร เตชะวงค์</td><td>91/1</td><td style="color:orange; font-weight:bold;">1</td></tr>
-        <tr><td>2</td><td>นายต่วน ทาทอง</td><td>114</td><td style="color:orange; font-weight:bold;">1</td></tr>
-        <tr><td>3</td><td>นายสมศีล งามจิต</td><td>135</td><td style="color:orange; font-weight:bold;">1</td></tr>
-        <tr><td>4</td><td>น.ส.ยุพา ใจดี</td><td>160</td><td style="color:orange; font-weight:bold;">1</td></tr>
-      </tbody>
-    </table>
+        <!-- Section 2: รายชื่อสมาชิกค้างส่ง (ค้างส่ง 1 ครั้ง) -->
+        <div class="bg-white rounded-xl shadow-md border border-amber-200 overflow-hidden print-card">
+            <div class="bg-amber-50 p-4 border-b border-amber-200 flex items-center justify-between">
+                <div>
+                    <h2 class="text-lg font-bold text-amber-800 flex items-center gap-2">
+                        🟡 รายชื่อสมาชิกค้างส่งเตือนก่อนตัดสิทธิ์
+                    </h2>
+                    <p class="text-xs text-amber-700">สมาชิกที่ค้างส่ง 1 ครั้ง (ติดตามเร่งรัด)</p>
+                </div>
+                <span id="warningBadge" class="px-3 py-1 bg-amber-100 text-amber-800 font-bold text-xs rounded-full border border-amber-300">
+                    0 ราย
+                </span>
+            </div>
 
-    <button class="btn-print" onclick="window.print()">🖨️ พิมพ์ใบรายงานสรุป (สำหรับแนบประชุม)</button>
-  </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left text-gray-700">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-200">
+                        <tr>
+                            <th class="px-4 py-3 text-center">ลำดับ</th>
+                            <th class="px-4 py-3">ชื่อ - สกุล</th>
+                            <th class="px-4 py-3 text-center">บ้านเลขที่</th>
+                            <th class="px-4 py-3 text-center">ค้างส่ง (ครั้ง)</th>
+                            <th class="px-4 py-3 text-center no-print">จัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="warningTableBody">
+                        <!-- Render จาก JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-  <a href="index.html" class="btn-back">← กลับหน้าหลัก</a>
+        <!-- ปุ่มย้อนกลับด้านล่าง (no-print) -->
+        <div class="flex justify-center pt-2 no-print">
+            <a href="index.html" class="px-5 py-2.5 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-xl transition shadow">
+                🏠 กลับหน้าหลัก
+            </a>
+        </div>
 
-</div>
+    </div>
 
-</body>
-</html>
-</div>
+    <!-- JavaScript ระบบจัดการและแสดงข้อมูล -->
+    <script>
+        const defaultReportData = [
+            { id: 1, name: "นายประหยัด ปิงเมือง", house: "120", pendingCount: 2 },
+            { id: 2, name: "นายตื่น มิ่งขวัญ", house: "176", pendingCount: 2 },
+            { id: 3, name: "น.ส.สำรอง มหาวรรณศรี", house: "200", pendingCount: 2 },
+            { id: 4, name: "นายบรรพต อินวงค์", house: "212", pendingCount: 2 },
+            { id: 5, name: "นางลวงทิพย์ ใฝ่จิต", house: "315", pendingCount: 2 },
+            { id: 6, name: "นายประทุม ดาวกระจาย", house: "328", pendingCount: 2 },
+            { id: 7, name: "นายวุฒิภัทร เตชะวงค์", house: "91/11", pendingCount: 1 },
+            { id: 8, name: "นายต่วน ทาทอง", house: "114", pendingCount: 1 },
+            { id: 9, name: "นายสมศีล งามจิต", house: "135", pendingCount: 1 },
+            { id: 10, name: "น.ส.ยุพา ใจดี", house: "160", pendingCount: 1 }
+        ];
 
-<a href="index.html"
-style="
-display:block;
-text-align:center;
-margin-top:25px;
-text-decoration:none;
-font-weight:bold;
-color:#666;
-">
+        function getReportData() {
+            const stored = localStorage.getItem('rongkhem_report_data_v2');
+            if (!stored) {
+                localStorage.setItem('rongkhem_report_data_v2', JSON.stringify(defaultReportData));
+                return defaultReportData;
+            }
+            return JSON.parse(stored);
+        }
 
-🏠 กลับหน้าหลัก
+        function saveData(data) {
+            localStorage.setItem('rongkhem_report_data_v2', JSON.stringify(data));
+            renderTables();
+        }
 
-</a>
+        function editItem(id) {
+            let data = getReportData();
+            const item = data.find(d => d.id === id);
+            if (!item) return;
 
-</div>
+            const newName = prompt("แก้ไขชื่อ - สกุล:", item.name);
+            if (newName === null) return;
 
-<script src="js/app.js"></script>
-<script src="js/report.js"></script>
+            const newHouse = prompt("แก้ไขบ้านเลขที่:", item.house);
+            if (newHouse === null) return;
 
+            const newCount = prompt("แก้ไขจำนวนครั้งที่ค้างส่ง:", item.pendingCount);
+            if (newCount === null) return;
+
+            item.name = newName.trim() || item.name;
+            item.house = newHouse.trim() || item.house;
+            item.pendingCount = parseInt(newCount) || item.pendingCount;
+
+            saveData(data);
+        }
+
+        function deleteItem(id) {
+            let data = getReportData();
+            const item = data.find(d => d.id === id);
+            if (!item) return;
+
+            if (confirm(`คุณแน่ใจหรือไม่ว่าต้องการลบรายชื่อ "${item.name}" ออกจากรายงาน?`)) {
+                data = data.filter(d => d.id !== id);
+                saveData(data);
+            }
+        }
+
+        function renderTables() {
+            const data = getReportData();
+            
+            const dangerList = data.filter(d => d.pendingCount >= 2);
+            const warningList = data.filter(d => d.pendingCount === 1);
+
+            document.getElementById('dangerBadge').innerText = `${dangerList.length} ราย`;
+            document.getElementById('warningBadge').innerText = `${warningList.length} ราย`;
+
+            const dangerTbody = document.getElementById('dangerTableBody');
+            if (dangerList.length === 0) {
+                dangerTbody.innerHTML = `<tr><td colspan="5" class="text-center py-6 text-gray-400">ไม่มีสมาชิกค้างส่ง 2 ครั้งขึ้นไป</td></tr>`;
+            } else {
+                dangerTbody.innerHTML = dangerList.map((item, index) => `
+                    <tr class="border-b border-gray-100 hover:bg-red-50/40 transition">
+                        <td class="px-4 py-3 text-center font-medium text-gray-500">${index + 1}</td>
+                        <td class="px-4 py-3 font-semibold text-gray-800">${item.name}</td>
+                        <td class="px-4 py-3 text-center text-gray-600">${item.house}</td>
+                        <td class="px-4 py-3 text-center font-bold text-red-600 bg-red-50/50">${item.pendingCount}</td>
+                        <td class="px-4 py-3 text-center space-x-1 no-print">
+                            <button onclick="editItem(${item.id})" class="px-2.5 py-1 text-xs bg-amber-100 hover:bg-amber-200 text-amber-800 rounded font-medium transition cursor-pointer">
+                                ✏️ แก้ไข
+                            </button>
+                            <button onclick="deleteItem(${item.id})" class="px-2.5 py-1 text-xs bg-rose-100 hover:bg-rose-200 text-rose-700 rounded font-medium transition cursor-pointer">
+                                🗑️ ลบ
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            const warningTbody = document.getElementById('warningTableBody');
+            if (warningList.length === 0) {
+                warningTbody.innerHTML = `<tr><td colspan="5" class="text-center py-6 text-gray-400">ไม่มีสมาชิกค้างส่ง 1 ครั้ง</td></tr>`;
+            } else {
+                warningTbody.innerHTML = warningList.map((item, index) => `
+                    <tr class="border-b border-gray-100 hover:bg-amber-50/40 transition">
+                        <td class="px-4 py-3 text-center font-medium text-gray-500">${index + 1}</td>
+                        <td class="px-4 py-3 font-semibold text-gray-800">${item.name}</td>
+                        <td class="px-4 py-3 text-center text-gray-600">${item.house}</td>
+                        <td class="px-4 py-3 text-center font-bold text-amber-600 bg-amber-50/50">${item.pendingCount}</td>
+                        <td class="px-4 py-3 text-center space-x-1 no-print">
+                            <button onclick="editItem(${item.id})" class="px-2.5 py-1 text-xs bg-amber-100 hover:bg-amber-200 text-amber-800 rounded font-medium transition cursor-pointer">
+                                ✏️ แก้ไข
+                            </button>
+                            <button onclick="deleteItem(${item.id})" class="px-2.5 py-1 text-xs bg-rose-100 hover:bg-rose-200 text-rose-700 rounded font-medium transition cursor-pointer">
+                                🗑️ ลบ
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', renderTables);
+    </script>
 </body>
 </html>
