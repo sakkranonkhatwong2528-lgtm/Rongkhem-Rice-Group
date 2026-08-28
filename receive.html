@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        รับข้าวสาร - ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
+    </title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Sarabun", sans-serif;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .normal {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .pending {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .btn {
+            border: none;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-family: inherit;
+        }
+
+        .btn-success {
+            background: #16a34a;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #15803d;
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            white-space: nowrap;
+        }
+
+    </style>
+
+</head>
+
+
+<body class="bg-amber-50 min-h-screen">
+
+
+<!-- =========================================
+     HEADER
+========================================== -->
+
+<header
+    class="
+        bg-gradient-to-r
+        from-amber-700
+        to-amber-500
+        text-white
+        shadow-lg
+    "
+>
+
+    <div
+        class="
+            max-w-7xl
+            mx-auto
+            px-4
+            py-5
+        "
+    >
+
+        <div
+            class="
+                flex
+                flex-col
+                md:flex-row
+                md:items-center
+                md:justify-between
+                gap-4
+            "
+        >
+
+            <div>
+
+                <h1
+                    class="
+                        text-2xl
+                        md:text-3xl
+                        font-bold
+                    "
+                >
+                    🌾 รับข้าวสาร
+                </h1>
+
+                <p
+                    class="
+                        text-amber-100
+                        mt-1
+                    "
+                >
+                    ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
+                </p>
+
+            </div>
+
+
+            <a
+                href="index.html"
+                class="
+                    bg-white
+                    text-amber-700
+                    px-4
+                    py-2
+                    rounded-xl
+                    font-medium
+                    hover:bg-amber-50
+                    text-center
+                "
+            >
+                ← กลับหน้าหลัก
+            </a>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+
+<!-- =========================================
+     MAIN
+========================================== -->
+
+<main
+    class="
+        max-w-7xl
+        mx-auto
+        px-4
+        py-6
+        space-y-6
+    "
+>
+
+
+    <!-- =====================================
+         SUMMARY
+    ====================================== -->
+
+    <section
+        class="
+            grid
+            grid-cols-1
+            sm:grid-cols-3
+            gap-4
+        "
+    >
+
+        <!-- สมาชิกทั้งหมด -->
+
+        <div
+            class="
+                bg-white
+                rounded-2xl
+                shadow-sm
+                border
+                border-amber-100
+                p-5
+            "
+        >
+
+            <div
+                class="
+                    text-gray-500
+                    text-sm
+                "
+            >
+                👥 สมาชิกทั้งหมด
+            </div>
+
+
+            <div
+                id="totalMembers"
+                class="
+                    text-4xl
+                    font-bold
+                    text-gray-800
+                    mt-2
+                "
+            >
+                0
+            </div>
+
+
+            <div
+                class="
+                    text-sm
+                    text-gray-400
+                    mt-1
+                "
+            >
+                ครัวเรือน
+            </div>
+
+        </div>
+
+
+
+        <!-- รับแล้ว -->
+
+        <div
+            class="
+                bg-white
+                rounded-2xl
+                shadow-sm
+                border
+                border-green-100
+                p-5
+            "
+        >
+
+            <div
+                class="
+                    text-green-600
+                    text-sm
+                "
+            >
+                🌾 รับข้าวสารแล้ว
+            </div>
+
+
+            <div
+                id="receivedCount"
+                class="
+                    text-4xl
+                    font-bold
+                    text-green-600
+                    mt-2
+                "
+            >
+                0
+            </div>
+
+
+            <div
+                class="
+                    text-sm
+                    text-gray-400
+                    mt-1
+                "
+            >
+                ถุง
+            </div>
+
+        </div>
+
+
+
+        <!-- ค้างส่ง -->
+
+        <div
+            class="
+                bg-white
+                rounded-2xl
+                shadow-sm
+                border
+                border-red-100
+                p-5
+            "
+        >
+
+            <div
+                class="
+                    text-red-600
+                    text-sm
+                "
+            >
+                ⚠️ ยังไม่ส่ง
+            </div>
+
+
+            <div
+                id="pendingCount"
+                class="
+                    text-4xl
+                    font-bold
+                    text-red-600
+                    mt-2
+                "
+            >
+                0
+            </div>
+
+
+            <div
+                class="
+                    text-sm
+                    text-gray-400
+                    mt-1
+                "
+            >
+                ครัวเรือน
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================
+         SEARCH + CONTROL
+    ====================================== -->
+
+    <section
+        class="
+            bg-white
+            rounded-2xl
+            shadow-sm
+            border
+            border-amber-100
+            p-5
+        "
+    >
+
+        <div
+            class="
+                flex
+                flex-col
+                lg:flex-row
+                gap-4
+                lg:items-center
+                lg:justify-between
+            "
+        >
+
+            <div
+                class="
+                    w-full
+                    lg:max-w-xl
+                "
+            >
+
+                <label
+                    for="searchReceive"
+                    class="
+                        block
+                        text-sm
+                        font-medium
+                        text-gray-600
+                        mb-2
+                    "
+                >
+                    🔍 ค้นหาสมาชิก
+                </label>
+
+
+                <input
+
+                    type="text"
+
+                    id="searchReceive"
+
+                    oninput="searchReceive()"
+
+                    placeholder="
+                        ค้นหาชื่อ
+                        บ้านเลขที่
+                        หรือเบอร์โทรศัพท์
+                    "
+
+                    class="
+                        w-full
+                        border
+                        border-gray-300
+                        rounded-xl
+                        px-4
+                        py-3
+                        outline-none
+                        focus:ring-2
+                        focus:ring-amber-400
+                    "
+
+                >
+
+            </div>
+
+
+
+            <div
+                class="
+                    flex
+                    flex-col
+                    sm:flex-row
+                    gap-3
+                    sm:items-end
+                "
+            >
+
+                <button
+
+                    onclick="location.reload()"
+
+                    class="
+                        bg-blue-600
+                        hover:bg-blue-700
+                        text-white
+                        px-5
+                        py-3
+                        rounded-xl
+                        font-medium
+                    "
+
+                >
+                    🔄 โหลดข้อมูลใหม่
+                </button>
+
+
+                <button
+
+                    onclick="finishFuneral()"
+
+                    class="
+                        bg-red-600
+                        hover:bg-red-700
+                        text-white
+                        px-5
+                        py-3
+                        rounded-xl
+                        font-medium
+                    "
+
+                >
+                    🔒 ปิดงานศพ
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================
+         RECEIVE TABLE
+    ====================================== -->
+
+    <section
+        class="
+            bg-white
+            rounded-2xl
+            shadow-sm
+            border
+            border-amber-100
+            overflow-hidden
+        "
+    >
+
+        <div
+            class="
+                px-5
+                py-4
+                border-b
+                bg-amber-50
+            "
+        >
+
+            <h2
+                class="
+                    text-lg
+                    font-bold
+                    text-gray-800
+                "
+            >
+                🌾 รายชื่อสมาชิกสำหรับรับข้าวสาร
+            </h2>
+
+
+            <p
+                class="
+                    text-sm
+                    text-gray-500
+                    mt-1
+                "
+            >
+                กดปุ่ม “รับข้าวสาร”
+                เพื่อบันทึกข้อมูลขึ้น Firebase
+            </p>
+
+        </div>
+
+
+        <div
+            class="
+                overflow-x-auto
+            "
+        >
+
+            <table
+                class="
+                    w-full
+                    text-sm
+                "
+            >
+
+                <thead
+                    class="
+                        bg-gray-50
+                        text-gray-600
+                    "
+                >
+
+                    <tr>
+
+                        <th
+                            class="
+                                px-4
+                                py-3
+                                text-center
+                            "
+                        >
+                            #
+                        </th>
+
+
+                        <th
+                            class="
+                                px-4
+                                py-3
+                                text-left
+                            "
+                        >
+                            บ้านเลขที่
+                        </th>
+
+
+                        <th
+                            class="
+                                px-4
+                                py-3
+                                text-left
+                            "
+                        >
+                            ชื่อ - นามสกุล
+                        </th>
+
+
+                        <th
+                            class="
+                                px-4
+                                py-3
+                                text-left
+                            "
+                        >
+                            โทรศัพท์
+                        </th>
+
+
+                        <th
+                            class="
+                                px-4
+                                py-3
+                                text-center
+                            "
+                        >
+                            สถานะ
+                        </th>
+
+
+                        <th
+                            class="
+                                px-4
+                                py-3
+                                text-center
+                            "
+                        >
+                            ดำเนินการ
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+
+                <tbody
+                    id="receiveTable"
+                    class="
+                        divide-y
+                    "
+                >
+
+                    <tr>
+
+                        <td
+                            colspan="6"
+                            class="
+                                text-center
+                                py-10
+                                text-gray-400
+                            "
+                        >
+                            🔄 กำลังโหลดข้อมูลสมาชิก...
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================
+         HISTORY
+    ====================================== -->
+
+    <section
+        class="
+            bg-white
+            rounded-2xl
+            shadow-sm
+            border
+            border-amber-100
+            overflow-hidden
+        "
+    >
+
+        <div
+            class="
+                px-5
+                py-4
+                border-b
+                bg-gray-50
+            "
+        >
+
+            <h2
+                class="
+                    text-lg
+                    font-bold
+                    text-gray-800
+                "
+            >
+                📜 ประวัติการรับข้าวสาร
+            </h2>
+
+
+            <p
+                class="
+                    text-sm
+                    text-gray-500
+                    mt-1
+                "
+            >
+                แสดงประวัติที่บันทึกไว้ใน Firebase
+            </p>
+
+        </div>
+
+
+        <div
+            class="
+                overflow-x-auto
+            "
+        >
+
+            <table
+                class="
+                    w-full
+                    text-sm
+                "
+            >
+
+                <thead
+                    class="
+                        bg-gray-50
+                        text-gray-600
+                    "
+                >
+
+                    <tr>
+
+                        <th
+                            class="
+                                px-4
+                                py-3
+                                text-center
+                            "
+                        >
+                            #
+                        </th>
+
+
+                        <th
+                            class="
+                                px-4
+                                py-3
+                                text-left
+                            "
+                        >
+                            สมาชิก
+                        </th>
+
+
+                        <th
+                            class="
+                                px-4
+                                py-3
+                                text-left
+                            "
+                        >
+                            งานศพ
+                        </th>
+
+
+                        <th
+                            class="
+                                px-4
+                                py-3
+                                text-center
+                            "
+                        >
+                            วันที่รับ
+                        </th>
+
+
+                        <th
+                            class="
+                                px-4
+                                py-3
+                                text-center
+                            "
+                        >
+                            จำนวน
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+
+                <tbody
+                    id="historyTable"
+                    class="
+                        divide-y
+                    "
+                >
+
+                    <tr>
+
+                        <td
+                            colspan="5"
+                            class="
+                                text-center
+                                py-10
+                                text-gray-400
+                            "
+                        >
+                            🔄 กำลังโหลดประวัติ...
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================
+         INFO
+    ====================================== -->
+
+    <section
+        class="
+            bg-blue-50
+            border
+            border-blue-100
+            rounded-2xl
+            p-5
+        "
+    >
+
+        <h3
+            class="
+                font-bold
+                text-blue-800
+                mb-2
+            "
+        >
+            ☁️ ระบบบันทึกข้อมูลร่วมกัน
+        </h3>
+
+
+        <p
+            class="
+                text-sm
+                text-blue-700
+                leading-relaxed
+            "
+        >
+            ข้อมูลการรับข้าวสารจะถูกบันทึกไว้บน Firebase Firestore
+            ดังนั้นเมื่อเปิดระบบจากมือถือ คอมพิวเตอร์
+            หรือแท็บเล็ต จะเห็นข้อมูลชุดเดียวกัน
+            และข้อมูลจะไม่หายเมื่อเปลี่ยนอุปกรณ์
+        </p>
+
+    </section>
+
+
+</main>
+
+
+
+<!-- =========================================
+     FOOTER
+========================================== -->
+
+<footer
+    class="
+        text-center
+        text-sm
+        text-gray-400
+        py-8
+    "
+>
+
+    🌾 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
+
+</footer>
+
+
+
+<!-- =========================================
+     LOAD RECEIVE SYSTEM
+========================================== -->
+
+<script
+    type="module"
+    src="receive.js"
+></script>
+
+
+</body>
+</html>
