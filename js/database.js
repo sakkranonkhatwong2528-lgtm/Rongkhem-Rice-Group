@@ -1,29 +1,58 @@
 // ==========================================
 // database.js
 // Rongkhem Rice Group
-// Firebase Firestore Database
+// Firebase Firestore Cloud Database
+// ใช้ร่วมกันทั้งมือถือ / คอม / แท็บเล็ต
 // ==========================================
 
-import { initializeApp } from
-"https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+
+// ==========================================
+// IMPORT FIREBASE
+// ==========================================
 
 import {
+    initializeApp
+}
+
+from
+"https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+
+
+import {
+
     getFirestore,
+
     collection,
+
     addDoc,
+
     getDocs,
-    getDoc,
+
     doc,
+
+    getDoc,
+
     updateDoc,
+
     deleteDoc,
-    setDoc,
-    onSnapshot
-} from
+
+    onSnapshot,
+
+    serverTimestamp,
+
+    query,
+
+    orderBy
+
+}
+
+from
 "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 
+
 // ==========================================
-// Firebase Config
+// FIREBASE CONFIG
 // ==========================================
 
 const firebaseConfig = {
@@ -52,54 +81,92 @@ const firebaseConfig = {
 };
 
 
-// ==========================================
-// เริ่มต้น Firebase
-// ==========================================
-
-const app = initializeApp(firebaseConfig);
-
-export const db = getFirestore(app);
-
-console.log("🔥 Rongkhem Rice Group Firebase Ready");
-
 
 // ==========================================
-// บันทึกข้อมูลใหม่
+// INITIALIZE FIREBASE
+// ==========================================
+
+const app =
+    initializeApp(
+        firebaseConfig
+    );
+
+
+const db =
+    getFirestore(
+        app
+    );
+
+
+
+// ==========================================
+// EXPORT DATABASE
+// ==========================================
+
+export {
+    db
+};
+
+
+
+// ==========================================
+// SAVE DATA
+// เพิ่มข้อมูลใหม่
 // ==========================================
 
 export async function saveData(
+
     collectionName,
+
     data
+
 ) {
 
     try {
 
-        const docRef = await addDoc(
+        const docRef =
+            await addDoc(
 
-            collection(
-                db,
-                collectionName
-            ),
+                collection(
+                    db,
+                    collectionName
+                ),
 
-            {
-                ...data,
+                {
 
-                createdAt:
-                    data.createdAt ||
-                    new Date().toISOString(),
+                    ...data,
 
-                updatedAt:
-                    new Date().toISOString()
-            }
+                    createdAt:
+                        new Date()
+                        .toISOString(),
+
+                    updatedAt:
+                        new Date()
+                        .toISOString()
+
+                }
+
+            );
+
+
+        console.log(
+
+            "✅ บันทึกข้อมูลสำเร็จ:",
+
+            collectionName,
+
+            docRef.id
 
         );
 
 
         return {
 
-            success: true,
+            success:
+                true,
 
-            id: docRef.id
+            id:
+                docRef.id
 
         };
 
@@ -108,13 +175,18 @@ export async function saveData(
     catch (error) {
 
         console.error(
-            "❌ Save Error:",
+
+            "❌ บันทึกข้อมูลไม่สำเร็จ:",
+
             error
+
         );
+
 
         return {
 
-            success: false,
+            success:
+                false,
 
             error:
                 error.message ||
@@ -127,106 +199,51 @@ export async function saveData(
 }
 
 
-// ==========================================
-// บันทึกข้อมูลแบบกำหนด ID
-// ==========================================
-
-export async function saveDataWithId(
-    collectionName,
-    documentId,
-    data
-) {
-
-    try {
-
-        await setDoc(
-
-            doc(
-                db,
-                collectionName,
-                documentId
-            ),
-
-            {
-                ...data,
-
-                updatedAt:
-                    new Date().toISOString()
-            },
-
-            {
-                merge: true
-            }
-
-        );
-
-
-        return {
-
-            success: true,
-
-            id: documentId
-
-        };
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "❌ Save With ID Error:",
-            error
-        );
-
-        return {
-
-            success: false,
-
-            error:
-                error.message ||
-                String(error)
-
-        };
-
-    }
-
-}
-
 
 // ==========================================
-// โหลดข้อมูลทั้งหมด
+// LOAD DATA
+// ดึงข้อมูลทั้งหมด
 // ==========================================
 
 export async function loadData(
+
     collectionName
+
 ) {
 
     try {
 
-        const snapshot = await getDocs(
+        const snapshot =
+            await getDocs(
 
-            collection(
-                db,
-                collectionName
-            )
+                collection(
+                    db,
+                    collectionName
+                )
 
-        );
+            );
 
 
-        const list = [];
+        const list =
+            [];
 
 
         snapshot.forEach(
 
-            item => {
+            document => {
 
-                list.push({
+                list.push(
 
-                    id: item.id,
+                    {
 
-                    ...item.data()
+                        id:
+                            document.id,
 
-                });
+                        ...document.data()
+
+                    }
+
+                );
 
             }
 
@@ -240,10 +257,15 @@ export async function loadData(
     catch (error) {
 
         console.error(
-            "❌ Load Error:",
+
+            "❌ โหลดข้อมูลไม่สำเร็จ:",
+
             collectionName,
+
             error
+
         );
+
 
         return [];
 
@@ -252,42 +274,51 @@ export async function loadData(
 }
 
 
+
 // ==========================================
-// โหลดข้อมูลพร้อม firestoreId
-// ใช้สำหรับสมาชิก งานศพ และรายการรับข้าว
+// LOAD DATA
+// พร้อม firestoreId
 // ==========================================
 
 export async function loadDataWithFirestoreId(
+
     collectionName
+
 ) {
 
     try {
 
-        const snapshot = await getDocs(
+        const snapshot =
+            await getDocs(
 
-            collection(
-                db,
-                collectionName
-            )
+                collection(
+                    db,
+                    collectionName
+                )
 
-        );
+            );
 
 
-        const list = [];
+        const list =
+            [];
 
 
         snapshot.forEach(
 
-            item => {
+            document => {
 
-                list.push({
+                list.push(
 
-                    ...item.data(),
+                    {
 
-                    firestoreId:
-                        item.id
+                        firestoreId:
+                            document.id,
 
-                });
+                        ...document.data()
+
+                    }
+
+                );
 
             }
 
@@ -301,9 +332,15 @@ export async function loadDataWithFirestoreId(
     catch (error) {
 
         console.error(
-            "❌ Load Firebase Error:",
+
+            "❌ โหลดข้อมูลไม่สำเร็จ:",
+
+            collectionName,
+
             error
+
         );
+
 
         return [];
 
@@ -312,41 +349,71 @@ export async function loadDataWithFirestoreId(
 }
 
 
+
 // ==========================================
-// โหลดข้อมูล 1 รายการ
+// GET ONE DOCUMENT
 // ==========================================
 
 export async function getData(
+
     collectionName,
+
     documentId
+
 ) {
 
     try {
 
-        const snapshot = await getDoc(
-
+        const documentRef =
             doc(
+
                 db,
+
                 collectionName,
+
                 documentId
-            )
 
-        );
+            );
 
 
-        if (!snapshot.exists()) {
+        const snapshot =
+            await getDoc(
+                documentRef
+            );
 
-            return null;
+
+        if (
+            !snapshot.exists()
+        ) {
+
+            return {
+
+                success:
+                    false,
+
+                data:
+                    null
+
+            };
 
         }
 
 
         return {
 
-            firestoreId:
-                snapshot.id,
+            success:
+                true,
 
-            ...snapshot.data()
+            data:
+
+                {
+
+                    firestoreId:
+                        snapshot.id,
+
+                    ...snapshot.data()
+
+                }
 
         };
 
@@ -355,62 +422,102 @@ export async function getData(
     catch (error) {
 
         console.error(
-            "❌ Get Error:",
+
+            "❌ ดึงข้อมูลไม่สำเร็จ:",
+
             error
+
         );
 
-        return null;
+
+        return {
+
+            success:
+                false,
+
+            error:
+                error.message
+
+        };
 
     }
 
 }
 
 
+
 // ==========================================
+// UPDATE DATA
 // แก้ไขข้อมูล
 // ==========================================
 
 export async function updateData(
+
     collectionName,
+
     documentId,
+
     data
+
 ) {
 
     try {
 
-        if (!documentId) {
+        if (
+            !documentId
+        ) {
 
             throw new Error(
-                "ไม่พบ Firebase Document ID"
+                "ไม่พบ Document ID"
             );
 
         }
 
 
+        const documentRef =
+            doc(
+
+                db,
+
+                collectionName,
+
+                documentId
+
+            );
+
+
         await updateDoc(
 
-            doc(
-                db,
-                collectionName,
-                documentId
-            ),
+            documentRef,
 
             {
+
                 ...data,
 
                 updatedAt:
-                    new Date().toISOString()
+                    new Date()
+                    .toISOString()
+
             }
+
+        );
+
+
+        console.log(
+
+            "✏️ แก้ไขข้อมูลสำเร็จ:",
+
+            collectionName,
+
+            documentId
 
         );
 
 
         return {
 
-            success: true,
-
-            id:
-                documentId
+            success:
+                true
 
         };
 
@@ -419,13 +526,18 @@ export async function updateData(
     catch (error) {
 
         console.error(
-            "❌ Update Error:",
+
+            "❌ แก้ไขข้อมูลไม่สำเร็จ:",
+
             error
+
         );
+
 
         return {
 
-            success: false,
+            success:
+                false,
 
             error:
                 error.message ||
@@ -438,21 +550,28 @@ export async function updateData(
 }
 
 
+
 // ==========================================
+// DELETE DATA
 // ลบข้อมูล
 // ==========================================
 
 export async function deleteData(
+
     collectionName,
+
     documentId
+
 ) {
 
     try {
 
-        if (!documentId) {
+        if (
+            !documentId
+        ) {
 
             throw new Error(
-                "ไม่พบ Firebase Document ID"
+                "ไม่พบ Document ID"
             );
 
         }
@@ -461,17 +580,33 @@ export async function deleteData(
         await deleteDoc(
 
             doc(
+
                 db,
+
                 collectionName,
+
                 documentId
+
             )
+
+        );
+
+
+        console.log(
+
+            "🗑️ ลบข้อมูลสำเร็จ:",
+
+            collectionName,
+
+            documentId
 
         );
 
 
         return {
 
-            success: true
+            success:
+                true
 
         };
 
@@ -480,13 +615,18 @@ export async function deleteData(
     catch (error) {
 
         console.error(
-            "❌ Delete Error:",
+
+            "❌ ลบข้อมูลไม่สำเร็จ:",
+
             error
+
         );
+
 
         return {
 
-            success: false,
+            success:
+                false,
 
             error:
                 error.message ||
@@ -499,44 +639,182 @@ export async function deleteData(
 }
 
 
+
 // ==========================================
-// Real-time Firebase
-//
-// เมื่อมือถือบันทึกข้อมูล
-// คอมและแท็บเล็ตจะเห็นทันที
+// REALTIME DATABASE
+// ติดตามข้อมูลแบบทันที
 // ==========================================
 
 export function subscribeData(
+
     collectionName,
+
     callback
+
 ) {
 
     try {
 
-        const unsubscribe = onSnapshot(
-
+        const collectionRef =
             collection(
+
                 db,
+
                 collectionName
-            ),
+
+            );
+
+
+        const unsubscribe =
+            onSnapshot(
+
+                collectionRef,
+
+                snapshot => {
+
+                    const list =
+                        [];
+
+
+                    snapshot.forEach(
+
+                        document => {
+
+                            list.push(
+
+                                {
+
+                                    firestoreId:
+                                        document.id,
+
+                                    ...document.data()
+
+                                }
+
+                            );
+
+                        }
+
+                    );
+
+
+                    callback(
+                        list
+                    );
+
+                },
+
+                error => {
+
+                    console.error(
+
+                        "❌ Realtime Error:",
+
+                        collectionName,
+
+                        error
+
+                    );
+
+                }
+
+            );
+
+
+        return unsubscribe;
+
+    }
+
+    catch (error) {
+
+        console.error(
+
+            "❌ ไม่สามารถเชื่อม Realtime ได้:",
+
+            error
+
+        );
+
+
+        return () => {};
+
+    }
+
+}
+
+
+
+// ==========================================
+// REALTIME SORTED DATA
+// ใช้กรณีต้องการเรียงตาม field
+// ==========================================
+
+export function subscribeSortedData(
+
+    collectionName,
+
+    orderField,
+
+    direction,
+
+    callback
+
+) {
+
+    try {
+
+        const collectionRef =
+            collection(
+
+                db,
+
+                collectionName
+
+            );
+
+
+        const q =
+            query(
+
+                collectionRef,
+
+                orderBy(
+
+                    orderField,
+
+                    direction || "desc"
+
+                )
+
+            );
+
+
+        return onSnapshot(
+
+            q,
 
             snapshot => {
 
-                const list = [];
+                const list =
+                    [];
 
 
                 snapshot.forEach(
 
-                    item => {
+                    document => {
 
-                        list.push({
+                        list.push(
 
-                            ...item.data(),
+                            {
 
-                            firestoreId:
-                                item.id
+                                firestoreId:
+                                    document.id,
 
-                        });
+                                ...document.data()
+
+                            }
+
+                        );
 
                     }
 
@@ -553,9 +831,7 @@ export function subscribeData(
 
                 console.error(
 
-                    "❌ Realtime Error:",
-
-                    collectionName,
+                    "❌ Sorted Realtime Error:",
 
                     error
 
@@ -565,21 +841,143 @@ export function subscribeData(
 
         );
 
-
-        return unsubscribe;
-
     }
 
     catch (error) {
 
         console.error(
-            "❌ Subscribe Error:",
             error
         );
-
 
         return () => {};
 
     }
 
 }
+
+
+
+// ==========================================
+// COUNT DATA
+// นับจำนวนเอกสาร
+// ==========================================
+
+export async function countData(
+
+    collectionName
+
+) {
+
+    try {
+
+        const snapshot =
+            await getDocs(
+
+                collection(
+
+                    db,
+
+                    collectionName
+
+                )
+
+            );
+
+
+        return {
+
+            success:
+                true,
+
+            count:
+                snapshot.size
+
+        };
+
+    }
+
+    catch (error) {
+
+        return {
+
+            success:
+                false,
+
+            count:
+                0,
+
+            error:
+                error.message
+
+        };
+
+    }
+
+}
+
+
+
+// ==========================================
+// CHECK FIREBASE CONNECTION
+// ตรวจสอบการเชื่อมต่อ
+// ==========================================
+
+export async function checkFirebaseConnection() {
+
+    try {
+
+        await getDocs(
+
+            collection(
+                db,
+                "members"
+            )
+
+        );
+
+
+        return {
+
+            success:
+                true,
+
+            message:
+                "เชื่อมต่อ Firebase สำเร็จ"
+
+        };
+
+    }
+
+    catch (error) {
+
+        console.error(
+            error
+        );
+
+
+        return {
+
+            success:
+                false,
+
+            message:
+                error.message ||
+                "ไม่สามารถเชื่อมต่อ Firebase"
+
+        };
+
+    }
+
+}
+
+
+
+// ==========================================
+// LOG SYSTEM READY
+// ==========================================
+
+console.log(
+
+    "🔥 Rongkhem Rice Group Firebase Ready"
+
+);
