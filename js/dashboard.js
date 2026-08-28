@@ -743,3 +743,203 @@ document.addEventListener(
 console.log(
     "📊 Dashboard Firebase Ready"
 );
+// ==========================================
+// บันทึกงานศพใหม่
+// ==========================================
+
+import {
+    saveData,
+    updateData
+} from "./database.js";
+
+
+async function createNewFuneral(event) {
+
+    event.preventDefault();
+
+
+    const name =
+        document
+            .getElementById("funeralName")
+            ?.value
+            .trim();
+
+
+    const age =
+        document
+            .getElementById("funeralAge")
+            ?.value
+            .trim();
+
+
+    const houseNo =
+        document
+            .getElementById("funeralHouseNo")
+            ?.value
+            .trim();
+
+
+    const deathDate =
+        document
+            .getElementById("deathDate")
+            ?.value;
+
+
+    const cremationDate =
+        document
+            .getElementById("cremationDate")
+            ?.value;
+
+
+    const note =
+        document
+            .getElementById("funeralNote")
+            ?.value
+            .trim();
+
+
+    if (!name) {
+
+        alert("⚠️ กรุณาระบุชื่อผู้เสียชีวิต");
+
+        return;
+
+    }
+
+
+    // ตรวจสอบว่ามีงานที่เปิดอยู่หรือไม่
+
+    const activeFuneral =
+        getActiveFuneral();
+
+
+    if (activeFuneral) {
+
+        const confirmed =
+            confirm(
+
+                `ขณะนี้มีงานศพที่กำลังดำเนินการอยู่\n\n` +
+                `${activeFuneral.name || activeFuneral.deceasedName}\n\n` +
+                `ต้องการปิดงานเดิมและเปิดงานใหม่หรือไม่?`
+
+            );
+
+
+        if (!confirmed) {
+
+            return;
+
+        }
+
+
+        // ปิดงานเดิม
+
+        await updateData(
+
+            "funerals",
+
+            activeFuneral.firestoreId,
+
+            {
+                active: false,
+                status: "finished",
+                finishedAt: new Date().toISOString()
+            }
+
+        );
+
+    }
+
+
+    // บันทึกงานใหม่
+
+    const result =
+        await saveData(
+
+            "funerals",
+
+            {
+
+                name: name,
+
+                deceasedName: name,
+
+                age: age || "",
+
+                houseNo: houseNo || "",
+
+                deathDate: deathDate || "",
+
+                cremationDate: cremationDate || "",
+
+                note: note || "",
+
+                active: true,
+
+                status: "active",
+
+                openedAt:
+                    new Date()
+                    .toISOString()
+
+            }
+
+        );
+
+
+    if (!result.success) {
+
+        alert(
+            "❌ ไม่สามารถบันทึกงานศพได้\n\n" +
+            (result.error || "")
+        );
+
+        return;
+
+    }
+
+
+    alert(
+        "✅ บันทึกงานศพเรียบร้อย\n\n" +
+        "ระบบเปิดรอบรับข้าวสารแล้ว"
+    );
+
+
+    document
+        .getElementById("funeralForm")
+        ?.reset();
+
+}
+
+
+// ==========================================
+// ผูกฟอร์มแจ้งงานศพ
+// ==========================================
+
+document.addEventListener(
+
+    "DOMContentLoaded",
+
+    () => {
+
+        const funeralForm =
+            document.getElementById(
+                "funeralForm"
+            );
+
+
+        if (funeralForm) {
+
+            funeralForm.addEventListener(
+
+                "submit",
+
+                createNewFuneral
+
+            );
+
+        }
+
+    }
+
+);
