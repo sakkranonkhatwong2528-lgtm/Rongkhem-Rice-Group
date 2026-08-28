@@ -1,1796 +1,990 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>
-        รายชื่อสมาชิก - ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
-    </title>
-
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet"
-    >
-
-    <style>
-
-        body {
-            font-family: "Sarabun", sans-serif;
-        }
-
-        .loading-row {
-            text-align: center;
-            padding: 40px;
-            color: #6b7280;
-        }
-
-    </style>
-
-</head>
-
-
-<body class="bg-amber-50 min-h-screen p-4 sm:p-6">
-
-<div class="max-w-6xl mx-auto space-y-6">
-
-
-    <!-- =====================================
-         HEADER
-    ====================================== -->
-
-    <div
-        class="
-            bg-white
-            rounded-2xl
-            shadow-sm
-            border
-            border-amber-200
-            p-5
-            flex
-            flex-col
-            md:flex-row
-            md:items-center
-            md:justify-between
-            gap-4
-        "
-    >
-
-        <div>
-
-            <h1
-                class="
-                    text-2xl
-                    font-bold
-                    text-gray-800
-                "
-            >
-                👥 รายชื่อสมาชิกกลุ่มข้าวสาร
-            </h1>
-
-            <p class="text-gray-500 text-sm mt-1">
-                บ้านร่องเข็ม หมู่ที่ 6
-            </p>
-
-        </div>
-
-
-        <div
-            class="
-                flex
-                flex-wrap
-                gap-2
-            "
-        >
-
-            <button
-                id="reloadButton"
-                class="
-                    px-4
-                    py-2
-                    rounded-lg
-                    bg-blue-600
-                    hover:bg-blue-700
-                    text-white
-                    text-sm
-                "
-            >
-                🔄 โหลดข้อมูลใหม่
-            </button>
-
-
-            <button
-                id="resetButton"
-                class="
-                    px-4
-                    py-2
-                    rounded-lg
-                    bg-rose-600
-                    hover:bg-rose-700
-                    text-white
-                    text-sm
-                "
-            >
-                🔄 เริ่มรอบใหม่
-            </button>
-
-
-            <a
-                href="index.html"
-                class="
-                    px-4
-                    py-2
-                    rounded-lg
-                    bg-gray-100
-                    hover:bg-gray-200
-                    text-gray-700
-                    text-sm
-                "
-            >
-                ← กลับหน้าหลัก
-            </a>
-
-        </div>
-
-    </div>
-
-
-
-    <!-- =====================================
-         SUMMARY
-    ====================================== -->
-
-    <div
-        class="
-            grid
-            grid-cols-1
-            sm:grid-cols-2
-            lg:grid-cols-4
-            gap-4
-        "
-    >
-
-        <div
-            class="
-                bg-white
-                rounded-xl
-                p-5
-                border
-                border-amber-200
-                shadow-sm
-            "
-        >
-
-            <div class="text-sm text-gray-500">
-                👥 สมาชิกทั้งหมด
-            </div>
-
-            <div
-                id="totalCount"
-                class="
-                    text-3xl
-                    font-bold
-                    text-gray-800
-                    mt-2
-                "
-            >
-                0
-            </div>
-
-            <div class="text-xs text-gray-400">
-                ครัวเรือน
-            </div>
-
-        </div>
-
-
-        <div
-            class="
-                bg-white
-                rounded-xl
-                p-5
-                border
-                border-green-200
-                shadow-sm
-            "
-        >
-
-            <div class="text-sm text-green-600">
-                🟢 ส่งแล้ว
-            </div>
-
-            <div
-                id="sentCount"
-                class="
-                    text-3xl
-                    font-bold
-                    text-green-600
-                    mt-2
-                "
-            >
-                0
-            </div>
-
-            <div class="text-xs text-gray-400">
-                คน
-            </div>
-
-        </div>
-
-
-        <div
-            class="
-                bg-white
-                rounded-xl
-                p-5
-                border
-                border-red-200
-                shadow-sm
-            "
-        >
-
-            <div class="text-sm text-red-600">
-                🔴 ยังไม่ส่ง
-            </div>
-
-            <div
-                id="pendingCount"
-                class="
-                    text-3xl
-                    font-bold
-                    text-red-600
-                    mt-2
-                "
-            >
-                0
-            </div>
-
-            <div class="text-xs text-gray-400">
-                คน
-            </div>
-
-        </div>
-
-
-        <div
-            class="
-                bg-white
-                rounded-xl
-                p-5
-                border
-                border-orange-200
-                shadow-sm
-            "
-        >
-
-            <div class="text-sm text-orange-600">
-                ⚠️ ค้างส่งสะสม
-            </div>
-
-            <div
-                id="overdueCount"
-                class="
-                    text-3xl
-                    font-bold
-                    text-orange-600
-                    mt-2
-                "
-            >
-                0
-            </div>
-
-            <div class="text-xs text-gray-400">
-                ครัวเรือน
-            </div>
-
-        </div>
-
-    </div>
-
-
-
-    <!-- =====================================
-         ADD MEMBER
-    ====================================== -->
-
-    <div
-        class="
-            bg-white
-            rounded-2xl
-            shadow-sm
-            border
-            border-amber-200
-            p-5
-        "
-    >
-
-        <h2
-            class="
-                text-lg
-                font-bold
-                text-gray-800
-                mb-4
-            "
-        >
-            ➕ เพิ่มสมาชิกใหม่
-        </h2>
-
-
-        <form
-            id="memberForm"
-            class="
-                grid
-                grid-cols-1
-                md:grid-cols-4
-                gap-3
-            "
-        >
-
-            <input
-                id="memberId"
-                type="text"
-                placeholder="รหัส เช่น RK177 (เว้นว่างได้)"
-                class="
-                    border
-                    rounded-lg
-                    px-4
-                    py-3
-                    text-sm
-                "
-            >
-
-
-            <input
-                id="memberName"
-                type="text"
-                required
-                placeholder="ชื่อ - นามสกุล"
-                class="
-                    border
-                    rounded-lg
-                    px-4
-                    py-3
-                    text-sm
-                "
-            >
-
-
-            <input
-                id="memberHouse"
-                type="text"
-                required
-                placeholder="บ้านเลขที่"
-                class="
-                    border
-                    rounded-lg
-                    px-4
-                    py-3
-                    text-sm
-                "
-            >
-
-
-            <button
-                type="submit"
-                class="
-                    bg-amber-600
-                    hover:bg-amber-700
-                    text-white
-                    rounded-lg
-                    px-4
-                    py-3
-                    font-medium
-                "
-            >
-                💾 เพิ่มสมาชิก
-            </button>
-
-        </form>
-
-    </div>
-
-
-
-    <!-- =====================================
-         SEARCH / FILTER
-    ====================================== -->
-
-    <div
-        class="
-            bg-white
-            rounded-xl
-            border
-            border-amber-200
-            p-4
-            flex
-            flex-col
-            md:flex-row
-            gap-3
-            md:items-center
-            md:justify-between
-        "
-    >
-
-        <input
-            id="searchInput"
-            type="text"
-            placeholder="🔍 ค้นหาชื่อ รหัสสมาชิก หรือบ้านเลขที่..."
-            class="
-                border
-                rounded-lg
-                px-4
-                py-2
-                w-full
-                md:max-w-md
-            "
-        >
-
-
-        <div class="flex flex-wrap gap-2">
-
-            <button
-                class="
-                    filter-button
-                    px-4
-                    py-2
-                    rounded-lg
-                    bg-amber-600
-                    text-white
-                    text-sm
-                "
-                data-filter="all"
-            >
-                ทั้งหมด
-            </button>
-
-
-            <button
-                class="
-                    filter-button
-                    px-4
-                    py-2
-                    rounded-lg
-                    bg-gray-100
-                    text-gray-700
-                    text-sm
-                "
-                data-filter="sent"
-            >
-                🟢 ส่งแล้ว
-            </button>
-
-
-            <button
-                class="
-                    filter-button
-                    px-4
-                    py-2
-                    rounded-lg
-                    bg-gray-100
-                    text-gray-700
-                    text-sm
-                "
-                data-filter="pending"
-            >
-                🔴 ยังไม่ส่ง
-            </button>
-
-
-            <button
-                class="
-                    filter-button
-                    px-4
-                    py-2
-                    rounded-lg
-                    bg-gray-100
-                    text-gray-700
-                    text-sm
-                "
-                data-filter="overdue"
-            >
-                ⚠️ ค้างส่ง
-            </button>
-
-        </div>
-
-    </div>
-
-
-
-    <!-- =====================================
-         TABLE
-    ====================================== -->
-
-    <div
-        class="
-            bg-white
-            rounded-2xl
-            shadow-sm
-            border
-            border-amber-200
-            overflow-hidden
-        "
-    >
-
-        <div class="overflow-x-auto">
-
-            <table
-                class="
-                    min-w-full
-                    text-sm
-                "
-            >
-
-                <thead
-                    class="
-                        bg-amber-100
-                        text-gray-700
-                    "
-                >
-
-                    <tr>
-
-                        <th class="px-4 py-3 text-center">
-                            #
-                        </th>
-
-                        <th class="px-4 py-3 text-left">
-                            รหัสสมาชิก
-                        </th>
-
-                        <th class="px-4 py-3 text-left">
-                            ชื่อ - นามสกุล
-                        </th>
-
-                        <th class="px-4 py-3 text-left">
-                            บ้านเลขที่
-                        </th>
-
-                        <th class="px-4 py-3 text-center">
-                            ส่ง
-                        </th>
-
-                        <th class="px-4 py-3 text-center">
-                            ค้างส่ง
-                        </th>
-
-                        <th class="px-4 py-3 text-center">
-                            สถานะ
-                        </th>
-
-                        <th class="px-4 py-3 text-center">
-                            จัดการ
-                        </th>
-
-                    </tr>
-
-                </thead>
-
-
-                <tbody id="memberTableBody">
-
-                    <tr>
-
-                        <td
-                            colspan="8"
-                            class="
-                                loading-row
-                            "
-                        >
-                            🔄 กำลังโหลดข้อมูลสมาชิก...
-                        </td>
-
-                    </tr>
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </div>
-
-
-</div>
-
-
-
-<!-- =========================================
-     JAVASCRIPT MODULE
-========================================== -->
-
-<script type="module">
+// ============================================================
+// 👥 members.js
+// ระบบจัดการสมาชิกกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
+// Firebase Firestore + รายชื่อสมาชิก
+// ============================================================
 
 import {
+    saveData,
+    loadData,
+    updateData,
+    deleteData,
+    subscribeData
+} from "./js/database.js";
 
-    getRongkhemMembers,
-    addRongkhemMember,
-    updateRongkhemMember,
-    deleteRongkhemMember,
-    resetAllMembersStatus,
-    subscribeMembers,
-    getMemberSummary
+const MEMBERS_COLLECTION = "members";
 
-}
+// ============================================================
+// 📦 รายชื่อสมาชิกเริ่มต้น
+// ============================================================
 
-from "./members.js";
+const DEFAULT_MEMBERS = [
+    { memberId: "RK001", name: "นายจักร์กวัส ประพลรัตนัง", houseNo: "2 หมู่ 6" },
+    { memberId: "RK002", name: "นางแสงเพียร วงค์ขัติย์", houseNo: "6 หมู่ 6" },
+    { memberId: "RK003", name: "นายยนต์ ปิงเมือง", houseNo: "7 หมู่ 6" },
+    { memberId: "RK004", name: "นางสมศรี ปิงเมือง", houseNo: "8 หมู่ 6" },
+    { memberId: "RK005", name: "นายชัด ปิงเมือง", houseNo: "10 หมู่ 6" },
+    { memberId: "RK006", name: "นายปิ๊ก ขัติย์วงศ์", houseNo: "12 หมู่ 6" },
+    { memberId: "RK007", name: "นายยรรยง ผัดดี", houseNo: "14/1 หมู่ 6" },
+    { memberId: "RK008", name: "นายหมื่น วังมูล", houseNo: "15 หมู่ 6" },
+    { memberId: "RK009", name: "นายโกวัฒธฤทธิ์ ประพลรัตนัง", houseNo: "17 หมู่ 6" },
+    { memberId: "RK010", name: "นายภาณุวัฒน์ บุญยา", houseNo: "20 หมู่ 6" },
+    { memberId: "RK011", name: "นายสมอน ศรีเมือง", houseNo: "22 หมู่ 6" },
+    { memberId: "RK012", name: "นายพรชัย ปัญใจ", houseNo: "29 หมู่ 6" },
+    { memberId: "RK013", name: "นายชูชาติ จำปา", houseNo: "30 หมู่ 6" },
+    { memberId: "RK014", name: "นางน้อย วิศรีใจ", houseNo: "31 หมู่ 6" },
+    { memberId: "RK015", name: "นายอินทร์ ถิ่นลำปาง", houseNo: "32 หมู่ 6" },
+    { memberId: "RK016", name: "นายคำตั๋น วังมูล", houseNo: "34 หมู่ 6" },
+    { memberId: "RK017", name: "นางวิไลพร วังมูล", houseNo: "35 หมู่ 6" },
+    { memberId: "RK018", name: "นายบุญ ไฝ่จิตต์", houseNo: "36 หมู่ 6" },
+    { memberId: "RK019", name: "นายบุญช่วย เครือวัลย์", houseNo: "37 หมู่ 6" },
+    { memberId: "RK020", name: "นายมา วังมูล", houseNo: "38 หมู่ 6" },
+    { memberId: "RK021", name: "นายสมาน วังมูล", houseNo: "39 หมู่ 6" },
+    { memberId: "RK022", name: "นายวัชร ถิ่นลำปาง", houseNo: "40 หมู่ 6" },
+    { memberId: "RK023", name: "นางพิมพร ใฝ่ใจ", houseNo: "41 หมู่ 6" },
+    { memberId: "RK024", name: "นางถวิล ใฝ่ใจ", houseNo: "42 หมู่ 6" },
+    { memberId: "RK025", name: "นายบรรลัง ใฝ่ใจ", houseNo: "42/1 หมู่ 6" },
+    { memberId: "RK026", name: "นายอิ่น จักจุ่ม", houseNo: "46 หมู่ 6" },
+    { memberId: "RK027", name: "นางทองดี วงศ์ขัติย์", houseNo: "47 หมู่ 6" },
+    { memberId: "RK028", name: "นายชุม ใฝ่ใจ", houseNo: "49 หมู่ 6" },
+    { memberId: "RK029", name: "นางทองดี พลูคำ", houseNo: "50 หมู่ 6" },
+    { memberId: "RK030", name: "นายผัด ทาแก้ว", houseNo: "51 หมู่ 6" },
+    { memberId: "RK031", name: "นางสายทอง ชุ่มธิ", houseNo: "51/1 หมู่ 6" },
+    { memberId: "RK032", name: "นายอดิศักดิ์ ขัติธิ", houseNo: "52 หมู่ 6" },
+    { memberId: "RK033", name: "นายนพคุณ จอมภา", houseNo: "53 หมู่ 6" },
+    { memberId: "RK034", name: "นายพิพัฒน์ ใฝ่ใจ", houseNo: "56 หมู่ 6" },
+    { memberId: "RK035", name: "น.ส.เตือนธิวา ใฝ่ใจ", houseNo: "58 หมู่ 6" },
+    { memberId: "RK036", name: "นางเหล็ง วิศรีใจ", houseNo: "60 หมู่ 6" },
+    { memberId: "RK037", name: "นายบุญเสริม วิศรีใจ", houseNo: "60/1 หมู่ 6" },
+    { memberId: "RK038", name: "น.ส.กรพิน กาวิน", houseNo: "61 หมู่ 6" },
+    { memberId: "RK039", name: "นายบุญเรือง ถิ่นลำปาง", houseNo: "62 หมู่ 6" },
+    { memberId: "RK040", name: "นางวิไล ถิ่นลำปาง", houseNo: "62/2 หมู่ 6" },
+    { memberId: "RK041", name: "นายวิทยา งามจิต", houseNo: "64 หมู่ 6" },
+    { memberId: "RK042", name: "นายแสวง ศรีไชยอินทร์", houseNo: "67 หมู่ 6" },
+    { memberId: "RK043", name: "นางอำไพวิทย์ ปัญญา", houseNo: "68 หมู่ 6" },
+    { memberId: "RK044", name: "นางเลข ใฝ่จิตร์", houseNo: "69 หมู่ 6" },
+    { memberId: "RK045", name: "นายยก ถิ่นลำปาง", houseNo: "70 หมู่ 6" },
+    { memberId: "RK046", name: "น.ส.ผ่องศรี ปัญใจ", houseNo: "72 หมู่ 6" },
+    { memberId: "RK047", name: "น.ส.บรรณารักษ์ พลูคำ", houseNo: "73 หมู่ 6" },
+    { memberId: "RK048", name: "นางสุดารัตน์ จักจุ่ม", houseNo: "73/1 หมู่ 6" },
+    { memberId: "RK049", name: "นายธนวัฒน์ ปัญใจ", houseNo: "74 หมู่ 6" },
+    { memberId: "RK050", name: "นายแก้วมูล ทินนา", houseNo: "75 หมู่ 6" },
+    { memberId: "RK051", name: "นางหล้า ใฝ่ใจ", houseNo: "76 หมู่ 6" },
+    { memberId: "RK052", name: "นายสุทัศน์ ปัญใจ", houseNo: "79/1 หมู่ 6" },
+    { memberId: "RK053", name: "นายผล งามจิตร", houseNo: "82 หมู่ 6" },
+    { memberId: "RK054", name: "นางเครือวัลย์ บุญธิวงค์", houseNo: "84 หมู่ 6" },
+    { memberId: "RK055", name: "นางเป็ง ใฝ่จิต", houseNo: "85 หมู่ 6" },
+    { memberId: "RK056", name: "นายพัสกร งามจิต", houseNo: "86 หมู่ 6" },
+    { memberId: "RK057", name: "น.ส.วิภารัตน์ กันทะวัง", houseNo: "88 หมู่ 6" },
+    { memberId: "RK058", name: "นางบุญปั๋น ทาทอง", houseNo: "89 หมู่ 6" },
+    { memberId: "RK059", name: "นางฝน งามจิต", houseNo: "91 หมู่ 6" },
+    { memberId: "RK060", name: "นายวุฒิภัทร เตชะวงค์", houseNo: "91/1 หมู่ 6" },
 
+    // รายชื่อที่เหลือให้ต่อในส่วนที่ 2
+];
 
+// ============================================================
+// 🧠 ตัวแปรข้อมูลสมาชิก
+// ============================================================
 
-let members = [];
+let membersCache = [];
 
-let currentFilter = "all";
+// ============================================================
+// 🔢 เรียงลำดับสมาชิก
+// ============================================================
 
-let searchKeyword = "";
+function sortMembers(members = []) {
 
-let unsubscribeMembers = null;
+    return [...members].sort((a, b) => {
 
+        return String(
+            a.memberId || ""
+        ).localeCompare(
 
+            String(
+                b.memberId || ""
+            ),
 
-// ==========================================
-// ป้องกัน XSS
-// ==========================================
+            undefined,
 
-function escapeHtml(value) {
+            {
+                numeric: true,
+                sensitivity: "base"
+            }
 
-    return String(
-        value ?? ""
-    )
-
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-
-}
-
-
-
-// ==========================================
-// LOAD MEMBERS
-// ==========================================
-
-async function loadMembers() {
-
-    const tbody =
-        document.getElementById(
-            "memberTableBody"
         );
 
+    });
 
-    tbody.innerHTML = `
+}
 
-        <tr>
+// ============================================================
+// 📥 โหลดรายชื่อสมาชิก
+// ============================================================
 
-            <td
-                colspan="8"
-                class="loading-row"
-            >
-
-                🔄 กำลังโหลดข้อมูลจาก Firebase...
-
-            </td>
-
-        </tr>
-
-    `;
-
+async function getRongkhemMembers() {
 
     try {
 
-        members =
-            await getRongkhemMembers();
+        const result =
+            await loadData(
+                MEMBERS_COLLECTION
+            );
 
+        const firebaseMembers =
+            Array.isArray(result)
+                ? result
+                : [];
 
-        render();
+        if (
+            firebaseMembers.length > 0
+        ) {
 
-    }
+            membersCache =
+                sortMembers(
+                    firebaseMembers.map(
+                        member => ({
 
-    catch (error) {
+                            ...member,
 
-        console.error(error);
+                            houseNo:
 
+                                member.houseNo ||
 
-        tbody.innerHTML = `
+                                member.address ||
 
-            <tr>
+                                ""
 
-                <td
-                    colspan="8"
-                    class="
-                        text-center
-                        py-10
-                        text-red-600
-                    "
-                >
+                        })
+                    )
+                );
 
-                    ❌ ไม่สามารถโหลดข้อมูลสมาชิกได้
+            return membersCache;
 
-                </td>
+        }
 
-            </tr>
+        membersCache =
+            sortMembers(
+                DEFAULT_MEMBERS.map(
+                    member => ({
+                        ...member,
 
-        `;
+                        status:
+                            "active"
+                    })
+                )
+            );
+
+        return membersCache;
+
+    } catch (error) {
+
+        console.error(
+            "❌ โหลดสมาชิกไม่สำเร็จ:",
+            error
+        );
+
+        membersCache =
+            sortMembers(
+                DEFAULT_MEMBERS
+            );
+
+        return membersCache;
 
     }
 
 }
 
+// ============================================================
+// 🔎 ค้นหาสมาชิกจากรหัส
+// ============================================================
 
+function findMemberById(memberId) {
 
-// ==========================================
-// FILTER MEMBERS
-// ==========================================
+    return membersCache.find(
+        member =>
 
-function getFilteredMembers() {
+            String(
+                member.memberId
+            ) === String(memberId)
 
-    return members.filter(
+    ) || null;
 
-        member => {
+}
 
-            const keyword =
-                searchKeyword
-                .trim()
-                .toLowerCase();
+// ============================================================
+// 🔎 ค้นหาสมาชิกจากชื่อ
+// ============================================================
 
+function findMemberByName(name) {
 
-            const searchable =
-                [
+    const keyword =
+        String(name || "")
+            .trim()
+            .toLowerCase();
 
-                    member.memberId,
-                    member.name,
-                    member.address,
-                    member.houseNo
+    return membersCache.find(
+        member =>
 
-                ]
+            String(
+                member.name || ""
+            )
+            .toLowerCase()
+            .includes(keyword)
 
-                .join(" ")
+    ) || null;
 
-                .toLowerCase();
+}
 
+// ============================================================
+// 🔎 ค้นหาจากรหัสหรือชื่อ
+// ============================================================
 
-            const matchesSearch =
-                !keyword ||
+function findMemberByIdOrName(keyword) {
 
-                searchable.includes(
-                    keyword
-                );
+    return (
 
+        findMemberById(keyword)
 
-            if (
-                !matchesSearch
-            ) {
+        ||
 
-                return false;
-
-            }
-
-
-            if (
-                currentFilter ===
-                "sent"
-            ) {
-
-                return (
-                    member.status ===
-                    "sent"
-                );
-
-            }
-
-
-            if (
-                currentFilter ===
-                "pending"
-            ) {
-
-                return (
-                    member.status !==
-                    "sent"
-                );
-
-            }
-
-
-            if (
-                currentFilter ===
-                "overdue"
-            ) {
-
-                return Number(
-                    member.pending || 0
-                ) > 0;
-
-            }
-
-
-            return true;
-
-        }
+        findMemberByName(keyword)
 
     );
 
 }
 
+// ============================================================
+// 🆔 สร้างรหัสสมาชิกใหม่
+// ============================================================
 
+function generateMemberId() {
 
-// ==========================================
-// RENDER SUMMARY + TABLE
-// ==========================================
+    let max = 0;
 
-function render() {
+    membersCache.forEach(
+        member => {
 
-    const summary =
-        getMemberSummary(
-            members
-        );
+            const number =
+                parseInt(
 
+                    String(
+                        member.memberId || ""
+                    )
+                    .replace(
+                        "RK",
+                        ""
+                    ),
 
-    document.getElementById(
-        "totalCount"
-    ).textContent =
-        summary.total;
+                    10
 
+                );
 
-    document.getElementById(
-        "sentCount"
-    ).textContent =
-        summary.sent;
+            if (
+                !Number.isNaN(number) &&
+                number > max
+            ) {
 
-
-    document.getElementById(
-        "pendingCount"
-    ).textContent =
-        summary.pending;
-
-
-    document.getElementById(
-        "overdueCount"
-    ).textContent =
-        summary.overdue;
-
-
-    renderTable();
-
-}
-
-
-
-// ==========================================
-// RENDER TABLE
-// ==========================================
-
-function renderTable() {
-
-    const tbody =
-        document.getElementById(
-            "memberTableBody"
-        );
-
-
-    const filtered =
-        getFilteredMembers();
-
-
-    if (
-        filtered.length === 0
-    ) {
-
-        tbody.innerHTML = `
-
-            <tr>
-
-                <td
-                    colspan="8"
-                    class="
-                        text-center
-                        py-10
-                        text-gray-400
-                    "
-                >
-
-                    ไม่พบข้อมูลสมาชิก
-
-                </td>
-
-            </tr>
-
-        `;
-
-        return;
-
-    }
-
-
-    tbody.innerHTML =
-        filtered.map(
-
-            (
-                member,
-                index
-            ) => {
-
-                const isSent =
-                    member.status ===
-                    "sent";
-
-
-                const pendingCount =
-                    Number(
-                        member.pending || 0
-                    );
-
-
-                return `
-
-                    <tr
-                        class="
-                            border-t
-                            hover:bg-amber-50
-                        "
-                    >
-
-                        <td
-                            class="
-                                px-4
-                                py-3
-                                text-center
-                            "
-                        >
-
-                            ${index + 1}
-
-                        </td>
-
-
-                        <td
-                            class="
-                                px-4
-                                py-3
-                                font-mono
-                                font-semibold
-                            "
-                        >
-
-                            ${escapeHtml(
-                                member.memberId ||
-                                "-"
-                            )}
-
-                        </td>
-
-
-                        <td
-                            class="
-                                px-4
-                                py-3
-                            "
-                        >
-
-                            ${escapeHtml(
-                                member.name ||
-                                "-"
-                            )}
-
-                        </td>
-
-
-                        <td
-                            class="
-                                px-4
-                                py-3
-                            "
-                        >
-
-                            ${escapeHtml(
-
-                                member.houseNo ||
-                                member.address ||
-                                "-"
-
-                            )}
-
-                        </td>
-
-
-                        <td
-                            class="
-                                px-4
-                                py-3
-                                text-center
-                            "
-                        >
-
-                            ${Number(
-                                member.sent || 0
-                            )}
-
-                        </td>
-
-
-                        <td
-                            class="
-                                px-4
-                                py-3
-                                text-center
-                            "
-                        >
-
-                            ${pendingCount}
-
-                        </td>
-
-
-                        <td
-                            class="
-                                px-4
-                                py-3
-                                text-center
-                            "
-                        >
-
-                            <button
-
-                                class="
-                                    toggle-status
-                                    px-3
-                                    py-1
-                                    rounded-full
-                                    text-xs
-                                    font-medium
-                                    ${
-
-                                        isSent
-
-                                        ?
-
-                                        "bg-green-100 text-green-700"
-
-                                        :
-
-                                        "bg-red-100 text-red-700"
-
-                                    }
-                                "
-
-                                data-id="${member.firestoreId}"
-
-                            >
-
-                                ${
-
-                                    isSent
-
-                                    ?
-
-                                    "🟢 ส่งแล้ว"
-
-                                    :
-
-                                    "🔴 ยังไม่ส่ง"
-
-                                }
-
-                            </button>
-
-                        </td>
-
-
-                        <td
-                            class="
-                                px-4
-                                py-3
-                                text-center
-                                whitespace-nowrap
-                            "
-                        >
-
-                            <button
-
-                                class="
-                                    edit-member
-                                    text-blue-600
-                                    hover:text-blue-800
-                                    mr-2
-                                "
-
-                                data-id="${member.firestoreId}"
-
-                            >
-
-                                ✏️ แก้ไข
-
-                            </button>
-
-
-                            <button
-
-                                class="
-                                    delete-member
-                                    text-red-600
-                                    hover:text-red-800
-                                "
-
-                                data-id="${member.firestoreId}"
-
-                            >
-
-                                🗑️ ลบ
-
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-                `;
+                max = number;
 
             }
 
-        )
+        }
+    );
 
-        .join("");
+    return (
+        "RK" +
+        String(
+            max + 1
+        ).padStart(
+            3,
+            "0"
+        )
+    );
 
 }
 
+// ============================================================
+// ➕ เพิ่มสมาชิกใหม่
+// ============================================================
 
+async function addRongkhemMember(memberData) {
 
-// ==========================================
-// ADD MEMBER
-// ==========================================
-
-document
-.getElementById(
-    "memberForm"
-)
-
-.addEventListener(
-
-    "submit",
-
-    async event => {
-
-        event.preventDefault();
-
+    try {
 
         const memberId =
-            document
-            .getElementById(
-                "memberId"
-            )
-            .value
-            .trim();
 
+            String(
+                memberData.memberId ||
+                generateMemberId()
+            ).trim();
 
         const name =
-            document
-            .getElementById(
-                "memberName"
-            )
-            .value
-            .trim();
-
+            String(
+                memberData.name || ""
+            ).trim();
 
         const houseNo =
-            document
-            .getElementById(
-                "memberHouse"
-            )
-            .value
-            .trim();
+            String(
+                memberData.houseNo ||
+                memberData.address ||
+                ""
+            ).trim();
 
+        const phone =
+            String(
+                memberData.phone || ""
+            ).trim();
 
-        const result =
-            await addRongkhemMember({
+        if (!name) {
 
-                memberId,
-                name,
-                houseNo,
-                address:
-                    houseNo
+            throw new Error(
+                "กรุณาระบุชื่อสมาชิก"
+            );
 
-            });
-
+        }
 
         if (
-            result.success
+            membersCache.some(
+                member =>
+
+                    String(
+                        member.memberId
+                    ) === memberId
+            )
         ) {
 
-            alert(
-                "✅ เพิ่มสมาชิกเรียบร้อย"
-            );
-
-
-            event.target.reset();
-
-        }
-
-        else {
-
-            alert(
-
-                "❌ เพิ่มสมาชิกไม่สำเร็จ\n" +
-
-                result.error
-
+            throw new Error(
+                "รหัสสมาชิกนี้มีอยู่แล้ว"
             );
 
         }
+
+        const data = {
+
+            memberId,
+
+            name,
+
+            houseNo,
+
+            address:
+                houseNo,
+
+            phone,
+
+            status:
+                "active",
+
+            createdAt:
+                new Date()
+                    .toISOString()
+
+        };
+
+        const result =
+            await saveData(
+                MEMBERS_COLLECTION,
+                data
+            );
+
+        if (
+            result &&
+            result.success === false
+        ) {
+
+            throw new Error(
+                result.error ||
+                "บันทึกสมาชิกไม่สำเร็จ"
+            );
+
+        }
+
+        await refreshMembers();
+
+        return {
+
+            success: true,
+
+            memberId
+
+        };
+
+    } catch (error) {
+
+        console.error(
+            "❌ เพิ่มสมาชิกไม่สำเร็จ:",
+            error
+        );
+
+        return {
+
+            success: false,
+
+            error:
+                error.message
+
+        };
 
     }
 
-);
+}
+// ============================================================
+// ✏️ แก้ไขข้อมูลสมาชิก
+// ============================================================
 
+async function updateRongkhemMember(memberId, memberData) {
 
-
-// ==========================================
-// TABLE CLICK
-// ==========================================
-
-document
-.getElementById(
-    "memberTableBody"
-)
-
-.addEventListener(
-
-    "click",
-
-    async event => {
-
-        const button =
-            event.target.closest(
-                "button"
-            );
-
-
-        if (
-            !button
-        ) return;
-
-
-        const firestoreId =
-            button.dataset.id;
-
-
-        if (
-            !firestoreId
-        ) return;
-
+    try {
 
         const member =
-            members.find(
+            findMemberById(memberId);
 
-                item =>
-                    item.firestoreId ===
-                    firestoreId
+        if (!member) {
 
+            throw new Error(
+                "ไม่พบข้อมูลสมาชิก"
             );
 
+        }
 
-        if (
-            !member
-        ) return;
+        const name =
+            String(
+                memberData.name ||
+                member.name ||
+                ""
+            ).trim();
 
+        const houseNo =
+            String(
+                memberData.houseNo ||
+                memberData.address ||
+                member.houseNo ||
+                member.address ||
+                ""
+            ).trim();
 
+        const phone =
+            String(
+                memberData.phone ||
+                ""
+            ).trim();
 
-        // ----------------------------
-        // เปลี่ยนสถานะ
-        // ----------------------------
+        if (!name) {
 
-        if (
+            throw new Error(
+                "กรุณาระบุชื่อสมาชิก"
+            );
 
-            button.classList.contains(
-                "toggle-status"
-            )
+        }
 
-        ) {
+        const data = {
 
-            const newStatus =
+            ...member,
 
-                member.status ===
-                "sent"
+            name,
 
-                ?
+            houseNo,
 
-                "pending"
+            address:
+                houseNo,
 
-                :
+            phone,
 
-                "sent";
+            updatedAt:
+                new Date()
+                    .toISOString()
 
+        };
+
+        const documentId =
+
+            member.firestoreId ||
+
+            member.docId ||
+
+            member.id;
+
+        if (documentId) {
 
             const result =
-                await updateRongkhemMember(
-
-                    firestoreId,
-
-                    {
-
-                        status:
-                            newStatus
-
-                    }
-
+                await updateData(
+                    MEMBERS_COLLECTION,
+                    documentId,
+                    data
                 );
 
-
             if (
-                !result.success
+                result &&
+                result.success === false
             ) {
 
-                alert(
-                    "❌ เปลี่ยนสถานะไม่สำเร็จ"
+                throw new Error(
+                    result.error ||
+                    "แก้ไขสมาชิกไม่สำเร็จ"
                 );
 
             }
 
-        }
+        } else {
 
-
-
-        // ----------------------------
-        // แก้ไขสมาชิก
-        // ----------------------------
-
-        if (
-
-            button.classList.contains(
-                "edit-member"
-            )
-
-        ) {
-
-            const newName =
-                prompt(
-
-                    "ชื่อ - นามสกุล",
-
-                    member.name || ""
-
-                );
-
-
-            if (
-                newName === null
-            ) return;
-
-
-            const newHouse =
-                prompt(
-
-                    "บ้านเลขที่",
-
-                    member.houseNo ||
-                    member.address ||
-                    ""
-
-                );
-
-
-            if (
-                newHouse === null
-            ) return;
-
+            // กรณีเป็นรายชื่อเริ่มต้น
+            // ให้บันทึกเข้า Firebase เป็นสมาชิกใหม่
 
             const result =
-                await updateRongkhemMember(
-
-                    firestoreId,
-
-                    {
-
-                        name:
-                            newName.trim(),
-
-                        houseNo:
-                            newHouse.trim(),
-
-                        address:
-                            newHouse.trim()
-
-                    }
-
+                await saveData(
+                    MEMBERS_COLLECTION,
+                    data
                 );
 
-
             if (
-                result.success
+                result &&
+                result.success === false
             ) {
 
-                alert(
-                    "✅ แก้ไขข้อมูลเรียบร้อย"
-                );
-
-            }
-
-            else {
-
-                alert(
-                    "❌ แก้ไขข้อมูลไม่สำเร็จ"
+                throw new Error(
+                    result.error ||
+                    "บันทึกข้อมูลสมาชิกไม่สำเร็จ"
                 );
 
             }
 
         }
 
+        await refreshMembers();
 
+        return {
+            success: true
+        };
 
-        // ----------------------------
-        // ลบสมาชิก
-        // ----------------------------
+    } catch (error) {
 
-        if (
-
-            button.classList.contains(
-                "delete-member"
-            )
-
-        ) {
-
-            const confirmDelete =
-                confirm(
-
-                    "ยืนยันลบสมาชิก\n\n" +
-
-                    (
-                        member.name ||
-                        ""
-                    )
-
-                );
-
-
-            if (
-                !confirmDelete
-            ) return;
-
-
-            const result =
-                await deleteRongkhemMember(
-                    firestoreId
-                );
-
-
-            if (
-                result.success
-            ) {
-
-                alert(
-                    "🗑️ ลบสมาชิกเรียบร้อย"
-                );
-
-            }
-
-            else {
-
-                alert(
-                    "❌ ลบสมาชิกไม่สำเร็จ"
-                );
-
-            }
-
-        }
-
-    }
-
-);
-
-
-
-// ==========================================
-// SEARCH
-// ==========================================
-
-document
-.getElementById(
-    "searchInput"
-)
-
-.addEventListener(
-
-    "input",
-
-    event => {
-
-        searchKeyword =
-            event.target.value;
-
-
-        renderTable();
-
-    }
-
-);
-
-
-
-// ==========================================
-// FILTER
-// ==========================================
-
-document
-.querySelectorAll(
-    ".filter-button"
-)
-
-.forEach(
-
-    button => {
-
-        button.addEventListener(
-
-            "click",
-
-            () => {
-
-                currentFilter =
-                    button.dataset.filter;
-
-
-                document
-                .querySelectorAll(
-                    ".filter-button"
-                )
-
-                .forEach(
-
-                    item => {
-
-                        item.className =
-                            "filter-button px-4 py-2 rounded-lg bg-gray-100 text-gray-700 text-sm";
-
-                    }
-
-                );
-
-
-                if (
-                    currentFilter ===
-                    "all"
-                ) {
-
-                    button.className =
-                        "filter-button px-4 py-2 rounded-lg bg-amber-600 text-white text-sm";
-
-                }
-
-                else if (
-                    currentFilter ===
-                    "sent"
-                ) {
-
-                    button.className =
-                        "filter-button px-4 py-2 rounded-lg bg-green-600 text-white text-sm";
-
-                }
-
-                else if (
-                    currentFilter ===
-                    "pending"
-                ) {
-
-                    button.className =
-                        "filter-button px-4 py-2 rounded-lg bg-red-600 text-white text-sm";
-
-                }
-
-                else {
-
-                    button.className =
-                        "filter-button px-4 py-2 rounded-lg bg-orange-600 text-white text-sm";
-
-                }
-
-
-                renderTable();
-
-            }
-
+        console.error(
+            "❌ แก้ไขสมาชิกไม่สำเร็จ:",
+            error
         );
 
-    }
+        return {
 
-);
+            success: false,
 
+            error:
+                error.message
 
-
-// ==========================================
-// RELOAD
-// ==========================================
-
-document
-.getElementById(
-    "reloadButton"
-)
-
-.addEventListener(
-
-    "click",
-
-    async () => {
-
-        await loadMembers();
-
-        alert(
-            "🔄 โหลดข้อมูลล่าสุดแล้ว"
-        );
+        };
 
     }
-
-);
-
-
-
-// ==========================================
-// RESET ALL
-// ==========================================
-
-document
-.getElementById(
-    "resetButton"
-)
-
-.addEventListener(
-
-    "click",
-
-    async () => {
-
-        const confirmed =
-            confirm(
-
-                "⚠️ ยืนยันเริ่มรอบใหม่?\n\n" +
-
-                "สถานะสมาชิกทั้งหมดจะถูกรีเซ็ต"
-
-            );
-
-
-        if (
-            !confirmed
-        ) return;
-
-
-        const result =
-            await resetAllMembersStatus();
-
-
-        if (
-            result.success
-        ) {
-
-            alert(
-
-                "✅ เริ่มรอบใหม่เรียบร้อย\n" +
-
-                "อัปเดต " +
-
-                result.successCount +
-
-                " รายการ"
-
-            );
-
-        }
-
-        else {
-
-            alert(
-                "❌ รีเซ็ตข้อมูลไม่สำเร็จ"
-            );
-
-        }
-
-    }
-
-);
-
-
-
-// ==========================================
-// REALTIME FIREBASE
-// ==========================================
-
-function startRealtime() {
-
-    if (
-        unsubscribeMembers
-    ) {
-
-        unsubscribeMembers();
-
-    }
-
-
-    unsubscribeMembers =
-        subscribeMembers(
-
-            updatedMembers => {
-
-                members =
-                    updatedMembers;
-
-
-                render();
-
-            }
-
-        );
 
 }
 
+// ============================================================
+// 🗑️ ลบสมาชิก
+// ============================================================
 
+async function deleteRongkhemMember(memberId) {
 
-// ==========================================
-// START SYSTEM
-// ==========================================
+    try {
 
-document.addEventListener(
+        const member =
+            findMemberById(memberId);
 
-    "DOMContentLoaded",
+        if (!member) {
 
-    async () => {
-
-        await loadMembers();
-
-        startRealtime();
-
-    }
-
-);
-
-
-
-// ==========================================
-// CLEANUP
-// ==========================================
-
-window.addEventListener(
-
-    "beforeunload",
-
-    () => {
-
-        if (
-            unsubscribeMembers
-        ) {
-
-            unsubscribeMembers();
+            throw new Error(
+                "ไม่พบข้อมูลสมาชิก"
+            );
 
         }
 
+        const documentId =
+
+            member.firestoreId ||
+
+            member.docId ||
+
+            member.id;
+
+        if (!documentId) {
+
+            throw new Error(
+                "สมาชิกคนนี้ยังไม่มีข้อมูลใน Firebase ไม่สามารถลบได้"
+            );
+
+        }
+
+        const result =
+            await deleteData(
+                MEMBERS_COLLECTION,
+                documentId
+            );
+
+        if (
+            result &&
+            result.success === false
+        ) {
+
+            throw new Error(
+                result.error ||
+                "ลบสมาชิกไม่สำเร็จ"
+            );
+
+        }
+
+        await refreshMembers();
+
+        return {
+            success: true
+        };
+
+    } catch (error) {
+
+        console.error(
+            "❌ ลบสมาชิกไม่สำเร็จ:",
+            error
+        );
+
+        return {
+
+            success: false,
+
+            error:
+                error.message
+
+        };
+
     }
 
-);
+}
 
-</script>
+// ============================================================
+// 🔄 โหลดข้อมูลสมาชิกใหม่
+// ============================================================
 
+async function refreshMembers() {
 
-</body>
-</html>
-/* =========================================================
-   EXPORT FUNCTIONS
-   สำหรับ members.html และ receive.js
-========================================================= */
+    membersCache =
+        await getRongkhemMembers();
+
+    return membersCache;
+
+}
+
+// ============================================================
+// ☁️ บันทึกรายชื่อเริ่มต้นเข้า Firebase
+// ใช้ครั้งแรกเมื่อต้องการย้ายรายชื่อทั้งหมด
+// ============================================================
+
+async function initializeDefaultMembers() {
+
+    try {
+
+        const firebaseMembers =
+            await loadData(
+                MEMBERS_COLLECTION
+            );
+
+        if (
+            Array.isArray(firebaseMembers) &&
+            firebaseMembers.length > 0
+        ) {
+
+            membersCache =
+                sortMembers(
+                    firebaseMembers
+                );
+
+            return {
+
+                success: true,
+
+                message:
+                    "มีข้อมูลสมาชิกอยู่แล้ว",
+
+                count:
+                    membersCache.length
+
+            };
+
+        }
+
+        let successCount = 0;
+
+        for (
+            const member of DEFAULT_MEMBERS
+        ) {
+
+            const result =
+                await saveData(
+                    MEMBERS_COLLECTION,
+                    {
+
+                        ...member,
+
+                        address:
+                            member.houseNo,
+
+                        phone:
+                            "",
+
+                        status:
+                            "active",
+
+                        createdAt:
+                            new Date()
+                                .toISOString()
+
+                    }
+                );
+
+            if (
+                !result ||
+                result.success !== false
+            ) {
+
+                successCount++;
+
+            }
+
+        }
+
+        await refreshMembers();
+
+        return {
+
+            success: true,
+
+            message:
+                "นำเข้ารายชื่อสมาชิกเรียบร้อย",
+
+            count:
+                successCount
+
+        };
+
+    } catch (error) {
+
+        console.error(
+            "❌ นำเข้ารายชื่อสมาชิกไม่สำเร็จ:",
+            error
+        );
+
+        return {
+
+            success: false,
+
+            error:
+                error.message
+
+        };
+
+    }
+
+}
+
+// ============================================================
+// ⚡ ระบบติดตามข้อมูลสมาชิกแบบ Real-time
+// ============================================================
+
+function subscribeMembers(callback) {
+
+    try {
+
+        return subscribeData(
+            MEMBERS_COLLECTION,
+
+            members => {
+
+                if (
+                    Array.isArray(members) &&
+                    members.length > 0
+                ) {
+
+                    membersCache =
+                        sortMembers(
+                            members.map(
+                                member => ({
+
+                                    ...member,
+
+                                    houseNo:
+
+                                        member.houseNo ||
+
+                                        member.address ||
+
+                                        ""
+
+                                })
+                            )
+                        );
+
+                } else {
+
+                    membersCache =
+                        sortMembers(
+                            DEFAULT_MEMBERS.map(
+                                member => ({
+
+                                    ...member,
+
+                                    status:
+                                        "active"
+
+                                })
+                            )
+                        );
+
+                }
+
+                if (
+                    typeof callback ===
+                    "function"
+                ) {
+
+                    callback(
+                        membersCache
+                    );
+
+                }
+
+            }
+
+        );
+
+    } catch (error) {
+
+        console.error(
+            "❌ Real-time สมาชิกไม่ทำงาน:",
+            error
+        );
+
+        return null;
+
+    }
+
+}
+
+// ============================================================
+// 📊 สรุปจำนวนสมาชิก
+// ============================================================
+
+function getMembersSummary() {
+
+    const total =
+        membersCache.length;
+
+    const active =
+        membersCache.filter(
+            member =>
+
+                member.status !==
+                "inactive"
+        ).length;
+
+    const inactive =
+        total - active;
+
+    return {
+
+        total,
+
+        active,
+
+        inactive
+
+    };
+
+}
+
+// ============================================================
+// 🌐 เปิดใช้กับหน้า HTML
+// ============================================================
+
+window.getRongkhemMembers =
+    getRongkhemMembers;
+
+window.addRongkhemMember =
+    addRongkhemMember;
+
+window.updateRongkhemMember =
+    updateRongkhemMember;
+
+window.deleteRongkhemMember =
+    deleteRongkhemMember;
+
+window.findMemberById =
+    findMemberById;
+
+window.findMemberByName =
+    findMemberByName;
+
+window.findMemberByIdOrName =
+    findMemberByIdOrName;
+
+window.generateMemberId =
+    generateMemberId;
+
+window.initializeDefaultMembers =
+    initializeDefaultMembers;
+
+window.getMembersSummary =
+    getMembersSummary;
+
+// ============================================================
+// 📤 Export สำหรับไฟล์ JavaScript อื่น
+// ============================================================
 
 export {
-  getRongkhemMembers,
-  findMemberByIdOrName,
-  findMemberById,
-  findMemberByName,
-  generateMemberId,
-  addRongkhemMember,
-  updateRongkhemMember,
-  deleteRongkhemMember,
-  migrateDefaultMembers,
-  refreshMembers,
-  subscribeMembers
+
+    getRongkhemMembers,
+
+    addRongkhemMember,
+
+    updateRongkhemMember,
+
+    deleteRongkhemMember,
+
+    findMemberById,
+
+    findMemberByName,
+
+    findMemberByIdOrName,
+
+    generateMemberId,
+
+    initializeDefaultMembers,
+
+    subscribeMembers,
+
+    refreshMembers,
+
+    getMembersSummary
+
 };
+
+// ============================================================
+// 🚀 เริ่มต้นข้อมูล
+// ============================================================
+
+refreshMembers()
+    .then(
+        () => {
+
+            console.log(
+                "👥 ระบบสมาชิกพร้อมใช้งาน:",
+                membersCache.length,
+                "ราย"
+            );
+
+        }
+    )
+    .catch(
+        error => {
+
+            console.error(
+                "❌ เริ่มระบบสมาชิกไม่สำเร็จ:",
+                error
+            );
+
+        }
+    );
