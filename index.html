@@ -1095,5 +1095,57 @@ footer *{color:#31513b!important}
 })();
 </script>
 
+
+<script>
+/* ===== FIX: ปุ่ม/เมนู รับข้าวสาร กดได้แน่นอน ===== */
+(function () {
+  function openReceivePage() {
+    window.location.href = "receive.html";
+  }
+
+  function bindReceiveButtons() {
+    const items = Array.from(document.querySelectorAll("[onclick]"));
+    items.forEach(el => {
+      const code = el.getAttribute("onclick") || "";
+      if (code.includes("receive.html")) {
+        el.style.pointerEvents = "auto";
+        el.style.position = "relative";
+        el.style.zIndex = "10";
+        el.addEventListener("click", function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          openReceivePage();
+        });
+      }
+    });
+
+    document.querySelectorAll(".menu-card, .card").forEach(el => {
+      el.style.pointerEvents = "auto";
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", bindReceiveButtons);
+  window.openReceivePage = openReceivePage;
+})();
+</script>
+
+<style>
+/* ป้องกันเลเยอร์ตกแต่งบังการคลิก */
+.hero::before,.hero::after,
+.menu-card::before,.menu-card::after,
+.card::before,.card::after{
+  pointer-events:none!important;
+}
+.menu-card,.card{
+  position:relative;
+}
+.menu-card[onclick*="receive.html"],
+.card[onclick*="receive.html"]{
+  cursor:pointer!important;
+  pointer-events:auto!important;
+  z-index:5;
+}
+</style>
+
 </body>
 </html>
