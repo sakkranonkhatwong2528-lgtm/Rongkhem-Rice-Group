@@ -1879,3 +1879,139 @@ console.log(
   DEFAULT_MEMBERS.length,
   "ราย"
 );
+// ==========================================
+// แก้ไขข้อมูลสมาชิก
+// ==========================================
+
+async function updateRongkhemMember(
+    firestoreId,
+    data
+) {
+
+    try {
+
+        if (!firestoreId) {
+
+            throw new Error(
+                "ไม่พบ Firebase Document ID"
+            );
+
+        }
+
+
+        const result =
+            await updateData(
+
+                MEMBERS_COLLECTION,
+
+                firestoreId,
+
+                {
+
+                    ...data,
+
+                    updatedAt:
+                        new Date()
+                        .toISOString()
+
+                }
+
+            );
+
+
+        return result;
+
+    } catch (error) {
+
+        console.error(
+            "แก้ไขสมาชิกไม่สำเร็จ:",
+            error
+        );
+
+
+        return {
+
+            success: false,
+
+            error:
+                error.message ||
+                String(error)
+
+        };
+
+    }
+
+}
+
+
+// ==========================================
+// ลบสมาชิก
+// ==========================================
+
+async function deleteRongkhemMember(
+    firestoreId
+) {
+
+    try {
+
+        if (!firestoreId) {
+
+            throw new Error(
+                "ไม่พบ Firebase Document ID"
+            );
+
+        }
+
+
+        const result =
+            await deleteData(
+
+                MEMBERS_COLLECTION,
+
+                firestoreId
+
+            );
+
+
+        return result;
+
+    } catch (error) {
+
+        console.error(
+            "ลบสมาชิกไม่สำเร็จ:",
+            error
+        );
+
+
+        return {
+
+            success: false,
+
+            error:
+                error.message ||
+                String(error)
+
+        };
+
+    }
+
+}
+
+
+// ==========================================
+// Export ฟังก์ชัน
+// ==========================================
+
+export {
+
+    getRongkhemMembers,
+
+    addRongkhemMember,
+
+    updateRongkhemMember,
+
+    deleteRongkhemMember,
+
+    restoreMembersToFirebase
+
+};
