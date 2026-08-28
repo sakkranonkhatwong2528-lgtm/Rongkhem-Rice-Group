@@ -213,6 +213,126 @@ footer *{color:#31513b!important}
  section.max-w-7xl.mx-auto.px-5.mt-6:first-of-type .overflow-hidden{padding:45px 20px 0!important}
 }
 
+
+/* ===== REMOVE COVER PHOTO / CLEAN PREMIUM HERO ===== */
+.hero{
+  min-height:330px!important;
+  background:
+    radial-gradient(circle at 14% 20%,rgba(216,180,58,.16),transparent 24%),
+    radial-gradient(circle at 88% 12%,rgba(71,151,91,.16),transparent 27%),
+    linear-gradient(135deg,#f8faf6 0%,#edf5ee 52%,#faf7ec 100%)!important;
+  border-radius:0 0 30px 30px!important;
+  border-bottom:1px solid #dce7dc!important;
+  box-shadow:0 8px 25px rgba(36,69,41,.08)!important;
+  overflow:hidden!important;
+}
+.hero::before{
+  display:block!important;
+  content:"🌾   🌿   🌾   🌿   🌾   🌿   🌾"!important;
+  position:absolute!important;
+  left:-40px!important;right:-40px!important;bottom:-28px!important;
+  width:auto!important;height:auto!important;
+  font-size:72px!important;letter-spacing:26px!important;
+  white-space:nowrap!important;
+  opacity:.13!important;
+  background:none!important;border-radius:0!important;
+  transform:none!important;
+}
+.hero::after{
+  display:block!important;
+  content:"" !important;
+  position:absolute!important;
+  width:280px!important;height:280px!important;
+  border-radius:50%!important;
+  right:-120px!important;top:-130px!important;
+  background:rgba(211,168,42,.08)!important;
+  opacity:1!important;
+}
+.hero .max-w-7xl{
+  height:330px!important;
+}
+.hero .flex.flex-col{
+  height:330px!important;
+  padding:80px 20px 35px!important;
+}
+.hero h1{
+  font-size:clamp(40px,5vw,64px)!important;
+  color:#184c2c!important;
+  text-shadow:none!important;
+}
+.hero h1:after{
+  content:"บ้านร่องเข็ม หมู่ที่ 6"!important;
+  color:#3d4841!important;
+  font-size:.48em!important;
+  font-weight:700!important;
+  margin-top:8px!important;
+}
+.hero .inline-flex{
+  background:linear-gradient(90deg,#37784d,#275f3b)!important;
+  color:#fff!important;
+}
+.hero .w-20{
+  background:linear-gradient(145deg,#ffffff,#f4f6ee)!important;
+  border:1px solid #e0e6dc!important;
+}
+@media(max-width:900px){
+  .hero,.hero .max-w-7xl,.hero .flex.flex-col{
+    min-height:310px!important;height:310px!important;
+  }
+  .hero .flex.flex-col{padding-top:145px!important}
+}
+
+
+/* ===== CURRENT FUNERAL PROMINENT TOP BANNER ===== */
+.top-funeral-banner{
+    margin:-8px 0 20px!important;
+    min-height:118px;
+    display:flex;
+    align-items:center;
+    gap:20px;
+    padding:20px 26px;
+    background:
+      radial-gradient(circle at 92% 30%,rgba(214,169,57,.15),transparent 24%),
+      linear-gradient(135deg,#ffffff,#f8faf6);
+    border:1px solid #d8e1d9;
+    border-left:6px solid #bd3e34;
+    border-radius:18px;
+    box-shadow:0 8px 22px rgba(43,65,48,.10);
+}
+.top-funeral-icon{
+    width:76px;height:76px;min-width:76px;
+    display:grid;place-items:center;
+    border-radius:20px;
+    font-size:38px;
+    background:linear-gradient(145deg,#fff1ee,#f9d8d1);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.9);
+}
+.top-funeral-info{flex:1;min-width:0}
+.top-funeral-label{
+    color:#b53b32;font-weight:800;font-size:13px;
+    margin-bottom:3px;
+}
+.top-funeral-info h2{
+    color:#203d2b;font-size:clamp(22px,3vw,32px);
+    font-weight:800;margin:0;line-height:1.25;
+}
+.top-funeral-meta{
+    margin-top:7px;color:#647069;font-size:14px;
+}
+.top-funeral-status{
+    white-space:nowrap;
+    padding:10px 16px;border-radius:999px;
+    background:#fff1f0;color:#c43e34;
+    border:1px solid #f1c4be;font-size:13px;font-weight:800;
+}
+@media(max-width:650px){
+  .top-funeral-banner{padding:16px;gap:12px;flex-wrap:wrap}
+  .top-funeral-icon{width:58px;height:58px;min-width:58px;font-size:28px;border-radius:16px}
+  .top-funeral-info h2{font-size:21px}
+  .top-funeral-meta{font-size:12px}
+  .top-funeral-status{width:100%;text-align:center}
+}
+
 </style>
 </head>
 
@@ -902,5 +1022,78 @@ footer *{color:#31513b!important}
         // เริ่มต้นระบบเมื่อโหลดหน้าเว็บเรียบร้อย
         window.addEventListener('DOMContentLoaded', initSystem);
     </script>
+
+<script>
+(function(){
+    function syncTopCurrentFuneral(){
+        const topName = document.getElementById("topFuneralName");
+        const topMeta = document.getElementById("topFuneralMeta");
+        const oldName = document.getElementById("currentFuneralName");
+        const oldMeta = document.getElementById("currentFuneralMeta");
+
+        // Prefer the existing live element if the original system already updates it.
+        if(oldName && oldName.textContent.trim()){
+            topName.textContent = oldName.textContent.trim();
+        }
+
+        if(oldMeta && oldMeta.textContent.trim()){
+            topMeta.textContent = oldMeta.textContent.trim();
+        }
+
+        // Fallback: read current funeral from localStorage without changing original data.
+        try{
+            const keys = [
+                "rongkhem_current_funeral",
+                "currentFuneral",
+                "current_funeral",
+                "rice_current_funeral"
+            ];
+
+            let funeral = null;
+            for(const key of keys){
+                const raw = localStorage.getItem(key);
+                if(raw){
+                    const data = JSON.parse(raw);
+                    if(data && typeof data === "object"){
+                        funeral = data;
+                        break;
+                    }
+                }
+            }
+
+            if(funeral){
+                const name = funeral.name || funeral.deceasedName || funeral.deceased || funeral.fullName;
+                if(name) topName.textContent = "🕯️ " + name;
+
+                const parts = [];
+                const age = funeral.age;
+                const house = funeral.houseNumber || funeral.house || funeral.address;
+                const deathDate = funeral.deathDate || funeral.dateOfDeath;
+                const cremationDate = funeral.cremationDate || funeral.cremation;
+                if(age) parts.push("อายุ " + age + " ปี");
+                if(house) parts.push("บ้านเลขที่ " + house);
+                if(deathDate) parts.push("✝️ เสียชีวิต " + deathDate);
+                if(cremationDate) parts.push("🔥 ฌาปนกิจ " + cremationDate);
+                if(parts.length) topMeta.textContent = parts.join("  |  ");
+            }
+        }catch(e){}
+
+        // If the visible existing funeral card contains a name, use it as another fallback.
+        const headings = Array.from(document.querySelectorAll("h1,h2,h3,h4"));
+        const match = headings.find(el => /นายนพพร คิดอ่าน|กำลังดำเนินการ/.test(el.textContent));
+        if(topName.textContent.includes("กำลังตรวจสอบ") && match){
+            const text = match.textContent.trim().replace(/^🕯️\s*/,"");
+            if(text && text !== "กำลังดำเนินการ") topName.textContent = "🕯️ " + text;
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function(){
+        syncTopCurrentFuneral();
+        setTimeout(syncTopCurrentFuneral, 500);
+        setTimeout(syncTopCurrentFuneral, 1500);
+    });
+})();
+</script>
+
 </body>
 </html>
