@@ -1,13 +1,9 @@
-/* =========================================================
-   🌾 RONGKHEM RICE GROUP
-   funeral.js
-   ระบบจัดการงานศพ Firebase Firestore
-
-   ใช้ข้อมูลกลางร่วมกัน:
-   📱 มือถือ
-   💻 คอมพิวเตอร์
-   📲 แท็บเล็ต
-========================================================= */
+// ============================================================
+// funeral.js
+// ระบบจัดการงานศพ
+// Rongkhem Rice Group
+// Firebase Firestore
+// ============================================================
 
 import {
     saveData,
@@ -18,982 +14,815 @@ import {
 } from "./database.js";
 
 
-/* =========================================================
-   ⚙️ ตั้งค่า Collection
-========================================================= */
+// ============================================================
+// ตัวแปรระบบ
+// ============================================================
 
-const FUNERALS_COLLECTION = "funerals";
-
-let CURRENT_FUNERALS = [];
-
-let unsubscribeFunerals = null;
+let funerals = [];
+let editingFuneralId = null;
 
 
-/* =========================================================
-   🔢 สร้าง ID งานศพ
-========================================================= */
+// ============================================================
+// ป้องกัน HTML
+// ============================================================
 
-function generateFuneralId() {
+function escapeHtml(value) {
 
-    return "FUNERAL_" + Date.now();
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 
 }
 
 
-/* =========================================================
-   ⚰️ บันทึกงานศพใหม่
-========================================================= */
+// ============================================================
+// ค้นหาชื่อ Element รองรับ ID หลายแบบ
+// ============================================================
 
-export async function saveFuneralData(
-    deceasedName,
-    additionalInfo = {}
-) {
+function getElement(...ids) {
 
-    try {
+    for (const id of ids) {
 
-        if (
-            !deceasedName ||
-            String(deceasedName).trim() === ""
-        ) {
+        const element =
+            document.getElementById(id);
 
-            showFuneralNotify(
-                "กรุณาระบุชื่อผู้เสียชีวิต"
-            );
+        if (element) return element;
 
-            return {
-                success: false,
-                error: "Empty name"
-            };
+    }
+
+    return null;
+
+}
+
+
+// ============================================================
+// อ่านชื่องานศพ
+// ============================================================
+
+function getFuneralNameInput() {
+
+    return getElement(
+        "funeralName",
+        "deceasedName",
+        "inputDeceasedName"
+    );
+
+}
+
+
+// ============================================================
+// แสดงรายการงานศพ
+// ============================================================
+
+function renderFunerals() {
+
+    const container =
+        getElement(
+            "funeralList",
+            "funeralTable",
+            "funeralTableBody"
+        );
+
+    if (!container) return;
+
+
+    const sortedFunerals =
+        [...funerals].sort((a, b) => {
+
+            const dateA =
+                new Date(
+                    a.createdAt ||
+                    a.openedAt ||
+                    a.date ||
+                    0
+                );
+
+            const dateB =
+                new Date(
+                    b.createdAt ||
+                    b.openedAt ||
+                    b.date ||
+                    0
+                );
+
+            return dateB - dateA;
+
+        });
+
+
+    // ถ้าเป็น TBODY
+    if (container.tagName === "TBODY") {
+
+        if (sortedFunerals.length === 0) {
+
+            container.innerHTML = `
+                <tr>
+                    <td colspan="6"
+                        style="text-align:center;padding:25px">
+                        ยังไม่มีข้อมูลงานศพ
+                    </td>
+                </tr>
+            `;
+
+            return;
 
         }
 
 
-        const cleanName =
-            String(deceasedName).trim();
+        container.innerHTML =
+            sortedFunerals.map((funeral, index) => {
+
+                const name =
+                    funeral.name ||
+                    funeral.deceasedName ||
+                    "-";
 
 
-        /*
-            ตรวจสอบว่ามีงานศพเปิดอยู่หรือไม่
-        */
-
-        const funerals =
-            await loadData(
-                FUNERALS_COLLECTION
-            );
+                const active =
+                    funeral.active === true ||
+                    funeral.status === "active";
 
 
-        const activeFuneral =
-            funerals.find(funeral =>
+                return `
+                    <tr>
 
+                        <td>${index + 1}</td>
+
+                        <td>
+                            ${escapeHtml(name)}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                funeral.houseNo || "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${
+                                active
+                                    ? "🟢 กำลังดำเนินการ"
+                                    : "⚪ ปิดงานแล้ว"
+                            }
+                        </td>
+
+                        <td>
+                            <button
+                                onclick="editFuneral('${funeral.firestoreId}')"
+                            >
+                                ✏️ แก้ไข
+                            </button>
+
+                            <button
+                                onclick="deleteFuneral('${funeral.firestoreId}')"
+                            >
+                                🗑️ ลบ
+                            </button>
+                        </td>
+
+                    </tr>
+                `;
+
+            }).join("");
+
+        return;
+
+    }
+
+
+    // ถ้าเป็น DIV
+    if (sortedFunerals.length === 0) {
+
+        container.innerHTML = `
+            <div class="empty-state">
+                ⚰️ ยังไม่มีรายการงานศพ
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        sortedFunerals.map((funeral) => {
+
+            const name =
+                funeral.name ||
+                funeral.deceasedName ||
+                "-";
+
+
+            const active =
                 funeral.active === true ||
+                funeral.status === "active";
 
-                funeral.status === "active" ||
 
-                funeral.status === "กำลังดำเนินการ"
+            return `
+                <div class="funeral-item">
 
-            );
+                    <div>
 
+                        <strong>
+                            ⚰️ ${escapeHtml(name)}
+                        </strong>
 
-        /*
-            ป้องกันเปิดงานใหม่
-            ถ้ายังมีงานเดิมไม่ปิด
-        */
+                        <br>
 
-        if (activeFuneral) {
+                        บ้านเลขที่:
+                        ${escapeHtml(
+                            funeral.houseNo || "-"
+                        )}
 
-            showFuneralNotify(
+                        <br>
 
-                "⚠️ ขณะนี้มีงานศพที่กำลังดำเนินการอยู่\n\n" +
-
-                `${activeFuneral.name ||
-                activeFuneral.deceasedName ||
-                ""}`
-
-            );
-
-
-            return {
-
-                success: false,
-
-                error:
-                    "Active funeral already exists"
-
-            };
-
-        }
-
-
-        /*
-            สร้างข้อมูล
-        */
-
-        const funeralId =
-            generateFuneralId();
-
-
-        const funeralRecord = {
-
-            /*
-                ID สำหรับเชื่อมระบบ
-            */
-
-            id:
-                funeralId,
-
-            funeralId:
-                funeralId,
-
-
-            /*
-                ชื่อผู้เสียชีวิต
-
-                เก็บทั้ง name และ deceasedName
-                เพื่อรองรับหน้าเว็บเดิม
-            */
-
-            name:
-                cleanName,
-
-            deceasedName:
-                cleanName,
-
-
-            /*
-                บ้านเลขที่
-            */
-
-            houseNo:
-
-                additionalInfo.houseNo ||
-
-                additionalInfo.address ||
-
-                "",
-
-
-            /*
-                อายุ
-            */
-
-            age:
-
-                additionalInfo.age ||
-
-                "",
-
-
-            /*
-                วันที่เสียชีวิต
-            */
-
-            deathDate:
-
-                additionalInfo.deathDate ||
-
-                additionalInfo.date ||
-
-                new Date().toISOString(),
-
-
-            /*
-                วันที่ฌาปนกิจ
-            */
-
-            cremationDate:
-
-                additionalInfo.cremationDate ||
-
-                "",
-
-
-            /*
-                สถานะงานศพ
-            */
-
-            active:
-                true,
-
-            status:
-                "active",
-
-
-            /*
-                หมายเหตุ
-            */
-
-            note:
-
-                additionalInfo.note ||
-
-                "",
-
-
-            /*
-                ยอดรับข้าว
-            */
-
-            receivedCount:
-                0,
-
-            pendingCount:
-                0,
-
-
-            /*
-                วันที่สร้าง
-            */
-
-            createdAt:
-                new Date().toISOString()
-
-        };
-
-
-        /*
-            💾 บันทึก Firebase
-        */
-
-        const result =
-            await saveData(
-
-                FUNERALS_COLLECTION,
-
-                funeralRecord
-
-            );
-
-
-        if (!result.success) {
-
-            throw new Error(
-
-                result.error ||
-
-                "ไม่สามารถบันทึกข้อมูลได้"
-
-            );
-
-        }
-
-
-        showFuneralNotify(
-
-            "🕊️ บันทึกงานศพเรียบร้อยแล้ว\n\n" +
-
-            cleanName
-
-        );
-
-
-        return {
-
-            success:
-                true,
-
-            id:
-                result.id,
-
-            funeralId:
-                funeralId,
-
-            data:
-                {
-
-                    firestoreId:
-                        result.id,
-
-                    ...funeralRecord
-
-                }
-
-        };
-
-
-    } catch (error) {
-
-        console.error(
-            "❌ บันทึกงานศพไม่สำเร็จ:",
-            error
-        );
-
-
-        showFuneralNotify(
-
-            "❌ เกิดข้อผิดพลาด\n\n" +
-
-            error.message
-
-        );
-
-
-        return {
-
-            success:
-                false,
-
-            error:
-                error.message
-
-        };
-
-    }
-
-}
-
-
-/* =========================================================
-   📥 ดึงงานศพทั้งหมด
-========================================================= */
-
-export async function getAllFunerals() {
-
-    try {
-
-        const funerals =
-            await loadData(
-                FUNERALS_COLLECTION
-            );
-
-
-        CURRENT_FUNERALS =
-            sortFunerals(funerals);
-
-
-        return CURRENT_FUNERALS;
-
-
-    } catch (error) {
-
-        console.error(
-            "❌ ไม่สามารถดึงข้อมูลรายการงานศพ:",
-            error
-        );
-
-
-        return [];
-
-    }
-
-}
-
-
-/* =========================================================
-   🔢 เรียงงานศพล่าสุดก่อน
-========================================================= */
-
-function sortFunerals(funerals) {
-
-    return [...funerals].sort((a, b) => {
-
-        const dateA =
-            new Date(
-                a.createdAt ||
-                a.deathDate ||
-                0
-            );
-
-
-        const dateB =
-            new Date(
-                b.createdAt ||
-                b.deathDate ||
-                0
-            );
-
-
-        return dateB - dateA;
-
-    });
-
-}
-
-
-/* =========================================================
-   🔥 ดึงงานศพที่กำลังดำเนินการ
-========================================================= */
-
-export async function getActiveFuneral() {
-
-    try {
-
-        const funerals =
-            await getAllFunerals();
-
-
-        return funerals.find(funeral =>
-
-            funeral.active === true ||
-
-            funeral.status === "active" ||
-
-            funeral.status === "กำลังดำเนินการ"
-
-        ) || null;
-
-
-    } catch (error) {
-
-        console.error(
-            "❌ ไม่สามารถค้นหางานศพปัจจุบัน:",
-            error
-        );
-
-
-        return null;
-
-    }
-
-}
-
-
-/* =========================================================
-   ✏️ แก้ไขข้อมูลงานศพ
-========================================================= */
-
-export async function updateFuneralData(
-    firestoreId,
-    funeralData
-) {
-
-    try {
-
-        if (!firestoreId) {
-
-            throw new Error(
-                "ไม่พบ Firestore ID"
-            );
-
-        }
-
-
-        if (!funeralData) {
-
-            throw new Error(
-                "ไม่พบข้อมูลที่ต้องการแก้ไข"
-            );
-
-        }
-
-
-        const updateDataObject = {
-
-            ...funeralData,
-
-            updatedAt:
-                new Date().toISOString()
-
-        };
-
-
-        /*
-            ป้องกันเขียน ID ทับ
-        */
-
-        delete updateDataObject.firestoreId;
-
-
-        const result =
-            await updateData(
-
-                FUNERALS_COLLECTION,
-
-                firestoreId,
-
-                updateDataObject
-
-            );
-
-
-        if (!result.success) {
-
-            throw new Error(
-
-                result.error ||
-
-                "ไม่สามารถแก้ไขข้อมูลได้"
-
-            );
-
-        }
-
-
-        showFuneralNotify(
-            "✏️ แก้ไขข้อมูลเรียบร้อย"
-        );
-
-
-        return {
-
-            success:
-                true
-
-        };
-
-
-    } catch (error) {
-
-        console.error(
-            "❌ แก้ไขงานศพไม่สำเร็จ:",
-            error
-        );
-
-
-        return {
-
-            success:
-                false,
-
-            error:
-                error.message
-
-        };
-
-    }
-
-}
-
-
-/* =========================================================
-   🏁 ปิดงานศพ
-========================================================= */
-
-export async function closeFuneralData(
-    firestoreId,
-    summaryData = {}
-) {
-
-    try {
-
-        if (!firestoreId) {
-
-            throw new Error(
-                "ไม่พบ ID งานศพ"
-            );
-
-        }
-
-
-        const result =
-            await updateData(
-
-                FUNERALS_COLLECTION,
-
-                firestoreId,
-
-                {
-
-                    active:
-                        false,
-
-                    status:
-                        "finished",
-
-                    finishedDate:
-                        new Date().toISOString(),
-
-                    ...summaryData
-
-                }
-
-            );
-
-
-        if (!result.success) {
-
-            throw new Error(
-
-                result.error ||
-
-                "ไม่สามารถปิดงานศพได้"
-
-            );
-
-        }
-
-
-        showFuneralNotify(
-            "⚰️ ปิดงานศพเรียบร้อย"
-        );
-
-
-        return {
-
-            success:
-                true
-
-        };
-
-
-    } catch (error) {
-
-        console.error(
-            "❌ ปิดงานศพไม่สำเร็จ:",
-            error
-        );
-
-
-        return {
-
-            success:
-                false,
-
-            error:
-                error.message
-
-        };
-
-    }
-
-}
-
-
-/* =========================================================
-   🗑️ ลบงานศพ
-========================================================= */
-
-export async function removeFuneralData(
-    docId
-) {
-
-    try {
-
-        if (!docId) {
-
-            throw new Error(
-                "ไม่พบ ID งานศพ"
-            );
-
-        }
-
-
-        const confirmDelete =
-            confirm(
-                "ยืนยันการลบข้อมูลงานศพนี้หรือไม่?"
-            );
-
-
-        if (!confirmDelete) {
-
-            return {
-
-                success:
-                    false,
-
-                cancelled:
-                    true
-
-            };
-
-        }
-
-
-        const result =
-            await deleteData(
-
-                FUNERALS_COLLECTION,
-
-                docId
-
-            );
-
-
-        if (!result.success) {
-
-            throw new Error(
-
-                result.error ||
-
-                "ไม่สามารถลบข้อมูลได้"
-
-            );
-
-        }
-
-
-        showFuneralNotify(
-            "🗑️ ลบข้อมูลเรียบร้อยแล้ว"
-        );
-
-
-        return {
-
-            success:
-                true
-
-        };
-
-
-    } catch (error) {
-
-        console.error(
-            "❌ ลบงานศพไม่สำเร็จ:",
-            error
-        );
-
-
-        return {
-
-            success:
-                false,
-
-            error:
-                error.message
-
-        };
-
-    }
-
-}
-
-
-/* =========================================================
-   🔄 REAL-TIME
-
-   เมื่อมีการเพิ่ม/แก้ไขงานศพจากมือถือ
-   คอมและแท็บเล็ตจะเห็นทันที
-========================================================= */
-
-export function subscribeFunerals(callback) {
-
-    if (unsubscribeFunerals) {
-
-        unsubscribeFunerals();
-
-        unsubscribeFunerals = null;
-
-    }
-
-
-    unsubscribeFunerals =
-        subscribeData(
-
-            FUNERALS_COLLECTION,
-
-            funerals => {
-
-                CURRENT_FUNERALS =
-                    sortFunerals(
-                        funerals
-                    );
-
-
-                if (
-                    typeof callback ===
-                    "function"
-                ) {
-
-                    callback(
-                        CURRENT_FUNERALS
-                    );
-
-                }
-
-
-                /*
-                    แจ้งหน้า Dashboard
-                */
-
-                window.dispatchEvent(
-
-                    new CustomEvent(
-
-                        "funeralsUpdated",
-
-                        {
-
-                            detail:
-                                CURRENT_FUNERALS
-
+                        ${
+                            active
+                                ? "🟢 กำลังดำเนินการ"
+                                : "⚪ ปิดงานแล้ว"
                         }
 
-                    )
+                    </div>
 
+
+                    <div>
+
+                        <button
+                            onclick="editFuneral('${funeral.firestoreId}')"
+                        >
+                            ✏️ แก้ไข
+                        </button>
+
+                        <button
+                            onclick="deleteFuneral('${funeral.firestoreId}')"
+                        >
+                            🗑️ ลบ
+                        </button>
+
+                    </div>
+
+                </div>
+            `;
+
+        }).join("");
+
+}
+
+
+// ============================================================
+// เปิด / บันทึกงานศพ
+// ============================================================
+
+async function saveFuneral(event) {
+
+    if (event) {
+        event.preventDefault();
+    }
+
+
+    const nameInput =
+        getFuneralNameInput();
+
+
+    if (!nameInput) {
+
+        alert(
+            "❌ ไม่พบช่องกรอกชื่อผู้เสียชีวิต"
+        );
+
+        return;
+
+    }
+
+
+    const name =
+        nameInput.value.trim();
+
+
+    if (!name) {
+
+        alert(
+            "⚠️ กรุณาระบุชื่อผู้เสียชีวิต"
+        );
+
+        nameInput.focus();
+
+        return;
+
+    }
+
+
+    const houseInput =
+        getElement(
+            "funeralHouseNo",
+            "houseNo"
+        );
+
+
+    const deathDateInput =
+        getElement(
+            "deathDate",
+            "funeralDate"
+        );
+
+
+    const cremationDateInput =
+        getElement(
+            "cremationDate"
+        );
+
+
+    const noteInput =
+        getElement(
+            "funeralNote",
+            "note"
+        );
+
+
+    const funeralData = {
+
+        name: name,
+
+        deceasedName: name,
+
+        houseNo:
+            houseInput?.value.trim() || "",
+
+        deathDate:
+            deathDateInput?.value || "",
+
+        cremationDate:
+            cremationDateInput?.value || "",
+
+        note:
+            noteInput?.value.trim() || ""
+
+    };
+
+
+    try {
+
+        // ==============================================
+        // แก้ไขข้อมูลเดิม
+        // ==============================================
+
+        if (editingFuneralId) {
+
+            const result =
+                await updateData(
+
+                    "funerals",
+
+                    editingFuneralId,
+
+                    funeralData
+
+                );
+
+
+            if (!result.success) {
+
+                throw new Error(
+                    result.error ||
+                    "ไม่สามารถแก้ไขข้อมูลได้"
                 );
 
             }
 
-        );
 
-
-    return unsubscribeFunerals;
-
-}
-
-
-/* =========================================================
-   🛑 หยุด Real-time
-========================================================= */
-
-export function stopFuneralRealtime() {
-
-    if (unsubscribeFunerals) {
-
-        unsubscribeFunerals();
-
-        unsubscribeFunerals = null;
-
-    }
-
-}
-
-
-/* =========================================================
-   🔔 ระบบแจ้งเตือน
-========================================================= */
-
-function showFuneralNotify(message) {
-
-    if (
-        typeof window.notify ===
-        "function"
-    ) {
-
-        window.notify(message);
-
-    } else {
-
-        alert(message);
-
-    }
-
-}
-
-
-/* =========================================================
-   🌍 รองรับ HTML และ JavaScript เดิม
-========================================================= */
-
-window.saveFuneralData =
-    saveFuneralData;
-
-window.getAllFunerals =
-    getAllFunerals;
-
-window.getActiveFuneral =
-    getActiveFuneral;
-
-window.updateFuneralData =
-    updateFuneralData;
-
-window.closeFuneralData =
-    closeFuneralData;
-
-window.removeFuneralData =
-    removeFuneralData;
-
-window.subscribeFunerals =
-    subscribeFunerals;
-
-window.stopFuneralRealtime =
-    stopFuneralRealtime;
-
-
-/* =========================================================
-   🚀 เริ่มต้นระบบ
-========================================================= */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        console.log(
-            "⚰️ funeral.js เชื่อม Firebase Firestore แล้ว"
-        );
-
-
-        /*
-            เปิด Real-time
-        */
-
-        subscribeFunerals(
-            function (funerals) {
-
-                console.log(
-                    "🔄 งานศพอัปเดต:",
-                    funerals.length,
-                    "รายการ"
-                );
-
-            }
-        );
-
-
-        /*
-            รองรับปุ่มบันทึกเดิม
-        */
-
-        const btnSave =
-            document.getElementById(
-                "btnSaveFuneral"
-            );
-
-
-        if (btnSave) {
-
-            btnSave.addEventListener(
-
-                "click",
-
-                async function (event) {
-
-                    event.preventDefault();
-
-
-                    const inputElement =
-                        document.getElementById(
-                            "inputDeceasedName"
-                        );
-
-
-                    if (!inputElement) {
-
-                        return;
-
-                    }
-
-
-                    const deceasedName =
-                        inputElement.value;
-
-
-                    const result =
-                        await saveFuneralData(
-                            deceasedName
-                        );
-
-
-                    /*
-                        บันทึกสำเร็จ
-                        ล้างช่องกรอก
-                    */
-
-                    if (result.success) {
-
-                        inputElement.value =
-                            "";
-
-                    }
-
-                }
-
+            alert(
+                "✅ แก้ไขข้อมูลงานศพเรียบร้อย"
             );
 
         }
 
+
+        // ==============================================
+        // เพิ่มงานศพใหม่
+        // ==============================================
+
+        else {
+
+            // ปิดงานศพเก่าที่กำลังเปิดอยู่ก่อน
+
+            const activeFunerals =
+                funerals.filter(
+
+                    funeral =>
+
+                        funeral.active === true ||
+
+                        funeral.status === "active"
+
+                );
+
+
+            for (
+                const oldFuneral
+                of activeFunerals
+            ) {
+
+                await updateData(
+
+                    "funerals",
+
+                    oldFuneral.firestoreId,
+
+                    {
+
+                        active: false,
+
+                        status: "finished",
+
+                        finishedAt:
+                            new Date()
+                                .toISOString()
+
+                    }
+
+                );
+
+            }
+
+
+            // บันทึกงานศพใหม่
+
+            const result =
+                await saveData(
+
+                    "funerals",
+
+                    {
+
+                        ...funeralData,
+
+                        active: true,
+
+                        status: "active",
+
+                        openedAt:
+                            new Date()
+                                .toISOString()
+
+                    }
+
+                );
+
+
+            if (!result.success) {
+
+                throw new Error(
+                    result.error ||
+                    "ไม่สามารถบันทึกข้อมูลได้"
+                );
+
+            }
+
+
+            alert(
+                "✅ เปิดงานศพใหม่เรียบร้อย\n\n" +
+                "🌾 ระบบรับข้าวสารพร้อมใช้งาน"
+            );
+
+        }
+
+
+        resetFuneralForm();
+
     }
+
+    catch (error) {
+
+        console.error(
+            "Funeral Save Error:",
+            error
+        );
+
+
+        alert(
+            "❌ " +
+            (
+                error.message ||
+                "เกิดข้อผิดพลาด"
+            )
+        );
+
+    }
+
+}
+
+
+// ============================================================
+// แก้ไขงานศพ
+// ============================================================
+
+function editFuneral(id) {
+
+    const funeral =
+        funerals.find(
+
+            item =>
+
+                String(item.firestoreId)
+
+                ===
+
+                String(id)
+
+        );
+
+
+    if (!funeral) {
+
+        alert(
+            "❌ ไม่พบข้อมูลงานศพ"
+        );
+
+        return;
+
+    }
+
+
+    editingFuneralId =
+        funeral.firestoreId;
+
+
+    const nameInput =
+        getFuneralNameInput();
+
+
+    if (nameInput) {
+
+        nameInput.value =
+            funeral.name ||
+            funeral.deceasedName ||
+            "";
+
+    }
+
+
+    const houseInput =
+        getElement(
+            "funeralHouseNo",
+            "houseNo"
+        );
+
+
+    if (houseInput) {
+
+        houseInput.value =
+            funeral.houseNo || "";
+
+    }
+
+
+    const deathDateInput =
+        getElement(
+            "deathDate",
+            "funeralDate"
+        );
+
+
+    if (deathDateInput) {
+
+        deathDateInput.value =
+            funeral.deathDate || "";
+
+    }
+
+
+    const cremationDateInput =
+        getElement(
+            "cremationDate"
+        );
+
+
+    if (cremationDateInput) {
+
+        cremationDateInput.value =
+            funeral.cremationDate || "";
+
+    }
+
+
+    const noteInput =
+        getElement(
+            "funeralNote",
+            "note"
+        );
+
+
+    if (noteInput) {
+
+        noteInput.value =
+            funeral.note || "";
+
+    }
+
+
+    nameInput?.focus();
+
+}
+
+
+// ============================================================
+// ลบงานศพ
+// ============================================================
+
+async function deleteFuneral(id) {
+
+    const funeral =
+        funerals.find(
+
+            item =>
+
+                String(item.firestoreId)
+
+                ===
+
+                String(id)
+
+        );
+
+
+    if (!funeral) {
+
+        alert(
+            "❌ ไม่พบข้อมูลงานศพ"
+        );
+
+        return;
+
+    }
+
+
+    const name =
+        funeral.name ||
+        funeral.deceasedName ||
+        "";
+
+
+    const confirmDelete =
+        confirm(
+
+            `ต้องการลบงานศพ\n\n${name}\n\nใช่หรือไม่?`
+
+        );
+
+
+    if (!confirmDelete) {
+
+        return;
+
+    }
+
+
+    const result =
+        await deleteData(
+
+            "funerals",
+
+            funeral.firestoreId
+
+        );
+
+
+    if (result.success) {
+
+        alert(
+            "✅ ลบข้อมูลงานศพเรียบร้อย"
+        );
+
+    }
+
+    else {
+
+        alert(
+            "❌ ไม่สามารถลบข้อมูลได้\n" +
+            (result.error || "")
+        );
+
+    }
+
+}
+
+
+// ============================================================
+// รีเซ็ตฟอร์ม
+// ============================================================
+
+function resetFuneralForm() {
+
+    editingFuneralId = null;
+
+
+    const form =
+        getElement(
+            "funeralForm"
+        );
+
+
+    if (form) {
+
+        form.reset();
+
+    }
+
+    else {
+
+        const nameInput =
+            getFuneralNameInput();
+
+        if (nameInput) {
+
+            nameInput.value = "";
+
+        }
+
+    }
+
+}
+
+
+// ============================================================
+// โหลดข้อมูลครั้งแรก
+// ============================================================
+
+async function loadFunerals() {
+
+    funerals =
+        await loadData(
+            "funerals"
+        );
+
+
+    renderFunerals();
+
+}
+
+
+// ============================================================
+// Real-time Firebase
+// ============================================================
+
+subscribeData(
+
+    "funerals",
+
+    (data) => {
+
+        funerals = data;
+
+        renderFunerals();
+
+    }
+
 );
 
 
-/* =========================================================
-   🛑 ปิดการเชื่อมต่อ
-========================================================= */
+// ============================================================
+// Export สำหรับ HTML
+// ============================================================
 
-window.addEventListener(
-    "beforeunload",
+window.saveFuneral =
+    saveFuneral;
+
+window.editFuneral =
+    editFuneral;
+
+window.deleteFuneral =
+    deleteFuneral;
+
+window.removeFuneral =
+    deleteFuneral;
+
+window.resetFuneralForm =
+    resetFuneralForm;
+
+window.loadFunerals =
+    loadFunerals;
+
+
+// ============================================================
+// เริ่มระบบ
+// ============================================================
+
+document.addEventListener(
+
+    "DOMContentLoaded",
+
     () => {
 
-        stopFuneralRealtime();
+        loadFunerals();
 
     }
+
+);
+
+
+console.log(
+    "⚰️ Rongkhem Funeral System Firebase Ready"
 );
