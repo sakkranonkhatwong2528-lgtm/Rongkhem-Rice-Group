@@ -1,7 +1,7 @@
 // ============================================================
 // 👥 members.js
 // ระบบจัดการสมาชิกกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
-// Firebase Firestore + รายชื่อสมาชิก
+// ส่วนที่ 1/2
 // ============================================================
 
 import {
@@ -15,10 +15,11 @@ import {
 const MEMBERS_COLLECTION = "members";
 
 // ============================================================
-// 📦 รายชื่อสมาชิกเริ่มต้น
+// 📦 รายชื่อสมาชิกทั้งหมด
 // ============================================================
 
 const DEFAULT_MEMBERS = [
+
     { memberId: "RK001", name: "นายจักร์กวัส ประพลรัตนัง", houseNo: "2 หมู่ 6" },
     { memberId: "RK002", name: "นางแสงเพียร วงค์ขัติย์", houseNo: "6 หมู่ 6" },
     { memberId: "RK003", name: "นายยนต์ ปิงเมือง", houseNo: "7 หมู่ 6" },
@@ -79,12 +80,127 @@ const DEFAULT_MEMBERS = [
     { memberId: "RK058", name: "นางบุญปั๋น ทาทอง", houseNo: "89 หมู่ 6" },
     { memberId: "RK059", name: "นางฝน งามจิต", houseNo: "91 หมู่ 6" },
     { memberId: "RK060", name: "นายวุฒิภัทร เตชะวงค์", houseNo: "91/1 หมู่ 6" },
+    { memberId: "RK061", name: "นายนวล ศรีเมือง", houseNo: "93 หมู่ 6" },
+    { memberId: "RK062", name: "นายทิน วิศรีใจ", houseNo: "96 หมู่ 6" },
+    { memberId: "RK063", name: "นายธีระพันธ์ ถิ่นลำปาง", houseNo: "96/1 หมู่ 6" },
+    { memberId: "RK064", name: "นายเสาร์แก้ว คิดอ่าน", houseNo: "98 หมู่ 6" },
+    { memberId: "RK065", name: "นายผัด เครือนวล", houseNo: "100 หมู่ 6" },
+    { memberId: "RK066", name: "นายปัน ผัดดี", houseNo: "101 หมู่ 6" },
+    { memberId: "RK067", name: "นายลักษ์ คำวงษา", houseNo: "103 หมู่ 6" },
+    { memberId: "RK068", name: "นายไหล่ ศรีเมือง", houseNo: "104 หมู่ 6" },
+    { memberId: "RK069", name: "นายพิชัย ปัญใจ", houseNo: "105 หมู่ 6" },
+    { memberId: "RK070", name: "นางจันทร์เพ็ญ ใฝ่ใจ", houseNo: "106 หมู่ 6" },
+    { memberId: "RK071", name: "นายสรชัย ใฝ่ใจ", houseNo: "106/1 หมู่ 6" },
+    { memberId: "RK072", name: "นายวรวรรธน์ ลำพูน", houseNo: "109 หมู่ 6" },
+    { memberId: "RK073", name: "นางป้อ ใฝ่ใจ", houseNo: "111 หมู่ 6" },
+    { memberId: "RK074", name: "นางอ่อน จักจุ่ม", houseNo: "112 หมู่ 6" },
+    { memberId: "RK075", name: "นายยนต์ บุญธิวงค์", houseNo: "112/1 หมู่ 6" },
+    { memberId: "RK076", name: "นางขันคำ จันทวงศ์", houseNo: "113 หมู่ 6" },
+    { memberId: "RK077", name: "นายต่วน ทาทอง", houseNo: "114 หมู่ 6" },
+    { memberId: "RK078", name: "นายธวัชชัย บุญเก่ง", houseNo: "116 หมู่ 6" },
+    { memberId: "RK079", name: "นายผล วิศรีใจ", houseNo: "117 หมู่ 6" },
+    { memberId: "RK080", name: "นางประมวลศรี ถิ่นลำปาง", houseNo: "80 หมู่ 6" },
+    { memberId: "RK081", name: "นางจันทร์ทิพย์ ถิ่นลำปาง", houseNo: "118 หมู่ 6" },
+    { memberId: "RK082", name: "นายอัครวัฒน์ วริพัฒผัดดี", houseNo: "119 หมู่ 6" },
+    { memberId: "RK083", name: "นายสุพนธ์ นาแพร่", houseNo: "121 หมู่ 6" },
+    { memberId: "RK084", name: "นายบุญศรี ศรีคำ", houseNo: "125 หมู่ 6" },
+    { memberId: "RK085", name: "นางหวิง นามวงค์", houseNo: "126 หมู่ 6" },
+    { memberId: "RK086", name: "นายกิตติศักดิ์ นามจิต", houseNo: "130 หมู่ 6" },
+    { memberId: "RK087", name: "นายสุนิตย์ ไข่หนู", houseNo: "130/1 หมู่ 6" },
+    { memberId: "RK088", name: "นางวิไล ใจชื่น", houseNo: "131 หมู่ 6" },
+    { memberId: "RK089", name: "นายนิกร งามจิต", houseNo: "132 หมู่ 6" },
+    { memberId: "RK090", name: "นายประสิทธิ์ วงค์ขัติย์", houseNo: "136 หมู่ 6" },
+    { memberId: "RK091", name: "นายเม็ด งามจิต", houseNo: "137 หมู่ 6" },
+    { memberId: "RK092", name: "นายส่ง ปิงเมือง", houseNo: "138 หมู่ 6" },
+    { memberId: "RK093", name: "นายบุญศักดิ์ ลำพูน", houseNo: "139 หมู่ 6" },
+    { memberId: "RK094", name: "นายวีระ นามจิตต์", houseNo: "140 หมู่ 6" },
+    { memberId: "RK095", name: "นายสิงห์ธนู วงค์ขัติย์", houseNo: "141 หมู่ 6" },
+    { memberId: "RK096", name: "นายสุทัศน์ ตุ่นคำ", houseNo: "142 หมู่ 6" },
+    { memberId: "RK097", name: "นายเขียน ศรีเมือง", houseNo: "143 หมู่ 6" },
+    { memberId: "RK098", name: "นางลาวัลย์ ปันใจ", houseNo: "144 หมู่ 6" },
+    { memberId: "RK099", name: "นายบุญธรรม ศรีเมือง", houseNo: "145 หมู่ 6" },
+    { memberId: "RK100", name: "นางทับ บุญรมย์", houseNo: "147 หมู่ 6" },
+    { memberId: "RK101", name: "น.ส.เนียม ศรีเมือง", houseNo: "148 หมู่ 6" },
+    { memberId: "RK102", name: "น.ส.สุทัตตา พลูคำ", houseNo: "148/1 หมู่ 6" },
+    { memberId: "RK103", name: "นายผล ไชยยศ", houseNo: "149 หมู่ 6" },
+    { memberId: "RK104", name: "นายศักดิ์ จันทร์มูล", houseNo: "151/1 หมู่ 6" },
+    { memberId: "RK105", name: "น.ส.นิติการณ์ จันทร์มูล", houseNo: "152 หมู่ 6" },
+    { memberId: "RK106", name: "นางสายใจ ธรรมสาร", houseNo: "153 หมู่ 6" },
+    { memberId: "RK107", name: "นายปัญญา เขียวนาค", houseNo: "153/1 หมู่ 6" },
+    { memberId: "RK108", name: "นายเกียรติศักดิ์ จันทร์มูล", houseNo: "154/1 หมู่ 6" },
+    { memberId: "RK109", name: "นายจำรัส ปัญใจ", houseNo: "155 หมู่ 6" },
+    { memberId: "RK110", name: "นางศรีอร ใฝ่ใจ", houseNo: "157 หมู่ 6" },
+    { memberId: "RK111", name: "นางยวงคำ ถิ่นลำปาง", houseNo: "159 หมู่ 6" },
+    { memberId: "RK112", name: "นายวิเชียร ถิ่นลำปาง", houseNo: "159/1 หมู่ 6" },
+    { memberId: "RK113", name: "น.ส.ยุพา ใจดี", houseNo: "160 หมู่ 6" },
+    { memberId: "RK114", name: "นายเกียรติศักดิ์ พลูคำ", houseNo: "162 หมู่ 6" },
+    { memberId: "RK115", name: "น.ส.น้อย บุญธิวงค์", houseNo: "162/1 หมู่ 6" },
+    { memberId: "RK116", name: "น.ส.พวงผกา จันทร์มูล", houseNo: "163 หมู่ 6" },
+    { memberId: "RK117", name: "นายปริญญา ยานะถนอม", houseNo: "164 หมู่ 6" },
+    { memberId: "RK118", name: "นางสุพรรณ์ เรือนมูล", houseNo: "165 หมู่ 6" },
+    { memberId: "RK119", name: "นางคำหมาย สมคิด", houseNo: "166 หมู่ 6" },
+    { memberId: "RK120", name: "นางอาลิษา กอเตอะ", houseNo: "167 หมู่ 6" },
+    { memberId: "RK121", name: "นางวิภาวดี ถิ่นลำปาง", houseNo: "168 หมู่ 6" },
+    { memberId: "RK122", name: "นายศรีนวล วงค์ขัติย์", houseNo: "169 หมู่ 6" },
+    { memberId: "RK123", name: "น.ส.สุภาวดี วังมูล", houseNo: "169/1 หมู่ 6" },
+    { memberId: "RK124", name: "น.ส.ทองสุข ค้านาค", houseNo: "174 หมู่ 6" },
+    { memberId: "RK125", name: "นายสม ขัติย์วงศ์", houseNo: "177 หมู่ 6" },
+    { memberId: "RK126", name: "นายสงัด ศรีไชยอินทร์", houseNo: "178 หมู่ 6" },
+    { memberId: "RK127", name: "นายมิตร ผัดดี", houseNo: "179 หมู่ 6" },
+    { memberId: "RK128", name: "นางศรีลา งามจิต", houseNo: "181 หมู่ 6" },
+    { memberId: "RK129", name: "นายธวัชชัย พลูคำ", houseNo: "182 หมู่ 6" },
+    { memberId: "RK130", name: "นายนิยม ละเอียด", houseNo: "184 หมู่ 6" },
+    { memberId: "RK131", name: "นางแสงคล้าย นามจิต", houseNo: "186 หมู่ 6" },
+    { memberId: "RK132", name: "นายสุนทร ปิงเมือง", houseNo: "188 หมู่ 6" },
+    { memberId: "RK133", name: "นายชุมพล ใฝ่ใจ", houseNo: "189 หมู่ 6" },
+    { memberId: "RK134", name: "นางเหลี่ยม สมศรี", houseNo: "192 หมู่ 6" },
+    { memberId: "RK135", name: "นางสมศรี สัตย์สม", houseNo: "193 หมู่ 6" },
+    { memberId: "RK136", name: "นางจุฑามาศ งามจิต", houseNo: "195 หมู่ 6" },
+    { memberId: "RK137", name: "นางยุพา กิ่งก้าน", houseNo: "199 หมู่ 6" },
+    { memberId: "RK138", name: "นายบัว ศรีเมือง", houseNo: "201 หมู่ 6" },
+    { memberId: "RK139", name: "นายอิ่น ฉลาดการ", houseNo: "204 หมู่ 6" },
+    { memberId: "RK140", name: "นางเพ็ญ อิ่นทอง", houseNo: "205 หมู่ 6" },
+    { memberId: "RK141", name: "นางพรศรี ใฝ่ใจ", houseNo: "206 หมู่ 6" },
+    { memberId: "RK142", name: "นายประจักร งานดี", houseNo: "213 หมู่ 6" },
+    { memberId: "RK143", name: "นายวัชร จอมภา", houseNo: "214 หมู่ 6" },
+    { memberId: "RK144", name: "น.ส.อำภา งามจิต", houseNo: "222 หมู่ 6" },
+    { memberId: "RK145", name: "นายบุญช่วย จำปา", houseNo: "223 หมู่ 6" },
+    { memberId: "RK146", name: "นายบุญธรรม สมคิด", houseNo: "226 หมู่ 6" },
+    { memberId: "RK147", name: "นางวาสนา เต", houseNo: "232 หมู่ 6" },
+    { memberId: "RK148", name: "นายภาณุพงศ์ ผัดดี", houseNo: "236 หมู่ 6" },
+    { memberId: "RK149", name: "นายเสมียน ศรีเมือง", houseNo: "237 หมู่ 6" },
+    { memberId: "RK150", name: "นายสง่า จันทร์มูล", houseNo: "238 หมู่ 6" },
+    { memberId: "RK151", name: "นายภาณุพงศ์ ใฝ่ใจ", houseNo: "239 หมู่ 6" },
+    { memberId: "RK152", name: "นายสมบูรณ์ ปิงเมือง", houseNo: "243 หมู่ 6" },
+    { memberId: "RK153", name: "นางนิตยา ใฝ่จิตต์", houseNo: "245 หมู่ 6" },
+    { memberId: "RK154", name: "นางจอมศรี นามจิต", houseNo: "247 หมู่ 6" },
+    { memberId: "RK155", name: "นายชิษณุพงษ์ ฟองทา", houseNo: "274 หมู่ 6" },
+    { memberId: "RK156", name: "นายอริยพล ขัติย์วงศ์", houseNo: "275 หมู่ 6" },
+    { memberId: "RK157", name: "นายศุภลัก สุพยน", houseNo: "278 หมู่ 6" },
+    { memberId: "RK158", name: "น.ส.ศิริลภัศ คำวงษา", houseNo: "281 หมู่ 6" },
+    { memberId: "RK159", name: "นายเกียรติพงษ์ ศักดิ์สูง", houseNo: "282 หมู่ 6" },
+    { memberId: "RK160", name: "น.ส.ไพลิน ใจชื่น", houseNo: "287 หมู่ 6" },
+    { memberId: "RK161", name: "นายพิชัย ใจดี", houseNo: "288 หมู่ 6" },
+    { memberId: "RK162", name: "นางปานหทัย สุวรรณรัตน์", houseNo: "302 หมู่ 6" },
+    { memberId: "RK163", name: "นายปรีชา ผัดดี", houseNo: "308 หมู่ 6" },
+    { memberId: "RK164", name: "นายจิติพันธ์ จำปา", houseNo: "309 หมู่ 6" },
+    { memberId: "RK165", name: "นายนพดล นามวงค์", houseNo: "310 หมู่ 6" },
+    { memberId: "RK166", name: "นายสงวน จันทร์มูล", houseNo: "316 หมู่ 6" },
+    { memberId: "RK167", name: "นางพร พลูคำ", houseNo: "317 หมู่ 6" },
+    { memberId: "RK168", name: "นายทวน ทาฤทธิ์", houseNo: "325 หมู่ 6" },
+    { memberId: "RK169", name: "น.ส.ถนิตา พัฒนกรวณิช", houseNo: "329 หมู่ 6" },
+    { memberId: "RK170", name: "นายสนธยา สารเชื้อ", houseNo: "330 หมู่ 6" },
+    { memberId: "RK171", name: "นายยงหยัด พลูคำ", houseNo: "331 หมู่ 6" },
+    { memberId: "RK172", name: "น.ส.อรพินฑ์ เครือวัลย์", houseNo: "333 หมู่ 6" },
+    { memberId: "RK173", name: "นายธนารินทร์ ทินนา", houseNo: "336 หมู่ 6" },
+    { memberId: "RK174", name: "นางวาสนา ศรีไชยอินทร์", houseNo: "340 หมู่ 6" },
+    { memberId: "RK175", name: "นางหล้า วงค์ขัติย์", houseNo: "348 หมู่ 6" },
+    { memberId: "RK176", name: "นางญาฐิกา ถิ่นลำปาง", houseNo: "365 หมู่ 6" }
 
-    // รายชื่อที่เหลือให้ต่อในส่วนที่ 2
 ];
 
 // ============================================================
-// 🧠 ตัวแปรข้อมูลสมาชิก
+// 🧠 ตัวแปรเก็บข้อมูลสมาชิก
 // ============================================================
 
 let membersCache = [];
@@ -97,97 +213,89 @@ function sortMembers(members = []) {
 
     return [...members].sort((a, b) => {
 
-        return String(
-            a.memberId || ""
-        ).localeCompare(
-
-            String(
-                b.memberId || ""
-            ),
-
-            undefined,
-
-            {
-                numeric: true,
-                sensitivity: "base"
-            }
-
-        );
+        return String(a.memberId || a.id || "")
+            .localeCompare(
+                String(b.memberId || b.id || ""),
+                "en",
+                { numeric: true }
+            );
 
     });
 
 }
 
 // ============================================================
-// 📥 โหลดรายชื่อสมาชิก
+// 📥 โหลดข้อมูลสมาชิก
+// ถ้า Firebase ยังไม่มีข้อมูล จะใช้รายชื่อ 176 รายนี้
 // ============================================================
 
 async function getRongkhemMembers() {
 
     try {
 
-        const result =
-            await loadData(
-                MEMBERS_COLLECTION
-            );
-
         const firebaseMembers =
-            Array.isArray(result)
-                ? result
-                : [];
+            await loadData(MEMBERS_COLLECTION);
 
         if (
+            Array.isArray(firebaseMembers) &&
             firebaseMembers.length > 0
         ) {
 
-            membersCache =
-                sortMembers(
-                    firebaseMembers.map(
-                        member => ({
+            membersCache = sortMembers(
+                firebaseMembers.map(member => ({
 
-                            ...member,
+                    ...member,
 
-                            houseNo:
+                    memberId:
+                        member.memberId ||
+                        member.id ||
 
-                                member.houseNo ||
+                        `RK${String(member.id || "").padStart(3, "0")}`,
 
-                                member.address ||
+                    houseNo:
+                        member.houseNo ||
+                        member.address ||
+                        "",
 
-                                ""
+                    status:
+                        member.status ||
+                        "active"
 
-                        })
-                    )
-                );
+                }))
+            );
 
             return membersCache;
 
         }
 
-        membersCache =
-            sortMembers(
-                DEFAULT_MEMBERS.map(
-                    member => ({
-                        ...member,
+        membersCache = DEFAULT_MEMBERS.map(member => ({
 
-                        status:
-                            "active"
-                    })
-                )
-            );
+            ...member,
+
+            phone: "",
+
+            status: "active"
+
+        }));
 
         return membersCache;
 
     } catch (error) {
 
         console.error(
-            "❌ โหลดสมาชิกไม่สำเร็จ:",
+            "โหลดข้อมูลสมาชิกไม่สำเร็จ:",
             error
         );
 
-        membersCache =
-            sortMembers(
-                DEFAULT_MEMBERS
-            );
+        membersCache = DEFAULT_MEMBERS.map(member => ({
+
+            ...member,
+
+            phone: "",
+
+            status: "active"
+
+        }));
 
         return membersCache;
 
@@ -196,24 +304,21 @@ async function getRongkhemMembers() {
 }
 
 // ============================================================
-// 🔎 ค้นหาสมาชิกจากรหัส
+// 🔍 ค้นหาสมาชิกจากรหัส
 // ============================================================
 
 function findMemberById(memberId) {
 
-    return membersCache.find(
-        member =>
-
-            String(
-                member.memberId
-            ) === String(memberId)
-
-    ) || null;
+    return membersCache.find(member =>
+        member.memberId === memberId ||
+        member.id === memberId ||
+        member.firestoreId === memberId
+    );
 
 }
 
 // ============================================================
-// 🔎 ค้นหาสมาชิกจากชื่อ
+// 🔍 ค้นหาสมาชิกจากชื่อ
 // ============================================================
 
 function findMemberByName(name) {
@@ -223,16 +328,13 @@ function findMemberByName(name) {
             .trim()
             .toLowerCase();
 
-    return membersCache.find(
-        member =>
+    if (!keyword) return null;
 
-            String(
-                member.name || ""
-            )
+    return membersCache.find(member =>
+        String(member.name || "")
             .toLowerCase()
             .includes(keyword)
-
-    ) || null;
+    );
 
 }
 
@@ -242,15 +344,34 @@ function findMemberByName(name) {
 
 function findMemberByIdOrName(keyword) {
 
-    return (
+    const search =
+        String(keyword || "")
+            .trim()
+            .toLowerCase();
 
-        findMemberById(keyword)
+    if (!search) return null;
 
-        ||
+    return membersCache.find(member => {
 
-        findMemberByName(keyword)
+        return (
+            String(member.memberId || "")
+                .toLowerCase()
+                .includes(search)
 
-    );
+            ||
+
+            String(member.name || "")
+                .toLowerCase()
+                .includes(search)
+
+            ||
+
+            String(member.houseNo || "")
+                .toLowerCase()
+                .includes(search)
+        );
+
+    });
 
 }
 
@@ -260,69 +381,35 @@ function findMemberByIdOrName(keyword) {
 
 function generateMemberId() {
 
-    let max = 0;
+    const numbers = membersCache.map(member => {
 
-    membersCache.forEach(
-        member => {
+        const match =
+            String(member.memberId || "")
+                .match(/\d+/);
 
-            const number =
-                parseInt(
+        return match
+            ? parseInt(match[0], 10)
+            : 0;
 
-                    String(
-                        member.memberId || ""
-                    )
-                    .replace(
-                        "RK",
-                        ""
-                    ),
+    });
 
-                    10
+    const next =
+        Math.max(176, ...numbers) + 1;
 
-                );
-
-            if (
-                !Number.isNaN(number) &&
-                number > max
-            ) {
-
-                max = number;
-
-            }
-
-        }
-    );
-
-    return (
-        "RK" +
-        String(
-            max + 1
-        ).padStart(
-            3,
-            "0"
-        )
-    );
+    return `RK${String(next).padStart(3, "0")}`;
 
 }
 
 // ============================================================
-// ➕ เพิ่มสมาชิกใหม่
+// ➕ เพิ่มสมาชิก
 // ============================================================
 
-async function addRongkhemMember(memberData) {
+async function addRongkhemMember(memberData = {}) {
 
     try {
 
-        const memberId =
-
-            String(
-                memberData.memberId ||
-                generateMemberId()
-            ).trim();
-
         const name =
-            String(
-                memberData.name || ""
-            ).trim();
+            String(memberData.name || "").trim();
 
         const houseNo =
             String(
@@ -332,33 +419,19 @@ async function addRongkhemMember(memberData) {
             ).trim();
 
         const phone =
-            String(
-                memberData.phone || ""
-            ).trim();
+            String(memberData.phone || "").trim();
 
         if (!name) {
 
             throw new Error(
-                "กรุณาระบุชื่อสมาชิก"
+                "กรุณากรอกชื่อสมาชิก"
             );
 
         }
 
-        if (
-            membersCache.some(
-                member =>
-
-                    String(
-                        member.memberId
-                    ) === memberId
-            )
-        ) {
-
-            throw new Error(
-                "รหัสสมาชิกนี้มีอยู่แล้ว"
-            );
-
-        }
+        const memberId =
+            memberData.memberId ||
+            generateMemberId();
 
         const data = {
 
@@ -368,17 +441,19 @@ async function addRongkhemMember(memberData) {
 
             houseNo,
 
-            address:
-                houseNo,
+            address: houseNo,
 
             phone,
 
             status:
+                memberData.status ||
                 "active",
 
             createdAt:
-                new Date()
-                    .toISOString()
+                new Date().toISOString(),
+
+            updatedAt:
+                new Date().toISOString()
 
         };
 
@@ -406,14 +481,16 @@ async function addRongkhemMember(memberData) {
 
             success: true,
 
-            memberId
+            memberId,
+
+            data
 
         };
 
     } catch (error) {
 
         console.error(
-            "❌ เพิ่มสมาชิกไม่สำเร็จ:",
+            "เพิ่มสมาชิกไม่สำเร็จ:",
             error
         );
 
@@ -429,11 +506,15 @@ async function addRongkhemMember(memberData) {
     }
 
 }
+
 // ============================================================
-// ✏️ แก้ไขข้อมูลสมาชิก
+// ✏️ แก้ไขสมาชิก
 // ============================================================
 
-async function updateRongkhemMember(memberId, memberData) {
+async function updateRongkhemMember(
+    memberId,
+    memberData = {}
+) {
 
     try {
 
@@ -448,106 +529,73 @@ async function updateRongkhemMember(memberId, memberData) {
 
         }
 
-        const name =
-            String(
-                memberData.name ||
-                member.name ||
-                ""
-            ).trim();
-
-        const houseNo =
-            String(
-                memberData.houseNo ||
-                memberData.address ||
-                member.houseNo ||
-                member.address ||
-                ""
-            ).trim();
-
-        const phone =
-            String(
-                memberData.phone ||
-                ""
-            ).trim();
-
-        if (!name) {
-
-            throw new Error(
-                "กรุณาระบุชื่อสมาชิก"
-            );
-
-        }
-
         const data = {
 
             ...member,
 
-            name,
+            name:
+                String(
+                    memberData.name ||
+                    member.name
+                ).trim(),
 
-            houseNo,
+            houseNo:
+                String(
+                    memberData.houseNo ||
+                    memberData.address ||
+                    member.houseNo ||
+                    ""
+                ).trim(),
 
-            address:
-                houseNo,
+            phone:
+                String(
+                    memberData.phone ??
+                    member.phone ??
+                    ""
+                ).trim(),
 
-            phone,
+            status:
+                memberData.status ||
+                member.status ||
+                "active",
 
             updatedAt:
-                new Date()
-                    .toISOString()
+                new Date().toISOString()
 
         };
 
+        data.address =
+            data.houseNo;
+
         const documentId =
-
             member.firestoreId ||
-
             member.docId ||
-
             member.id;
 
-        if (documentId) {
+        if (!documentId) {
 
-            const result =
-                await updateData(
-                    MEMBERS_COLLECTION,
-                    documentId,
-                    data
-                );
+            throw new Error(
+                "สมาชิกคนนี้ยังไม่ได้บันทึกใน Firebase"
+            );
 
-            if (
-                result &&
-                result.success === false
-            ) {
+        }
 
-                throw new Error(
-                    result.error ||
-                    "แก้ไขสมาชิกไม่สำเร็จ"
-                );
+        const result =
+            await updateData(
+                MEMBERS_COLLECTION,
+                documentId,
+                data
+            );
 
-            }
+        if (
+            result &&
+            result.success === false
+        ) {
 
-        } else {
-
-            // กรณีเป็นรายชื่อเริ่มต้น
-            // ให้บันทึกเข้า Firebase เป็นสมาชิกใหม่
-
-            const result =
-                await saveData(
-                    MEMBERS_COLLECTION,
-                    data
-                );
-
-            if (
-                result &&
-                result.success === false
-            ) {
-
-                throw new Error(
-                    result.error ||
-                    "บันทึกข้อมูลสมาชิกไม่สำเร็จ"
-                );
-
-            }
+            throw new Error(
+                result.error ||
+                "แก้ไขสมาชิกไม่สำเร็จ"
+            );
 
         }
 
@@ -560,7 +608,7 @@ async function updateRongkhemMember(memberId, memberData) {
     } catch (error) {
 
         console.error(
-            "❌ แก้ไขสมาชิกไม่สำเร็จ:",
+            "แก้ไขสมาชิกไม่สำเร็จ:",
             error
         );
 
@@ -597,17 +645,14 @@ async function deleteRongkhemMember(memberId) {
         }
 
         const documentId =
-
             member.firestoreId ||
-
             member.docId ||
-
             member.id;
 
         if (!documentId) {
 
             throw new Error(
-                "สมาชิกคนนี้ยังไม่มีข้อมูลใน Firebase ไม่สามารถลบได้"
+                "สมาชิกเดิมยังไม่ได้อยู่ใน Firebase กรุณาบันทึกข้อมูลเข้าระบบก่อน"
             );
 
         }
@@ -639,7 +684,7 @@ async function deleteRongkhemMember(memberId) {
     } catch (error) {
 
         console.error(
-            "❌ ลบสมาชิกไม่สำเร็จ:",
+            "ลบสมาชิกไม่สำเร็จ:",
             error
         );
 
@@ -657,7 +702,7 @@ async function deleteRongkhemMember(memberId) {
 }
 
 // ============================================================
-// 🔄 โหลดข้อมูลสมาชิกใหม่
+// 🔄 โหลดข้อมูลใหม่
 // ============================================================
 
 async function refreshMembers() {
@@ -670,38 +715,38 @@ async function refreshMembers() {
 }
 
 // ============================================================
-// ☁️ บันทึกรายชื่อเริ่มต้นเข้า Firebase
-// ใช้ครั้งแรกเมื่อต้องการย้ายรายชื่อทั้งหมด
+// ☁️ นำรายชื่อเริ่มต้น 176 คนเข้า Firebase
+// เรียกใช้ครั้งแรกเพียงครั้งเดียว
 // ============================================================
 
 async function initializeDefaultMembers() {
 
     try {
 
-        const firebaseMembers =
+        const existing =
             await loadData(
                 MEMBERS_COLLECTION
             );
 
         if (
-            Array.isArray(firebaseMembers) &&
-            firebaseMembers.length > 0
+            Array.isArray(existing) &&
+            existing.length > 0
         ) {
 
             membersCache =
-                sortMembers(
-                    firebaseMembers
-                );
+                sortMembers(existing);
 
             return {
 
                 success: true,
 
-                message:
-                    "มีข้อมูลสมาชิกอยู่แล้ว",
+                exists: true,
 
                 count:
-                    membersCache.length
+                    membersCache.length,
+
+                message:
+                    "มีข้อมูลสมาชิกอยู่ในระบบแล้ว"
 
             };
 
@@ -723,15 +768,16 @@ async function initializeDefaultMembers() {
                         address:
                             member.houseNo,
 
-                        phone:
-                            "",
+                        phone: "",
 
                         status:
                             "active",
 
                         createdAt:
-                            new Date()
-                                .toISOString()
+                            new Date().toISOString(),
+
+                        updatedAt:
+                            new Date().toISOString()
 
                     }
                 );
@@ -753,18 +799,18 @@ async function initializeDefaultMembers() {
 
             success: true,
 
-            message:
-                "นำเข้ารายชื่อสมาชิกเรียบร้อย",
-
             count:
-                successCount
+                successCount,
+
+            message:
+                `นำเข้ารายชื่อ ${successCount} รายเรียบร้อย`
 
         };
 
     } catch (error) {
 
         console.error(
-            "❌ นำเข้ารายชื่อสมาชิกไม่สำเร็จ:",
+            "นำเข้ารายชื่อไม่สำเร็จ:",
             error
         );
 
@@ -782,7 +828,7 @@ async function initializeDefaultMembers() {
 }
 
 // ============================================================
-// ⚡ ระบบติดตามข้อมูลสมาชิกแบบ Real-time
+// ⚡ ติดตามข้อมูลสมาชิกแบบ Real-time
 // ============================================================
 
 function subscribeMembers(callback) {
@@ -801,37 +847,18 @@ function subscribeMembers(callback) {
 
                     membersCache =
                         sortMembers(
-                            members.map(
-                                member => ({
-
-                                    ...member,
-
-                                    houseNo:
-
-                                        member.houseNo ||
-
-                                        member.address ||
-
-                                        ""
-
-                                })
-                            )
+                            members
                         );
 
                 } else {
 
                     membersCache =
-                        sortMembers(
-                            DEFAULT_MEMBERS.map(
-                                member => ({
-
-                                    ...member,
-
-                                    status:
-                                        "active"
-
-                                })
-                            )
+                        DEFAULT_MEMBERS.map(
+                            member => ({
+                                ...member,
+                                phone: "",
+                                status: "active"
+                            })
                         );
 
                 }
@@ -854,7 +881,7 @@ function subscribeMembers(callback) {
     } catch (error) {
 
         console.error(
-            "❌ Real-time สมาชิกไม่ทำงาน:",
+            "Real-time สมาชิกไม่ทำงาน:",
             error
         );
 
@@ -876,9 +903,7 @@ function getMembersSummary() {
     const active =
         membersCache.filter(
             member =>
-
-                member.status !==
-                "inactive"
+                member.status !== "inactive"
         ).length;
 
     const inactive =
@@ -897,7 +922,7 @@ function getMembersSummary() {
 }
 
 // ============================================================
-// 🌐 เปิดใช้กับหน้า HTML
+// 🌐 เปิดใช้กับ HTML
 // ============================================================
 
 window.getRongkhemMembers =
@@ -930,8 +955,11 @@ window.initializeDefaultMembers =
 window.getMembersSummary =
     getMembersSummary;
 
+window.subscribeMembers =
+    subscribeMembers;
+
 // ============================================================
-// 📤 Export สำหรับไฟล์ JavaScript อื่น
+// 📤 Export
 // ============================================================
 
 export {
@@ -963,28 +991,24 @@ export {
 };
 
 // ============================================================
-// 🚀 เริ่มต้นข้อมูล
+// 🚀 เริ่มต้นระบบ
 // ============================================================
 
 refreshMembers()
-    .then(
-        () => {
+    .then(() => {
 
-            console.log(
-                "👥 ระบบสมาชิกพร้อมใช้งาน:",
-                membersCache.length,
-                "ราย"
-            );
+        console.log(
+            "👥 ระบบสมาชิกพร้อมใช้งาน:",
+            membersCache.length,
+            "ราย"
+        );
 
-        }
-    )
-    .catch(
-        error => {
+    })
+    .catch(error => {
 
-            console.error(
-                "❌ เริ่มระบบสมาชิกไม่สำเร็จ:",
-                error
-            );
+        console.error(
+            "❌ เริ่มระบบสมาชิกไม่สำเร็จ:",
+            error
+        );
 
-        }
-    );
+    });
