@@ -1476,3 +1476,94 @@ window.addEventListener(
     }
 
 );
+// ==========================================
+// REAL-TIME LISTENER
+// Firebase Firestore
+// ==========================================
+
+import {
+  onSnapshot
+} from
+"https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+
+export function subscribeData(
+  collectionName,
+  callback
+) {
+
+  try {
+
+    const collectionRef =
+      collection(
+        db,
+        collectionName
+      );
+
+
+    const unsubscribe =
+      onSnapshot(
+
+        collectionRef,
+
+        snapshot => {
+
+          const list = [];
+
+
+          snapshot.forEach(
+            item => {
+
+              list.push({
+
+                id:
+                  item.id,
+
+                ...item.data()
+
+              });
+
+            }
+          );
+
+
+          console.log(
+            "🔄 Real-time:",
+            collectionName,
+            list.length,
+            "รายการ"
+          );
+
+
+          callback(list);
+
+        },
+
+        error => {
+
+          console.error(
+            "❌ Real-time Firebase Error:",
+            collectionName,
+            error
+          );
+
+        }
+
+      );
+
+
+    return unsubscribe;
+
+  } catch (error) {
+
+    console.error(
+      "❌ ไม่สามารถเปิด Real-time ได้:",
+      error
+    );
+
+
+    return () => {};
+
+  }
+
+}
