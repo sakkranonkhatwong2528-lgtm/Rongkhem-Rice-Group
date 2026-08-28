@@ -1,0 +1,151 @@
+// ==========================================
+// ปิดงานศพ
+// บันทึกสมาชิกค้างส่ง + ปิดสถานะ Firebase
+// ==========================================
+
+async function finishFuneral() {
+
+    const active = getActiveFuneral();
+
+    if (!active) {
+
+        notify("ไม่มีงานศพที่เปิดอยู่");
+
+        return;
+
+    }
+
+
+    const confirmFinish = confirm(
+
+        `ยืนยันการปิดงานศพ\n\n` +
+        `${active.name}\n\n` +
+        `สมาชิกที่ยังไม่ส่งข้าวจะถูกบันทึกเป็นค้างส่ง`
+
+    );
+
+
+    if (!confirmFinish) {
+
+        return;
+
+    }
+
+
+    try {
+
+        // --------------------------------
+        // หาสมาชิกที่ยังไม่ส่ง
+        // --------------------------------
+
+        const pending = pendingMembers();
+
+
+        // --------------------------------
+        // บันทึกจำนวนค้างส่งของสมาชิก
+        // --------------------------------
+
+        for (const member of pending) {
+
+            member.pending =
+                Number(member.pending || 0) + 1;
+
+
+            // ถ้ามี Firebase Document ID
+            if (member.firestoreId) {
+
+                await updateData(
+                    "members",
+                    member.firestoreId,
+                    {
+                        pending: member.pending
+                    }
+                );
+
+            }
+
+        }
+
+
+        // --------------------------------
+        // ปิดสถานะงานศพ
+        // --------------------------------
+
+        active.active = false;
+
+        active.status = "finished";
+
+        active.finishedAt =
+            new Date().toISOString();
+
+
+        // --------------------------------
+        // บันทึกงานศพลง Firebase
+        // --------------------------------
+
+        if (active.firestoreId) {
+
+            await updateData(
+                "funerals",
+                active.firestoreId,
+                {
+                    active: false,
+                    status: "finished",
+                    finishedAt:
+                        active.finishedAt
+                }
+            );
+
+        }
+
+
+        // --------------------------------
+        // บันทึกกิจกรรม
+        // --------------------------------
+
+        addActivity(
+            "ปิดงานศพ " +
+            active.name
+        );
+
+
+        // --------------------------------
+        // รีเฟรชข้อมูล
+        // --------------------------------
+
+        if (
+            typeof loadDataFromFirebase ===
+            "function"
+        ) {
+
+            await loadDataFromFirebase();
+
+        }
+
+
+        loadReceiveMembers();
+
+        updateDashboard();
+
+
+        notify(
+            "ปิดงานศพเรียบร้อยแล้ว"
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "ปิดงานศพไม่สำเร็จ:",
+            error
+        );
+
+
+        alert(
+            "เกิดข้อผิดพลาดในการปิดงานศพ\n" +
+            error.message
+        );
+
+    }
+
+}
