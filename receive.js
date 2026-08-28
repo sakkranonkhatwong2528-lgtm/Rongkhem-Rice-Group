@@ -1,585 +1,1306 @@
 // ============================================================
-// 🌾 RECEIVE.JS
+// 🌾 receive.js
 // ระบบรับข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
-// รายชื่อสมาชิก RK001 - RK176
+// ใช้ Firebase + รายชื่อสำรองจาก members.js
 // ============================================================
 
-// ========================
-// 👥 รายชื่อสมาชิก
-// ========================
+import {
+    saveData,
+    loadData,
+    updateData,
+    subscribeData
+} from "./js/database.js";
 
-const DEFAULT_MEMBERS = [
-["RK001","นายจักร์กวัส ประพลรัตนัง","2 หมู่ 6"],
-["RK002","นางแสงเพียร วงค์ขัติย์","6 หมู่ 6"],
-["RK003","นายยนต์ ปิงเมือง","7 หมู่ 6"],
-["RK004","นางสมศรี ปิงเมือง","8 หมู่ 6"],
-["RK005","นายชัด ปิงเมือง","10 หมู่ 6"],
-["RK006","นายปิ๊ก ขัติย์วงศ์","12 หมู่ 6"],
-["RK007","นายยรรยง ผัดดี","14/1 หมู่ 6"],
-["RK008","นายหมื่น วังมูล","15 หมู่ 6"],
-["RK009","นายโกวัฒธฤทธิ์ ประพลรัตนัง","17 หมู่ 6"],
-["RK010","นายภาณุวัฒน์ บุญยา","20 หมู่ 6"],
-["RK011","นายสมอน ศรีเมือง","22 หมู่ 6"],
-["RK012","นายพรชัย ปัญใจ","29 หมู่ 6"],
-["RK013","นายชูชาติ จำปา","30 หมู่ 6"],
-["RK014","นางน้อย วิศรีใจ","31 หมู่ 6"],
-["RK015","นายอินทร์ ถิ่นลำปาง","32 หมู่ 6"],
-["RK016","นายคำตั๋น วังมูล","34 หมู่ 6"],
-["RK017","นางวิไลพร วังมูล","35 หมู่ 6"],
-["RK018","นายบุญ ไฝ่จิตต์","36 หมู่ 6"],
-["RK019","นายบุญช่วย เครือวัลย์","37 หมู่ 6"],
-["RK020","นายมา วังมูล","38 หมู่ 6"],
-["RK021","นายสมาน วังมูล","39 หมู่ 6"],
-["RK022","นายวัชร ถิ่นลำปาง","40 หมู่ 6"],
-["RK023","นางพิมพร ใฝ่ใจ","41 หมู่ 6"],
-["RK024","นางถวิล ใฝ่ใจ","42 หมู่ 6"],
-["RK025","นายบรรลัง ใฝ่ใจ","42/1 หมู่ 6"],
-["RK026","นายอิ่น จักจุ่ม","46 หมู่ 6"],
-["RK027","นางทองดี วงศ์ขัติย์","47 หมู่ 6"],
-["RK028","นายชุม ใฝ่ใจ","49 หมู่ 6"],
-["RK029","นางทองดี พลูคำ","50 หมู่ 6"],
-["RK030","นายผัด ทาแก้ว","51 หมู่ 6"],
-["RK031","นางสายทอง ชุ่มธิ","51/1 หมู่ 6"],
-["RK032","นายอดิศักดิ์ ขัติธิ","52 หมู่ 6"],
-["RK033","นายนพคุณ จอมภา","53 หมู่ 6"],
-["RK034","นายพิพัฒน์ ใฝ่ใจ","56 หมู่ 6"],
-["RK035","น.ส.เตือนธิวา ใฝ่ใจ","58 หมู่ 6"],
-["RK036","นางเหล็ง วิศรีใจ","60 หมู่ 6"],
-["RK037","นายบุญเสริม วิศรีใจ","60/1 หมู่ 6"],
-["RK038","น.ส.กรพิน กาวิน","61 หมู่ 6"],
-["RK039","นายบุญเรือง ถิ่นลำปาง","62 หมู่ 6"],
-["RK040","นางวิไล ถิ่นลำปาง","62/2 หมู่ 6"],
-["RK041","นายวิทยา งามจิต","64 หมู่ 6"],
-["RK042","นายแสวง ศรีไชยอินทร์","67 หมู่ 6"],
-["RK043","นางอำไพวิทย์ ปัญญา","68 หมู่ 6"],
-["RK044","นางเลข ใฝ่จิตร์","69 หมู่ 6"],
-["RK045","นายยก ถิ่นลำปาง","70 หมู่ 6"],
-["RK046","น.ส.ผ่องศรี ปัญใจ","72 หมู่ 6"],
-["RK047","น.ส.บรรณารักษ์ พลูคำ","73 หมู่ 6"],
-["RK048","นางสุดารัตน์ จักจุ่ม","73/1 หมู่ 6"],
-["RK049","นายธนวัฒน์ ปัญใจ","74 หมู่ 6"],
-["RK050","นายแก้วมูล ทินนา","75 หมู่ 6"],
-["RK051","นางหล้า ใฝ่ใจ","76 หมู่ 6"],
-["RK052","นายสุทัศน์ ปัญใจ","79/1 หมู่ 6"],
-["RK053","นายผล งามจิตร","82 หมู่ 6"],
-["RK054","นางเครือวัลย์ บุญธิวงค์","84 หมู่ 6"],
-["RK055","นางเป็ง ใฝ่จิต","85 หมู่ 6"],
-["RK056","นายพัสกร งามจิต","86 หมู่ 6"],
-["RK057","น.ส.วิภารัตน์ กันทะวัง","88 หมู่ 6"],
-["RK058","นางบุญปั๋น ทาทอง","89 หมู่ 6"],
-["RK059","นางฝน งามจิต","91 หมู่ 6"],
-["RK060","นายวุฒิภัทร เตชะวงค์","91/1 หมู่ 6"],
-["RK061","นายนวล ศรีเมือง","93 หมู่ 6"],
-["RK062","นายทิน วิศรีใจ","96 หมู่ 6"],
-["RK063","นายธีระพันธ์ ถิ่นลำปาง","96/1 หมู่ 6"],
-["RK064","นายเสาร์แก้ว คิดอ่าน","98 หมู่ 6"],
-["RK065","นายผัด เครือนวล","100 หมู่ 6"],
-["RK066","นายปัน ผัดดี","101 หมู่ 6"],
-["RK067","นายลักษ์ คำวงษา","103 หมู่ 6"],
-["RK068","นายไหล่ ศรีเมือง","104 หมู่ 6"],
-["RK069","นายพิชัย ปัญใจ","105 หมู่ 6"],
-["RK070","นางจันทร์เพ็ญ ใฝ่ใจ","106 หมู่ 6"],
-["RK071","นายสรชัย ใฝ่ใจ","106/1 หมู่ 6"],
-["RK072","นายวรวรรธน์ ลำพูน","109 หมู่ 6"],
-["RK073","นางป้อ ใฝ่ใจ","111 หมู่ 6"],
-["RK074","นางอ่อน จักจุ่ม","112 หมู่ 6"],
-["RK075","นายยนต์ บุญธิวงค์","112/1 หมู่ 6"],
-["RK076","นางขันคำ จันทวงศ์","113 หมู่ 6"],
-["RK077","นายต่วน ทาทอง","114 หมู่ 6"],
-["RK078","นายธวัชชัย บุญเก่ง","116 หมู่ 6"],
-["RK079","นายผล วิศรีใจ","117 หมู่ 6"],
-["RK080","นางประมวลศรี ถิ่นลำปาง","80 หมู่ 6"],
-["RK081","นางจันทร์ทิพย์ ถิ่นลำปาง","118 หมู่ 6"],
-["RK082","นายอัครวัฒน์ วริพัฒผัดดี","119 หมู่ 6"],
-["RK083","นายสุพนธ์ นาแพร่","121 หมู่ 6"],
-["RK084","นายบุญศรี ศรีคำ","125 หมู่ 6"],
-["RK085","นางหวิง นามวงค์","126 หมู่ 6"],
-["RK086","นายกิตติศักดิ์ นามจิต","130 หมู่ 6"],
-["RK087","นายสุนิตย์ ไข่หนู","130/1 หมู่ 6"],
-["RK088","นางวิไล ใจชื่น","131 หมู่ 6"],
-["RK089","นายนิกร งามจิต","132 หมู่ 6"],
-["RK090","นายประสิทธิ์ วงค์ขัติย์","136 หมู่ 6"],
-["RK091","นายเม็ด งามจิต","137 หมู่ 6"],
-["RK092","นายส่ง ปิงเมือง","138 หมู่ 6"],
-["RK093","นายบุญศักดิ์ ลำพูน","139 หมู่ 6"],
-["RK094","นายวีระ นามจิตต์","140 หมู่ 6"],
-["RK095","นายสิงห์ธนู วงค์ขัติย์","141 หมู่ 6"],
-["RK096","นายสุทัศน์ ตุ่นคำ","142 หมู่ 6"],
-["RK097","นายเขียน ศรีเมือง","143 หมู่ 6"],
-["RK098","นางลาวัลย์ ปันใจ","144 หมู่ 6"],
-["RK099","นายบุญธรรม ศรีเมือง","145 หมู่ 6"],
-["RK100","นางทับ บุญรมย์","147 หมู่ 6"],
-["RK101","น.ส.เนียม ศรีเมือง","148 หมู่ 6"],
-["RK102","น.ส.สุทัตตา พลูคำ","148/1 หมู่ 6"],
-["RK103","นายผล ไชยยศ","149 หมู่ 6"],
-["RK104","นายศักดิ์ จันทร์มูล","151/1 หมู่ 6"],
-["RK105","น.ส.นิติการณ์ จันทร์มูล","152 หมู่ 6"],
-["RK106","นางสายใจ ธรรมสาร","153 หมู่ 6"],
-["RK107","นายปัญญา เขียวนาค","153/1 หมู่ 6"],
-["RK108","นายเกียรติศักดิ์ จันทร์มูล","154/1 หมู่ 6"],
-["RK109","นายจำรัส ปัญใจ","155 หมู่ 6"],
-["RK110","นางศรีอร ใฝ่ใจ","157 หมู่ 6"],
-["RK111","นางยวงคำ ถิ่นลำปาง","159 หมู่ 6"],
-["RK112","นายวิเชียร ถิ่นลำปาง","159/1 หมู่ 6"],
-["RK113","น.ส.ยุพา ใจดี","160 หมู่ 6"],
-["RK114","นายเกียรติศักดิ์ พลูคำ","162 หมู่ 6"],
-["RK115","น.ส.น้อย บุญธิวงค์","162/1 หมู่ 6"],
-["RK116","น.ส.พวงผกา จันทร์มูล","163 หมู่ 6"],
-["RK117","นายปริญญา ยานะถนอม","164 หมู่ 6"],
-["RK118","นางสุพรรณ์ เรือนมูล","165 หมู่ 6"],
-["RK119","นางคำหมาย สมคิด","166 หมู่ 6"],
-["RK120","นางอาลิษา กอเตอะ","167 หมู่ 6"],
-["RK121","นางวิภาวดี ถิ่นลำปาง","168 หมู่ 6"],
-["RK122","นายศรีนวล วงค์ขัติย์","169 หมู่ 6"],
-["RK123","น.ส.สุภาวดี วังมูล","169/1 หมู่ 6"],
-["RK124","น.ส.ทองสุข ค้านาค","174 หมู่ 6"],
-["RK125","นายสม ขัติย์วงศ์","177 หมู่ 6"],
-["RK126","นายสงัด ศรีไชยอินทร์","178 หมู่ 6"],
-["RK127","นายมิตร ผัดดี","179 หมู่ 6"],
-["RK128","นางศรีลา งามจิต","181 หมู่ 6"],
-["RK129","นายธวัชชัย พลูคำ","182 หมู่ 6"],
-["RK130","นายนิยม ละเอียด","184 หมู่ 6"],
-["RK131","นางแสงคล้าย นามจิต","186 หมู่ 6"],
-["RK132","นายสุนทร ปิงเมือง","188 หมู่ 6"],
-["RK133","นายชุมพล ใฝ่ใจ","189 หมู่ 6"],
-["RK134","นางเหลี่ยม สมศรี","192 หมู่ 6"],
-["RK135","นางสมศรี สัตย์สม","193 หมู่ 6"],
-["RK136","นางจุฑามาศ งามจิต","195 หมู่ 6"],
-["RK137","นางยุพา กิ่งก้าน","199 หมู่ 6"],
-["RK138","นายบัว ศรีเมือง","201 หมู่ 6"],
-["RK139","นายอิ่น ฉลาดการ","204 หมู่ 6"],
-["RK140","นางเพ็ญ อิ่นทอง","205 หมู่ 6"],
-["RK141","นางพรศรี ใฝ่ใจ","206 หมู่ 6"],
-["RK142","นายประจักร งานดี","213 หมู่ 6"],
-["RK143","นายวัชร จอมภา","214 หมู่ 6"],
-["RK144","น.ส.อำภา งามจิต","222 หมู่ 6"],
-["RK145","นายบุญช่วย จำปา","223 หมู่ 6"],
-["RK146","นายบุญธรรม สมคิด","226 หมู่ 6"],
-["RK147","นางวาสนา เต","232 หมู่ 6"],
-["RK148","นายภาณุพงศ์ ผัดดี","236 หมู่ 6"],
-["RK149","นายเสมียน ศรีเมือง","237 หมู่ 6"],
-["RK150","นายสง่า จันทร์มูล","238 หมู่ 6"],
-["RK151","นายภาณุพงศ์ ใฝ่ใจ","239 หมู่ 6"],
-["RK152","นายสมบูรณ์ ปิงเมือง","243 หมู่ 6"],
-["RK153","นางนิตยา ใฝ่จิตต์","245 หมู่ 6"],
-["RK154","นางจอมศรี นามจิต","247 หมู่ 6"],
-["RK155","นายชิษณุพงษ์ ฟองทา","274 หมู่ 6"],
-["RK156","นายอริยพล ขัติย์วงศ์","275 หมู่ 6"],
-["RK157","นายศุภลัก สุพยน","278 หมู่ 6"],
-["RK158","น.ส.ศิริลภัศ คำวงษา","281 หมู่ 6"],
-["RK159","นายเกียรติพงษ์ ศักดิ์สูง","282 หมู่ 6"],
-["RK160","น.ส.ไพลิน ใจชื่น","287 หมู่ 6"],
-["RK161","นายพิชัย ใจดี","288 หมู่ 6"],
-["RK162","นางปานหทัย สุวรรณรัตน์","302 หมู่ 6"],
-["RK163","นายปรีชา ผัดดี","308 หมู่ 6"],
-["RK164","นายจิติพันธ์ จำปา","309 หมู่ 6"],
-["RK165","นายนพดล นามวงค์","310 หมู่ 6"],
-["RK166","นายสงวน จันทร์มูล","316 หมู่ 6"],
-["RK167","นางพร พลูคำ","317 หมู่ 6"],
-["RK168","นายทวน ทาฤทธิ์","325 หมู่ 6"],
-["RK169","น.ส.ถนิตา พัฒนกรวณิช","329 หมู่ 6"],
-["RK170","นายสนธยา สารเชื้อ","330 หมู่ 6"],
-["RK171","นายยงหยัด พลูคำ","331 หมู่ 6"],
-["RK172","น.ส.อรพินฑ์ เครือวัลย์","333 หมู่ 6"],
-["RK173","นายธนารินทร์ ทินนา","336 หมู่ 6"],
-["RK174","นางวาสนา ศรีไชยอินทร์","340 หมู่ 6"],
-["RK175","นางหล้า วงค์ขัติย์","348 หมู่ 6"],
-["RK176","นางญาฐิกา ถิ่นลำปาง","365 หมู่ 6"]
-].map(([id, name, houseNo]) => ({
-    id,
-    memberId: id,
-    name,
-    houseNo,
-    phone: ""
-}));
+import {
+    getRongkhemMembers,
+    subscribeMembers
+} from "./members.js";
 
+const MEMBERS_COLLECTION = "members";
+const FUNERALS_COLLECTION = "funerals";
+const DELIVERIES_COLLECTION = "deliveries";
+const ACTIVITIES_COLLECTION = "activities";
 
-// ========================
-// 📦 ข้อมูลการรับข้าว
-// ========================
+let receiveMembers = [];
+let receiveFunerals = [];
+let receiveDeliveries = [];
 
-let receiveMembers = [...DEFAULT_MEMBERS];
+let unsubscribeMembers = null;
+let unsubscribeFunerals = null;
+let unsubscribeDeliveries = null;
 
-let receiveHistory = JSON.parse(
-    localStorage.getItem("rongkhem_rice_history") || "[]"
-);
+function safeArray(data) {
+    return Array.isArray(data) ? data : [];
+}
 
-let currentFuneral = JSON.parse(
-    localStorage.getItem("rongkhem_current_funeral") || "null"
-);
-
-
-// ========================
-// 🔄 โหลดระบบ
-// ========================
-
-function loadReceiveData() {
-    receiveMembers = [...DEFAULT_MEMBERS];
-
-    loadReceiveMembers();
-    loadHistory();
-    updateSummary();
-
-    console.log(
-        "🌾 โหลดสมาชิกสำเร็จ:",
-        receiveMembers.length,
-        "ราย"
+function getMemberId(member) {
+    return String(
+        member?.memberId ||
+        member?.id ||
+        ""
     );
 }
 
+function getMemberDocumentId(member) {
 
-// ========================
-// 📊 สรุปข้อมูล
-// ========================
+    const firestoreId =
+        member?.firestoreId ||
+        member?.docId;
 
-function updateSummary() {
+    if (
+        firestoreId &&
+        !String(firestoreId).startsWith("local-")
+    ) {
+        return firestoreId;
+    }
 
-    const total = receiveMembers.length;
+    return null;
+}
+
+function getFuneralId(funeral) {
+    return String(
+        funeral?.id ||
+        funeral?.funeralId ||
+        funeral?.firestoreId ||
+        ""
+    );
+}
+
+function getHouseNo(member) {
+    return (
+        member?.address ||
+        member?.houseNo ||
+        "-"
+    );
+}
+
+function sortMembers(members) {
+    return [...safeArray(members)].sort(
+        (a, b) => {
+            return getMemberId(a).localeCompare(
+                getMemberId(b),
+                undefined,
+                {
+                    numeric: true,
+                    sensitivity: "base"
+                }
+            );
+        }
+    );
+}
+
+// ============================================================
+// 🔄 โหลดข้อมูลทั้งหมด
+// ============================================================
+
+async function loadReceiveData() {
+
+    try {
+
+        const [
+            members,
+            funerals,
+            deliveries
+        ] = await Promise.all([
+
+            getRongkhemMembers(),
+
+            loadData(FUNERALS_COLLECTION),
+
+            loadData(DELIVERIES_COLLECTION)
+
+        ]);
+
+        receiveMembers =
+            sortMembers(members);
+
+        receiveFunerals =
+            safeArray(funerals);
+
+        receiveDeliveries =
+            safeArray(deliveries);
+
+        console.log(
+            "👥 สมาชิก:",
+            receiveMembers.length
+        );
+
+        loadReceiveMembers();
+
+        loadHistory();
+
+        updateReceiveSummary();
+
+    } catch (error) {
+
+        console.error(
+            "❌ โหลดข้อมูลระบบรับข้าวไม่สำเร็จ:",
+            error
+        );
+
+        try {
+
+            receiveMembers =
+                sortMembers(
+                    await getRongkhemMembers()
+                );
+
+        } catch (memberError) {
+
+            console.error(
+                "❌ โหลดสมาชิกสำรองไม่สำเร็จ:",
+                memberError
+            );
+
+            receiveMembers = [];
+
+        }
+
+        loadReceiveMembers();
+
+        loadHistory();
+
+        updateReceiveSummary();
+
+    }
+
+}
+
+// ============================================================
+// ⚰️ งานศพที่กำลังเปิด
+// ============================================================
+
+function getActiveReceiveFuneral() {
+
+    return receiveFunerals.find(
+        funeral =>
+
+            funeral.active === true ||
+
+            funeral.status === "active" ||
+
+            funeral.status === "กำลังดำเนินการ"
+
+    ) || null;
+
+}
+
+// ============================================================
+// 🌾 ตรวจสอบว่าสมาชิกส่งข้าวแล้วหรือยัง
+// ============================================================
+
+function hasReceivedRice(
+    memberId,
+    funeral
+) {
+
+    if (!funeral) {
+        return false;
+    }
+
+    const funeralId =
+        getFuneralId(funeral);
+
+    return receiveDeliveries.some(
+        delivery =>
+
+            String(
+                delivery.funeralId || ""
+            )
+            ===
+            funeralId
+
+            &&
+
+            String(
+                delivery.memberId || ""
+            )
+            ===
+            String(memberId)
+
+    );
+
+}
+
+// ============================================================
+// 📊 อัปเดตตัวเลขสรุป
+// ============================================================
+
+function updateReceiveSummary() {
+
+    const active =
+        getActiveReceiveFuneral();
+
+    const total =
+        receiveMembers.length;
 
     let received = 0;
 
-    if (currentFuneral) {
-        received = receiveHistory.filter(
-            item => item.funeralId === currentFuneral.id
-        ).length;
+    if (active) {
+
+        received =
+            receiveMembers.filter(
+                member =>
+
+                    hasReceivedRice(
+                        getMemberId(member),
+                        active
+                    )
+
+            ).length;
+
     }
 
-    const pending = total - received;
+    const pending =
+        Math.max(
+            0,
+            total - received
+        );
 
     const totalElement =
-        document.getElementById("totalMembers");
+
+        document.getElementById(
+            "totalMembers"
+        )
+
+        ||
+
+        document.getElementById(
+            "totalCount"
+        );
 
     const receivedElement =
-        document.getElementById("receivedCount");
+
+        document.getElementById(
+            "receivedCount"
+        )
+
+        ||
+
+        document.getElementById(
+            "receivedMembers"
+        );
 
     const pendingElement =
-        document.getElementById("pendingCount");
+
+        document.getElementById(
+            "pendingCount"
+        )
+
+        ||
+
+        document.getElementById(
+            "pendingMembers"
+        );
 
     if (totalElement) {
-        totalElement.textContent = total;
+
+        totalElement.textContent =
+            total;
+
     }
 
     if (receivedElement) {
-        receivedElement.textContent = received;
+
+        receivedElement.textContent =
+            received;
+
     }
 
     if (pendingElement) {
-        pendingElement.textContent = pending;
+
+        pendingElement.textContent =
+            pending;
+
     }
+
 }
 
-
-// ========================
-// 👥 แสดงสมาชิก
-// ========================
+// ============================================================
+// 👥 โหลดตารางสมาชิก
+// ============================================================
 
 function loadReceiveMembers() {
 
     const tbody =
-        document.getElementById("receiveTable");
+        document.getElementById(
+            "receiveTable"
+        );
 
     if (!tbody) {
-        console.error("ไม่พบ receiveTable");
         return;
     }
 
     tbody.innerHTML = "";
 
-    receiveMembers.forEach((member, index) => {
-
-        const received =
-            currentFuneral &&
-            receiveHistory.some(
-                item =>
-                    item.memberId === member.id &&
-                    item.funeralId === currentFuneral.id
-            );
-
-        let status;
-        let button;
-
-        if (!currentFuneral) {
-
-            status =
-                `<span>⚪ รอเปิดงานศพ</span>`;
-
-            button =
-                `<button disabled>
-                    รอเปิดงาน
-                </button>`;
-
-        } else if (received) {
-
-            status =
-                `<span>🟢 รับแล้ว</span>`;
-
-            button =
-                `<button disabled>
-                    ✓ รับแล้ว
-                </button>`;
-
-        } else {
-
-            status =
-                `<span>🔴 ยังไม่ส่ง</span>`;
-
-            button =
-                `<button onclick="receiveRice('${member.id}')">
-                    🌾 รับข้าวสาร
-                </button>`;
-        }
-
-        tbody.innerHTML += `
-            <tr>
-                <td>${index + 1}</td>
-                <td>${member.houseNo}</td>
-                <td>${member.name}</td>
-                <td>${member.phone || "-"}</td>
-                <td>${status}</td>
-                <td>${button}</td>
-            </tr>
-        `;
-    });
-}
-
-
-// ========================
-// 🌾 รับข้าวสาร
-// ========================
-
-function receiveRice(memberId) {
-
-    if (!currentFuneral) {
-
-        alert("⚠️ กรุณาเปิดงานศพก่อน");
-
-        return;
-    }
-
-    const member =
-        receiveMembers.find(
-            item => item.id === memberId
-        );
-
-    if (!member) {
-
-        alert("ไม่พบสมาชิก");
-
-        return;
-    }
-
-    const alreadyReceived =
-        receiveHistory.some(
-            item =>
-                item.memberId === memberId &&
-                item.funeralId === currentFuneral.id
-        );
-
-    if (alreadyReceived) {
-
-        alert("สมาชิกคนนี้รับข้าวแล้ว");
-
-        return;
-    }
-
-    const confirmReceive =
-        confirm(
-            `ยืนยันรับข้าวสาร\n\n` +
-            `${member.name}\n` +
-            `บ้านเลขที่ ${member.houseNo}\n\n` +
-            `จำนวน 1 ถุง`
-        );
-
-    if (!confirmReceive) return;
-
-    receiveHistory.push({
-        id: "RC" + Date.now(),
-        memberId: member.id,
-        memberName: member.name,
-        houseNo: member.houseNo,
-        funeralId: currentFuneral.id,
-        funeralName: currentFuneral.name,
-        quantity: 1,
-        receivedDate: new Date().toISOString()
-    });
-
-    localStorage.setItem(
-        "rongkhem_rice_history",
-        JSON.stringify(receiveHistory)
-    );
-
-    loadReceiveMembers();
-    loadHistory();
-    updateSummary();
-
-    alert("✅ บันทึกการรับข้าวสารเรียบร้อย");
-}
-
-
-// ========================
-// 📜 ประวัติ
-// ========================
-
-function loadHistory() {
-
-    const tbody =
-        document.getElementById("historyTable");
-
-    if (!tbody) return;
-
-    tbody.innerHTML = "";
-
-    const history =
-        [...receiveHistory].reverse();
-
-    if (history.length === 0) {
+    if (
+        receiveMembers.length === 0
+    ) {
 
         tbody.innerHTML = `
             <tr>
-                <td colspan="5">
-                    ยังไม่มีประวัติการรับข้าวสาร
+                <td
+                    colspan="6"
+                    style="
+                        text-align:center;
+                        padding:25px;
+                    "
+                >
+                    ⚠️ ไม่พบรายชื่อสมาชิก
                 </td>
             </tr>
         `;
 
         return;
+
     }
 
-    history.forEach((item, index) => {
+    const active =
+        getActiveReceiveFuneral();
 
-        const date =
-            new Date(
-                item.receivedDate
-            ).toLocaleDateString("th-TH");
+    receiveMembers.forEach(
+        (member, index) => {
 
-        tbody.innerHTML += `
-            <tr>
-                <td>${index + 1}</td>
-                <td>${item.memberName}</td>
-                <td>${item.funeralName || "-"}</td>
-                <td>${date}</td>
-                <td>${item.quantity} ถุง</td>
-            </tr>
-        `;
-    });
+            const memberId =
+                getMemberId(member);
+
+            const received =
+                active
+
+                    ?
+
+                    hasReceivedRice(
+                        memberId,
+                        active
+                    )
+
+                    :
+
+                    false;
+
+            let statusHtml = "";
+            let actionHtml = "";
+
+            if (!active) {
+
+                statusHtml = `
+                    <span
+                        class="status pending"
+                    >
+                        รอเปิดงานศพ
+                    </span>
+                `;
+
+                actionHtml = `
+                    <span style="
+                        color:#777;
+                    ">
+                        -
+                    </span>
+                `;
+
+            }
+
+            else if (received) {
+
+                statusHtml = `
+                    <span
+                        class="status normal"
+                    >
+                        ✓ ส่งแล้ว
+                    </span>
+                `;
+
+                actionHtml = `
+                    <span style="
+                        color:#15803d;
+                        font-weight:bold;
+                    ">
+                        ✓ รับแล้ว
+                    </span>
+                `;
+
+            }
+
+            else {
+
+                statusHtml = `
+                    <span
+                        class="status pending"
+                    >
+                        รอส่ง
+                    </span>
+                `;
+
+                actionHtml = `
+                    <button
+                        class="btn btn-success"
+                        onclick="receiveRice('${memberId}')"
+                    >
+                        🌾 รับข้าวสาร
+                    </button>
+                `;
+
+            }
+
+            tbody.innerHTML += `
+
+                <tr>
+
+                    <td>
+                        ${index + 1}
+                    </td>
+
+                    <td>
+                        ${getHouseNo(member)}
+                    </td>
+
+                    <td>
+                        ${member.name || "-"}
+                    </td>
+
+                    <td>
+                        ${member.phone || "-"}
+                    </td>
+
+                    <td>
+                        ${statusHtml}
+                    </td>
+
+                    <td>
+                        ${actionHtml}
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+    );
+
+    updateReceiveSummary();
+
 }
 
+// ============================================================
+// 🌾 รับข้าวสาร
+// ============================================================
 
-// ========================
-// 🔍 ค้นหาสมาชิก
-// ========================
+async function receiveRice(memberId) {
+
+    try {
+
+        const active =
+            getActiveReceiveFuneral();
+
+        if (!active) {
+
+            showReceiveNotify(
+                "⚠️ กรุณาเปิดงานศพก่อนรับข้าวสาร"
+            );
+
+            return;
+
+        }
+
+        const member =
+            receiveMembers.find(
+                item =>
+
+                    getMemberId(item)
+                    ===
+                    String(memberId)
+
+            );
+
+        if (!member) {
+
+            showReceiveNotify(
+                "❌ ไม่พบข้อมูลสมาชิก"
+            );
+
+            return;
+
+        }
+
+        if (
+            hasReceivedRice(
+                memberId,
+                active
+            )
+        ) {
+
+            showReceiveNotify(
+                "⚠️ สมาชิกคนนี้ส่งข้าวแล้ว"
+            );
+
+            return;
+
+        }
+
+        const confirmReceive =
+            confirm(
+
+                `ยืนยันการรับข้าวสาร\n\n` +
+
+                `สมาชิก: ${member.name}\n` +
+
+                `บ้านเลขที่: ${getHouseNo(member)}\n\n` +
+
+                `จำนวน: 1 ถุง`
+
+            );
+
+        if (!confirmReceive) {
+            return;
+        }
+
+        const deliveryData = {
+
+            funeralId:
+                getFuneralId(active),
+
+            memberId:
+                getMemberId(member),
+
+            memberName:
+                member.name || "",
+
+            houseNo:
+                getHouseNo(member),
+
+            quantity:
+                1,
+
+            receivedDate:
+                new Date()
+                    .toISOString(),
+
+            status:
+                "received"
+
+        };
+
+        const result =
+            await saveData(
+                DELIVERIES_COLLECTION,
+                deliveryData
+            );
+
+        if (!result?.success) {
+
+            throw new Error(
+
+                result?.error ||
+
+                "ไม่สามารถบันทึกการรับข้าวได้"
+
+            );
+
+        }
+
+        await addReceiveActivity(
+
+            `${member.name} ส่งข้าวสาร ` +
+
+            `งานศพ ${active.name || ""}`
+
+        );
+
+        await loadReceiveData();
+
+        showReceiveNotify(
+
+            `✅ บันทึกรับข้าวสารสำเร็จ\n\n` +
+
+            `${member.name}\n` +
+
+            `จำนวน 1 ถุง`
+
+        );
+
+    } catch (error) {
+
+        console.error(
+            "❌ รับข้าวไม่สำเร็จ:",
+            error
+        );
+
+        showReceiveNotify(
+
+            "❌ บันทึกข้อมูลไม่สำเร็จ\n" +
+            error.message
+
+        );
+
+    }
+
+}
+
+// สำคัญ: เปิดฟังก์ชันให้ปุ่ม onclick ใช้งานได้
+window.receiveRice = receiveRice;
+
+// ============================================================
+// 🔍 ค้นหารายชื่อ
+// ============================================================
 
 function searchReceive() {
 
     const input =
-        document.getElementById("searchReceive");
+        document.getElementById(
+            "searchReceive"
+        );
 
-    if (!input) return;
+    if (!input) {
+        return;
+    }
 
     const keyword =
-        input.value.toLowerCase();
+        input.value
+            .trim()
+            .toLowerCase();
 
     const rows =
         document.querySelectorAll(
             "#receiveTable tr"
         );
 
-    rows.forEach(row => {
+    rows.forEach(
+        row => {
 
-        const text =
-            row.innerText.toLowerCase();
+            const text =
+                row.innerText
+                    .toLowerCase();
 
-        row.style.display =
-            text.includes(keyword)
-                ? ""
-                : "none";
-    });
+            row.style.display =
+
+                text.includes(keyword)
+
+                    ?
+
+                    ""
+
+                    :
+
+                    "none";
+
+        }
+    );
+
 }
 
+// ============================================================
+// ⚠️ รายชื่อสมาชิกค้างส่ง
+// ============================================================
 
-// ========================
-// 🔒 ปิดงานศพ
-// ========================
+function pendingMembers() {
 
-function finishFuneral() {
+    const active =
+        getActiveReceiveFuneral();
 
-    if (!currentFuneral) {
+    if (!active) {
+        return [];
+    }
 
-        alert("ยังไม่มีงานศพที่เปิดอยู่");
+    return receiveMembers.filter(
+        member =>
 
+            !hasReceivedRice(
+                getMemberId(member),
+                active
+            )
+
+    );
+
+}
+// ============================================================
+// 📜 ประวัติการรับข้าวสาร
+// ============================================================
+
+function loadHistory() {
+
+    const tbody =
+        document.getElementById(
+            "historyTable"
+        )
+
+        ||
+
+        document.getElementById(
+            "receiveHistory"
+        );
+
+    if (!tbody) {
         return;
     }
 
-    const received =
-        receiveHistory.filter(
-            item =>
-                item.funeralId === currentFuneral.id
-        ).length;
+    tbody.innerHTML = "";
 
-    const pending =
-        receiveMembers.length - received;
+    if (
+        receiveDeliveries.length === 0
+    ) {
 
-    const confirmFinish =
-        confirm(
-            `ปิดงานศพ\n\n` +
-            `รับข้าวแล้ว ${received} ราย\n` +
-            `ยังไม่ส่ง ${pending} ราย`
+        tbody.innerHTML = `
+            <tr>
+                <td
+                    colspan="5"
+                    style="
+                        text-align:center;
+                        padding:25px;
+                        color:#777;
+                    "
+                >
+                    ยังไม่มีประวัติการรับข้าวสาร
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+    const history =
+        [...receiveDeliveries]
+            .sort(
+                (a, b) => {
+
+                    const dateA =
+                        new Date(
+                            a.receivedDate ||
+                            a.createdAt ||
+                            0
+                        );
+
+                    const dateB =
+                        new Date(
+                            b.receivedDate ||
+                            b.createdAt ||
+                            0
+                        );
+
+                    return dateB - dateA;
+
+                }
+            );
+
+    history.forEach(
+        (item, index) => {
+
+            const date =
+                formatReceiveDate(
+                    item.receivedDate ||
+                    item.createdAt
+                );
+
+            tbody.innerHTML += `
+
+                <tr>
+
+                    <td>
+                        ${index + 1}
+                    </td>
+
+                    <td>
+                        ${item.memberName || "-"}
+                    </td>
+
+                    <td>
+                        ${item.funeralName || "-"}
+                    </td>
+
+                    <td>
+                        ${date}
+                    </td>
+
+                    <td>
+                        ${item.quantity || 1}
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+    );
+
+}
+
+// ============================================================
+// 📅 แปลงวันที่
+// ============================================================
+
+function formatReceiveDate(value) {
+
+    if (!value) {
+        return "-";
+    }
+
+    try {
+
+        const date =
+            new Date(value);
+
+        if (
+            Number.isNaN(
+                date.getTime()
+            )
+        ) {
+            return "-";
+        }
+
+        return date.toLocaleDateString(
+            "th-TH",
+            {
+                year: "numeric",
+                month: "short",
+                day: "numeric"
+            }
         );
 
-    if (!confirmFinish) return;
+    } catch (error) {
 
-    currentFuneral = null;
+        return "-";
 
-    localStorage.removeItem(
-        "rongkhem_current_funeral"
-    );
+    }
 
-    loadReceiveMembers();
-    updateSummary();
-
-    alert("🔒 ปิดงานศพเรียบร้อย");
 }
 
+// ============================================================
+// 📢 แสดงข้อความแจ้งเตือน
+// ============================================================
 
-// ========================
-// 🔄 โหลดใหม่
-// ========================
+function showReceiveNotify(message) {
 
-function reloadReceiveData() {
+    const notify =
+        document.getElementById(
+            "receiveNotify"
+        );
 
-    loadReceiveData();
+    if (notify) {
 
-    alert(
-        `โหลดข้อมูลเรียบร้อย\nสมาชิก ${receiveMembers.length} ราย`
-    );
+        notify.textContent =
+            message;
+
+        notify.style.display =
+            "block";
+
+        setTimeout(
+            () => {
+
+                notify.style.display =
+                    "none";
+
+            },
+            4000
+        );
+
+    } else {
+
+        alert(message);
+
+    }
+
 }
 
+// ============================================================
+// 📝 บันทึกกิจกรรม
+// ============================================================
 
-// ========================
-// 🌍 ให้ HTML เรียกใช้
-// ========================
+async function addReceiveActivity(message) {
 
-window.receiveRice = receiveRice;
-window.searchReceive = searchReceive;
-window.finishFuneral = finishFuneral;
-window.reloadReceiveData = reloadReceiveData;
-window.loadReceiveData = loadReceiveData;
+    try {
 
+        await saveData(
+            ACTIVITIES_COLLECTION,
+            {
 
-// ========================
+                message,
+
+                type:
+                    "rice",
+
+                createdAt:
+                    new Date()
+                        .toISOString()
+
+            }
+        );
+
+    } catch (error) {
+
+        console.warn(
+            "⚠️ ไม่สามารถบันทึกกิจกรรม:",
+            error
+        );
+
+    }
+
+}
+
+// ============================================================
+// 🔄 โหลดข้อมูลใหม่
+// ============================================================
+
+async function reloadReceiveData() {
+
+    try {
+
+        await loadReceiveData();
+
+        showReceiveNotify(
+            "🔄 โหลดข้อมูลล่าสุดเรียบร้อย"
+        );
+
+    } catch (error) {
+
+        console.error(
+            error
+        );
+
+        showReceiveNotify(
+            "❌ ไม่สามารถโหลดข้อมูลใหม่ได้"
+        );
+
+    }
+
+}
+
+// ============================================================
+// 🔒 ปิดงานศพ
+// ============================================================
+
+async function closeReceiveFuneral() {
+
+    try {
+
+        const active =
+            getActiveReceiveFuneral();
+
+        if (!active) {
+
+            showReceiveNotify(
+                "⚠️ ไม่มีงานศพที่กำลังดำเนินการ"
+            );
+
+            return;
+
+        }
+
+        const confirmClose =
+            confirm(
+
+                `ยืนยันการปิดงานศพ\n\n` +
+
+                `${active.name || active.deceasedName || ""}`
+
+            );
+
+        if (!confirmClose) {
+            return;
+        }
+
+        const funeralDocumentId =
+            active.firestoreId ||
+            active.docId ||
+            active.id;
+
+        if (!funeralDocumentId) {
+
+            throw new Error(
+                "ไม่พบรหัสงานศพ"
+            );
+
+        }
+
+        const result =
+            await updateData(
+                FUNERALS_COLLECTION,
+                funeralDocumentId,
+                {
+
+                    active:
+                        false,
+
+                    status:
+                        "completed",
+
+                    closedAt:
+                        new Date()
+                            .toISOString()
+
+                }
+            );
+
+        if (
+            result &&
+            result.success === false
+        ) {
+
+            throw new Error(
+                result.error ||
+                "ไม่สามารถปิดงานศพได้"
+            );
+
+        }
+
+        await loadReceiveData();
+
+        showReceiveNotify(
+            "🔒 ปิดงานศพเรียบร้อย"
+        );
+
+    } catch (error) {
+
+        console.error(
+            "❌ ปิดงานศพไม่สำเร็จ:",
+            error
+        );
+
+        showReceiveNotify(
+
+            "❌ ไม่สามารถปิดงานศพได้\n" +
+
+            error.message
+
+        );
+
+    }
+
+}
+
+// ============================================================
+// ⚡ ระบบ Real-time สมาชิก
+// ============================================================
+
+function startReceiveRealtime() {
+
+    try {
+
+        if (
+            typeof unsubscribeMembers ===
+            "function"
+        ) {
+
+            unsubscribeMembers();
+
+        }
+
+        unsubscribeMembers =
+            subscribeMembers(
+                members => {
+
+                    receiveMembers =
+                        sortMembers(
+                            safeArray(members)
+                        );
+
+                    loadReceiveMembers();
+
+                }
+            );
+
+    } catch (error) {
+
+        console.warn(
+            "⚠️ ไม่สามารถเชื่อม Real-time สมาชิก:",
+            error
+        );
+
+    }
+
+    try {
+
+        if (
+            typeof unsubscribeFunerals ===
+            "function"
+        ) {
+
+            unsubscribeFunerals();
+
+        }
+
+        unsubscribeFunerals =
+            subscribeData(
+                FUNERALS_COLLECTION,
+                funerals => {
+
+                    receiveFunerals =
+                        safeArray(
+                            funerals
+                        );
+
+                    loadReceiveMembers();
+
+                    updateReceiveSummary();
+
+                }
+            );
+
+    } catch (error) {
+
+        console.warn(
+            "⚠️ ไม่สามารถเชื่อม Real-time งานศพ:",
+            error
+        );
+
+    }
+
+    try {
+
+        if (
+            typeof unsubscribeDeliveries ===
+            "function"
+        ) {
+
+            unsubscribeDeliveries();
+
+        }
+
+        unsubscribeDeliveries =
+            subscribeData(
+                DELIVERIES_COLLECTION,
+                deliveries => {
+
+                    receiveDeliveries =
+                        safeArray(
+                            deliveries
+                        );
+
+                    loadReceiveMembers();
+
+                    loadHistory();
+
+                    updateReceiveSummary();
+
+                }
+            );
+
+    } catch (error) {
+
+        console.warn(
+            "⚠️ ไม่สามารถเชื่อม Real-time การรับข้าว:",
+            error
+        );
+
+    }
+
+}
+
+// ============================================================
+// 🧹 ปิดการเชื่อมต่อ
+// ============================================================
+
+function stopReceiveRealtime() {
+
+    if (
+        typeof unsubscribeMembers ===
+        "function"
+    ) {
+
+        unsubscribeMembers();
+
+        unsubscribeMembers =
+            null;
+
+    }
+
+    if (
+        typeof unsubscribeFunerals ===
+        "function"
+    ) {
+
+        unsubscribeFunerals();
+
+        unsubscribeFunerals =
+            null;
+
+    }
+
+    if (
+        typeof unsubscribeDeliveries ===
+        "function"
+    ) {
+
+        unsubscribeDeliveries();
+
+        unsubscribeDeliveries =
+            null;
+
+    }
+
+}
+
+// ============================================================
+// 🌐 เปิดฟังก์ชันให้ HTML ใช้งาน
+// ============================================================
+
+window.receiveRice =
+    receiveRice;
+
+window.reloadReceiveData =
+    reloadReceiveData;
+
+window.closeReceiveFuneral =
+    closeReceiveFuneral;
+
+window.searchReceive =
+    searchReceive;
+
+window.loadReceiveData =
+    loadReceiveData;
+
+window.loadReceiveMembers =
+    loadReceiveMembers;
+
+// ============================================================
 // 🚀 เริ่มระบบ
-// ========================
+// ============================================================
 
 document.addEventListener(
     "DOMContentLoaded",
-    function () {
 
-        loadReceiveData();
+    async function () {
+
+        console.log(
+            "🌾 เริ่มระบบรับข้าวสาร"
+        );
+
+        try {
+
+            await loadReceiveData();
+
+            startReceiveRealtime();
+
+            console.log(
+                "✅ ระบบรับข้าวสารพร้อมใช้งาน"
+            );
+
+        } catch (error) {
+
+            console.error(
+                "❌ เริ่มระบบไม่สำเร็จ:",
+                error
+            );
+
+            showReceiveNotify(
+                "❌ ไม่สามารถเริ่มระบบได้"
+            );
+
+        }
 
     }
 );
-/* =========================================================
-   FIX: ให้ปุ่ม onclick="receiveRice(...)" เรียกฟังก์ชันได้
-========================================================= */
 
-window.receiveRice = receiveRice;
+// ============================================================
+// 🧹 ปิดการเชื่อมต่อเมื่อออกจากหน้า
+// ============================================================
+
+window.addEventListener(
+    "beforeunload",
+
+    function () {
+
+        stopReceiveRealtime();
+
+    }
+);
