@@ -2,255 +2,1487 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ทะเบียนสมาชิก - กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ 6</title>
-    <!-- Tailwind CSS CDN -->
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        ทะเบียนสมาชิก - กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ 6
+    </title>
+
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts (Sarabun) -->
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
     <style>
-        body { font-family: 'Sarabun', sans-serif; }
+
+        body {
+            font-family: 'Sarabun', sans-serif;
+        }
+
+        .loading-row {
+            text-align: center;
+            padding: 40px;
+            color: #6b7280;
+        }
+
     </style>
 </head>
+
+
 <body class="bg-amber-50 min-h-screen p-4 sm:p-6">
 
     <div class="max-w-5xl mx-auto space-y-6">
 
-        <!-- Header & ปุ่มย้อนกลับ -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-amber-200 gap-4">
+
+        <!-- HEADER -->
+
+        <div
+            class="
+                flex
+                flex-col
+                sm:flex-row
+                sm:items-center
+                justify-between
+                bg-white
+                p-4
+                sm:p-6
+                rounded-xl
+                shadow-sm
+                border
+                border-amber-200
+                gap-4
+            "
+        >
+
             <div>
-                <h1 class="text-xl sm:text-2xl font-bold text-gray-800 flex items-center gap-2">
+
+                <h1
+                    class="
+                        text-xl
+                        sm:text-2xl
+                        font-bold
+                        text-gray-800
+                        flex
+                        items-center
+                        gap-2
+                    "
+                >
+
                     👥 ทะเบียนสมาชิกกลุ่มข้าวสาร
+
                 </h1>
-                <p class="text-sm text-gray-500">บ้านร่องเข็ม หมู่ที่ 6</p>
+
+
+                <p class="text-sm text-gray-500">
+
+                    บ้านร่องเข็ม หมู่ที่ 6
+
+                </p>
+
             </div>
+
+
             <div class="flex items-center gap-2">
-                <button onclick="resetAllStatus()" class="px-3 py-2 text-xs sm:text-sm bg-rose-100 hover:bg-rose-200 text-rose-700 font-medium rounded-lg transition flex items-center gap-1 border border-rose-200">
-                    🔄 เริ่มรอบใหม่ (รีเซ็ตทั้งหมด)
+
+                <button
+                    onclick="resetAllStatus()"
+                    class="
+                        px-3
+                        py-2
+                        text-xs
+                        sm:text-sm
+                        bg-rose-100
+                        hover:bg-rose-200
+                        text-rose-700
+                        font-medium
+                        rounded-lg
+                        transition
+                        border
+                        border-rose-200
+                    "
+                >
+
+                    🔄 เริ่มรอบใหม่
+
                 </button>
-                <a href="index.html" class="px-3 py-2 text-xs sm:text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg transition">
+
+
+                <a
+                    href="index.html"
+                    class="
+                        px-3
+                        py-2
+                        text-xs
+                        sm:text-sm
+                        bg-gray-100
+                        hover:bg-gray-200
+                        text-gray-700
+                        font-medium
+                        rounded-lg
+                        transition
+                    "
+                >
+
                     ← กลับหน้าหลัก
+
                 </a>
+
             </div>
+
         </div>
 
-        <!-- การ์ดสรุปยอดการส่งข้าวสาร -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div class="bg-white p-4 rounded-xl border border-amber-200 shadow-sm flex items-center justify-between">
+
+
+        <!-- SUMMARY -->
+
+        <div
+            class="
+                grid
+                grid-cols-1
+                sm:grid-cols-3
+                gap-4
+            "
+        >
+
+            <div
+                class="
+                    bg-white
+                    p-4
+                    rounded-xl
+                    border
+                    border-amber-200
+                    shadow-sm
+                    flex
+                    items-center
+                    justify-between
+                "
+            >
+
                 <div>
-                    <p class="text-xs text-gray-500 font-medium">👥 สมาชิกทั้งหมด</p>
-                    <p id="totalCount" class="text-2xl font-bold text-gray-800">0 <span class="text-xs text-gray-500 font-normal">คน</span></p>
+
+                    <p
+                        class="
+                            text-xs
+                            text-gray-500
+                            font-medium
+                        "
+                    >
+
+                        👥 สมาชิกทั้งหมด
+
+                    </p>
+
+
+                    <p
+                        id="totalCount"
+                        class="
+                            text-2xl
+                            font-bold
+                            text-gray-800
+                        "
+                    >
+
+                        0 คน
+
+                    </p>
+
                 </div>
-                <div class="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center text-amber-600 font-bold">👥</div>
+
+                <div
+                    class="
+                        w-10
+                        h-10
+                        bg-amber-100
+                        rounded-full
+                        flex
+                        items-center
+                        justify-center
+                        text-amber-600
+                    "
+                >
+
+                    👥
+
+                </div>
+
             </div>
 
-            <div class="bg-white p-4 rounded-xl border border-emerald-200 shadow-sm flex items-center justify-between">
+
+
+            <div
+                class="
+                    bg-white
+                    p-4
+                    rounded-xl
+                    border
+                    border-emerald-200
+                    shadow-sm
+                    flex
+                    items-center
+                    justify-between
+                "
+            >
+
                 <div>
-                    <p class="text-xs text-emerald-600 font-medium">🟢 ส่งแล้ว</p>
-                    <p id="sentCount" class="text-2xl font-bold text-emerald-600">0 <span class="text-xs text-gray-500 font-normal">คน</span></p>
+
+                    <p
+                        class="
+                            text-xs
+                            text-emerald-600
+                            font-medium
+                        "
+                    >
+
+                        🟢 ส่งแล้ว
+
+                    </p>
+
+
+                    <p
+                        id="sentCount"
+                        class="
+                            text-2xl
+                            font-bold
+                            text-emerald-600
+                        "
+                    >
+
+                        0 คน
+
+                    </p>
+
                 </div>
-                <div class="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 font-bold">✓</div>
+
+
+                <div
+                    class="
+                        w-10
+                        h-10
+                        bg-emerald-100
+                        rounded-full
+                        flex
+                        items-center
+                        justify-center
+                        text-emerald-600
+                    "
+                >
+
+                    ✓
+
+                </div>
+
             </div>
 
-            <div class="bg-white p-4 rounded-xl border border-red-200 shadow-sm flex items-center justify-between">
+
+
+            <div
+                class="
+                    bg-white
+                    p-4
+                    rounded-xl
+                    border
+                    border-red-200
+                    shadow-sm
+                    flex
+                    items-center
+                    justify-between
+                "
+            >
+
                 <div>
-                    <p class="text-xs text-red-500 font-medium">🔴 ยังไม่ส่ง</p>
-                    <p id="notSentCount" class="text-2xl font-bold text-red-600">0 <span class="text-xs text-gray-500 font-normal">คน</span></p>
+
+                    <p
+                        class="
+                            text-xs
+                            text-red-500
+                            font-medium
+                        "
+                    >
+
+                        🔴 ยังไม่ส่ง
+
+                    </p>
+
+
+                    <p
+                        id="notSentCount"
+                        class="
+                            text-2xl
+                            font-bold
+                            text-red-600
+                        "
+                    >
+
+                        0 คน
+
+                    </p>
+
                 </div>
-                <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center text-red-600 font-bold">!</div>
+
+
+                <div
+                    class="
+                        w-10
+                        h-10
+                        bg-red-100
+                        rounded-full
+                        flex
+                        items-center
+                        justify-center
+                        text-red-600
+                    "
+                >
+
+                    !
+
+                </div>
+
             </div>
+
         </div>
 
-        <!-- ฟอร์มเพิ่มสมาชิก & ปุ่มกรองข้อมูล -->
-        <div class="bg-white p-4 sm:p-6 rounded-xl shadow-md border border-amber-200 space-y-4">
-            <h2 class="text-lg font-semibold text-gray-800">+ เพิ่มสมาชิกใหม่</h2>
-            
-            <form onsubmit="addMember(event)" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <input type="text" id="memberCode" placeholder="รหัสสมาชิก (เช่น M001)" required
-                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
-                <input type="text" id="memberName" placeholder="ชื่อ - นามสกุล" required
-                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
-                <input type="text" id="memberHouse" placeholder="บ้านเลขที่ / หมู่" required
-                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
-                
-                <button type="submit" class="sm:col-span-3 bg-amber-600 hover:bg-amber-700 text-white font-medium py-2 rounded-lg transition shadow">
-                    บันทึกเพิ่มสมาชิก
+
+
+        <!-- ADD MEMBER -->
+
+        <div
+            class="
+                bg-white
+                p-4
+                sm:p-6
+                rounded-xl
+                shadow-md
+                border
+                border-amber-200
+                space-y-4
+            "
+        >
+
+            <h2
+                class="
+                    text-lg
+                    font-semibold
+                    text-gray-800
+                "
+            >
+
+                ➕ เพิ่มสมาชิกใหม่
+
+            </h2>
+
+
+            <form
+                id="memberForm"
+                class="
+                    grid
+                    grid-cols-1
+                    sm:grid-cols-3
+                    gap-3
+                "
+            >
+
+                <input
+                    type="text"
+                    id="memberCode"
+                    placeholder="รหัสสมาชิก เช่น RK177"
+                    class="
+                        px-4
+                        py-2
+                        border
+                        border-gray-300
+                        rounded-lg
+                        text-sm
+                    "
+                >
+
+
+                <input
+                    type="text"
+                    id="memberName"
+                    placeholder="ชื่อ - นามสกุล"
+                    required
+                    class="
+                        px-4
+                        py-2
+                        border
+                        border-gray-300
+                        rounded-lg
+                        text-sm
+                    "
+                >
+
+
+                <input
+                    type="text"
+                    id="memberHouse"
+                    placeholder="บ้านเลขที่ / หมู่"
+                    required
+                    class="
+                        px-4
+                        py-2
+                        border
+                        border-gray-300
+                        rounded-lg
+                        text-sm
+                    "
+                >
+
+
+                <button
+                    type="submit"
+                    class="
+                        sm:col-span-3
+                        bg-amber-600
+                        hover:bg-amber-700
+                        text-white
+                        font-medium
+                        py-2
+                        rounded-lg
+                        transition
+                        shadow
+                    "
+                >
+
+                    💾 บันทึกเพิ่มสมาชิก
+
                 </button>
+
             </form>
 
-            <hr class="border-amber-100 my-4">
-
-            <!-- ตัวกรองสถานะ -->
-            <div class="flex items-center gap-2 overflow-x-auto pb-1">
-                <span class="text-xs text-gray-500 whitespace-nowrap">กรองข้อมูล:</span>
-                <button onclick="filterMembers('all')" id="btnFilterAll" class="px-3 py-1.5 text-xs rounded-lg bg-amber-600 text-white font-medium transition">
-                    -- แสดงสถานะทั้งหมด --
-                </button>
-                <button onclick="filterMembers('sent')" id="btnFilterSent" class="px-3 py-1.5 text-xs rounded-lg bg-gray-100 text-gray-700 hover:bg-emerald-100 hover:text-emerald-700 font-medium transition">
-                    🟢 ส่งแล้ว
-                </button>
-                <button onclick="filterMembers('notsent')" id="btnFilterNotSent" class="px-3 py-1.5 text-xs rounded-lg bg-gray-100 text-gray-700 hover:bg-red-100 hover:text-red-700 font-medium transition">
-                    🔴 ยังไม่ส่ง
-                </button>
-            </div>
         </div>
 
-        <!-- ตารางแสดงรายชื่อสมาชิก -->
-        <div class="bg-white rounded-xl shadow-md border border-amber-200 overflow-hidden">
+
+
+        <!-- FILTER -->
+
+        <div
+            class="
+                bg-white
+                p-4
+                rounded-xl
+                border
+                border-amber-200
+                flex
+                flex-wrap
+                gap-2
+                items-center
+            "
+        >
+
+            <span
+                class="
+                    text-sm
+                    text-gray-500
+                "
+            >
+
+                กรองข้อมูล:
+
+            </span>
+
+
+            <button
+                onclick="filterMembers('all')"
+                id="btnFilterAll"
+                class="
+                    px-3
+                    py-2
+                    text-xs
+                    rounded-lg
+                    bg-amber-600
+                    text-white
+                "
+            >
+
+                ทั้งหมด
+
+            </button>
+
+
+            <button
+                onclick="filterMembers('sent')"
+                id="btnFilterSent"
+                class="
+                    px-3
+                    py-2
+                    text-xs
+                    rounded-lg
+                    bg-gray-100
+                    text-gray-700
+                "
+            >
+
+                🟢 ส่งแล้ว
+
+            </button>
+
+
+            <button
+                onclick="filterMembers('pending')"
+                id="btnFilterPending"
+                class="
+                    px-3
+                    py-2
+                    text-xs
+                    rounded-lg
+                    bg-gray-100
+                    text-gray-700
+                "
+            >
+
+                🔴 ยังไม่ส่ง
+
+            </button>
+
+        </div>
+
+
+
+        <!-- MEMBER TABLE -->
+
+        <div
+            class="
+                bg-white
+                rounded-xl
+                shadow-md
+                border
+                border-amber-200
+                overflow-hidden
+            "
+        >
+
             <div class="overflow-x-auto">
-                <table class="w-full text-sm text-left text-gray-700">
-                    <thead class="text-xs text-gray-700 uppercase bg-amber-100/70 border-b border-amber-200">
+
+                <table
+                    class="
+                        w-full
+                        text-sm
+                        text-left
+                        text-gray-700
+                    "
+                >
+
+                    <thead
+                        class="
+                            text-xs
+                            text-gray-700
+                            uppercase
+                            bg-amber-100
+                        "
+                    >
+
                         <tr>
-                            <th class="px-4 py-3 text-center">ลำดับ</th>
-                            <th class="px-4 py-3">รหัสสมาชิก</th>
-                            <th class="px-4 py-3">ชื่อ - นามสกุล</th>
-                            <th class="px-4 py-3">บ้านเลขที่ / หมู่</th>
-                            <th class="px-4 py-3 text-center">สถานะการส่ง</th>
-                            <th class="px-4 py-3 text-center">จัดการ</th>
+
+                            <th
+                                class="
+                                    px-4
+                                    py-3
+                                    text-center
+                                "
+                            >
+
+                                ลำดับ
+
+                            </th>
+
+
+                            <th
+                                class="
+                                    px-4
+                                    py-3
+                                "
+                            >
+
+                                รหัสสมาชิก
+
+                            </th>
+
+
+                            <th
+                                class="
+                                    px-4
+                                    py-3
+                                "
+                            >
+
+                                ชื่อ - นามสกุล
+
+                            </th>
+
+
+                            <th
+                                class="
+                                    px-4
+                                    py-3
+                                "
+                            >
+
+                                บ้านเลขที่
+
+                            </th>
+
+
+                            <th
+                                class="
+                                    px-4
+                                    py-3
+                                    text-center
+                                "
+                            >
+
+                                สถานะ
+
+                            </th>
+
+
+                            <th
+                                class="
+                                    px-4
+                                    py-3
+                                    text-center
+                                "
+                            >
+
+                                จัดการ
+
+                            </th>
+
                         </tr>
+
                     </thead>
+
+
                     <tbody id="memberTableBody">
-                        <!-- รายชื่อจะถูกเติมผ่าน JavaScript -->
+
+                        <tr>
+
+                            <td
+                                colspan="6"
+                                class="loading-row"
+                            >
+
+                                🔄 กำลังโหลดข้อมูลสมาชิก...
+
+                            </td>
+
+                        </tr>
+
                     </tbody>
+
                 </table>
+
             </div>
+
         </div>
 
     </div>
 
-    <!-- JavaScript ระบบจัดการสมาชิก -->
-    <script>
-        let currentFilter = 'all';
 
-        // โหลดข้อมูลสมาชิกจาก LocalStorage
-        function getMembers() {
-            const stored = localStorage.getItem('rongkhem_members');
-            return stored ? JSON.parse(stored) : [];
+
+    <!-- FIREBASE MEMBER SYSTEM -->
+
+    <script type="module">
+
+        import {
+
+            getRongkhemMembers,
+            addRongkhemMember,
+            updateRongkhemMember,
+            deleteRongkhemMember
+
         }
 
-        function saveMembers(members) {
-            localStorage.setItem('rongkhem_members', JSON.stringify(members));
-            renderTable();
-        }
+        from "./members.js";
 
-        // เพิ่มสมาชิกใหม่
-        function addMember(e) {
-            e.preventDefault();
-            const code = document.getElementById('memberCode').value.trim();
-            const name = document.getElementById('memberName').value.trim();
-            const house = document.getElementById('memberHouse').value.trim();
 
-            let members = getMembers();
 
-            members.push({
-                code: code,
-                name: name,
-                house: house,
-                status: 'notsent' // สถานะเริ่มต้นเป็น "ยังไม่ส่ง"
-            });
+        let members = [];
 
-            saveMembers(members);
+        let currentFilter = "all";
 
-            // ล้างฟอร์ม
-            document.getElementById('memberCode').value = '';
-            document.getElementById('memberName').value = '';
-            document.getElementById('memberHouse').value = '';
-            alert('เพิ่มสมาชิกใหม่เรียบร้อยแล้ว');
-        }
 
-        // สลับสถานะส่งข้าวสาร (คลิกเพื่อเปลี่ยน ส่งแล้ว <-> ยังไม่ส่ง)
-        function toggleStatus(index) {
-            let members = getMembers();
-            members[index].status = (members[index].status === 'sent') ? 'notsent' : 'sent';
-            saveMembers(members);
-        }
 
-        // ลบสมาชิก
-        function deleteMember(index) {
-            if (confirm('คุณแน่ใจหรือไม่ว่าต้องการลบสมาชิกรายนี้?')) {
-                let members = getMembers();
-                members.splice(index, 1);
-                saveMembers(members);
-            }
-        }
+        // ==================================
+        // LOAD MEMBERS
+        // ==================================
 
-        // เริ่มรอบใหม่ (รีเซ็ตทุกคนเป็น "ยังไม่ส่ง")
-        function resetAllStatus() {
-            let members = getMembers();
-            if (members.length === 0) return;
+        async function loadMembers() {
 
-            if (confirm('คุณแน่ใจหรือไม่ที่จะเริ่มรอบใหม่? สถานะการส่งข้าวสารของสมาชิกทุกคนจะถูกเปลี่ยนเป็น "ยังไม่ส่ง"')) {
-                members.forEach(m => m.status = 'notsent');
-                saveMembers(members);
-                alert('รีเซ็ตสถานะทุกคนเรียบร้อยแล้ว');
-            }
-        }
+            const tbody =
+                document.getElementById(
+                    "memberTableBody"
+                );
 
-        // กรองข้อมูล
-        function filterMembers(type) {
-            currentFilter = type;
-            
-            // อัปเดตสีปุ่มกรอง
-            document.getElementById('btnFilterAll').className = `px-3 py-1.5 text-xs rounded-lg transition ${type === 'all' ? 'bg-amber-600 text-white font-medium' : 'bg-gray-100 text-gray-700'}`;
-            document.getElementById('btnFilterSent').className = `px-3 py-1.5 text-xs rounded-lg transition ${type === 'sent' ? 'bg-emerald-600 text-white font-medium' : 'bg-gray-100 text-gray-700'}`;
-            document.getElementById('btnFilterNotSent').className = `px-3 py-1.5 text-xs rounded-lg transition ${type === 'notsent' ? 'bg-red-600 text-white font-medium' : 'bg-gray-100 text-gray-700'}`;
 
-            renderTable();
-        }
+            try {
 
-        // แสดงผลตารางและอัปเดตตัวเลขสรุปยอด
-        function renderTable() {
-            const members = getMembers();
-            const tbody = document.getElementById('memberTableBody');
+                tbody.innerHTML = `
 
-            // อัปเดตตัวนับ
-            const sentCount = members.filter(m => m.status === 'sent').length;
-            const notSentCount = members.length - sentCount;
+                    <tr>
 
-            document.getElementById('totalCount').innerText = `${members.length} คน`;
-            document.getElementById('sentCount').innerText = `${sentCount} คน`;
-            document.getElementById('notSentCount').innerText = `${notSentCount} คน`;
+                        <td
+                            colspan="6"
+                            class="loading-row"
+                        >
 
-            // กรองรายการที่จะแสดง
-            let filtered = members;
-            if (currentFilter === 'sent') filtered = members.filter(m => m.status === 'sent');
-            if (currentFilter === 'notsent') filtered = members.filter(m => m.status === 'notsent');
+                            🔄 กำลังโหลดข้อมูล...
 
-            if (filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-gray-400">ไม่พบข้อมูลสมาชิก</td></tr>`;
-                return;
-            }
-
-            tbody.innerHTML = filtered.map((m, i) => {
-                const originalIndex = members.findIndex(original => original.code === m.code);
-                const isSent = m.status === 'sent';
-
-                return `
-                    <tr class="border-b border-gray-100 hover:bg-amber-50/50 transition">
-                        <td class="px-4 py-3 text-center font-medium text-gray-500">${i + 1}</td>
-                        <td class="px-4 py-3 font-mono font-semibold text-gray-800">${m.code}</td>
-                        <td class="px-4 py-3 font-medium text-gray-800">${m.name}</td>
-                        <td class="px-4 py-3 text-gray-600">${m.house}</td>
-                        <td class="px-4 py-3 text-center">
-                            <button onclick="toggleStatus(${originalIndex})" class="px-3 py-1 text-xs rounded-full font-medium transition cursor-pointer ${
-                                isSent ? 'bg-emerald-100 text-emerald-800 border border-emerald-300 hover:bg-emerald-200' 
-                                       : 'bg-red-100 text-red-800 border border-red-300 hover:bg-red-200'
-                            }">
-                                ${isSent ? '🟢 ส่งแล้ว' : '🔴 ยังไม่ส่ง'}
-                            </button>
                         </td>
-                        <td class="px-4 py-3 text-center">
-                            <button onclick="deleteMember(${originalIndex})" class="px-2.5 py-1 text-xs bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-md transition border border-rose-200">
-                                🗑️ ลบ
-                            </button>
-                        </td>
+
                     </tr>
+
                 `;
-            }).join('');
+
+
+                members =
+                    await getRongkhemMembers();
+
+
+                renderTable();
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    error
+                );
+
+
+                tbody.innerHTML = `
+
+                    <tr>
+
+                        <td
+                            colspan="6"
+                            class="
+                                text-center
+                                py-8
+                                text-red-500
+                            "
+                        >
+
+                            ❌ โหลดข้อมูลสมาชิกไม่สำเร็จ
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }
+
         }
 
-        // โหลดข้อมูลเมื่อเปิดหน้าเว็บ
-        document.addEventListener('DOMContentLoaded', renderTable);
+
+
+        // ==================================
+        // RENDER TABLE
+        // ==================================
+
+        function renderTable() {
+
+            const tbody =
+                document.getElementById(
+                    "memberTableBody"
+                );
+
+
+            const total =
+                members.length;
+
+
+            const sent =
+                members.filter(
+                    member =>
+                        member.status === "sent"
+                ).length;
+
+
+            const pending =
+                total - sent;
+
+
+            document.getElementById(
+                "totalCount"
+            ).innerText =
+                total + " คน";
+
+
+            document.getElementById(
+                "sentCount"
+            ).innerText =
+                sent + " คน";
+
+
+            document.getElementById(
+                "notSentCount"
+            ).innerText =
+                pending + " คน";
+
+
+
+            let filtered =
+                members;
+
+
+            if (
+                currentFilter === "sent"
+            ) {
+
+                filtered =
+                    members.filter(
+                        member =>
+                            member.status === "sent"
+                    );
+
+            }
+
+
+            if (
+                currentFilter === "pending"
+            ) {
+
+                filtered =
+                    members.filter(
+                        member =>
+                            member.status !== "sent"
+                    );
+
+            }
+
+
+
+            if (
+                filtered.length === 0
+            ) {
+
+                tbody.innerHTML = `
+
+                    <tr>
+
+                        <td
+                            colspan="6"
+                            class="
+                                text-center
+                                py-8
+                                text-gray-400
+                            "
+                        >
+
+                            ไม่พบข้อมูลสมาชิก
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+                return;
+
+            }
+
+
+
+            tbody.innerHTML =
+                filtered.map(
+                    (
+                        member,
+                        index
+                    ) => {
+
+                        const memberId =
+                            member.memberId ||
+                            member.id ||
+                            "-";
+
+
+                        const isSent =
+                            member.status ===
+                            "sent";
+
+
+                        return `
+
+                            <tr
+                                class="
+                                    border-b
+                                    border-gray-100
+                                    hover:bg-amber-50
+                                "
+                            >
+
+                                <td
+                                    class="
+                                        px-4
+                                        py-3
+                                        text-center
+                                    "
+                                >
+
+                                    ${index + 1}
+
+                                </td>
+
+
+                                <td
+                                    class="
+                                        px-4
+                                        py-3
+                                        font-mono
+                                        font-semibold
+                                    "
+                                >
+
+                                    ${memberId}
+
+                                </td>
+
+
+                                <td
+                                    class="
+                                        px-4
+                                        py-3
+                                        font-medium
+                                    "
+                                >
+
+                                    ${member.name || "-"}
+
+                                </td>
+
+
+                                <td
+                                    class="
+                                        px-4
+                                        py-3
+                                    "
+                                >
+
+                                    ${
+                                        member.address ||
+                                        member.houseNo ||
+                                        "-"
+                                    }
+
+                                </td>
+
+
+                                <td
+                                    class="
+                                        px-4
+                                        py-3
+                                        text-center
+                                    "
+                                >
+
+                                    <button
+
+                                        onclick="
+                                            toggleStatus(
+                                                '${member.firestoreId}'
+                                            )
+                                        "
+
+                                        class="
+                                            px-3
+                                            py-1
+                                            text-xs
+                                            rounded-full
+                                            font-medium
+                                            ${
+                                                isSent
+
+                                                ?
+
+                                                "bg-emerald-100 text-emerald-700"
+
+                                                :
+
+                                                "bg-red-100 text-red-700"
+                                            }
+                                        "
+
+                                    >
+
+                                        ${
+                                            isSent
+
+                                            ?
+
+                                            "🟢 ส่งแล้ว"
+
+                                            :
+
+                                            "🔴 ยังไม่ส่ง"
+                                        }
+
+                                    </button>
+
+                                </td>
+
+
+                                <td
+                                    class="
+                                        px-4
+                                        py-3
+                                        text-center
+                                    "
+                                >
+
+                                    <button
+
+                                        onclick="
+                                            deleteMember(
+                                                '${member.firestoreId}'
+                                            )
+                                        "
+
+                                        class="
+                                            px-3
+                                            py-1
+                                            text-xs
+                                            bg-rose-50
+                                            text-rose-600
+                                            rounded-lg
+                                        "
+                                    >
+
+                                        🗑️ ลบ
+
+                                    </button>
+
+                                </td>
+
+                            </tr>
+
+                        `;
+
+                    }
+
+                ).join("");
+
+        }
+
+
+
+        // ==================================
+        // ADD MEMBER
+        // ==================================
+
+        document
+            .getElementById(
+                "memberForm"
+            )
+            .addEventListener(
+
+                "submit",
+
+                async function (
+                    event
+                ) {
+
+                    event.preventDefault();
+
+
+                    const memberId =
+                        document
+                        .getElementById(
+                            "memberCode"
+                        )
+                        .value
+                        .trim();
+
+
+                    const name =
+                        document
+                        .getElementById(
+                            "memberName"
+                        )
+                        .value
+                        .trim();
+
+
+                    const address =
+                        document
+                        .getElementById(
+                            "memberHouse"
+                        )
+                        .value
+                        .trim();
+
+
+                    try {
+
+                        const result =
+                            await addRongkhemMember({
+
+                                memberId:
+
+                                    memberId ||
+
+                                    null,
+
+                                name:
+
+                                    name,
+
+                                address:
+
+                                    address
+
+                            });
+
+
+                        if (
+                            !result.success
+                        ) {
+
+                            throw new Error(
+                                result.error ||
+                                "บันทึกไม่สำเร็จ"
+                            );
+
+                        }
+
+
+                        alert(
+                            "✅ เพิ่มสมาชิกเรียบร้อย"
+                        );
+
+
+                        event.target.reset();
+
+
+                        await loadMembers();
+
+                    }
+
+                    catch (
+                        error
+                    ) {
+
+                        console.error(
+                            error
+                        );
+
+
+                        alert(
+
+                            "❌ เพิ่มสมาชิกไม่สำเร็จ\n" +
+
+                            error.message
+
+                        );
+
+                    }
+
+                }
+
+            );
+
+
+
+        // ==================================
+        // TOGGLE STATUS
+        // ==================================
+
+        window.toggleStatus =
+            async function (
+                firestoreId
+            ) {
+
+                const member =
+                    members.find(
+
+                        item =>
+                            item.firestoreId ===
+                            firestoreId
+
+                    );
+
+
+                if (
+                    !member
+                ) return;
+
+
+                const newStatus =
+
+                    member.status ===
+                    "sent"
+
+                    ?
+
+                    "pending"
+
+                    :
+
+                    "sent";
+
+
+                const result =
+                    await updateRongkhemMember(
+
+                        firestoreId,
+
+                        {
+
+                            status:
+
+                                newStatus
+
+                        }
+
+                    );
+
+
+                if (
+                    result.success
+                ) {
+
+                    await loadMembers();
+
+                }
+
+                else {
+
+                    alert(
+                        "❌ บันทึกสถานะไม่สำเร็จ"
+                    );
+
+                }
+
+            };
+
+
+
+        // ==================================
+        // DELETE MEMBER
+        // ==================================
+
+        window.deleteMember =
+            async function (
+                firestoreId
+            ) {
+
+                if (
+
+                    !confirm(
+                        "ยืนยันการลบสมาชิก?"
+                    )
+
+                ) {
+
+                    return;
+
+                }
+
+
+                const result =
+                    await deleteRongkhemMember(
+
+                        firestoreId
+
+                    );
+
+
+                if (
+                    result.success
+                ) {
+
+                    alert(
+                        "ลบสมาชิกเรียบร้อย"
+                    );
+
+
+                    await loadMembers();
+
+                }
+
+                else {
+
+                    alert(
+                        "❌ ลบข้อมูลไม่สำเร็จ"
+                    );
+
+                }
+
+            };
+
+
+
+        // ==================================
+        // RESET STATUS
+        // ==================================
+
+        window.resetAllStatus =
+            async function () {
+
+                if (
+                    members.length === 0
+                ) return;
+
+
+                if (
+
+                    !confirm(
+                        "ยืนยันเริ่มรอบใหม่? สมาชิกทั้งหมดจะถูกตั้งเป็นยังไม่ส่ง"
+                    )
+
+                ) {
+
+                    return;
+
+                }
+
+
+                try {
+
+                    for (
+                        const member
+                        of members
+                    ) {
+
+                        if (
+                            member.firestoreId
+                        ) {
+
+                            await updateRongkhemMember(
+
+                                member.firestoreId,
+
+                                {
+
+                                    status:
+
+                                        "pending"
+
+                                }
+
+                            );
+
+                        }
+
+                    }
+
+
+                    alert(
+                        "✅ เริ่มรอบใหม่เรียบร้อย"
+                    );
+
+
+                    await loadMembers();
+
+                }
+
+                catch (
+                    error
+                ) {
+
+                    alert(
+                        "❌ รีเซ็ตข้อมูลไม่สำเร็จ"
+                    );
+
+                }
+
+            };
+
+
+
+        // ==================================
+        // FILTER
+        // ==================================
+
+        window.filterMembers =
+            function (
+                type
+            ) {
+
+                currentFilter =
+                    type;
+
+
+                document
+                    .getElementById(
+                        "btnFilterAll"
+                    )
+                    .className =
+
+                    type === "all"
+
+                    ?
+
+                    "px-3 py-2 text-xs rounded-lg bg-amber-600 text-white"
+
+                    :
+
+                    "px-3 py-2 text-xs rounded-lg bg-gray-100 text-gray-700";
+
+
+                document
+                    .getElementById(
+                        "btnFilterSent"
+                    )
+                    .className =
+
+                    type === "sent"
+
+                    ?
+
+                    "px-3 py-2 text-xs rounded-lg bg-emerald-600 text-white"
+
+                    :
+
+                    "px-3 py-2 text-xs rounded-lg bg-gray-100 text-gray-700";
+
+
+                document
+                    .getElementById(
+                        "btnFilterPending"
+                    )
+                    .className =
+
+                    type === "pending"
+
+                    ?
+
+                    "px-3 py-2 text-xs rounded-lg bg-red-600 text-white"
+
+                    :
+
+                    "px-3 py-2 text-xs rounded-lg bg-gray-100 text-gray-700";
+
+
+                renderTable();
+
+            };
+
+
+
+        // ==================================
+        // START
+        // ==================================
+
+        document.addEventListener(
+
+            "DOMContentLoaded",
+
+            async function () {
+
+                await loadMembers();
+
+            }
+
+        );
+
     </script>
+
 </body>
 </html>
