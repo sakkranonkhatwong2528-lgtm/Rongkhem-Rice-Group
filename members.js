@@ -1776,3 +1776,21 @@ window.addEventListener(
 
 </body>
 </html>
+/* =========================================================
+   EXPORT FUNCTIONS
+   สำหรับ members.html และ receive.js
+========================================================= */
+
+export {
+  getRongkhemMembers,
+  findMemberByIdOrName,
+  findMemberById,
+  findMemberByName,
+  generateMemberId,
+  addRongkhemMember,
+  updateRongkhemMember,
+  deleteRongkhemMember,
+  migrateDefaultMembers,
+  refreshMembers,
+  subscribeMembers
+};
