@@ -1,16 +1,34 @@
-// Import สคริปต์ Firebase (เวอร์ชัน Web CDN ใช้งานบนมือถือได้ทันที)
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { 
-  getFirestore, 
-  collection, 
-  addDoc, 
-  getDocs, 
-  doc, 
-  updateDoc, 
-  deleteDoc 
-} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+// =============================================================
+// 🌾 Rongkhem Rice Group - Cloud Database
+// ใช้ Firebase Firestore เป็นฐานข้อมูลกลาง
+// มือถือ / คอมพิวเตอร์ / แท็บเล็ต ใช้ข้อมูลชุดเดียวกัน
+// =============================================================
 
-// รหัสเชื่อมต่อ Firebase ของกลุ่มข้าวรงเขม
+import { initializeApp } from
+"https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  getDoc,
+  doc,
+  updateDoc,
+  deleteDoc,
+  setDoc,
+  query,
+  orderBy,
+  onSnapshot,
+  serverTimestamp
+} from
+"https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+
+// =============================================================
+// 🔥 Firebase Configuration
+// =============================================================
+
 const firebaseConfig = {
   apiKey: "AIzaSyCme8E32QPySbSetpZP9_yAyiHpSGmlxlc",
   authDomain: "rongkhem-rice-group.firebaseapp.com",
@@ -21,51 +39,418 @@ const firebaseConfig = {
   measurementId: "G-70Z00XXB8Y"
 };
 
-// เริ่มต้นระบบ Firestore Database
+
+// =============================================================
+// 🚀 เริ่มต้น Firebase
+// =============================================================
+
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
 
-// -------------------------------------------------------------
-// ฟังก์ชันบันทึก / ดึง / ลบ ข้อมูลผ่าน Cloud Database
-// -------------------------------------------------------------
+export const db = getFirestore(app);
 
-// 1. บันทึกข้อมูลใหม่ (เช่น บันทึกสมาชิก, บันทึกงานศพ)
+
+// =============================================================
+// 💾 บันทึกข้อมูลใหม่
+// =============================================================
+
 export async function saveData(collectionName, data) {
+
   try {
-    const docRef = await addDoc(collection(db, collectionName), {
-      ...data,
-      createdAt: new Date().toISOString()
-    });
-    console.log("บันทึกขึ้น Cloud เรียบร้อย ID:", docRef.id);
-    return { success: true, id: docRef.id };
+
+    const docRef = await addDoc(
+      collection(db, collectionName),
+      {
+        ...data,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      }
+    );
+
+    console.log(
+      "✅ บันทึกข้อมูลสำเร็จ:",
+      collectionName,
+      docRef.id
+    );
+
+    return {
+      success: true,
+      id: docRef.id
+    };
+
   } catch (error) {
-    console.error("เกิดข้อผิดพลาดในการบันทึก:", error);
-    return { success: false, error };
+
+    console.error(
+      "❌ บันทึกข้อมูลไม่สำเร็จ:",
+      error
+    );
+
+    return {
+      success: false,
+      error: error.message
+    };
+
   }
+
 }
 
-// 2. ดึงข้อมูลทั้งหมด
-export async function loadData(collectionName) {
+
+// =============================================================
+// 📥 โหลดข้อมูลทั้งหมด
+// =============================================================
+
+export async function loadData(
+  collectionName,
+  orderField = null
+) {
+
   try {
-    const querySnapshot = await getDocs(collection(db, collectionName));
-    let list = [];
-    querySnapshot.forEach((doc) => {
-      list.push({ id: doc.id, ...doc.data() });
+
+    let ref = collection(
+      db,
+      collectionName
+    );
+
+    let snapshot;
+
+    if (orderField) {
+
+      const q = query(
+        ref,
+        orderBy(orderField, "desc")
+      );
+
+      snapshot = await getDocs(q);
+
+    } else {
+
+      snapshot = await getDocs(ref);
+
+    }
+
+
+    const list = [];
+
+    snapshot.forEach((item) => {
+
+      list.push({
+        id: item.id,
+        ...item.data()
+      });
+
     });
+
+
+    console.log(
+      "📥 โหลดข้อมูลสำเร็จ:",
+      collectionName,
+      list.length,
+      "รายการ"
+    );
+
+
     return list;
+
   } catch (error) {
-    console.error("เกิดข้อผิดพลาดในการดึงข้อมูล:", error);
+
+    console.error(
+      "❌ โหลดข้อมูลไม่สำเร็จ:",
+      collectionName,
+      error
+    );
+
     return [];
+
   }
+
 }
 
-// 3. ลบข้อมูล
-export async function deleteData(collectionName, docId) {
+
+// =============================================================
+// 🔎 โหลดข้อมูล 1 รายการ
+// =============================================================
+
+export async function loadOneData(
+  collectionName,
+  docId
+) {
+
   try {
-    await deleteDoc(doc(db, collectionName, docId));
-    return { success: true };
+
+    const docRef = doc(
+      db,
+      collectionName,
+      docId
+    );
+
+    const snapshot = await getDoc(
+      docRef
+    );
+
+
+    if (!snapshot.exists()) {
+
+      return null;
+
+    }
+
+
+    return {
+      id: snapshot.id,
+      ...snapshot.data()
+    };
+
   } catch (error) {
-    console.error("เกิดข้อผิดพลาดในการลบ:", error);
-    return { success: false, error };
+
+    console.error(
+      "❌ โหลดข้อมูลไม่สำเร็จ:",
+      error
+    );
+
+    return null;
+
   }
+
+}
+
+
+// =============================================================
+// ✏️ แก้ไขข้อมูล
+// =============================================================
+
+export async function updateData(
+  collectionName,
+  docId,
+  data
+) {
+
+  try {
+
+    const docRef = doc(
+      db,
+      collectionName,
+      docId
+    );
+
+
+    await updateDoc(
+      docRef,
+      {
+        ...data,
+        updatedAt: serverTimestamp()
+      }
+    );
+
+
+    console.log(
+      "✏️ แก้ไขข้อมูลสำเร็จ:",
+      collectionName,
+      docId
+    );
+
+
+    return {
+      success: true
+    };
+
+  } catch (error) {
+
+    console.error(
+      "❌ แก้ไขข้อมูลไม่สำเร็จ:",
+      error
+    );
+
+
+    return {
+      success: false,
+      error: error.message
+    };
+
+  }
+
+}
+
+
+// =============================================================
+// 🔁 บันทึกหรืออัปเดตข้อมูลตาม ID
+// =============================================================
+
+export async function setData(
+  collectionName,
+  docId,
+  data
+) {
+
+  try {
+
+    const docRef = doc(
+      db,
+      collectionName,
+      docId
+    );
+
+
+    await setDoc(
+      docRef,
+      {
+        ...data,
+        updatedAt: serverTimestamp()
+      },
+      {
+        merge: true
+      }
+    );
+
+
+    return {
+      success: true,
+      id: docId
+    };
+
+  } catch (error) {
+
+    console.error(
+      "❌ บันทึกข้อมูลไม่สำเร็จ:",
+      error
+    );
+
+
+    return {
+      success: false,
+      error: error.message
+    };
+
+  }
+
+}
+
+
+// =============================================================
+// 🗑️ ลบข้อมูล
+// =============================================================
+
+export async function deleteData(
+  collectionName,
+  docId
+) {
+
+  try {
+
+    await deleteDoc(
+      doc(
+        db,
+        collectionName,
+        docId
+      )
+    );
+
+
+    console.log(
+      "🗑️ ลบข้อมูลสำเร็จ:",
+      collectionName,
+      docId
+    );
+
+
+    return {
+      success: true
+    };
+
+  } catch (error) {
+
+    console.error(
+      "❌ ลบข้อมูลไม่สำเร็จ:",
+      error
+    );
+
+
+    return {
+      success: false,
+      error: error.message
+    };
+
+  }
+
+}
+
+
+// =============================================================
+// 🔴 ติดตามข้อมูลแบบ Real-time
+// ข้อมูลเปลี่ยนจากมือถือ → คอม/แท็บเล็ตอัปเดตตาม
+// =============================================================
+
+export function subscribeData(
+  collectionName,
+  callback,
+  orderField = null
+) {
+
+  try {
+
+    let ref = collection(
+      db,
+      collectionName
+    );
+
+
+    if (orderField) {
+
+      ref = query(
+        ref,
+        orderBy(orderField, "desc")
+      );
+
+    }
+
+
+    return onSnapshot(
+      ref,
+
+      (snapshot) => {
+
+        const list = [];
+
+        snapshot.forEach((item) => {
+
+          list.push({
+            id: item.id,
+            ...item.data()
+          });
+
+        });
+
+
+        console.log(
+          "🔄 ข้อมูลอัปเดต:",
+          collectionName,
+          list.length,
+          "รายการ"
+        );
+
+
+        callback(list);
+
+      },
+
+      (error) => {
+
+        console.error(
+          "❌ Real-time error:",
+          error
+        );
+
+      }
+
+    );
+
+  } catch (error) {
+
+    console.error(
+      "❌ Subscribe error:",
+      error
+    );
+
+    return null;
+
+  }
+
 }
