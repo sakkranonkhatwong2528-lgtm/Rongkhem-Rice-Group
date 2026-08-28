@@ -1,7 +1,6 @@
 // ==========================================
 // receive.js
-// ระบบรับข้าวสาร
-// Rongkhem Rice Group
+// ระบบรับข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
 // Firebase Firestore Version
 // ==========================================
 
@@ -11,20 +10,6 @@ import {
     updateData,
     subscribeData
 } from "./database.js";
-
-import {
-    getRongkhemMembers,
-    subscribeMembers
-} from "./members.js";
-
-
-// ==========================================
-// COLLECTION
-// ==========================================
-
-const FUNERALS_COLLECTION = "funerals";
-
-const DELIVERIES_COLLECTION = "deliveries";
 
 
 // ==========================================
@@ -37,12 +22,6 @@ let funerals = [];
 
 let deliveries = [];
 
-let unsubscribeMembers = null;
-
-let unsubscribeFunerals = null;
-
-let unsubscribeDeliveries = null;
-
 
 // ==========================================
 // Escape HTML
@@ -51,6 +30,7 @@ let unsubscribeDeliveries = null;
 function escapeHtml(value) {
 
     return String(value ?? "")
+
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
@@ -61,7 +41,7 @@ function escapeHtml(value) {
 
 
 // ==========================================
-// แจ้งข้อความ
+// แสดงข้อความ
 // ==========================================
 
 function notify(message) {
@@ -72,100 +52,84 @@ function notify(message) {
 
 
 // ==========================================
-// ดึงงานศพที่กำลังดำเนินการ
+// หางานศพที่กำลังเปิดอยู่
 // ==========================================
 
 function getActiveFuneral() {
 
-    return funerals.find(funeral => {
+    return funerals.find(
 
-        return funeral.active === true ||
-               funeral.status === "active";
+        funeral =>
 
-    }) || null;
+            funeral.active === true ||
 
-}
+            funeral.status === "active" ||
 
+            funeral.status === "กำลังดำเนินการ"
 
-// ==========================================
-// โหลดข้อมูลเริ่มต้น
-// ==========================================
-
-async function loadReceiveData() {
-
-    try {
-
-        members =
-            await getRongkhemMembers();
-
-        funerals =
-            await loadDataWithFirestoreId(
-                FUNERALS_COLLECTION
-            );
-
-        deliveries =
-            await loadDataWithFirestoreId(
-                DELIVERIES_COLLECTION
-            );
-
-        renderAll();
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "โหลดข้อมูลรับข้าวไม่สำเร็จ:",
-            error
-        );
-
-        notify(
-            "❌ ไม่สามารถโหลดข้อมูลได้"
-        );
-
-    }
+    ) || null;
 
 }
 
 
 // ==========================================
-// ตรวจสอบว่าสมาชิกส่งข้าวแล้วหรือยัง
+// ตรวจสอบสมาชิกส่งข้าวแล้วหรือยัง
 // ==========================================
 
-function getDelivery(member) {
+function hasReceived(memberId) {
 
     const active =
         getActiveFuneral();
 
+
     if (!active) {
 
-        return null;
+        return false;
 
     }
 
-    return deliveries.find(delivery => {
 
-        return String(
-            delivery.funeralId
-        ) === String(
-            active.firestoreId
-        )
+    return deliveries.some(
 
-        &&
+        delivery => {
 
-        String(
-            delivery.memberFirestoreId
-        ) === String(
-            member.firestoreId
-        );
+            const funeralId =
 
-    }) || null;
+                delivery.funeralId ||
+                delivery.funeralFirestoreId;
+
+
+            const deliveryMemberId =
+
+                delivery.memberId ||
+                delivery.memberFirestoreId;
+
+
+            return
+
+                String(funeralId)
+
+                ===
+
+                String(active.firestoreId)
+
+                &&
+
+                String(deliveryMemberId)
+
+                ===
+
+                String(memberId);
+
+        }
+
+    );
 
 }
 
 
 // ==========================================
-// แสดงตารางสมาชิก
+// โหลดตารางสมาชิก
 // ==========================================
 
 function loadReceiveMembers() {
@@ -175,7 +139,12 @@ function loadReceiveMembers() {
             "receiveTable"
         );
 
-    if (!tbody) return;
+
+    if (!tbody) {
+
+        return;
+
+    }
 
 
     const active =
@@ -192,11 +161,11 @@ function loadReceiveMembers() {
             <tr>
 
                 <td
-                    colspan="7"
+                    colspan="6"
                     style="
                         text-align:center;
                         padding:30px;
-                        color:#dc2626;
+                        color:#b91c1c;
                     "
                 >
 
@@ -207,6 +176,9 @@ function loadReceiveMembers() {
             </tr>
 
         `;
+
+
+        updateSummary();
 
         return;
 
@@ -220,10 +192,11 @@ function loadReceiveMembers() {
             <tr>
 
                 <td
-                    colspan="7"
+                    colspan="6"
                     style="
                         text-align:center;
                         padding:30px;
+                        color:#777;
                     "
                 >
 
@@ -235,6 +208,9 @@ function loadReceiveMembers() {
 
         `;
 
+
+        updateSummary();
+
         return;
 
     }
@@ -244,104 +220,123 @@ function loadReceiveMembers() {
 
         (member, index) => {
 
-            const delivery =
-                getDelivery(member);
+            const memberId =
+                member.firestoreId;
 
 
             const received =
-                !!delivery;
+                hasReceived(memberId);
 
 
-            const tr =
-                document.createElement(
-                    "tr"
-                );
+            tbody.innerHTML += `
+
+                <tr>
+
+                    <td
+                        class="px-4 py-3 text-center"
+                    >
+
+                        ${index + 1}
+
+                    </td>
 
 
-            tr.innerHTML = `
+                    <td
+                        class="px-4 py-3"
+                    >
 
-                <td>
-                    ${index + 1}
-                </td>
+                        ${escapeHtml(
+                            member.houseNo ||
+                            member.house ||
+                            "-"
+                        )}
 
-
-                <td>
-                    ${escapeHtml(
-
-                        member.houseNo ||
-                        member.address ||
-                        "-"
-
-                    )}
-                </td>
+                    </td>
 
 
-                <td>
-                    ${escapeHtml(
-                        member.name || "-"
-                    )}
-                </td>
+                    <td
+                        class="px-4 py-3 font-medium"
+                    >
+
+                        ${escapeHtml(
+                            member.name ||
+                            member.fullName ||
+                            "-"
+                        )}
+
+                    </td>
 
 
-                <td>
-                    ${escapeHtml(
-                        member.phone || "-"
-                    )}
-                </td>
+                    <td
+                        class="px-4 py-3"
+                    >
+
+                        ${escapeHtml(
+                            member.phone ||
+                            "-"
+                        )}
+
+                    </td>
 
 
-                <td>
+                    <td
+                        class="px-4 py-3 text-center"
+                    >
 
-                    ${
-                        received
+                        ${
+                            received
 
-                        ?
+                            ?
 
-                        `<span class="status normal">
-                            ส่งแล้ว
-                        </span>`
+                            `<span class="status normal">
+                                ส่งแล้ว
+                            </span>`
 
-                        :
+                            :
 
-                        `<span class="status pending">
-                            รอส่ง
-                        </span>`
-                    }
+                            `<span class="status pending">
+                                รอส่ง
+                            </span>`
+                        }
 
-                </td>
+                    </td>
 
 
-                <td>
+                    <td
+                        class="px-4 py-3 text-center"
+                    >
 
-                    ${
-                        received
+                        ${
+                            received
 
-                        ?
+                            ?
 
-                        `-`
+                            `-`
 
-                        :
+                            :
 
-                        `<button
-                            class="btn btn-success receive-button"
-                            data-member-id="${member.firestoreId}"
-                        >
-                            🌾 รับข้าวสาร
-                        </button>`
-                    }
+                            `<button
+                                class="btn btn-success"
+                                onclick="receiveRice('${memberId}')"
+                            >
 
-                </td>
+                                รับข้าวสาร
+
+                            </button>`
+                        }
+
+                    </td>
+
+                </tr>
 
             `;
-
-
-            tbody.appendChild(
-                tr
-            );
 
         }
 
     );
+
+
+    updateSummary();
 
 }
 
@@ -350,244 +345,138 @@ function loadReceiveMembers() {
 // รับข้าวสาร
 // ==========================================
 
-async function receiveRice(
-    memberFirestoreId
-) {
+async function receiveRice(memberId) {
 
-    try {
+    const active =
+        getActiveFuneral();
 
-        const active =
-            getActiveFuneral();
 
-
-        if (!active) {
-
-            notify(
-                "⚠️ ไม่มีงานศพที่เปิดอยู่"
-            );
-
-            return;
-
-        }
-
-
-        const member =
-            members.find(
-
-                item =>
-                    item.firestoreId ===
-                    memberFirestoreId
-
-            );
-
-
-        if (!member) {
-
-            notify(
-                "❌ ไม่พบข้อมูลสมาชิก"
-            );
-
-            return;
-
-        }
-
-
-        // ป้องกันการบันทึกซ้ำ
-
-        const existingDelivery =
-            deliveries.find(
-
-                delivery =>
-
-                    String(
-                        delivery.funeralId
-                    )
-
-                    ===
-
-                    String(
-                        active.firestoreId
-                    )
-
-                    &&
-
-                    String(
-                        delivery.memberFirestoreId
-                    )
-
-                    ===
-
-                    String(
-                        member.firestoreId
-                    )
-
-            );
-
-
-        if (existingDelivery) {
-
-            notify(
-                "⚠️ สมาชิกท่านนี้ส่งข้าวสารแล้ว"
-            );
-
-            return;
-
-        }
-
-
-        const confirmed =
-            confirm(
-
-                `ยืนยันรับข้าวสาร\n\n` +
-
-                `สมาชิก: ${member.name}\n` +
-
-                `บ้านเลขที่: ${
-                    member.houseNo ||
-                    member.address ||
-                    "-"
-                }\n\n` +
-
-                `จำนวน 1 ถุง`
-
-            );
-
-
-        if (!confirmed) {
-
-            return;
-
-        }
-
-
-        // ==================================
-        // บันทึกรายการรับข้าวลง Firebase
-        // ==================================
-
-        const result =
-            await saveData(
-
-                DELIVERIES_COLLECTION,
-
-                {
-
-                    funeralId:
-                        active.firestoreId,
-
-                    memberFirestoreId:
-                        member.firestoreId,
-
-                    memberId:
-                        member.memberId || "",
-
-                    memberName:
-                        member.name || "",
-
-                    houseNo:
-                        member.houseNo ||
-                        member.address ||
-                        "",
-
-                    quantity:
-                        1,
-
-                    receivedAt:
-                        new Date()
-                        .toISOString()
-
-                }
-
-            );
-
-
-        if (!result.success) {
-
-            throw new Error(
-
-                result.error ||
-                "ไม่สามารถบันทึกรายการรับข้าว"
-
-            );
-
-        }
-
-
-        // ==================================
-        // อัปเดตจำนวนครั้งที่ส่งของสมาชิก
-        // ==================================
-
-        const newSentCount =
-            Number(
-                member.sent || 0
-            ) + 1;
-
-
-        const updateResult =
-            await updateData(
-
-                "members",
-
-                member.firestoreId,
-
-                {
-
-                    sent:
-                        newSentCount,
-
-                    status:
-                        "sent"
-
-                }
-
-            );
-
-
-        if (!updateResult.success) {
-
-            console.warn(
-                "บันทึกรายการรับข้าวแล้ว แต่สถานะสมาชิกอัปเดตไม่สำเร็จ"
-            );
-
-        }
-
+    if (!active) {
 
         notify(
+            "⚠️ ยังไม่มีงานศพที่เปิดอยู่"
+        );
 
-            `✅ บันทึกรับข้าวสารเรียบร้อย\n\n` +
+        return;
 
-            `${member.name}\n` +
+    }
+
+
+    const member =
+        members.find(
+
+            item =>
+
+                String(item.firestoreId)
+
+                ===
+
+                String(memberId)
+
+        );
+
+
+    if (!member) {
+
+        notify(
+            "❌ ไม่พบข้อมูลสมาชิก"
+        );
+
+        return;
+
+    }
+
+
+    if (
+        hasReceived(memberId)
+    ) {
+
+        notify(
+            "⚠️ สมาชิกคนนี้ส่งข้าวสารแล้ว"
+        );
+
+        return;
+
+    }
+
+
+    const confirmed =
+        confirm(
+
+            `ยืนยันการรับข้าวสาร\n\n` +
+
+            `สมาชิก: ${member.name || "-"}\n` +
+
+            `บ้านเลขที่: ${member.houseNo || "-"}\n\n` +
 
             `จำนวน 1 ถุง`
 
         );
 
 
-        await loadReceiveData();
+    if (!confirmed) {
+
+        return;
 
     }
 
-    catch (error) {
 
-        console.error(
-            "❌ รับข้าวสารไม่สำเร็จ:",
-            error
+    const result =
+        await saveData(
+
+            "deliveries",
+
+            {
+
+                funeralId:
+                    active.firestoreId,
+
+                memberId:
+                    member.firestoreId,
+
+                memberName:
+                    member.name || "",
+
+                houseNo:
+                    member.houseNo || "",
+
+                quantity:
+                    1,
+
+                date:
+                    new Date()
+                    .toISOString(),
+
+                status:
+                    "received"
+
+            }
+
         );
 
+
+    if (!result.success) {
 
         notify(
-
-            "❌ บันทึกข้อมูลไม่สำเร็จ\n\n" +
-
-            (
-                error.message ||
-                error
-            )
-
+            "❌ บันทึกข้อมูลไม่สำเร็จ"
         );
+
+        return;
 
     }
 
+
+    notify(
+        "✅ บันทึกการรับข้าวสารเรียบร้อย"
+    );
+
 }
+
+
+// ทำให้ onclick ใน HTML เรียกใช้ได้
+
+window.receiveRice =
+    receiveRice;
 
 
 // ==========================================
@@ -596,19 +485,14 @@ async function receiveRice(
 
 function searchReceive() {
 
-    const input =
-        document.getElementById(
-            "searchReceive"
-        );
-
-
-    if (!input) return;
-
-
     const keyword =
-        input.value
-            .trim()
-            .toLowerCase();
+        document
+            .getElementById(
+                "searchReceive"
+            )
+            ?.value
+            .toLowerCase()
+            .trim() || "";
 
 
     const rows =
@@ -617,34 +501,40 @@ function searchReceive() {
         );
 
 
-    rows.forEach(row => {
+    rows.forEach(
 
-        const text =
-            row.innerText
-                .toLowerCase();
+        row => {
+
+            const text =
+                row.innerText
+                    .toLowerCase();
 
 
-        row.style.display =
+            row.style.display =
 
-            text.includes(
-                keyword
-            )
+                text.includes(keyword)
 
-            ?
+                ?
 
-            ""
+                ""
 
-            :
+                :
 
-            "none";
+                "none";
 
-    });
+        }
+
+    );
 
 }
 
 
+window.searchReceive =
+    searchReceive;
+
+
 // ==========================================
-// รายชื่อสมาชิกที่ยังไม่ส่ง
+// รายชื่อสมาชิกค้างส่ง
 // ==========================================
 
 function pendingMembers() {
@@ -660,41 +550,15 @@ function pendingMembers() {
     }
 
 
-    return members.filter(member => {
+    return members.filter(
 
-        const delivery =
-            deliveries.find(
+        member =>
 
-                item =>
+            !hasReceived(
+                member.firestoreId
+            )
 
-                    String(
-                        item.funeralId
-                    )
-
-                    ===
-
-                    String(
-                        active.firestoreId
-                    )
-
-                    &&
-
-                    String(
-                        item.memberFirestoreId
-                    )
-
-                    ===
-
-                    String(
-                        member.firestoreId
-                    )
-
-            );
-
-
-        return !delivery;
-
-    });
+    );
 
 }
 
@@ -705,172 +569,103 @@ function pendingMembers() {
 
 async function finishFuneral() {
 
-    try {
-
-        const active =
-            getActiveFuneral();
+    const active =
+        getActiveFuneral();
 
 
-        if (!active) {
-
-            notify(
-                "⚠️ ไม่มีงานศพที่กำลังดำเนินการ"
-            );
-
-            return;
-
-        }
-
-
-        const pending =
-            pendingMembers();
-
-
-        const confirmed =
-            confirm(
-
-                `ยืนยันปิดงานศพ\n\n` +
-
-                `${active.name ||
-                  active.deceasedName ||
-                  "ไม่ระบุชื่อ"}\n\n` +
-
-                `รับข้าวแล้ว: ${
-                    members.length -
-                    pending.length
-                } คน\n` +
-
-                `ค้างส่ง: ${
-                    pending.length
-                } คน`
-
-            );
-
-
-        if (!confirmed) {
-
-            return;
-
-        }
-
-
-        // ==================================
-        // เพิ่มจำนวนค้างส่ง
-        // ==================================
-
-        for (
-            const member
-            of pending
-        ) {
-
-            await updateData(
-
-                "members",
-
-                member.firestoreId,
-
-                {
-
-                    pending:
-
-                        Number(
-                            member.pending || 0
-                        ) + 1,
-
-                    status:
-                        "pending"
-
-                }
-
-            );
-
-        }
-
-
-        // ==================================
-        // ปิดงานศพ
-        // ==================================
-
-        const funeralResult =
-            await updateData(
-
-                FUNERALS_COLLECTION,
-
-                active.firestoreId,
-
-                {
-
-                    active:
-                        false,
-
-                    status:
-                        "finished",
-
-                    finishedAt:
-                        new Date()
-                        .toISOString(),
-
-                    receivedCount:
-
-                        members.length -
-                        pending.length,
-
-                    pendingCount:
-                        pending.length
-
-                }
-
-            );
-
-
-        if (!funeralResult.success) {
-
-            throw new Error(
-                "ไม่สามารถปิดงานศพได้"
-            );
-
-        }
-
+    if (!active) {
 
         notify(
-
-            "✅ ปิดงานศพเรียบร้อย\n\n" +
-
-            `รับข้าวแล้ว ${
-                members.length -
-                pending.length
-            } ถุง\n` +
-
-            `ค้างส่ง ${
-                pending.length
-            } ครัวเรือน`
-
+            "⚠️ ไม่มีงานศพที่กำลังเปิดอยู่"
         );
 
-
-        await loadReceiveData();
+        return;
 
     }
 
-    catch (error) {
 
-        console.error(
-            "❌ ปิดงานศพไม่สำเร็จ:",
-            error
+    const pending =
+        pendingMembers();
+
+
+    const confirmed =
+        confirm(
+
+            `ต้องการปิดงานศพ\n\n` +
+
+            `${
+                active.name ||
+                active.deceasedName ||
+                "-"
+            }\n\n` +
+
+            `สมาชิกทั้งหมด: ${members.length} คน\n` +
+
+            `ส่งแล้ว: ${
+                members.length -
+                pending.length
+            } คน\n` +
+
+            `ค้างส่ง: ${pending.length} คน`
+
         );
 
+
+    if (!confirmed) {
+
+        return;
+
+    }
+
+
+    const result =
+        await updateData(
+
+            "funerals",
+
+            active.firestoreId,
+
+            {
+
+                active:
+                    false,
+
+                status:
+                    "finished",
+
+                finishedAt:
+                    new Date()
+                    .toISOString()
+
+            }
+
+        );
+
+
+    if (!result.success) {
 
         notify(
             "❌ ไม่สามารถปิดงานศพได้"
         );
 
+        return;
+
     }
+
+
+    notify(
+        "✅ ปิดงานศพเรียบร้อย"
+    );
 
 }
 
 
+window.finishFuneral =
+    finishFuneral;
+
+
 // ==========================================
-// ประวัติรับข้าว
+// โหลดประวัติการรับข้าวสาร
 // ==========================================
 
 function loadHistory() {
@@ -881,38 +676,46 @@ function loadHistory() {
         );
 
 
-    if (!tbody) return;
+    if (!tbody) {
+
+        return;
+
+    }
 
 
     tbody.innerHTML = "";
 
 
-    const sortedDeliveries =
+    const history =
         [...deliveries]
         .sort(
 
-            (a, b) =>
+            (a, b) => {
 
-                new Date(
-                    b.receivedAt ||
-                    b.createdAt ||
-                    0
-                )
+                const dateA =
+                    new Date(
+                        a.date ||
+                        a.createdAt ||
+                        0
+                    );
 
-                -
 
-                new Date(
-                    a.receivedAt ||
-                    a.createdAt ||
-                    0
-                )
+                const dateB =
+                    new Date(
+                        b.date ||
+                        b.createdAt ||
+                        0
+                    );
+
+
+                return dateB - dateA;
+
+            }
 
         );
 
 
-    if (
-        sortedDeliveries.length === 0
-    ) {
+    if (history.length === 0) {
 
         tbody.innerHTML = `
 
@@ -920,9 +723,10 @@ function loadHistory() {
 
                 <td
                     colspan="5"
-                    style="
-                        text-align:center;
-                        padding:30px;
+                    class="
+                        text-center
+                        py-10
+                        text-gray-400
                     "
                 >
 
@@ -939,73 +743,121 @@ function loadHistory() {
     }
 
 
-    sortedDeliveries.forEach(
+    history.forEach(
 
-        (
-            delivery,
-            index
-        ) => {
+        (delivery, index) => {
 
             const member =
+
                 members.find(
 
                     item =>
 
-                        item.firestoreId ===
-                        delivery.memberFirestoreId
+                        String(
+                            item.firestoreId
+                        )
+
+                        ===
+
+                        String(
+                            delivery.memberId ||
+                            delivery.memberFirestoreId
+                        )
 
                 );
 
 
             const funeral =
+
                 funerals.find(
 
                     item =>
 
-                        item.firestoreId ===
-                        delivery.funeralId
+                        String(
+                            item.firestoreId
+                        )
+
+                        ===
+
+                        String(
+                            delivery.funeralId ||
+                            delivery.funeralFirestoreId
+                        )
 
                 );
 
 
             const dateValue =
-                delivery.receivedAt ||
-                delivery.createdAt;
+
+                delivery.date ||
+
+                delivery.createdAt ||
+
+                "";
 
 
-            const date =
-                dateValue
-
-                ?
-
-                new Date(
-                    dateValue
-                )
-                .toLocaleDateString(
-                    "th-TH"
-                )
-
-                :
-
+            let formattedDate =
                 "-";
+
+
+            if (dateValue) {
+
+                const date =
+                    new Date(
+                        dateValue
+                    );
+
+
+                if (
+                    !isNaN(
+                        date.getTime()
+                    )
+                ) {
+
+                    formattedDate =
+                        date.toLocaleDateString(
+                            "th-TH",
+                            {
+
+                                year:
+                                    "numeric",
+
+                                month:
+                                    "2-digit",
+
+                                day:
+                                    "2-digit"
+
+                            }
+                        );
+
+                }
+
+            }
 
 
             tbody.innerHTML += `
 
                 <tr>
 
-                    <td>
+                    <td
+                        class="px-4 py-3 text-center"
+                    >
+
                         ${index + 1}
+
                     </td>
 
 
-                    <td>
+                    <td
+                        class="px-4 py-3"
+                    >
 
                         ${escapeHtml(
 
-                            delivery.memberName ||
-
                             member?.name ||
+
+                            delivery.memberName ||
 
                             "-"
 
@@ -1014,7 +866,9 @@ function loadHistory() {
                     </td>
 
 
-                    <td>
+                    <td
+                        class="px-4 py-3"
+                    >
 
                         ${escapeHtml(
 
@@ -1029,15 +883,26 @@ function loadHistory() {
                     </td>
 
 
-                    <td>
-                        ${date}
+                    <td
+                        class="px-4 py-3 text-center"
+                    >
+
+                        ${formattedDate}
+
                     </td>
 
 
-                    <td>
-                        ${Number(
-                            delivery.quantity || 1
-                        )} ถุง
+                    <td
+                        class="px-4 py-3 text-center"
+                    >
+
+                        ${
+                            delivery.quantity ||
+                            1
+                        }
+
+                        ถุง
+
                     </td>
 
                 </tr>
@@ -1052,28 +917,49 @@ function loadHistory() {
 
 
 // ==========================================
-// แสดงผลทั้งหมด
+// อัปเดตสรุปด้านบน
 // ==========================================
 
-function renderAll() {
-
-    loadReceiveMembers();
-
-    loadHistory();
-
-    updateReceiveSummary();
-
-}
-
-
-// ==========================================
-// สรุปยอดรับข้าว
-// ==========================================
-
-function updateReceiveSummary() {
+function updateSummary() {
 
     const active =
         getActiveFuneral();
+
+
+    const total =
+        members.length;
+
+
+    let received =
+        0;
+
+
+    if (active) {
+
+        received =
+            members.filter(
+
+                member =>
+
+                    hasReceived(
+                        member.firestoreId
+                    )
+
+            ).length;
+
+    }
+
+
+    const pending =
+        active
+
+        ?
+
+        total - received
+
+        :
+
+        0;
 
 
     const totalElement =
@@ -1094,69 +980,10 @@ function updateReceiveSummary() {
         );
 
 
-    if (!active) {
-
-        if (totalElement) {
-
-            totalElement.textContent =
-                members.length;
-
-        }
-
-
-        if (receivedElement) {
-
-            receivedElement.textContent =
-                "0";
-
-        }
-
-
-        if (pendingElement) {
-
-            pendingElement.textContent =
-                "0";
-
-        }
-
-        return;
-
-    }
-
-
-    const received =
-        deliveries.filter(
-
-            delivery =>
-
-                String(
-                    delivery.funeralId
-                )
-
-                ===
-
-                String(
-                    active.firestoreId
-                )
-
-        ).length;
-
-
-    const pending =
-        Math.max(
-
-            0,
-
-            members.length -
-            received
-
-        );
-
-
     if (totalElement) {
 
         totalElement.textContent =
-            members.length;
+            total;
 
     }
 
@@ -1180,95 +1007,73 @@ function updateReceiveSummary() {
 
 
 // ==========================================
-// Real-time Firebase
+// โหลดข้อมูลครั้งแรก
 // ==========================================
 
-function startRealtime() {
+async function loadAllData() {
 
-    // สมาชิก
+    try {
 
-    unsubscribeMembers =
-        subscribeMembers(
+        members =
+            await loadDataWithFirestoreId(
+                "members"
+            );
 
-            updatedMembers => {
 
-                members =
-                    updatedMembers;
+        funerals =
+            await loadDataWithFirestoreId(
+                "funerals"
+            );
 
-                renderAll();
 
-            }
+        deliveries =
+            await loadDataWithFirestoreId(
+                "deliveries"
+            );
 
+
+        loadReceiveMembers();
+
+        loadHistory();
+
+        updateSummary();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "โหลดข้อมูลไม่สำเร็จ:",
+            error
         );
 
 
-    // งานศพ
-
-    unsubscribeFunerals =
-        subscribeData(
-
-            FUNERALS_COLLECTION,
-
-            updatedFunerals => {
-
-                funerals =
-                    updatedFunerals;
-
-                renderAll();
-
-            }
-
+        notify(
+            "❌ ไม่สามารถโหลดข้อมูลจาก Firebase ได้"
         );
 
-
-    // การรับข้าว
-
-    unsubscribeDeliveries =
-        subscribeData(
-
-            DELIVERIES_COLLECTION,
-
-            updatedDeliveries => {
-
-                deliveries =
-                    updatedDeliveries;
-
-                renderAll();
-
-            }
-
-        );
+    }
 
 }
 
 
 // ==========================================
-// Event Click
+// REALTIME สมาชิก
 // ==========================================
 
-document.addEventListener(
+subscribeData(
 
-    "click",
+    "members",
 
-    async event => {
+    data => {
 
-        const receiveButton =
-            event.target.closest(
-                ".receive-button"
-            );
+        members = data;
 
+        loadReceiveMembers();
 
-        if (receiveButton) {
+        loadHistory();
 
-            await receiveRice(
-
-                receiveButton.dataset.memberId
-
-            );
-
-            return;
-
-        }
+        updateSummary();
 
     }
 
@@ -1276,26 +1081,49 @@ document.addEventListener(
 
 
 // ==========================================
-// เปิดให้ HTML เดิมเรียกใช้ได้
+// REALTIME งานศพ
 // ==========================================
 
-window.receiveRice =
-    receiveRice;
+subscribeData(
 
-window.searchReceive =
-    searchReceive;
+    "funerals",
 
-window.pendingMembers =
-    pendingMembers;
+    data => {
 
-window.finishFuneral =
-    finishFuneral;
+        funerals = data;
 
-window.loadReceiveMembers =
-    loadReceiveMembers;
+        loadReceiveMembers();
 
-window.loadHistory =
-    loadHistory;
+        loadHistory();
+
+        updateSummary();
+
+    }
+
+);
+
+
+// ==========================================
+// REALTIME การรับข้าว
+// ==========================================
+
+subscribeData(
+
+    "deliveries",
+
+    data => {
+
+        deliveries = data;
+
+        loadReceiveMembers();
+
+        loadHistory();
+
+        updateSummary();
+
+    }
+
+);
 
 
 // ==========================================
@@ -1306,49 +1134,15 @@ document.addEventListener(
 
     "DOMContentLoaded",
 
-    async () => {
+    () => {
 
-        await loadReceiveData();
-
-        startRealtime();
-
-        console.log(
-            "🌾 Receive System Ready"
-        );
+        loadAllData();
 
     }
 
 );
 
 
-// ==========================================
-// ปิดการเชื่อมต่อเมื่อออกจากหน้า
-// ==========================================
-
-window.addEventListener(
-
-    "beforeunload",
-
-    () => {
-
-        if (unsubscribeMembers) {
-
-            unsubscribeMembers();
-
-        }
-
-        if (unsubscribeFunerals) {
-
-            unsubscribeFunerals();
-
-        }
-
-        if (unsubscribeDeliveries) {
-
-            unsubscribeDeliveries();
-
-        }
-
-    }
-
+console.log(
+    "🌾 Receive System Firebase Ready"
 );
