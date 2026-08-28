@@ -606,120 +606,1171 @@
 ========================================== -->
 
 <script type="module">
+
 import {
-  getRongkhemMembers, addRongkhemMember, updateRongkhemMember,
-  deleteRongkhemMember, resetAllMembersStatus, subscribeMembers,
-  getMemberSummary
-} from "./members.js";
 
-let members = [], currentFilter = "all", searchKeyword = "", unsubscribeMembers = null;
-const $ = id => document.getElementById(id);
+    getRongkhemMembers,
+    addRongkhemMember,
+    updateRongkhemMember,
+    deleteRongkhemMember,
+    resetAllMembersStatus,
+    subscribeMembers,
+    getMemberSummary
 
-function escapeHtml(v) {
-  return String(v ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
 }
-function normalize(m) {
-  return {...m, memberId:String(m.memberId||m.id||"").trim().toUpperCase(),
-    houseNo:m.houseNo||m.address||"", address:m.address||m.houseNo||""};
+
+from "./members.js";
+
+
+
+let members = [];
+
+let currentFilter = "all";
+
+let searchKeyword = "";
+
+let unsubscribeMembers = null;
+
+
+
+// ==========================================
+// ป้องกัน XSS
+// ==========================================
+
+function escapeHtml(value) {
+
+    return String(
+        value ?? ""
+    )
+
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
 }
-function showMessage(text,type="success"){
-  let box=$("systemMessage");
-  if(!box){
-    box=document.createElement("div"); box.id="systemMessage";
-    box.className="rounded-xl border px-4 py-3 text-sm";
-    document.querySelector(".max-w-6xl").prepend(box);
-  }
-  box.className="rounded-xl border px-4 py-3 text-sm "+(type==="error"?"bg-red-50 border-red-200 text-red-700":type==="warning"?"bg-amber-50 border-amber-200 text-amber-800":"bg-green-50 border-green-200 text-green-700");
-  box.textContent=text; box.classList.remove("hidden");
-  setTimeout(()=>box.classList.add("hidden"),4500);
-}
-function filtered(){
-  const k=searchKeyword.trim().toLowerCase();
-  return members.filter(m=>{
-    const s=[m.memberId,m.name,m.address,m.houseNo,m.phone].join(" ").toLowerCase();
-    if(k&&!s.includes(k)) return false;
-    if(currentFilter==="sent") return m.status==="sent";
-    if(currentFilter==="pending") return m.status!=="sent";
-    if(currentFilter==="overdue") return Number(m.pending||0)>0;
-    return true;
-  });
-}
-function render(){
-  members=members.map(normalize).sort((a,b)=>a.memberId.localeCompare(b.memberId,undefined,{numeric:true,sensitivity:"base"}));
-  const s=getMemberSummary(members);
-  $("totalCount").textContent=s.total; $("sentCount").textContent=s.sent;
-  $("pendingCount").textContent=s.pending; $("overdueCount").textContent=s.overdue;
-  const tbody=$("memberTableBody"), list=filtered();
-  if(!list.length){tbody.innerHTML='<tr><td colspan="8" class="text-center py-10 text-gray-400">ไม่พบข้อมูลสมาชิก</td></tr>';return;}
-  tbody.innerHTML=list.map((m,i)=>`
-    <tr class="border-t hover:bg-amber-50">
-      <td class="px-4 py-3 text-center">${i+1}</td>
-      <td class="px-4 py-3 font-mono font-semibold">${escapeHtml(m.memberId||"-")}</td>
-      <td class="px-4 py-3">${escapeHtml(m.name||"-")}</td>
-      <td class="px-4 py-3">${escapeHtml(m.houseNo||"-")}</td>
-      <td class="px-4 py-3 text-center">${Number(m.sent||0)}</td>
-      <td class="px-4 py-3 text-center">${Number(m.pending||0)}</td>
-      <td class="px-4 py-3 text-center"><button class="toggle-status px-3 py-1 rounded-full text-xs font-medium ${m.status==="sent"?"bg-green-100 text-green-700":"bg-red-100 text-red-700"}" data-id="${escapeHtml(m.firestoreId||"")}">${m.status==="sent"?"🟢 ส่งแล้ว":"🔴 ยังไม่ส่ง"}</button></td>
-      <td class="px-4 py-3 text-center whitespace-nowrap">
-        <button class="edit-member text-blue-600 hover:text-blue-800 mr-3" data-id="${escapeHtml(m.firestoreId||"")}">✏️ แก้ไข</button>
-        <button class="delete-member text-red-600 hover:text-red-800" data-id="${escapeHtml(m.firestoreId||"")}">🗑️ ลบ</button>
-      </td>
-    </tr>`).join("");
-}
-async function loadMembers(){
-  $("memberTableBody").innerHTML='<tr><td colspan="8" class="loading-row">🔄 กำลังโหลดข้อมูลจาก Firebase...</td></tr>';
-  try{members=(await getRongkhemMembers()).map(normalize);render();}
-  catch(e){console.error(e);$("memberTableBody").innerHTML='<tr><td colspan="8" class="text-center py-10 text-red-600">❌ ไม่สามารถโหลดข้อมูลสมาชิกได้</td></tr>';showMessage("❌ โหลดข้อมูลไม่สำเร็จ: "+e.message,"error");}
-}
-$("memberForm").addEventListener("submit",async e=>{
-  e.preventDefault();
-  const memberId=$("memberId").value.trim(),name=$("memberName").value.trim(),houseNo=$("memberHouse").value.trim();
-  if(!name||!houseNo){showMessage("⚠️ กรุณากรอกชื่อและบ้านเลขที่","warning");return;}
-  const btn=e.submitter||e.target.querySelector('button[type="submit"]'); if(btn){btn.disabled=true;btn.textContent="⏳ กำลังบันทึก...";}
-  try{
-    const r=await addRongkhemMember({memberId,name,houseNo,address:houseNo,status:"pending",sent:0,pending:0});
-    if(!r.success)throw new Error(r.error||"ไม่สามารถบันทึกสมาชิกได้");
-    e.target.reset();showMessage("✅ เพิ่มสมาชิก "+name+" เรียบร้อย");await loadMembers();
-  }catch(err){showMessage("❌ เพิ่มสมาชิกไม่สำเร็จ: "+err.message,"error");}
-  finally{if(btn){btn.disabled=false;btn.textContent="💾 เพิ่มสมาชิก";}}
-});
-$("memberTableBody").addEventListener("click",async e=>{
-  const b=e.target.closest("button");if(!b)return;
-  const id=b.dataset.id,m=members.find(x=>x.firestoreId===id);if(!id||!m)return;
-  try{
-    if(b.classList.contains("toggle-status")){
-      const r=await updateRongkhemMember(id,{status:m.status==="sent"?"pending":"sent"});if(!r.success)throw new Error(r.error||"เปลี่ยนสถานะไม่สำเร็จ");showMessage("✅ อัปเดตสถานะเรียบร้อย");
-    }else if(b.classList.contains("edit-member")){
-      const newId=prompt("รหัสสมาชิก",m.memberId||"");if(newId===null)return;
-      const name=prompt("ชื่อ - นามสกุล",m.name||"");if(name===null)return;
-      const house=prompt("บ้านเลขที่",m.houseNo||m.address||"");if(house===null)return;
-      if(!name.trim()||!house.trim()){showMessage("⚠️ ชื่อและบ้านเลขที่ห้ามว่าง","warning");return;}
-      const code=newId.trim().toUpperCase()||m.memberId;
-      if(members.some(x=>x.firestoreId!==id&&x.memberId===code)){showMessage("❌ รหัสสมาชิกซ้ำ: "+code,"error");return;}
-      const r=await updateRongkhemMember(id,{memberId:code,id:code,name:name.trim(),houseNo:house.trim(),address:house.trim()});
-      if(!r.success)throw new Error(r.error||"แก้ไขไม่สำเร็จ");showMessage("✅ แก้ไขข้อมูลเรียบร้อย");
-    }else if(b.classList.contains("delete-member")){
-      if(!confirm("ยืนยันลบสมาชิก\n\n"+(m.name||"")))return;
-      const r=await deleteRongkhemMember(id);if(!r.success)throw new Error(r.error||"ลบไม่สำเร็จ");showMessage("🗑️ ลบสมาชิกเรียบร้อย");
+
+
+
+// ==========================================
+// LOAD MEMBERS
+// ==========================================
+
+async function loadMembers() {
+
+    const tbody =
+        document.getElementById(
+            "memberTableBody"
+        );
+
+
+    tbody.innerHTML = `
+
+        <tr>
+
+            <td
+                colspan="8"
+                class="loading-row"
+            >
+
+                🔄 กำลังโหลดข้อมูลจาก Firebase...
+
+            </td>
+
+        </tr>
+
+    `;
+
+
+    try {
+
+        members =
+            await getRongkhemMembers();
+
+
+        render();
+
     }
-  }catch(err){showMessage("❌ "+err.message,"error");}
-});
-$("searchInput").addEventListener("input",e=>{searchKeyword=e.target.value;render();});
-document.querySelectorAll(".filter-button").forEach(b=>b.addEventListener("click",()=>{
-  currentFilter=b.dataset.filter;
-  document.querySelectorAll(".filter-button").forEach(x=>x.className="filter-button px-4 py-2 rounded-lg bg-gray-100 text-gray-700 text-sm");
-  const c=currentFilter==="all"?"bg-amber-600":currentFilter==="sent"?"bg-green-600":currentFilter==="pending"?"bg-red-600":"bg-orange-600";
-  b.className=`filter-button px-4 py-2 rounded-lg ${c} text-white text-sm`;render();
-}));
-$("reloadButton").addEventListener("click",async()=>{await loadMembers();showMessage("🔄 โหลดข้อมูลล่าสุดแล้ว");});
-$("resetButton").addEventListener("click",async()=>{
-  if(!confirm("⚠️ ยืนยันเริ่มรอบใหม่?\n\nสถานะสมาชิกทั้งหมดจะถูกรีเซ็ตเป็น ยังไม่ส่ง"))return;
-  const r=await resetAllMembersStatus();if(r.success)showMessage(`✅ เริ่มรอบใหม่เรียบร้อย อัปเดต ${r.successCount} รายการ`);else showMessage("❌ รีเซ็ตไม่สำเร็จ: "+(r.error||""),"error");
-});
-function startRealtime(){if(unsubscribeMembers)unsubscribeMembers();unsubscribeMembers=subscribeMembers(data=>{members=data.map(normalize);render();});}
-document.addEventListener("DOMContentLoaded",async()=>{await loadMembers();startRealtime();});
-window.addEventListener("beforeunload",()=>{if(unsubscribeMembers)unsubscribeMembers();});
+
+    catch (error) {
+
+        console.error(error);
+
+
+        tbody.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="8"
+                    class="
+                        text-center
+                        py-10
+                        text-red-600
+                    "
+                >
+
+                    ❌ ไม่สามารถโหลดข้อมูลสมาชิกได้
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+}
+
+
+
+// ==========================================
+// FILTER MEMBERS
+// ==========================================
+
+function getFilteredMembers() {
+
+    return members.filter(
+
+        member => {
+
+            const keyword =
+                searchKeyword
+                .trim()
+                .toLowerCase();
+
+
+            const searchable =
+                [
+
+                    member.memberId,
+                    member.name,
+                    member.address,
+                    member.houseNo
+
+                ]
+
+                .join(" ")
+
+                .toLowerCase();
+
+
+            const matchesSearch =
+                !keyword ||
+
+                searchable.includes(
+                    keyword
+                );
+
+
+            if (
+                !matchesSearch
+            ) {
+
+                return false;
+
+            }
+
+
+            if (
+                currentFilter ===
+                "sent"
+            ) {
+
+                return (
+                    member.status ===
+                    "sent"
+                );
+
+            }
+
+
+            if (
+                currentFilter ===
+                "pending"
+            ) {
+
+                return (
+                    member.status !==
+                    "sent"
+                );
+
+            }
+
+
+            if (
+                currentFilter ===
+                "overdue"
+            ) {
+
+                return Number(
+                    member.pending || 0
+                ) > 0;
+
+            }
+
+
+            return true;
+
+        }
+
+    );
+
+}
+
+
+
+// ==========================================
+// RENDER SUMMARY + TABLE
+// ==========================================
+
+function render() {
+
+    const summary =
+        getMemberSummary(
+            members
+        );
+
+
+    document.getElementById(
+        "totalCount"
+    ).textContent =
+        summary.total;
+
+
+    document.getElementById(
+        "sentCount"
+    ).textContent =
+        summary.sent;
+
+
+    document.getElementById(
+        "pendingCount"
+    ).textContent =
+        summary.pending;
+
+
+    document.getElementById(
+        "overdueCount"
+    ).textContent =
+        summary.overdue;
+
+
+    renderTable();
+
+}
+
+
+
+// ==========================================
+// RENDER TABLE
+// ==========================================
+
+function renderTable() {
+
+    const tbody =
+        document.getElementById(
+            "memberTableBody"
+        );
+
+
+    const filtered =
+        getFilteredMembers();
+
+
+    if (
+        filtered.length === 0
+    ) {
+
+        tbody.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="8"
+                    class="
+                        text-center
+                        py-10
+                        text-gray-400
+                    "
+                >
+
+                    ไม่พบข้อมูลสมาชิก
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    tbody.innerHTML =
+        filtered.map(
+
+            (
+                member,
+                index
+            ) => {
+
+                const isSent =
+                    member.status ===
+                    "sent";
+
+
+                const pendingCount =
+                    Number(
+                        member.pending || 0
+                    );
+
+
+                return `
+
+                    <tr
+                        class="
+                            border-t
+                            hover:bg-amber-50
+                        "
+                    >
+
+                        <td
+                            class="
+                                px-4
+                                py-3
+                                text-center
+                            "
+                        >
+
+                            ${index + 1}
+
+                        </td>
+
+
+                        <td
+                            class="
+                                px-4
+                                py-3
+                                font-mono
+                                font-semibold
+                            "
+                        >
+
+                            ${escapeHtml(
+                                member.memberId ||
+                                "-"
+                            )}
+
+                        </td>
+
+
+                        <td
+                            class="
+                                px-4
+                                py-3
+                            "
+                        >
+
+                            ${escapeHtml(
+                                member.name ||
+                                "-"
+                            )}
+
+                        </td>
+
+
+                        <td
+                            class="
+                                px-4
+                                py-3
+                            "
+                        >
+
+                            ${escapeHtml(
+
+                                member.houseNo ||
+                                member.address ||
+                                "-"
+
+                            )}
+
+                        </td>
+
+
+                        <td
+                            class="
+                                px-4
+                                py-3
+                                text-center
+                            "
+                        >
+
+                            ${Number(
+                                member.sent || 0
+                            )}
+
+                        </td>
+
+
+                        <td
+                            class="
+                                px-4
+                                py-3
+                                text-center
+                            "
+                        >
+
+                            ${pendingCount}
+
+                        </td>
+
+
+                        <td
+                            class="
+                                px-4
+                                py-3
+                                text-center
+                            "
+                        >
+
+                            <button
+
+                                class="
+                                    toggle-status
+                                    px-3
+                                    py-1
+                                    rounded-full
+                                    text-xs
+                                    font-medium
+                                    ${
+
+                                        isSent
+
+                                        ?
+
+                                        "bg-green-100 text-green-700"
+
+                                        :
+
+                                        "bg-red-100 text-red-700"
+
+                                    }
+                                "
+
+                                data-id="${member.firestoreId}"
+
+                            >
+
+                                ${
+
+                                    isSent
+
+                                    ?
+
+                                    "🟢 ส่งแล้ว"
+
+                                    :
+
+                                    "🔴 ยังไม่ส่ง"
+
+                                }
+
+                            </button>
+
+                        </td>
+
+
+                        <td
+                            class="
+                                px-4
+                                py-3
+                                text-center
+                                whitespace-nowrap
+                            "
+                        >
+
+                            <button
+
+                                class="
+                                    edit-member
+                                    text-blue-600
+                                    hover:text-blue-800
+                                    mr-2
+                                "
+
+                                data-id="${member.firestoreId}"
+
+                            >
+
+                                ✏️ แก้ไข
+
+                            </button>
+
+
+                            <button
+
+                                class="
+                                    delete-member
+                                    text-red-600
+                                    hover:text-red-800
+                                "
+
+                                data-id="${member.firestoreId}"
+
+                            >
+
+                                🗑️ ลบ
+
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }
+
+        )
+
+        .join("");
+
+}
+
+
+
+// ==========================================
+// ADD MEMBER
+// ==========================================
+
+document
+.getElementById(
+    "memberForm"
+)
+
+.addEventListener(
+
+    "submit",
+
+    async event => {
+
+        event.preventDefault();
+
+
+        const memberId =
+            document
+            .getElementById(
+                "memberId"
+            )
+            .value
+            .trim();
+
+
+        const name =
+            document
+            .getElementById(
+                "memberName"
+            )
+            .value
+            .trim();
+
+
+        const houseNo =
+            document
+            .getElementById(
+                "memberHouse"
+            )
+            .value
+            .trim();
+
+
+        const result =
+            await addRongkhemMember({
+
+                memberId,
+                name,
+                houseNo,
+                address:
+                    houseNo
+
+            });
+
+
+        if (
+            result.success
+        ) {
+
+            alert(
+                "✅ เพิ่มสมาชิกเรียบร้อย"
+            );
+
+
+            event.target.reset();
+
+        }
+
+        else {
+
+            alert(
+
+                "❌ เพิ่มสมาชิกไม่สำเร็จ\n" +
+
+                result.error
+
+            );
+
+        }
+
+    }
+
+);
+
+
+
+// ==========================================
+// TABLE CLICK
+// ==========================================
+
+document
+.getElementById(
+    "memberTableBody"
+)
+
+.addEventListener(
+
+    "click",
+
+    async event => {
+
+        const button =
+            event.target.closest(
+                "button"
+            );
+
+
+        if (
+            !button
+        ) return;
+
+
+        const firestoreId =
+            button.dataset.id;
+
+
+        if (
+            !firestoreId
+        ) return;
+
+
+        const member =
+            members.find(
+
+                item =>
+                    item.firestoreId ===
+                    firestoreId
+
+            );
+
+
+        if (
+            !member
+        ) return;
+
+
+
+        // ----------------------------
+        // เปลี่ยนสถานะ
+        // ----------------------------
+
+        if (
+
+            button.classList.contains(
+                "toggle-status"
+            )
+
+        ) {
+
+            const newStatus =
+
+                member.status ===
+                "sent"
+
+                ?
+
+                "pending"
+
+                :
+
+                "sent";
+
+
+            const result =
+                await updateRongkhemMember(
+
+                    firestoreId,
+
+                    {
+
+                        status:
+                            newStatus
+
+                    }
+
+                );
+
+
+            if (
+                !result.success
+            ) {
+
+                alert(
+                    "❌ เปลี่ยนสถานะไม่สำเร็จ"
+                );
+
+            }
+
+        }
+
+
+
+        // ----------------------------
+        // แก้ไขสมาชิก
+        // ----------------------------
+
+        if (
+
+            button.classList.contains(
+                "edit-member"
+            )
+
+        ) {
+
+            const newName =
+                prompt(
+
+                    "ชื่อ - นามสกุล",
+
+                    member.name || ""
+
+                );
+
+
+            if (
+                newName === null
+            ) return;
+
+
+            const newHouse =
+                prompt(
+
+                    "บ้านเลขที่",
+
+                    member.houseNo ||
+                    member.address ||
+                    ""
+
+                );
+
+
+            if (
+                newHouse === null
+            ) return;
+
+
+            const result =
+                await updateRongkhemMember(
+
+                    firestoreId,
+
+                    {
+
+                        name:
+                            newName.trim(),
+
+                        houseNo:
+                            newHouse.trim(),
+
+                        address:
+                            newHouse.trim()
+
+                    }
+
+                );
+
+
+            if (
+                result.success
+            ) {
+
+                alert(
+                    "✅ แก้ไขข้อมูลเรียบร้อย"
+                );
+
+            }
+
+            else {
+
+                alert(
+                    "❌ แก้ไขข้อมูลไม่สำเร็จ"
+                );
+
+            }
+
+        }
+
+
+
+        // ----------------------------
+        // ลบสมาชิก
+        // ----------------------------
+
+        if (
+
+            button.classList.contains(
+                "delete-member"
+            )
+
+        ) {
+
+            const confirmDelete =
+                confirm(
+
+                    "ยืนยันลบสมาชิก\n\n" +
+
+                    (
+                        member.name ||
+                        ""
+                    )
+
+                );
+
+
+            if (
+                !confirmDelete
+            ) return;
+
+
+            const result =
+                await deleteRongkhemMember(
+                    firestoreId
+                );
+
+
+            if (
+                result.success
+            ) {
+
+                alert(
+                    "🗑️ ลบสมาชิกเรียบร้อย"
+                );
+
+            }
+
+            else {
+
+                alert(
+                    "❌ ลบสมาชิกไม่สำเร็จ"
+                );
+
+            }
+
+        }
+
+    }
+
+);
+
+
+
+// ==========================================
+// SEARCH
+// ==========================================
+
+document
+.getElementById(
+    "searchInput"
+)
+
+.addEventListener(
+
+    "input",
+
+    event => {
+
+        searchKeyword =
+            event.target.value;
+
+
+        renderTable();
+
+    }
+
+);
+
+
+
+// ==========================================
+// FILTER
+// ==========================================
+
+document
+.querySelectorAll(
+    ".filter-button"
+)
+
+.forEach(
+
+    button => {
+
+        button.addEventListener(
+
+            "click",
+
+            () => {
+
+                currentFilter =
+                    button.dataset.filter;
+
+
+                document
+                .querySelectorAll(
+                    ".filter-button"
+                )
+
+                .forEach(
+
+                    item => {
+
+                        item.className =
+                            "filter-button px-4 py-2 rounded-lg bg-gray-100 text-gray-700 text-sm";
+
+                    }
+
+                );
+
+
+                if (
+                    currentFilter ===
+                    "all"
+                ) {
+
+                    button.className =
+                        "filter-button px-4 py-2 rounded-lg bg-amber-600 text-white text-sm";
+
+                }
+
+                else if (
+                    currentFilter ===
+                    "sent"
+                ) {
+
+                    button.className =
+                        "filter-button px-4 py-2 rounded-lg bg-green-600 text-white text-sm";
+
+                }
+
+                else if (
+                    currentFilter ===
+                    "pending"
+                ) {
+
+                    button.className =
+                        "filter-button px-4 py-2 rounded-lg bg-red-600 text-white text-sm";
+
+                }
+
+                else {
+
+                    button.className =
+                        "filter-button px-4 py-2 rounded-lg bg-orange-600 text-white text-sm";
+
+                }
+
+
+                renderTable();
+
+            }
+
+        );
+
+    }
+
+);
+
+
+
+// ==========================================
+// RELOAD
+// ==========================================
+
+document
+.getElementById(
+    "reloadButton"
+)
+
+.addEventListener(
+
+    "click",
+
+    async () => {
+
+        await loadMembers();
+
+        alert(
+            "🔄 โหลดข้อมูลล่าสุดแล้ว"
+        );
+
+    }
+
+);
+
+
+
+// ==========================================
+// RESET ALL
+// ==========================================
+
+document
+.getElementById(
+    "resetButton"
+)
+
+.addEventListener(
+
+    "click",
+
+    async () => {
+
+        const confirmed =
+            confirm(
+
+                "⚠️ ยืนยันเริ่มรอบใหม่?\n\n" +
+
+                "สถานะสมาชิกทั้งหมดจะถูกรีเซ็ต"
+
+            );
+
+
+        if (
+            !confirmed
+        ) return;
+
+
+        const result =
+            await resetAllMembersStatus();
+
+
+        if (
+            result.success
+        ) {
+
+            alert(
+
+                "✅ เริ่มรอบใหม่เรียบร้อย\n" +
+
+                "อัปเดต " +
+
+                result.successCount +
+
+                " รายการ"
+
+            );
+
+        }
+
+        else {
+
+            alert(
+                "❌ รีเซ็ตข้อมูลไม่สำเร็จ"
+            );
+
+        }
+
+    }
+
+);
+
+
+
+// ==========================================
+// REALTIME FIREBASE
+// ==========================================
+
+function startRealtime() {
+
+    if (
+        unsubscribeMembers
+    ) {
+
+        unsubscribeMembers();
+
+    }
+
+
+    unsubscribeMembers =
+        subscribeMembers(
+
+            updatedMembers => {
+
+                members =
+                    updatedMembers;
+
+
+                render();
+
+            }
+
+        );
+
+}
+
+
+
+// ==========================================
+// START SYSTEM
+// ==========================================
+
+document.addEventListener(
+
+    "DOMContentLoaded",
+
+    async () => {
+
+        await loadMembers();
+
+        startRealtime();
+
+    }
+
+);
+
+
+
+// ==========================================
+// CLEANUP
+// ==========================================
+
+window.addEventListener(
+
+    "beforeunload",
+
+    () => {
+
+        if (
+            unsubscribeMembers
+        ) {
+
+            unsubscribeMembers();
+
+        }
+
+    }
+
+);
+
 </script>
 
 
