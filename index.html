@@ -4,136 +4,454 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
+    <!-- Prompt Font & Font Awesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Sarabun', Tahoma, sans-serif; }
-        body { background-color: #f4f6f9; color: #333; padding: 15px; }
-        .header { background: linear-gradient(135deg, #1b4d3e, #2e7d32); color: white; padding: 20px; border-radius: 12px; text-align: center; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
-        .header h1 { font-size: 1.5rem; margin-bottom: 5px; }
-        .header p { font-size: 0.95rem; opacity: 0.9; }
-        .datetime-box { margin-top: 12px; background: rgba(255, 255, 255, 0.2); padding: 8px 15px; border-radius: 8px; display: inline-block; }
-        .time-text { font-size: 1.5rem; font-weight: bold; color: #ffe600; letter-spacing: 1px; }
-        .date-text { font-size: 0.95rem; }
-        .container { max-width: 600px; margin: 0 auto; }
-        .card { background: white; padding: 18px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 15px; }
-        .card h2 { font-size: 1.1rem; color: #1b4d3e; border-bottom: 2px solid #eef2f5; padding-bottom: 8px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-        .funeral-card { background: #fff3f3; padding: 12px; border-left: 5px solid #e74c3c; border-radius: 6px; }
-        .funeral-card h3 { color: #c0392b; font-size: 1.05rem; margin-bottom: 4px; }
-        .funeral-card p { font-size: 0.9rem; color: #444; margin-top: 2px; }
-        .stat-number { font-size: 2rem; font-weight: bold; color: #2e7d32; text-align: center; margin: 10px 0; }
-        .footer { text-align: center; font-size: 0.85rem; color: #777; margin-top: 25px; padding-bottom: 15px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Prompt', sans-serif; }
+        body { background-color: #f3f4f6; color: #1f2937; display: flex; min-height: 100vh; font-size: 14px; }
+
+        /* 1. SIDEBAR NAVIGATION */
+        .sidebar { width: 260px; background-color: #064e3b; color: #ffffff; display: flex; flex-direction: column; padding: 20px 15px; flex-shrink: 0; }
+        .sidebar-brand { display: flex; align-items: center; gap: 12px; padding-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 20px; }
+        .sidebar-brand i { font-size: 32px; color: #a7f3d0; }
+        .sidebar-brand-title { font-size: 16px; font-weight: 700; line-height: 1.2; }
+        .sidebar-brand-sub { font-size: 12px; color: #9ca3af; font-weight: 300; }
+
+        .nav-list { list-style: none; display: flex; flex-direction: column; gap: 6px; flex-grow: 1; }
+        .nav-item a { display: flex; align-items: center; gap: 14px; padding: 12px 16px; color: #d1d5db; text-decoration: none; border-radius: 8px; font-weight: 400; transition: all 0.2s; }
+        .nav-item a:hover { background-color: rgba(255, 255, 255, 0.08); color: #ffffff; }
+        .nav-item.active a { background-color: #059669; color: #ffffff; font-weight: 600; }
+        .nav-item i { font-size: 18px; width: 22px; text-align: center; }
+
+        /* User Profile & Logout */
+        .user-profile { background-color: #022c22; padding: 12px; border-radius: 10px; display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+        .user-avatar { width: 40px; height: 40px; border-radius: 50%; background-color: #9ca3af; display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 20px; }
+        .user-info { display: flex; flex-direction: column; }
+        .user-role { font-size: 11px; color: #9ca3af; }
+        .user-name { font-size: 13px; font-weight: 600; }
+        .user-badge { display: inline-block; background-color: #059669; color: #a7f3d0; font-size: 10px; padding: 2px 8px; border-radius: 12px; margin-top: 2px; width: fit-content; }
+
+        .btn-logout { display: flex; align-items: center; justify-content: center; gap: 8px; background: rgba(0, 0, 0, 0.2); color: #d1d5db; border: none; padding: 10px; border-radius: 8px; cursor: pointer; text-decoration: none; font-size: 13px; transition: 0.2s; }
+        .btn-logout:hover { background-color: #dc2626; color: #ffffff; }
+
+        /* 2. MAIN CONTENT AREA */
+        .main-wrapper { flex-grow: 1; display: flex; flex-direction: column; min-width: 0; }
+        
+        /* Header Bar */
+        .top-header { background-color: #ffffff; padding: 16px 28px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e5e7eb; }
+        .header-left { display: flex; align-items: center; gap: 16px; }
+        .header-icon { width: 48px; height: 48px; background-color: #ecfdf5; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #059669; font-size: 24px; }
+        .header-title-box h1 { font-size: 20px; font-weight: 700; color: #065f46; }
+        .header-title-box p { font-size: 12px; color: #6b7280; }
+
+        .header-right { display: flex; align-items: center; gap: 16px; }
+        .clock-card { background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 18px; border-radius: 10px; text-align: center; }
+        .clock-time { font-size: 20px; font-weight: 700; color: #1e293b; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; }
+        .clock-time i { font-size: 16px; color: #64748b; }
+        .clock-date { font-size: 11px; color: #64748b; }
+
+        .notification-btn { position: relative; width: 42px; height: 42px; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 18px; cursor: pointer; }
+        .notification-badge { position: absolute; top: -4px; right: -4px; background-color: #ef4444; color: #ffffff; font-size: 10px; font-weight: 700; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid #ffffff; }
+
+        /* Dashboard Body Content */
+        .dashboard-container { padding: 24px; display: grid; grid-template-columns: 1fr 360px; gap: 24px; }
+        .content-left { display: flex; flex-direction: column; gap: 20px; }
+        .content-right { display: flex; flex-direction: column; gap: 20px; }
+
+        /* Card System */
+        .card { background-color: #ffffff; border-radius: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); overflow: hidden; border: 1px solid #e5e7eb; }
+        .card-header { padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .card-header.green { background-color: #065f46; color: #ffffff; }
+        .card-header-title { font-size: 15px; font-weight: 600; }
+        .card-link { font-size: 12px; color: #0284c7; text-decoration: none; font-weight: 500; }
+        .card-link:hover { text-decoration: underline; }
+
+        /* Active Funeral Display */
+        .funeral-body { padding: 20px; }
+        .funeral-grid { display: grid; grid-template-columns: 220px 1fr; gap: 24px; }
+        .funeral-image-box img { width: 100%; height: 260px; object-fit: cover; border-radius: 10px; border: 4px solid #fef3c7; }
+        .funeral-details { display: flex; flex-direction: column; justify-content: center; }
+        .deceased-name { font-size: 24px; font-weight: 700; color: #111827; margin-bottom: 4px; }
+        .deceased-age { font-size: 14px; color: #4b5563; margin-bottom: 12px; }
+        .funeral-meta { font-size: 14px; font-weight: 600; color: #047857; margin-bottom: 4px; }
+        .funeral-location { font-size: 13px; color: #6b7280; margin-bottom: 20px; }
+
+        .condolence-box { text-align: center; border-top: 1px solid #f3f4f6; border-bottom: 1px solid #f3f4f6; padding: 12px 0; margin-bottom: 20px; }
+        .condolence-text { font-size: 13px; color: #92400e; font-style: italic; }
+
+        .funeral-stats-bar { display: grid; grid-template-columns: 1fr 100px 1fr 140px; gap: 12px; align-items: center; background-color: #f9fafb; padding: 16px; border-radius: 10px; text-align: center; }
+        .stat-box-title { font-size: 11px; color: #6b7280; margin-bottom: 2px; }
+        .stat-box-value { font-size: 22px; font-weight: 700; color: #111827; }
+        .stat-box-sub { font-size: 11px; color: #9ca3af; }
+        
+        /* Circular Progress Indicator */
+        .circle-progress { width: 64px; height: 64px; border-radius: 50%; background: conic-gradient(#059669 0% 75%, #e5e7eb 75% 100%); display: flex; align-items: center; justify-content: center; margin: 0 auto; }
+        .circle-inner { width: 50px; height: 50px; background-color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #065f46; }
+
+        .btn-detail { background-color: #065f46; color: #ffffff; border: none; padding: 10px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; text-decoration: none; }
+        .btn-detail:hover { background-color: #047857; }
+
+        /* Recent Funerals List */
+        .recent-funeral-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; padding: 16px; }
+        .recent-card { border: 1px solid #f3f4f6; border-radius: 10px; padding: 12px; display: flex; gap: 12px; align-items: center; background-color: #ffffff; }
+        .recent-card img { width: 50px; height: 60px; object-fit: cover; border-radius: 6px; }
+        .recent-info h4 { font-size: 13px; font-weight: 600; color: #111827; }
+        .recent-info p { font-size: 11px; color: #6b7280; }
+        .recent-progress { margin-top: 6px; font-size: 11px; font-weight: 600; color: #059669; }
+        .progress-bar-bg { background-color: #e5e7eb; height: 4px; border-radius: 2px; margin-top: 2px; }
+        .progress-bar-fill { background-color: #059669; height: 100%; border-radius: 2px; }
+
+        /* Fast Action Buttons Grid */
+        .action-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+        .action-btn { padding: 14px 10px; border-radius: 10px; border: none; font-weight: 600; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: transform 0.1s; text-decoration: none; }
+        .action-btn:active { transform: scale(0.98); }
+        .act-green { background-color: #d1fae5; color: #065f46; }
+        .act-blue { background-color: #dbeafe; color: #1e40af; }
+        .act-amber { background-color: #fef3c7; color: #92400e; }
+        .act-purple { background-color: #f3e8ff; color: #6b21a8; }
+        .act-rose { background-color: #ffe4e6; color: #9f1239; }
+
+        /* Right Column Overview Cards */
+        .overview-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 16px; text-align: center; }
+        .overview-item { padding: 12px 6px; border-radius: 8px; }
+        .ov-green { background-color: #f0fdf4; }
+        .ov-blue { background-color: #eff6ff; }
+        .ov-amber { background-color: #fffbeb; }
+        .ov-purple { background-color: #faf5ff; }
+        .ov-icon { font-size: 18px; margin-bottom: 4px; display: inline-block; }
+        .ov-label { font-size: 10px; color: #6b7280; margin-bottom: 4px; }
+        .ov-num { font-size: 18px; font-weight: 700; color: #111827; }
+        .ov-unit { font-size: 10px; color: #9ca3af; }
+
+        /* Announcements & Overdue Lists */
+        .list-group { display: flex; flex-direction: column; }
+        .list-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid #f3f4f6; }
+        .list-item:last-child { border-bottom: none; }
+        .list-left { display: flex; align-items: center; gap: 12px; }
+        .list-icon-bg { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+        .bg-rose-light { background-color: #ffe4e6; color: #e11d48; }
+        .list-title-box h5 { font-size: 12px; font-weight: 600; color: #1f2937; display: flex; align-items: center; gap: 6px; }
+        .list-title-box p { font-size: 11px; color: #6b7280; }
+        .badge-new { background-color: #ef4444; color: #ffffff; font-size: 9px; padding: 1px 5px; border-radius: 4px; font-weight: 500; }
+        .list-date { font-size: 11px; color: #9ca3af; }
+
+        .overdue-tag { color: #dc2626; font-size: 11px; font-weight: 600; }
+
+        /* Footer */
+        .footer-text { text-align: center; padding: 16px; font-size: 11px; color: #ffffff; background-color: #064e3b; margin-top: auto; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <!-- ส่วนหัวแสดงชื่อและเวลา -->
-        <header class="header">
-            <h1>🌾 ระบบกลุ่มข้าวสาร</h1>
-            <p>บ้านร่องเข็ม หมู่ที่ 6 ต.จำป่าหวาย อ.เมือง จ.พะเยา</p>
-            <div class="datetime-box">
-                <div id="date-display" class="date-text">กำลังโหลดวันที่...</div>
-                <div id="clock-display" class="time-text">00:00:00</div>
+    <!-- 1. LEFT SIDEBAR MENU -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <i class="fa-solid fa-wheat-awn"></i>
+            <div>
+                <div class="sidebar-brand-title">กลุ่มข้าวสาร</div>
+                <div class="sidebar-brand-sub">บ้านร่องเข็ม หมู่ที่ 6</div>
+            </div>
+        </div>
+
+        <ul class="nav-list">
+            <li class="nav-item active"><a href="#"><i class="fa-solid fa-house"></i> หน้าหลัก</a></li>
+            <li class="nav-item"><a href="#"><i class="fa-solid fa-cross"></i> งานศพปัจจุบัน</a></li>
+            <li class="nav-item"><a href="#"><i class="fa-solid fa-users"></i> สมาชิก</a></li>
+            <li class="nav-item"><a href="#"><i class="fa-solid fa-box-archive"></i> บันทึกรับข้าว</a></li>
+            <li class="nav-item"><a href="#"><i class="fa-solid fa-clock-rotate-left"></i> งานศพย้อนหลัง</a></li>
+            <li class="nav-item"><a href="#"><i class="fa-solid fa-bullhorn"></i> ประกาศ</a></li>
+            <li class="nav-item"><a href="#"><i class="fa-solid fa-chart-column"></i> รายงาน</a></li>
+            <li class="nav-item"><a href="#"><i class="fa-solid fa-gear"></i> ตั้งค่า</a></li>
+        </ul>
+
+        <div class="user-profile">
+            <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
+            <div class="user-info">
+                <span class="user-role">ผู้ใหญ่บ้าน</span>
+                <span class="user-name">ศักรนนทน์ ขัติย์วงศ์</span>
+                <span class="user-badge">ผู้ดูแลระบบ</span>
+            </div>
+        </div>
+
+        <a href="#" class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> ออกจากระบบ</a>
+    </aside>
+
+    <!-- 2. MAIN CONTAINER AREA -->
+    <div class="main-wrapper">
+        
+        <!-- Header Bar -->
+        <header class="top-header">
+            <div class="header-left">
+                <div class="header-icon"><i class="fa-solid fa-wheat-awn"></i></div>
+                <div class="header-title-box">
+                    <h1>ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</h1>
+                    <p>ร่วมแรง ร่วมใจ แบ่งปันน้ำใจ ในวันที่เพื่อนบ้านจากไป</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="clock-card">
+                    <div class="clock-time"><i class="fa-regular fa-clock"></i> <span id="clock-display">17:08:04</span></div>
+                    <div class="clock-date" id="date-display">วันอาทิตย์ที่ 30 สิงหาคม 2569</div>
+                </div>
+                <div class="notification-btn">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </div>
             </div>
         </header>
 
-        <!-- แสดงสถานะงานศพปัจจุบัน -->
-        <section class="card">
-            <h2>⚰️ งานศพปัจจุบัน / กำลังดำเนินการ</h2>
-            <div id="active-funeral-display">
-                <p style="text-align: center; color: #666; padding: 10px;">กำลังโหลดข้อมูล...</p>
+        <!-- Dashboard Body Content -->
+        <main class="dashboard-container">
+            
+            <!-- LEFT MAIN COLUMN -->
+            <div class="content-left">
+                
+                <!-- Card 1: Active Funeral -->
+                <div class="card">
+                    <div class="card-header green">
+                        <span class="card-header-title">งานศพปัจจุบัน / กำลังดำเนินการ</span>
+                    </div>
+                    <div class="funeral-body">
+                        <div class="funeral-grid">
+                            <div class="funeral-image-box">
+                                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=400" alt="รูปผู้เสียชีวิต">
+                            </div>
+                            <div class="funeral-details">
+                                <h2 class="deceased-name">นายเกษมสุข ใฝ่ใจ</h2>
+                                <div class="deceased-age">อายุ 72 ปี</div>
+                                <div class="funeral-meta">ฌาปนกิจ : 25 กรกฎาคม 2569</div>
+                                <div class="funeral-location">วัดร่องเข็ม ต.จำป่าหวาย อ.เมืองพะเยา จ.พะเยา</div>
+
+                                <div class="condolence-box">
+                                    <div class="condolence-text">"ขอแสดงความอาลัย และร่วมไว้อาลัยเป็นครั้งสุดท้าย"</div>
+                                </div>
+
+                                <div class="funeral-stats-bar">
+                                    <div>
+                                        <div class="stat-box-title">ยอดรับจริง</div>
+                                        <div class="stat-box-value">132</div>
+                                        <div class="stat-box-sub">ครัวเรือน</div>
+                                    </div>
+                                    <div>
+                                        <div class="circle-progress">
+                                            <div class="circle-inner">75%</div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="stat-box-title">จากทั้งหมด</div>
+                                        <div class="stat-box-value">176</div>
+                                        <div class="stat-box-sub">ครัวเรือน</div>
+                                    </div>
+                                    <div>
+                                        <a href="#" class="btn-detail"><i class="fa-solid fa-arrow-right-to-bracket"></i> ดูรายละเอียดการรับข้าว</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Recent Funerals -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title" style="color: #065f46;">งานศพล่าสุด</span>
+                        <a href="#" class="card-link">ดูทั้งหมด</a>
+                    </div>
+                    <div class="recent-funeral-grid">
+                        
+                        <!-- Person 1 -->
+                        <div class="recent-card">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200" alt="รูป">
+                            <div class="recent-info">
+                                <h4>นายเกษมสุข ใฝ่ใจ</h4>
+                                <p>ฌาปนกิจ 25/07/2569</p>
+                                <p style="margin-top: 4px;">รับแล้ว 132 ครัวเรือน</p>
+                                <p><small>จากทั้งหมด 176 ครัวเรือน</small></p>
+                                <div class="recent-progress">75%</div>
+                                <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 75%;"></div></div>
+                            </div>
+                        </div>
+
+                        <!-- Person 2 -->
+                        <div class="recent-card">
+                            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200" alt="รูป">
+                            <div class="recent-info">
+                                <h4>นายบูรณภพ ผัดดี</h4>
+                                <p>ฌาปนกิจ 10/07/2569</p>
+                                <p style="margin-top: 4px;">รับแล้ว 176 ครัวเรือน</p>
+                                <p><small>จากทั้งหมด 176 ครัวเรือน</small></p>
+                                <div class="recent-progress">100%</div>
+                                <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 100%;"></div></div>
+                            </div>
+                        </div>
+
+                        <!-- Person 3 -->
+                        <div class="recent-card">
+                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=200" alt="รูป">
+                            <div class="recent-info">
+                                <h4>นางจันทร์แก้ว แสงดี</h4>
+                                <p>ฌาปนกิจ 01/07/2569</p>
+                                <p style="margin-top: 4px;">รับแล้ว 175 ครัวเรือน</p>
+                                <p><small>จากทั้งหมด 176 ครัวเรือน</small></p>
+                                <div class="recent-progress">99%</div>
+                                <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 99%;"></div></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Action Buttons Bottom Bar -->
+                <div class="action-grid">
+                    <a href="#" class="action-btn act-green"><i class="fa-solid fa-plus"></i> แจ้งงานศพใหม่</a>
+                    <a href="#" class="action-btn act-blue"><i class="fa-solid fa-box-archive"></i> บันทึกรับข้าว</a>
+                    <a href="#" class="action-btn act-amber"><i class="fa-solid fa-user-plus"></i> เพิ่มสมาชิก</a>
+                    <a href="#" class="action-btn act-purple"><i class="fa-solid fa-chart-pie"></i> ออกรายงาน</a>
+                    <a href="#" class="action-btn act-rose"><i class="fa-solid fa-bullhorn"></i> จัดการประกาศ</a>
+                </div>
+
             </div>
-        </section>
 
-        <!-- สรุปจำนวนสมาชิก -->
-        <section class="card">
-            <h2>👥 สมาชิกกลุ่มข้าวสาร</h2>
-            <div class="stat-number" id="total-members-count">0</div>
-            <p style="text-align: center; color: #666; font-size: 0.9rem;">ครัวเรือนในระบบทั้งหมด</p>
-        </section>
+            <!-- RIGHT SIDEBAR COLUMN -->
+            <div class="content-right">
+                
+                <!-- Summary Stats -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">สรุปภาพรวม</span>
+                    </div>
+                    <div class="overview-grid">
+                        <div class="overview-item ov-green">
+                            <span class="ov-icon" style="color: #16a34a;"><i class="fa-solid fa-users"></i></span>
+                            <div class="ov-label">สมาชิกทั้งหมด</div>
+                            <div class="ov-num">176</div>
+                            <div class="ov-unit">ครัวเรือน</div>
+                        </div>
+                        <div class="overview-item ov-blue">
+                            <span class="ov-icon" style="color: #2563eb;"><i class="fa-solid fa-circle-check"></i></span>
+                            <div class="ov-label">รับแล้ว</div>
+                            <div class="ov-num">132</div>
+                            <div class="ov-unit">ครัวเรือน</div>
+                        </div>
+                        <div class="overview-item ov-amber">
+                            <span class="ov-icon" style="color: #d97706;"><i class="fa-solid fa-clock"></i></span>
+                            <div class="ov-label">ค้างส่ง</div>
+                            <div class="ov-num">44</div>
+                            <div class="ov-unit">ครัวเรือน</div>
+                        </div>
+                        <div class="overview-item ov-purple">
+                            <span class="ov-icon" style="color: #9333ea;"><i class="fa-solid fa-list-check"></i></span>
+                            <div class="ov-label">งานศพทั้งหมด</div>
+                            <div class="ov-num">8</div>
+                            <div class="ov-unit">งาน</div>
+                        </div>
+                    </div>
+                </div>
 
-        <footer class="footer">
-            🌾 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6<br>
-            จัดทำและพัฒนาระบบโดย นายศักรนนทน์ ขัติย์วงศ์ ผู้ใหญ่บ้าน
+                <!-- Latest Announcements -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title" style="color: #065f46;">ประกาศล่าสุด</span>
+                        <a href="#" class="card-link">ดูทั้งหมด</a>
+                    </div>
+                    <div class="list-group">
+                        <div class="list-item">
+                            <div class="list-left">
+                                <div class="list-icon-bg bg-rose-light"><i class="fa-solid fa-bullhorn"></i></div>
+                                <div class="list-title-box">
+                                    <h5>งดเผาในที่โล่งทุกชนิด <span class="badge-new">ใหม่</span></h5>
+                                    <p>ตั้งแต่วันที่ 1 ก.พ. - 31 มี.ค. 2569</p>
+                                </div>
+                            </div>
+                            <div class="list-date">30 ส.ค. 2569</div>
+                        </div>
+                        <div class="list-item">
+                            <div class="list-left">
+                                <div class="list-icon-bg bg-rose-light"><i class="fa-solid fa-bullhorn"></i></div>
+                                <div class="list-title-box">
+                                    <h5>ประชุมประจำเดือน</h5>
+                                    <p>วันอาทิตย์ที่ 7 ก.ย. 2569 เวลา 07.00 น.</p>
+                                </div>
+                            </div>
+                            <div class="list-date">29 ส.ค. 2569</div>
+                        </div>
+                        <div class="list-item">
+                            <div class="list-left">
+                                <div class="list-icon-bg bg-rose-light"><i class="fa-solid fa-bullhorn"></i></div>
+                                <div class="list-title-box">
+                                    <h5>โครงการคัดแยกขยะ</h5>
+                                    <p>ขอความร่วมมือทุกครัวเรือน</p>
+                                </div>
+                            </div>
+                            <div class="list-date">28 ส.ค. 2569</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Overdue Members -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title" style="color: #dc2626;">สมาชิกค้างส่ง (เกิน 2 ครั้ง)</span>
+                        <a href="#" class="card-link">ดูทั้งหมด</a>
+                    </div>
+                    <div class="list-group">
+                        <div class="list-item">
+                            <div class="list-left">
+                                <div class="list-icon-bg bg-rose-light"><i class="fa-solid fa-house"></i></div>
+                                <div class="list-title-box">
+                                    <h5>บ้านเลขที่ 123</h5>
+                                    <p>นายสมชาย ใจดี</p>
+                                </div>
+                            </div>
+                            <div class="overdue-tag">ค้างส่ง 2 ครั้ง</div>
+                        </div>
+                        <div class="list-item">
+                            <div class="list-left">
+                                <div class="list-icon-bg bg-rose-light"><i class="fa-solid fa-house"></i></div>
+                                <div class="list-title-box">
+                                    <h5>บ้านเลขที่ 145</h5>
+                                    <p>นางสาววิภาดา คำมา</p>
+                                </div>
+                            </div>
+                            <div class="overdue-tag">ค้างส่ง 2 ครั้ง</div>
+                        </div>
+                        <div class="list-item">
+                            <div class="list-left">
+                                <div class="list-icon-bg bg-rose-light"><i class="fa-solid fa-house"></i></div>
+                                <div class="list-title-box">
+                                    <h5>บ้านเลขที่ 167</h5>
+                                    <p>นายทองสุข ฟ้าใส</p>
+                                </div>
+                            </div>
+                            <div class="overdue-tag">ค้างส่ง 3 ครั้ง</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+
+        <footer class="footer-text">
+            © 2025 กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6 ต.จำป่าหวาย อ.เมืองพะเยา จ.พะเยา
         </footer>
+
     </div>
 
-    <!-- โค้ดเชื่อมต่อ Firebase และควบคุมระบบทั้งหมด -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, query, where, onSnapshot, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-        // 1. Firebase Config
-        const firebaseConfig = {
-            authDomain: "rongkhem-rice-group.firebaseapp.com",
-            projectId: "rongkhem-rice-group",
-            storageBucket: "rongkhem-rice-group.appspot.com"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        // 2. ระบบนาฬิกา Realtime
-        function startRealtimeClock() {
-            function update() {
-                const now = new Date();
-                const timeStr = now.toLocaleTimeString('th-TH', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
-                const dateStr = now.toLocaleDateString('th-TH', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-                
-                document.getElementById('clock-display').textContent = timeStr;
-                document.getElementById('date-display').textContent = dateStr;
-            }
-            update();
-            setInterval(update, 1000);
+    <!-- Clock Script -->
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('th-TH', { hour12: false });
+            const dateStr = now.toLocaleDateString('th-TH', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+            
+            document.getElementById('clock-display').textContent = timeStr;
+            document.getElementById('date-display').textContent = dateStr;
         }
-
-        // 3. ดึงสถานะงานศพปัจจุบัน
-        function listenToActiveFuneral() {
-            const container = document.getElementById('active-funeral-display');
-            const q = query(collection(db, "funerals"), where("status", "==", "active"));
-
-            onSnapshot(q, (snapshot) => {
-                if (snapshot.empty) {
-                    container.innerHTML = `
-                        <div style="text-align: center; color: #666; padding: 10px;">
-                            <p style="font-weight: bold; margin-bottom: 3px;">ยังไม่มีการแจ้งผู้เสียชีวิต</p>
-                            <small>เมื่อมีการแจ้งการเสียชีวิต ข้อมูลงานศพจะแสดงที่นี่อัตโนมัติ</small>
-                        </div>`;
-                } else {
-                    let html = '';
-                    snapshot.forEach((doc) => {
-                        const data = doc.data();
-                        html += `
-                            <div class="funeral-card">
-                                <h3>ผู้เสียชีวิต: ${data.deceasedName || 'ไม่ระบุชื่อ'}</h3>
-                                <p><strong>เจ้าภาพ:</strong> ${data.hostName || '-'}</p>
-                                <p><small><strong>กำหนดการ:</strong> ${data.funeralDate || '-'}</small></p>
-                            </div>`;
-                    });
-                    container.innerHTML = html;
-                }
-            }, (error) => {
-                console.error("Funeral Load Error:", error);
-                container.innerHTML = `<p style="text-align: center; color: #e74c3c;">ยังไม่มีรายการงานศพในขณะนี้</p>`;
-            });
-        }
-
-        // 4. นับจำนวนสมาชิกทั้งหมด
-        async function loadTotalMembers() {
-            try {
-                const snap = await getDocs(collection(db, "members"));
-                document.getElementById('total-members-count').textContent = snap.size;
-            } catch (err) {
-                console.error("Members Count Error:", err);
-                document.getElementById('total-members-count').textContent = '0';
-            }
-        }
-
-        // เรียกทำงานเมื่อโหลดหน้าเว็บ
-        document.addEventListener('DOMContentLoaded', () => {
-            startRealtimeClock();
-            listenToActiveFuneral();
-            loadTotalMembers();
-        });
+        setInterval(updateClock, 1000);
+        updateClock();
     </script>
 </body>
 </html>
