@@ -1,29 +1,26 @@
-// ฟังก์ชันสร้างสคริปต์ประกาศข่าวประชาสัมพันธ์พร้อมส่วนแสดงความไว้อาลัย
-function generateAnnouncementScript() {
-    // ดึงชื่อผู้เสียชีวิตล่าสุดจาก LocalStorage
-    const deceasedName = localStorage.getItem("latest_deceased_name");
+function updateClock() {
+    const now = new Date();
     
-    let condolenceText = "";
+    // รูปแบบเวลา HH:MM:SS
+    const timeString = now.toLocaleTimeString('th-TH', { 
+        hour12: false, 
+        hour: '2-digit', 
+        minute: '2-digit', 
+        second: '2-digit' 
+    });
+    
+    // รูปแบบวันที่ ภาษาไทย
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const dateString = now.toLocaleDateString('th-TH', options);
 
-    // ตรวจสอบเงื่อนไขการแจ้งตาย
-    if (deceasedName && deceasedName.trim() !== "") {
-        condolenceText = `"ก่อนเข้าสู่การแจ้งข่าวสารในวันนี้ ทางกลุ่มข้าวสารขอร่วมแสดงความอาลัยอย่างสุดซึ้ง ต่อการจากไปของ ${deceasedName} และขอส่งกำลังใจให้แก่ครอบครัวมา ณ ที่นี้ด้วยความเคารพครับ/ค่ะ"`;
-    } else {
-        condolenceText = `"ก่อนเข้าสู่การแจ้งข่าวสารในวันนี้ ทางกลุ่มข้าวสารขอร่วมแสดงความอาลัยและส่งกำลังใจแก่ครอบครัวผู้นำและสมาชิกที่สูญเสียบุคคลอันเป็นที่รักทุกท่าน มา ณ ที่นี้ด้วยความเคารพครับ/ค่ะ"`;
-    }
+    // อัปเดตลง Element ใน HTML (ปรับ id ให้ตรงกับใน index.html ของผู้ใหญ่บ้าน)
+    const clockEl = document.getElementById('clock') || document.querySelector('.time-display');
+    const dateEl = document.getElementById('date') || document.querySelector('.date-display');
 
-    // ประกอบข้อความสคริปต์ทั้งหมด
-    return `[ช่วงที่ 1: แสดงความไว้อาลัย]
-"กราบเรียนสมาชิกกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6 ทุกท่าน..."
-${condolenceText}
-(เว้นจังหวะเงียบสงบประมาณ 2-3 วินาที)
-
-[ช่วงที่ 2: เนื้อหาประกาศแจ้งเตือนสมาชิก]
-"ในการนี้ คณะกรรมการมีเรื่องขอแจ้งเตือนสมาชิกทุกท่าน เพื่อให้การดำเนินงานของกลุ่มเป็นไปด้วยความเรียบร้อย มีความเป็นธรรม และช่วยเหลือกันได้อย่างต่อเนื่อง"
-
-"ขอแจ้งให้ทราบว่า สมาชิกที่ไม่ส่งข้าวสารตามระเบียบของกลุ่ม จำนวน 2 ครั้ง โดยไม่มีเหตุผลอันสมควร จะถูกตัดสิทธิ์การเป็นสมาชิก และไม่มีสิทธิ์ได้รับสวัสดิการของกลุ่ม จนกว่าจะมีการพิจารณาเป็นกรณีไป"
-
-"หากท่านใดมีเหตุจำเป็นไม่สามารถส่งได้ตามกำหนด กรุณาแจ้งคณะกรรมการล่วงหน้าเพื่อร่วมกันหาแนวทางแก้ไข"
-
-"จึงขอความร่วมมือจากทุกท่านในการปฏิบัติตามระเบียบเพื่อประโยชน์ส่วนรวม ขอขอบพระคุณทุกท่านที่ให้ความร่วมมือด้วยดีมาโดยตลอดครับ/ค่ะ"`;
+    if (clockEl) clockEl.innerText = timeString;
+    if (dateEl) dateEl.innerText = dateString;
 }
+
+// เรียกให้ทำงานทันทีเมื่อโหลดหน้า และสั่งให้ทำงานทุกๆ 1 วินาที (1000 ms)
+updateClock();
+setInterval(updateClock, 1000);
