@@ -1,271 +1,269 @@
-<!DOCTYPE html>
-
-<html lang="th"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6 - Mobile</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
-<style data-purpose="custom-styles">
-    @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
-    
-    body {
-      font-family: 'Sarabun', sans-serif;
-      background-color: #f3f4f6;
-    }
-    
-    .text-theme-dark { color: #064E3B; }
-    .bg-theme-dark { background-color: #064E3B; }
-    .text-theme-light { color: #10B981; }
-    .bg-theme-light { background-color: #10B981; }
-    
-    /* Hide scrollbar for horizontal lists */
-    .hide-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
-    .hide-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-  </style>
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
+body{font-family:Sarabun,sans-serif;background:#f3f4f6}
+.text-theme-dark{color:#064E3B}.bg-theme-dark{background:#064E3B}
+.text-theme-light{color:#10B981}.bg-theme-light{background:#10B981}
+.hide-scrollbar::-webkit-scrollbar{display:none}.hide-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.loading{animation:pulse 1.5s infinite}@keyframes pulse{50%{opacity:.45}}
+</style>
 </head>
 <body class="bg-gray-50 text-gray-800 pb-20">
-<!-- BEGIN: Header -->
+
 <header class="bg-white shadow-sm p-4 sticky top-0 z-50 flex justify-between items-center">
-<div class="flex items-center gap-3">
-<!-- Placeholder for Logo -->
-<div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-theme-light">
-<i class="fa-solid fa-seedling text-xl"></i>
-</div>
-<div>
-<h1 class="text-lg font-bold text-theme-dark leading-tight">ระบบกลุ่มข้าวสาร</h1>
-<p class="text-xs text-gray-500">บ้านร่องเข็ม หมู่ที่ 6</p>
-</div>
-</div>
-<div class="flex flex-col items-end">
-<div class="text-sm font-semibold text-gray-700">17:08:04</div>
-<div class="text-[10px] text-gray-500">วันอาทิตย์ที่ 30 สิงหาคม 2569</div>
-</div>
+ <div class="flex items-center gap-3">
+  <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-emerald-500">
+   <i class="fa-solid fa-seedling text-xl"></i>
+  </div>
+  <div>
+   <h1 class="text-lg font-bold text-theme-dark leading-tight">ระบบกลุ่มข้าวสาร</h1>
+   <p class="text-xs text-gray-500">บ้านร่องเข็ม หมู่ที่ 6</p>
+  </div>
+ </div>
+ <div class="flex flex-col items-end">
+  <div id="clock" class="text-sm font-semibold text-gray-700">00:00:00</div>
+  <div id="date" class="text-[10px] text-gray-500">กำลังโหลด...</div>
+ </div>
 </header>
-<!-- END: Header -->
-<!-- BEGIN: Main Content -->
+
 <main class="p-4 space-y-6">
-<!-- BEGIN: Current Funeral Section -->
-<section class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-<div class="bg-theme-dark text-white p-3 text-sm font-semibold flex justify-between items-center">
-<span>งานศพปัจจุบัน / กำลังดำเนินการ</span>
-<span class="bg-white/20 px-2 py-0.5 rounded text-xs">กำลังดำเนินการ</span>
-</div>
-<div class="p-4">
-<div class="flex flex-col items-center mb-4">
-<!-- Placeholder for Portrait -->
-<img alt="Portrait" class="w-32 h-40 object-cover rounded border-4 border-yellow-100 shadow-md mb-3" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZRTAWg5-kwCMZv_JQT3iOTQ-F9oalcM1D49WRoBln6mV091PaQ-vdamNUBkrRpBIB2xUhBjyk-cGqYbIP8GlJtmBKWVD54IKOEbKBmX7quu1L8nsV7SvkaP-LRWofL1SZsZjjt8BoFIFl8R5PQQQvSut2yWmqKcUaj6HJ3iHwRZiAfEoYAy1T7cwsRE_fsF9THxAatokpbEP1WR-ucKKycMOv_ada-7g9oYXRbhyL3baXeOvo4FhY_A"/>
-<h2 class="text-xl font-bold text-gray-800">นายเกษมสุข ใฝ่ใจ</h2>
-<p class="text-gray-600 text-sm">อายุ 72 ปี</p>
-<div class="mt-2 text-center text-sm">
-<p class="text-theme-dark font-medium">ฌาปนกิจ : 25 กรกฎาคม 2569</p>
-<p class="text-gray-500 text-xs mt-1">วัดร่องเข็ม ต.จำป่าหวาย อ.เมืองพะเยา จ.พะเยา</p>
-</div>
-</div>
-<div class="border-t pt-4 flex items-center justify-around">
-<div class="text-center">
-<p class="text-xs text-gray-500 mb-1">ยอดรับจริง</p>
-<p class="text-2xl font-bold text-gray-800">132 <span class="text-sm font-normal text-gray-500">ครัวเรือน</span></p>
-</div>
-<!-- Progress Ring Placeholder -->
-<div class="relative w-16 h-16 flex items-center justify-center">
-<svg class="w-full h-full transform -rotate-90" viewbox="0 0 36 36">
-<path class="text-gray-200" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3"></path>
-<path class="text-theme-light" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="75, 100" stroke-linecap="round" stroke-width="3"></path>
-</svg>
-<span class="absolute text-sm font-bold text-gray-700">75%</span>
-</div>
-<div class="text-center">
-<p class="text-xs text-gray-500 mb-1">จากทั้งหมด</p>
-<p class="text-xl font-bold text-gray-800">176 <span class="text-sm font-normal text-gray-500">ครัวเรือน</span></p>
-</div>
-</div>
-<button class="w-full mt-4 bg-theme-light text-white py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-2">
-<i class="fa-solid fa-list-check"></i> ดูรายละเอียดการรับข้าว
-        </button>
-</div>
+
+<section class="card overflow-hidden">
+ <div class="bg-theme-dark text-white p-3 text-sm font-semibold flex justify-between items-center">
+  <span>งานศพปัจจุบัน / กำลังดำเนินการ</span>
+  <span id="statusBadge" class="bg-white/20 px-2 py-0.5 rounded text-xs">กำลังตรวจสอบ</span>
+ </div>
+ <div id="activeFuneral" class="p-4">
+  <div class="text-center py-10 text-gray-400 loading">
+   <i class="fa-solid fa-spinner fa-spin text-2xl"></i>
+   <p class="text-sm mt-2">กำลังตรวจสอบข้อมูล...</p>
+  </div>
+ </div>
 </section>
-<!-- END: Current Funeral Section -->
-<!-- BEGIN: Summary Cards -->
+
 <section>
-<h3 class="text-sm font-bold text-theme-dark mb-3">สรุปภาพรวม</h3>
-<div class="grid grid-cols-2 gap-3">
-<div class="bg-green-50 p-3 rounded-xl border border-green-100 flex flex-col items-center justify-center text-center">
-<div class="w-8 h-8 rounded-full bg-green-200 text-green-700 flex items-center justify-center mb-2">
-<i class="fa-solid fa-users"></i>
-</div>
-<p class="text-xs text-gray-600 mb-1">สมาชิกทั้งหมด</p>
-<p class="text-xl font-bold text-gray-800">176</p>
-</div>
-<div class="bg-blue-50 p-3 rounded-xl border border-blue-100 flex flex-col items-center justify-center text-center">
-<div class="w-8 h-8 rounded-full bg-blue-200 text-blue-700 flex items-center justify-center mb-2">
-<i class="fa-solid fa-check"></i>
-</div>
-<p class="text-xs text-gray-600 mb-1">รับแล้ว</p>
-<p class="text-xl font-bold text-gray-800">132</p>
-</div>
-<div class="bg-orange-50 p-3 rounded-xl border border-orange-100 flex flex-col items-center justify-center text-center">
-<div class="w-8 h-8 rounded-full bg-orange-200 text-orange-700 flex items-center justify-center mb-2">
-<i class="fa-solid fa-clock"></i>
-</div>
-<p class="text-xs text-gray-600 mb-1">ค้างส่ง</p>
-<p class="text-xl font-bold text-gray-800">44</p>
-</div>
-<div class="bg-purple-50 p-3 rounded-xl border border-purple-100 flex flex-col items-center justify-center text-center">
-<div class="w-8 h-8 rounded-full bg-purple-200 text-purple-700 flex items-center justify-center mb-2">
-<i class="fa-solid fa-file-lines"></i>
-</div>
-<p class="text-xs text-gray-600 mb-1">งานศพทั้งหมด</p>
-<p class="text-xl font-bold text-gray-800">8</p>
-</div>
-</div>
+ <h3 class="text-sm font-bold text-theme-dark mb-3">สรุปภาพรวม</h3>
+ <div class="grid grid-cols-2 gap-3">
+  <div class="bg-green-50 p-3 rounded-xl border border-green-100 flex flex-col items-center justify-center text-center">
+   <div class="w-8 h-8 rounded-full bg-green-200 text-green-700 flex items-center justify-center mb-2"><i class="fa-solid fa-users"></i></div>
+   <p class="text-xs text-gray-600 mb-1">สมาชิกทั้งหมด</p>
+   <p id="membersCount" class="text-xl font-bold text-gray-800">0</p>
+   <span class="text-[10px] text-gray-500">ครัวเรือน</span>
+  </div>
+  <div class="bg-blue-50 p-3 rounded-xl border border-blue-100 flex flex-col items-center justify-center text-center">
+   <div class="w-8 h-8 rounded-full bg-blue-200 text-blue-700 flex items-center justify-center mb-2"><i class="fa-solid fa-check"></i></div>
+   <p class="text-xs text-gray-600 mb-1">รับแล้ว</p>
+   <p id="receivedCount" class="text-xl font-bold text-gray-800">0</p>
+   <span class="text-[10px] text-gray-500">ครัวเรือน</span>
+  </div>
+  <div class="bg-orange-50 p-3 rounded-xl border border-orange-100 flex flex-col items-center justify-center text-center">
+   <div class="w-8 h-8 rounded-full bg-orange-200 text-orange-700 flex items-center justify-center mb-2"><i class="fa-solid fa-clock"></i></div>
+   <p class="text-xs text-gray-600 mb-1">ค้างส่ง</p>
+   <p id="pendingCount" class="text-xl font-bold text-gray-800">0</p>
+   <span class="text-[10px] text-gray-500">ครัวเรือน</span>
+  </div>
+  <div class="bg-purple-50 p-3 rounded-xl border border-purple-100 flex flex-col items-center justify-center text-center">
+   <div class="w-8 h-8 rounded-full bg-purple-200 text-purple-700 flex items-center justify-center mb-2"><i class="fa-solid fa-file-lines"></i></div>
+   <p class="text-xs text-gray-600 mb-1">งานศพทั้งหมด</p>
+   <p id="funeralsCount" class="text-xl font-bold text-gray-800">0</p>
+   <span class="text-[10px] text-gray-500">งาน</span>
+  </div>
+ </div>
 </section>
-<!-- END: Summary Cards -->
-<!-- BEGIN: Recent Funerals -->
+
 <section>
-<div class="flex justify-between items-center mb-3">
-<h3 class="text-sm font-bold text-theme-dark">งานศพล่าสุด</h3>
-<a class="text-xs text-blue-600 font-medium" href="#">ดูทั้งหมด</a>
-</div>
-<div class="flex gap-3 overflow-x-auto hide-scrollbar pb-2">
-<!-- Card 1 -->
-<div class="min-w-[140px] bg-white rounded-xl shadow-sm border border-gray-100 p-2 flex flex-col items-center">
-<img alt="Portrait" class="w-16 h-20 object-cover rounded border-2 border-yellow-50 mb-2" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkfVXSk7G65Lux9egkVjKQbd95BLMjoIY7cpduxHXolRA3AgRObvaRDgM8eUBziRxls2_KNb6N6_YBbTxkzNArF-gGnGqLeOgF1uHNBzll9WglpdHvwRrJ2dTJhhH3Y_gZ5qo_jpjl6jOzXRXOjEPqRsHsLXcIieUk5TwY3Jf8Y3WhmV6Uqv9xXV4Q-atPtGdf-LR2fr_Jha2JDqeonT4gPcEOjORHSn0ZDtppUZMsUfF6_HuQEsqV3Q"/>
-<h4 class="text-xs font-bold text-gray-800 text-center truncate w-full">นายเกษมสุข ใฝ่ใจ</h4>
-<p class="text-[10px] text-gray-500 mb-2">25/07/2569</p>
-<div class="w-full bg-gray-200 rounded-full h-1.5 mb-1">
-<div class="bg-theme-light h-1.5 rounded-full" style="width: 75%"></div>
-</div>
-<p class="text-[9px] text-gray-500 w-full text-right">75%</p>
-</div>
-<!-- Card 2 -->
-<div class="min-w-[140px] bg-white rounded-xl shadow-sm border border-gray-100 p-2 flex flex-col items-center">
-<img alt="Portrait" class="w-16 h-20 object-cover rounded border-2 border-yellow-50 mb-2" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAFxLhS1WRMoHL-QsdPy3bESAWXZV_8vnD8x5EswRKpXVl5JcZXSLYylTKG3o8E1_36eurrdVGqk5waR5MGkY57xomejvn6zxKewWwzFBeqaJ2qPH9gjmmWZtj2twJQtaehNt6nGl3ApNXQ0WuuytXTCLAkj46OM2zzlCVlHWHGBngQzpBk8NJyrQbUf0kKbKshBEE22Z302mnOhp8EFhWX-LFYiUrKd4HhMXRMcnK0bDg-NWaZGfCLw"/>
-<h4 class="text-xs font-bold text-gray-800 text-center truncate w-full">นายบูรณภพ ผัดดี</h4>
-<p class="text-[10px] text-gray-500 mb-2">10/07/2569</p>
-<div class="w-full bg-gray-200 rounded-full h-1.5 mb-1">
-<div class="bg-theme-light h-1.5 rounded-full" style="width: 100%"></div>
-</div>
-<p class="text-[9px] text-gray-500 w-full text-right">100%</p>
-</div>
-<!-- Card 3 -->
-<div class="min-w-[140px] bg-white rounded-xl shadow-sm border border-gray-100 p-2 flex flex-col items-center">
-<img alt="Portrait" class="w-16 h-20 object-cover rounded border-2 border-yellow-50 mb-2" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7NylRhCI3W0MLsmzDsfqMNhf7u4P87imjlDFvUTJlHiPVc1fozHLc9cRBkEoUaqylLUn6gDEvuNdnKR2bwb04LJduV13cZ-34ZGnWyQwrgpER811z-gQii4uqKyhpc-ThecYTlaf3pkXLXxDUhNjKMsMbpRYqLf-_puuG7QF6IuJWO4-d7iTou1IoSJDchp0RxWf7WHA9-yWK8EwFDDRSqqRnFjmKo9z5yh0nKcz4b8RRshxF_v2lvw"/>
-<h4 class="text-xs font-bold text-gray-800 text-center truncate w-full">นางจันทร์แก้ว แสงดี</h4>
-<p class="text-[10px] text-gray-500 mb-2">01/07/2569</p>
-<div class="w-full bg-gray-200 rounded-full h-1.5 mb-1">
-<div class="bg-theme-light h-1.5 rounded-full" style="width: 99%"></div>
-</div>
-<p class="text-[9px] text-gray-500 w-full text-right">99%</p>
-</div>
-</div>
+ <div class="flex justify-between items-center mb-3">
+  <h3 class="text-sm font-bold text-theme-dark">งานศพล่าสุด</h3>
+  <button onclick="document.getElementById('history').scrollIntoView({behavior:'smooth'})" class="text-xs text-blue-600 font-medium">ดูทั้งหมด</button>
+ </div>
+ <div id="recentFunerals" class="flex gap-3 overflow-x-auto hide-scrollbar pb-2">
+  <div class="text-sm text-gray-400 py-5">กำลังโหลด...</div>
+ </div>
 </section>
-<!-- END: Recent Funerals -->
-<!-- BEGIN: Latest Announcements -->
+
 <section>
-<div class="flex justify-between items-center mb-3">
-<h3 class="text-sm font-bold text-theme-dark">ประกาศล่าสุด</h3>
-<a class="text-xs text-blue-600 font-medium" href="#">ดูทั้งหมด</a>
-</div>
-<div class="bg-white rounded-xl shadow-sm border border-gray-100 divide-y divide-gray-100">
-<div class="p-3 flex gap-3">
-<div class="text-red-500 mt-1"><i class="fa-solid fa-bullhorn"></i></div>
-<div class="flex-1">
-<div class="flex justify-between items-start mb-1">
-<h4 class="text-sm font-bold text-gray-800">งดเผาในที่โล่งทุกชนิด <span class="bg-red-100 text-red-600 text-[10px] px-1.5 py-0.5 rounded ml-1">ใหม่</span></h4>
-<span class="text-[10px] text-gray-500">30 ส.ค. 2569</span>
-</div>
-<p class="text-xs text-gray-600">ตั้งแต่วันที่ 1 ก.พ. - 31 มี.ค. 2569</p>
-</div>
-</div>
-<div class="p-3 flex gap-3">
-<div class="text-red-400 mt-1"><i class="fa-solid fa-bullhorn"></i></div>
-<div class="flex-1">
-<div class="flex justify-between items-start mb-1">
-<h4 class="text-sm font-medium text-gray-800">ประชุมประจำเดือน</h4>
-<span class="text-[10px] text-gray-500">29 ส.ค. 2569</span>
-</div>
-<p class="text-xs text-gray-600">วันอาทิตย์ที่ 7 ก.ย. 2569 เวลา 07.00 น.</p>
-</div>
-</div>
-</div>
+ <div class="flex justify-between items-center mb-3">
+  <h3 class="text-sm font-bold text-theme-dark">ประกาศล่าสุด</h3>
+  <button onclick="document.getElementById('announcements').scrollIntoView({behavior:'smooth'})" class="text-xs text-blue-600 font-medium">ดูทั้งหมด</button>
+ </div>
+ <div id="announcements" class="bg-white rounded-xl shadow-sm border border-gray-100 divide-y divide-gray-100">
+  <div class="p-5 text-center text-sm text-gray-400">กำลังโหลด...</div>
+ </div>
 </section>
-<!-- END: Latest Announcements -->
-<!-- BEGIN: Pending Members -->
+
+<section id="history">
+ <div class="flex justify-between items-center mb-3">
+  <h3 class="text-sm font-bold text-theme-dark">รายการงานศพ / สรุปยอดรับข้าวสาร</h3>
+ </div>
+ <div id="historyList" class="space-y-3">
+  <div class="card p-5 text-center text-sm text-gray-400">กำลังโหลด...</div>
+ </div>
+</section>
+
 <section>
-<div class="flex justify-between items-center mb-3">
-<h3 class="text-sm font-bold text-red-600">สมาชิกค้างส่ง (เกิน 2 ครั้ง)</h3>
-<a class="text-xs text-blue-600 font-medium" href="#">ดูทั้งหมด</a>
-</div>
-<div class="bg-white rounded-xl shadow-sm border border-red-100 divide-y divide-gray-100">
-<div class="p-3 flex justify-between items-center">
-<div class="flex items-center gap-2">
-<div class="w-6 h-6 rounded-full bg-red-100 text-red-500 flex items-center justify-center text-xs">
-<i class="fa-solid fa-user"></i>
-</div>
-<span class="text-sm font-medium text-gray-800">บ้านเลขที่ 123</span>
-<span class="text-xs text-gray-600">นายสมชาย ใจดี</span>
-</div>
-<span class="text-xs font-bold text-red-500">ค้างส่ง 2 ครั้ง</span>
-</div>
-<div class="p-3 flex justify-between items-center">
-<div class="flex items-center gap-2">
-<div class="w-6 h-6 rounded-full bg-red-100 text-red-500 flex items-center justify-center text-xs">
-<i class="fa-solid fa-user"></i>
-</div>
-<span class="text-sm font-medium text-gray-800">บ้านเลขที่ 145</span>
-<span class="text-xs text-gray-600">นางสาววิภาดา คำมา</span>
-</div>
-<span class="text-xs font-bold text-red-500">ค้างส่ง 2 ครั้ง</span>
-</div>
-</div>
+ <h3 class="text-sm font-bold text-theme-dark mb-3">เมนู</h3>
+ <div class="grid grid-cols-2 gap-3">
+  <button onclick="location.href='receive.html'" class="card p-4 text-center text-green-700"><i class="fa-solid fa-wheat-awn text-xl"></i><div class="text-sm font-bold mt-2">รับข้าวสาร</div></button>
+  <button onclick="location.href='members.html'" class="card p-4 text-center text-blue-700"><i class="fa-solid fa-users text-xl"></i><div class="text-sm font-bold mt-2">รายชื่อสมาชิก</div></button>
+  <button onclick="location.href='report.html'" class="card p-4 text-center text-purple-700"><i class="fa-solid fa-chart-column text-xl"></i><div class="text-sm font-bold mt-2">รายงาน</div></button>
+  <button onclick="location.href='news.html'" class="card p-4 text-center text-red-600"><i class="fa-solid fa-bullhorn text-xl"></i><div class="text-sm font-bold mt-2">ประกาศ</div></button>
+ </div>
 </section>
-<!-- END: Pending Members -->
-<!-- BEGIN: Quick Actions -->
-<section class="grid grid-cols-2 gap-2 pb-6">
-<button class="bg-green-100 text-green-800 p-3 rounded-lg flex items-center justify-center gap-2 text-sm font-medium">
-<i class="fa-solid fa-plus-circle"></i> แจ้งงานศพใหม่
-      </button>
-<button class="bg-blue-100 text-blue-800 p-3 rounded-lg flex items-center justify-center gap-2 text-sm font-medium">
-<i class="fa-solid fa-sack-dollar"></i> บันทึกรับข้าว
-      </button>
-<button class="bg-yellow-100 text-yellow-800 p-3 rounded-lg flex items-center justify-center gap-2 text-sm font-medium">
-<i class="fa-solid fa-user-plus"></i> เพิ่มสมาชิก
-      </button>
-<button class="bg-purple-100 text-purple-800 p-3 rounded-lg flex items-center justify-center gap-2 text-sm font-medium">
-<i class="fa-solid fa-chart-bar"></i> ออกรายงาน
-      </button>
-</section>
-<!-- END: Quick Actions -->
+
 </main>
-<!-- END: Main Content -->
-<!-- BEGIN: Bottom Navigation -->
-<nav class="bg-white border-t border-gray-200 fixed bottom-0 w-full z-50 px-2 py-2 flex justify-around items-center text-xs text-gray-500">
-<a class="flex flex-col items-center gap-1 text-theme-dark" href="#">
-<i class="fa-solid fa-home text-lg"></i>
-<span>หน้าหลัก</span>
-</a>
-<a class="flex flex-col items-center gap-1" href="#">
-<i class="fa-solid fa-book-skull text-lg"></i>
-<span>งานปัจจุบัน</span>
-</a>
-<a class="flex flex-col items-center gap-1" href="#">
-<i class="fa-solid fa-users text-lg"></i>
-<span>สมาชิก</span>
-</a>
-<a class="flex flex-col items-center gap-1" href="#">
-<i class="fa-solid fa-sack-dollar text-lg"></i>
-<span>รับข้าว</span>
-</a>
-<a class="flex flex-col items-center gap-1" href="#">
-<i class="fa-solid fa-bars text-lg"></i>
-<span>เมนู</span>
-</a>
-</nav>
-<!-- END: Bottom Navigation -->
-</body></html>
+
+<footer class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 text-center py-2 text-[10px] text-gray-500 z-40">
+ ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6 • จัดทำโดย นายศักรนนทน์ ขัติย์วงศ์ ผู้ใหญ่บ้าน
+</footer>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import {getFirestore,collection,getDocs,query,orderBy} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+const firebaseConfig={
+ apiKey:"AIzaSyCme8E32QPySbSetpZP9_yAyiHpSGmlxlc",
+ authDomain:"rongkhem-rice-group.firebaseapp.com",
+ projectId:"rongkhem-rice-group",
+ storageBucket:"rongkhem-rice-group.firebasestorage.app",
+ messagingSenderId:"114954787725",
+ appId:"1:114954787725:web:d18bb54ac53bc00db17bc4"
+};
+const app=initializeApp(firebaseConfig);
+const db=getFirestore(app);
+
+const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+const fmtDate=v=>{
+ if(!v)return "-";
+ const d=new Date(v);
+ return isNaN(d)?"-":d.toLocaleDateString("th-TH",{day:"numeric",month:"long",year:"numeric"});
+};
+const fmtShort=v=>{
+ if(!v)return "-";
+ const d=new Date(v);
+ return isNaN(d)?"-":d.toLocaleDateString("th-TH",{day:"2-digit",month:"2-digit",year:"numeric"});
+};
+
+let members=[],funerals=[],deliveries=[],news=[];
+
+async function readCollection(name){
+ const snap=await getDocs(collection(db,name));
+ return snap.docs.map(d=>({id:d.id,...d.data()}));
+}
+
+function activeFuneral(){
+ return funerals
+  .filter(f=>f.status!=="closed" && f.active!==false)
+  .sort((a,b)=>new Date(b.deathDate||b.createdAt||0)-new Date(a.deathDate||a.createdAt||0))[0]||null;
+}
+
+function renderActive(){
+ const f=activeFuneral();
+ const box=document.getElementById("activeFuneral");
+ const badge=document.getElementById("statusBadge");
+ if(!f){
+  badge.textContent="ยังไม่มีงานศพ";
+  box.innerHTML=`<div class="text-center py-8">
+   <div class="text-4xl mb-3">🕊️</div>
+   <p class="font-semibold text-gray-700">ยังไม่มีการแจ้งผู้เสียชีวิตในขณะนี้</p>
+   <p class="text-xs text-gray-500 mt-1">เมื่อมีการแจ้งการเสียชีวิต งานศพจะแสดงที่นี่</p>
+  </div>`;
+  return;
+ }
+ badge.textContent="กำลังดำเนินการ";
+ const got=new Set(deliveries.filter(d=>d.funeralId===f.id).map(d=>String(d.memberId))).size;
+ const pct=members.length?Math.round(got/members.length*100):0;
+ const img=f.photoData?`<img src="${esc(f.photoData)}" class="w-32 h-40 object-cover rounded border-4 border-yellow-100 shadow-md mb-3" alt="รูปผู้วายชนม์">`:`<div class="w-32 h-40 rounded border-4 border-yellow-100 shadow-md mb-3 bg-amber-50 flex flex-col items-center justify-center text-amber-700"><i class="fa-solid fa-dove text-3xl"></i><span class="text-xs mt-2">ยังไม่มีรูป</span></div>`;
+ box.innerHTML=`<div class="flex flex-col items-center mb-4">${img}
+  <h2 class="text-xl font-bold text-gray-800">${esc(f.name)}</h2>
+  <p class="text-gray-600 text-sm">อายุ ${esc(f.age||"-")} ปี</p>
+  <div class="mt-2 text-center text-sm">
+   <p class="text-theme-dark font-medium">เสียชีวิต : ${fmtDate(f.deathDate)}</p>
+   <p class="text-theme-dark font-medium">ฌาปนกิจ : ${fmtDate(f.burnDate)}</p>
+   ${f.location?`<p class="text-gray-500 text-xs mt-1">${esc(f.location)}</p>`:""}
+  </div>
+ </div>
+ <div class="border-t pt-4 flex items-center justify-around">
+  <div class="text-center"><p class="text-xs text-gray-500 mb-1">ยอดรับจริง</p><p class="text-2xl font-bold">${got} <span class="text-sm font-normal text-gray-500">ครัวเรือน</span></p></div>
+  <div class="relative w-16 h-16 flex items-center justify-center">
+   <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+    <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#e5e7eb" stroke-width="3"/>
+    <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#10B981" stroke-dasharray="${pct},100" stroke-linecap="round" stroke-width="3"/>
+   </svg><span class="absolute text-sm font-bold">${pct}%</span>
+  </div>
+  <div class="text-center"><p class="text-xs text-gray-500 mb-1">จากทั้งหมด</p><p class="text-xl font-bold">${members.length} <span class="text-sm font-normal text-gray-500">ครัวเรือน</span></p></div>
+ </div>
+ <div class="w-full mt-4 bg-emerald-500 text-white py-2 rounded-lg text-sm font-medium text-center"><i class="fa-solid fa-list-check mr-1"></i> รับจริง ${got} จาก ${members.length} ครัวเรือน</div>`;
+}
+
+function renderSummary(){
+ const f=activeFuneral();
+ const got=f?new Set(deliveries.filter(d=>d.funeralId===f.id).map(d=>String(d.memberId))).size:0;
+ document.getElementById("membersCount").textContent=members.length;
+ document.getElementById("receivedCount").textContent=got;
+ document.getElementById("pendingCount").textContent=Math.max(0,members.length-got);
+ document.getElementById("funeralsCount").textContent=funerals.length;
+}
+
+function renderRecent(){
+ const list=funerals.slice().sort((a,b)=>new Date(b.deathDate||0)-new Date(a.deathDate||0)).slice(0,6);
+ document.getElementById("recentFunerals").innerHTML=list.length?list.map(f=>{
+  const got=new Set(deliveries.filter(d=>d.funeralId===f.id).map(d=>String(d.memberId))).size;
+  const pct=members.length?Math.round(got/members.length*100):0;
+  return `<div class="min-w-[145px] bg-white rounded-xl shadow-sm border border-gray-100 p-2 flex flex-col items-center">
+   ${f.photoData?`<img src="${esc(f.photoData)}" class="w-16 h-20 object-cover rounded border-2 border-yellow-50 mb-2" alt="">`:`<div class="w-16 h-20 rounded border-2 border-yellow-50 mb-2 bg-amber-50 flex items-center justify-center text-amber-600"><i class="fa-solid fa-dove"></i></div>`}
+   <h4 class="text-xs font-bold text-gray-800 text-center truncate w-full">${esc(f.name)}</h4>
+   <p class="text-[10px] text-gray-500 mb-2">${fmtShort(f.burnDate)}</p>
+   <div class="w-full bg-gray-200 rounded-full h-1.5 mb-1"><div class="bg-emerald-500 h-1.5 rounded-full" style="width:${pct}%"></div></div>
+   <p class="text-[9px] text-gray-500 w-full text-right">${pct}%</p>
+  </div>`;
+ }).join(""):`<div class="w-full text-center py-6 text-sm text-gray-400">ยังไม่มีข้อมูล</div>`;
+}
+
+function renderNews(){
+ const list=news.slice().sort((a,b)=>new Date(b.createdAt||0)-new Date(a.createdAt||0)).slice(0,6);
+ document.getElementById("announcements").innerHTML=list.length?list.map((n,i)=>`<div class="p-3 flex gap-3">
+  <div class="text-red-500 mt-1"><i class="fa-solid fa-bullhorn"></i></div>
+  <div class="flex-1"><div class="flex justify-between gap-2"><h4 class="text-sm font-bold text-gray-800">${esc(n.title)} ${i===0?'<span class="bg-red-100 text-red-600 text-[10px] px-1.5 py-0.5 rounded ml-1">ใหม่</span>':""}</h4><span class="text-[10px] text-gray-500 whitespace-nowrap">${fmtDate(n.createdAt)}</span></div><p class="text-xs text-gray-600 mt-1">${esc(n.body||"")}</p></div>
+ </div>`).join(""):`<div class="p-5 text-center text-sm text-gray-400">ยังไม่มีประกาศ</div>`;
+}
+
+function renderHistory(){
+ const list=funerals.slice().sort((a,b)=>new Date(b.deathDate||0)-new Date(a.deathDate||0));
+ document.getElementById("historyList").innerHTML=list.length?list.map(f=>{
+  const got=new Set(deliveries.filter(d=>d.funeralId===f.id).map(d=>String(d.memberId))).size;
+  const pct=members.length?Math.round(got/members.length*100):0;
+  return `<div class="card p-3 flex gap-3 items-center">
+   ${f.photoData?`<img src="${esc(f.photoData)}" class="w-16 h-20 object-cover rounded border-2 border-yellow-100" alt="">`:`<div class="w-16 h-20 rounded border-2 border-yellow-100 bg-amber-50 flex items-center justify-center text-amber-600"><i class="fa-solid fa-dove"></i></div>`}
+   <div class="flex-1 min-w-0"><h4 class="font-bold text-sm truncate">${esc(f.name)}</h4><p class="text-xs text-gray-500">ฌาปนกิจ ${fmtDate(f.burnDate)}</p><div class="mt-2 bg-gray-200 rounded-full h-1.5"><div class="bg-emerald-500 h-1.5 rounded-full" style="width:${pct}%"></div></div><p class="text-[10px] text-gray-500 mt-1">รับแล้ว ${got} / ${members.length} ครัวเรือน • ${pct}%</p></div>
+  </div>`;
+ }).join(""):`<div class="card p-5 text-center text-sm text-gray-400">ยังไม่มีงานศพย้อนหลัง</div>`;
+}
+
+async function load(){
+ try{
+  [members,funerals,deliveries,news]=await Promise.all([
+   readCollection("members"),readCollection("funerals"),readCollection("deliveries"),readCollection("news")
+  ]);
+  renderActive();renderSummary();renderRecent();renderNews();renderHistory();
+ }catch(err){
+  console.error(err);
+  document.getElementById("activeFuneral").innerHTML=`<div class="text-center py-8 text-red-600"><i class="fa-solid fa-triangle-exclamation text-2xl"></i><p class="font-semibold mt-2">ไม่สามารถอ่านข้อมูลได้</p><p class="text-xs text-gray-500 mt-1">${esc(err.message)}</p></div>`;
+ }
+}
+function clock(){
+ const d=new Date();
+ document.getElementById("clock").textContent=d.toLocaleTimeString("th-TH",{hour12:false});
+ document.getElementById("date").textContent=d.toLocaleDateString("th-TH",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+}
+clock();setInterval(clock,1000);load();
+</script>
+</body>
+</html>
