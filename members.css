@@ -1,0 +1,90 @@
+.toolbar-card {
+  background:#fff; border-radius:16px; padding:16px 20px; margin-bottom:20px;
+  display:flex; gap:16px; align-items:center; flex-wrap:wrap;
+  box-shadow:0 2px 10px rgba(0,0,0,.05);
+}
+.search-box {
+  flex:1; min-width:220px; display:flex; align-items:center; gap:10px;
+  background:#f3f4f6; border-radius:10px; padding:10px 16px;
+}
+.search-box i { color:#9ca3af; }
+.search-box input { border:none; background:transparent; outline:none; width:100%; font-family:inherit; font-size:14px; }
+
+.filter-group { display:flex; gap:8px; }
+.filter-btn {
+  padding:9px 16px; border:1px solid #e5e7eb; background:#fff; border-radius:10px;
+  cursor:pointer; font-family:inherit; font-size:13px; transition:.2s;
+}
+.filter-btn:hover { border-color:#2d6a4f; color:#2d6a4f; }
+.filter-btn.active { background:#2d6a4f; color:#fff; border-color:#2d6a4f; }
+
+.member-table { width:100%; border-collapse:collapse; }
+.member-table th {
+  text-align:left; padding:14px 20px; background:#f9fafb; font-size:13px; color:#6b7280;
+  border-bottom:1px solid #eee;
+}
+.member-table td { padding:14px 20px; border-bottom:1px solid #f3f4f6; font-size:14px; }
+.member-table tr { transition:.2s; opacity:0; animation:fadeInRow .4s ease forwards; }
+@keyframes fadeInRow { from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:translateY(0)} }
+.member-table tbody tr:hover { background:#f9fafb; }
+
+.status-pill {
+  padding:4px 12px; border-radius:20px; font-size:12px; font-weight:600; display:inline-flex; align-items:center; gap:6px;
+}
+.status-pill.paid { background:#dcfce7; color:#16a34a; }
+.status-pill.pending { background:#fde2e2; color:#dc2626; }
+
+.overdue-count { font-weight:600; }
+.overdue-count.zero { color:#9ca3af; }
+.overdue-count.warn { color:#f59e0b; }
+.overdue-count.danger { color:#dc2626; }
+
+.icon-btn {
+  width:34px; height:34px; border-radius:8px; border:none; cursor:pointer;
+  display:inline-flex; align-items:center; justify-content:center; margin-right:6px; transition:.2s;
+}
+.icon-btn.edit { background:#e0f2fe; color:#0284c7; }
+.icon-btn.edit:hover { background:#0284c7; color:#fff; }
+.icon-btn.delete { background:#fde2e2; color:#dc2626; }
+.icon-btn.delete:hover { background:#dc2626; color:#fff; }
+
+.empty-state { text-align:center; padding:60px 20px; color:#9ca3af; }
+.empty-state i { font-size:40px; margin-bottom:12px; }
+
+/* ===== MODAL ===== */
+.modal-overlay {
+  position:fixed; inset:0; background:rgba(0,0,0,.5); display:flex; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none; transition:.25s; z-index:500;
+}
+.modal-overlay.show { opacity:1; pointer-events:auto; }
+.modal-box {
+  background:#fff; border-radius:16px; width:420px; max-width:90vw;
+  transform:scale(.92); transition:.25s; overflow:hidden;
+}
+.modal-overlay.show .modal-box { transform:scale(1); }
+.modal-box.small { width:360px; }
+.modal-header { display:flex; justify-content:space-between; align-items:center; padding:18px 22px; border-bottom:1px solid #eee; }
+.modal-close { border:none; background:none; font-size:16px; cursor:pointer; color:#9ca3af; }
+.modal-body { padding:20px 22px; display:flex; flex-direction:column; gap:6px; }
+.modal-body label { font-size:13px; color:#6b7280; margin-top:8px; }
+.modal-body input {
+  padding:10px 14px; border:1px solid #e5e7eb; border-radius:10px; font-family:inherit; font-size:14px; outline:none;
+  transition:.2s;
+}
+.modal-body input:focus { border-color:#2d6a4f; box-shadow:0 0 0 3px rgba(45,106,79,.12); }
+.modal-body.center { text-align:center; align-items:center; }
+.warning-icon { font-size:40px; color:#f59e0b; margin-bottom:8px; }
+.modal-footer { display:flex; gap:10px; padding:16px 22px; border-top:1px solid #eee; justify-content:flex-end; }
+.btn-cancel {
+  padding:10px 18px; border:1px solid #e5e7eb; background:#fff; border-radius:10px; cursor:pointer; font-family:inherit;
+}
+.btn-confirm {
+  padding:10px 18px; border:none; background:#2d6a4f; color:#fff; border-radius:10px; cursor:pointer; font-family:inherit;
+  display:flex; align-items:center; gap:8px; transition:.2s;
+}
+.btn-confirm:hover { background:#1f4a2e; }
+.btn-danger {
+  padding:10px 18px; border:none; background:#dc2626; color:#fff; border-radius:10px; cursor:pointer; font-family:inherit;
+  display:flex; align-items:center; gap:8px; transition:.2s;
+}
+.btn-danger:hover { background:#b91c1c; }
