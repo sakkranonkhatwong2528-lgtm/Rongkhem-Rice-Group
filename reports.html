@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>รายงาน - ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="members.css">
+<link rel="stylesheet" href="reports.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<div class="app-wrapper">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon"><i class="fa-solid fa-wheat-awn"></i></div>
+      <div class="logo-text"><strong>กลุ่มข้าวสาร</strong><span>บ้านร่องเข็ม หมู่ที่ 6</span></div>
+    </div>
+    <nav class="sidebar-menu">
+      <a href="index.html" class="menu-item"><i class="fa-solid fa-house"></i><span>หน้าหลัก</span></a>
+      <a href="current-funeral.html" class="menu-item"><i class="fa-solid fa-hand-holding-heart"></i><span>งานศพปัจจุบัน</span></a>
+      <a href="members.html" class="menu-item"><i class="fa-solid fa-users"></i><span>สมาชิก</span></a>
+      <a href="rice-record.html" class="menu-item"><i class="fa-solid fa-bowl-rice"></i><span>บันทึกรับข้าว</span></a>
+      <a href="history.html" class="menu-item"><i class="fa-solid fa-calendar-days"></i><span>งานศพย้อนหลัง</span></a>
+      <a href="announcements.html" class="menu-item"><i class="fa-solid fa-bullhorn"></i><span>ประกาศ</span></a>
+      <a href="reports.html" class="menu-item active"><i class="fa-solid fa-chart-column"></i><span>รายงาน</span></a>
+      <a href="settings.html" class="menu-item"><i class="fa-solid fa-gear"></i><span>ตั้งค่า</span></a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-box">
+        <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
+        <div class="user-info"><strong>ผู้ใหญ่บ้าน</strong><span>ศักรแทน ขัติย์วงศ์</span><span class="badge-role">ผู้ดูแลระบบ</span></div>
+      </div>
+      <button class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> ออกจากระบบ</button>
+    </div>
+  </aside>
+
+  <main class="main-content">
+
+    <header class="topbar">
+      <div class="topbar-title">
+        <div class="logo-icon small"><i class="fa-solid fa-chart-column"></i></div>
+        <div><h1>รายงาน</h1><p>สรุปสถิติและวิเคราะห์ข้อมูลกลุ่มข้าวสาร</p></div>
+      </div>
+      <div class="topbar-right">
+        <div class="clock-box">
+          <i class="fa-regular fa-clock"></i>
+          <div><div id="liveClock" class="clock-time">00:00:00</div><div id="liveDate" class="clock-date">-</div></div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Toolbar -->
+    <div class="toolbar-card">
+      <div class="filter-group">
+        <span class="toolbar-label"><i class="fa-solid fa-calendar"></i> เลือกปี:</span>
+        <select id="yearSelect" class="year-select">
+          <option value="2569">พ.ศ. 2569</option>
+          <option value="2568">พ.ศ. 2568</option>
+          <option value="2567">พ.ศ. 2567</option>
+        </select>
+      </div>
+      <div class="toolbar-actions">
+        <button class="action-btn abtn-blue" id="btnExportExcel"><i class="fa-solid fa-file-excel"></i> Excel</button>
+        <button class="action-btn abtn-purple" id="btnExportPDF"><i class="fa-solid fa-file-pdf"></i> PDF</button>
+      </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <section class="summary-grid four-col">
+      <div class="summary-card">
+        <div class="summary-icon green"><i class="fa-solid fa-hand-holding-heart"></i></div>
+        <span class="summary-number" id="rTotalFunerals">0</span>
+        <span class="summary-label">งานศพในปีนี้</span>
+      </div>
+      <div class="summary-card">
+        <div class="summary-icon blue"><i class="fa-solid fa-bowl-rice"></i></div>
+        <span class="summary-number" id="rTotalRice">0</span>
+        <span class="summary-label">ข้าวสารรวม (ถัง)</span>
+      </div>
+      <div class="summary-card">
+        <div class="summary-icon orange"><i class="fa-solid fa-percent"></i></div>
+        <span class="summary-number" id="rAvgPercent">0</span>
+        <span class="summary-label">% เฉลี่ยความร่วมมือ</span>
+      </div>
+      <div class="summary-card">
+        <div class="summary-icon purple"><i class="fa-solid fa-triangle-exclamation"></i></div>
+        <span class="summary-number" id="rLowest">0</span>
+        <span class="summary-label">ครัวเรือนค้างส่งสูงสุด</span>
+      </div>
+    </section>
+
+    <!-- Charts Row 1 -->
+    <div class="two-col-grid">
+      <section class="card">
+        <div class="section-title"><h3>ข้าวสารรวมรายเดือน</h3></div>
+        <div class="chart-wrap"><canvas id="monthlyChart"></canvas></div>
+      </section>
+      <section class="card">
+        <div class="section-title"><h3>สัดส่วนความร่วมมือรวม</h3></div>
+        <div class="chart-wrap donut"><canvas id="donutChart"></canvas></div>
+      </section>
+    </div>
+
+    <!-- Charts Row 2 -->
+    <div class="two-col-grid">
+      <section class="card">
+        <div class="section-title"><h3>เปรียบเทียบจำนวนงานศพรายปี</h3></div>
+        <div class="chart-wrap"><canvas id="yearlyChart"></canvas></div>
+      </section>
+      <section class="card">
+        <div class="section-title"><h3>ครัวเรือนที่ค้างส่งข้าวสารบ่อยที่สุด</h3></div>
+        <div class="ranking-list" id="rankingList">
+          <!-- Generated by JS -->
+        </div>
+      </section>
+    </div>
+
+  </main>
+</div>
+
+<div id="toastContainer" class="toast-container"></div>
+
+<script src="script.js"></script>
+<script src="reports.js"></script>
+</body>
+</html>
