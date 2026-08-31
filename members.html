@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>สมาชิก - ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="members.css">
+</head>
+<body>
+
+<div class="app-wrapper">
+
+  <!-- SIDEBAR (เหมือนหน้าแรก) -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon"><i class="fa-solid fa-wheat-awn"></i></div>
+      <div class="logo-text"><strong>กลุ่มข้าวสาร</strong><span>บ้านร่องเข็ม หมู่ที่ 6</span></div>
+    </div>
+    <nav class="sidebar-menu">
+      <a href="index.html" class="menu-item"><i class="fa-solid fa-house"></i><span>หน้าหลัก</span></a>
+      <a href="current-funeral.html" class="menu-item"><i class="fa-solid fa-hand-holding-heart"></i><span>งานศพปัจจุบัน</span></a>
+      <a href="members.html" class="menu-item active"><i class="fa-solid fa-users"></i><span>สมาชิก</span></a>
+      <a href="rice-record.html" class="menu-item"><i class="fa-solid fa-bowl-rice"></i><span>บันทึกรับข้าว</span></a>
+      <a href="history.html" class="menu-item"><i class="fa-solid fa-calendar-days"></i><span>งานศพย้อนหลัง</span></a>
+      <a href="announcements.html" class="menu-item"><i class="fa-solid fa-bullhorn"></i><span>ประกาศ</span></a>
+      <a href="reports.html" class="menu-item"><i class="fa-solid fa-chart-column"></i><span>รายงาน</span></a>
+      <a href="settings.html" class="menu-item"><i class="fa-solid fa-gear"></i><span>ตั้งค่า</span></a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-box">
+        <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
+        <div class="user-info"><strong>ผู้ใหญ่บ้าน</strong><span>ศักรแทน ขัติย์วงศ์</span><span class="badge-role">ผู้ดูแลระบบ</span></div>
+      </div>
+      <button class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> ออกจากระบบ</button>
+    </div>
+  </aside>
+
+  <main class="main-content">
+
+    <header class="topbar">
+      <div class="topbar-title">
+        <div class="logo-icon small"><i class="fa-solid fa-users"></i></div>
+        <div><h1>สมาชิกทั้งหมด</h1><p>จัดการข้อมูลสมาชิกกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</p></div>
+      </div>
+      <div class="topbar-right">
+        <div class="clock-box">
+          <i class="fa-regular fa-clock"></i>
+          <div><div id="liveClock" class="clock-time">00:00:00</div><div id="liveDate" class="clock-date">-</div></div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Toolbar: Search + Filter + Add -->
+    <div class="toolbar-card">
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="searchMember" placeholder="ค้นหาชื่อ, บ้านเลขที่...">
+      </div>
+      <div class="filter-group">
+        <button class="filter-btn active" data-filter="all">ทั้งหมด</button>
+        <button class="filter-btn" data-filter="paid">รับแล้ว</button>
+        <button class="filter-btn" data-filter="pending">ค้างส่ง</button>
+      </div>
+      <button class="action-btn abtn-orange" id="btnAddMember"><i class="fa-solid fa-user-plus"></i> เพิ่มสมาชิก</button>
+    </div>
+
+    <!-- Members Table -->
+    <div class="card">
+      <table class="member-table" id="memberTable">
+        <thead>
+          <tr>
+            <th>บ้านเลขที่</th>
+            <th>ชื่อ-สกุล</th>
+            <th>เบอร์โทร</th>
+            <th>สถานะรับข้าว</th>
+            <th>จำนวนครั้งที่ค้าง</th>
+            <th>จัดการ</th>
+          </tr>
+        </thead>
+        <tbody id="memberTbody">
+          <!-- แถวจะถูกสร้างด้วย JS -->
+        </tbody>
+      </table>
+      <div id="emptyState" class="empty-state" style="display:none;">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <p>ไม่พบข้อมูลที่ค้นหา</p>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Modal: เพิ่ม/แก้ไขสมาชิก -->
+<div class="modal-overlay" id="memberModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3 id="modalTitle">เพิ่มสมาชิกใหม่</h3>
+      <button class="modal-close" id="closeModal"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <label>บ้านเลขที่</label>
+      <input type="text" id="inputHouseNo" placeholder="เช่น 123">
+      <label>ชื่อ-สกุล</label>
+      <input type="text" id="inputName" placeholder="เช่น นายสมชาย ใจดี">
+      <label>เบอร์โทร</label>
+      <input type="text" id="inputPhone" placeholder="เช่น 08x-xxx-xxxx">
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" id="cancelModal">ยกเลิก</button>
+      <button class="btn-confirm" id="saveMember"><i class="fa-solid fa-floppy-disk"></i> บันทึก</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: ยืนยันลบ -->
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal-box small">
+    <div class="modal-body center">
+      <div class="warning-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+      <h3>ยืนยันการลบสมาชิก?</h3>
+      <p id="deleteTargetName">คุณต้องการลบข้อมูลนี้ใช่หรือไม่</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" id="cancelDelete">ยกเลิก</button>
+      <button class="btn-danger" id="confirmDelete"><i class="fa-solid fa-trash"></i> ลบข้อมูล</button>
+    </div>
+  </div>
+</div>
+
+<div id="toastContainer" class="toast-container"></div>
+
+<script src="script.js"></script>
+<script src="members.js"></script>
+</body>
+</html>
