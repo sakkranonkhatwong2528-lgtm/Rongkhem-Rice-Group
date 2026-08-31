@@ -1,0 +1,10 @@
+import { db } from "./firebase-config.js";
+import { collection, addDoc, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+// ให้ Cloud Function เขียน log ทุกครั้งที่ backup สำเร็จ/ล้มเหลว เข้า collection "backupLogs"
+function listenBackupLogs(callback) {
+  const q = query(collection(db, "backupLogs"), orderBy("timestamp", "desc"), limit(30));
+  return onSnapshot(q, (snap) => {
+    callback(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+  });
+}
