@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>งานศพปัจจุบัน - ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="current-funeral.css">
+</head>
+<body>
+
+<div class="app-wrapper">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon"><i class="fa-solid fa-wheat-awn"></i></div>
+      <div class="logo-text"><strong>กลุ่มข้าวสาร</strong><span>บ้านร่องเข็ม หมู่ที่ 6</span></div>
+    </div>
+    <nav class="sidebar-menu">
+      <a href="index.html" class="menu-item"><i class="fa-solid fa-house"></i><span>หน้าหลัก</span></a>
+      <a href="current-funeral.html" class="menu-item active"><i class="fa-solid fa-hand-holding-heart"></i><span>งานศพปัจจุบัน</span></a>
+      <a href="members.html" class="menu-item"><i class="fa-solid fa-users"></i><span>สมาชิก</span></a>
+      <a href="rice-record.html" class="menu-item"><i class="fa-solid fa-bowl-rice"></i><span>บันทึกรับข้าว</span></a>
+      <a href="history.html" class="menu-item"><i class="fa-solid fa-calendar-days"></i><span>งานศพย้อนหลัง</span></a>
+      <a href="announcements.html" class="menu-item"><i class="fa-solid fa-bullhorn"></i><span>ประกาศ</span></a>
+      <a href="reports.html" class="menu-item"><i class="fa-solid fa-chart-column"></i><span>รายงาน</span></a>
+      <a href="settings.html" class="menu-item"><i class="fa-solid fa-gear"></i><span>ตั้งค่า</span></a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-box">
+        <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
+        <div class="user-info"><strong>ผู้ใหญ่บ้าน</strong><span>ศักรแทน ขัติย์วงศ์</span><span class="badge-role">ผู้ดูแลระบบ</span></div>
+      </div>
+      <button class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> ออกจากระบบ</button>
+    </div>
+  </aside>
+
+  <main class="main-content">
+
+    <header class="topbar">
+      <div class="topbar-title">
+        <div class="logo-icon small"><i class="fa-solid fa-hand-holding-heart"></i></div>
+        <div><h1>งานศพปัจจุบัน</h1><p>รายละเอียดงานฌาปนกิจที่กำลังดำเนินการ</p></div>
+      </div>
+      <div class="topbar-right">
+        <div class="clock-box">
+          <i class="fa-regular fa-clock"></i>
+          <div><div id="liveClock" class="clock-time">00:00:00</div><div id="liveDate" class="clock-date">-</div></div>
+        </div>
+      </div>
+    </header>
+
+    <!-- HERO: ข้อมูลผู้เสียชีวิต -->
+    <section class="card funeral-hero">
+      <div class="hero-badge">
+        <i class="fa-solid fa-circle-dot"></i> กำลังดำเนินการ
+      </div>
+      <div class="hero-content">
+        <div class="hero-photo">
+          <img src="https://placehold.co/240x280/e8e0d0/555?text=รูปผู้เสียชีวิต" alt="">
+        </div>
+        <div class="hero-detail">
+          <h2>นายเกษมสุข ใฝ่ใจ</h2>
+          <p class="hero-sub">อายุ 72 ปี &nbsp;•&nbsp; บ้านเลขที่ 88 หมู่ที่ 6</p>
+
+          <div class="info-grid">
+            <div class="info-item"><i class="fa-solid fa-heart-crack"></i><div><small>วันที่เสียชีวิต</small><strong>20 กรกฎาคม 2569</strong></div></div>
+            <div class="info-item"><i class="fa-solid fa-fire-flame-curved"></i><div><small>วันฌาปนกิจ</small><strong>25 กรกฎาคม 2569</strong></div></div>
+            <div class="info-item"><i class="fa-solid fa-location-dot"></i><div><small>สถานที่</small><strong>วัดร่องเข็ม ต.จำป่าหวาย</strong></div></div>
+            <div class="info-item"><i class="fa-solid fa-user-group"></i><div><small>ทายาท/ผู้ติดต่อ</small><strong>นายสมพงษ์ ใฝ่ใจ (ลูกชาย)</strong></div></div>
+            <div class="info-item"><i class="fa-solid fa-phone"></i><div><small>เบอร์ติดต่อ</small><strong>089-123-4567</strong></div></div>
+            <div class="info-item"><i class="fa-solid fa-clock-rotate-left"></i><div><small>สถานะ</small><strong class="status-live">กำลังรับข้าว</strong></div></div>
+          </div>
+
+          <div class="condolence-box">
+            🕊️ ขอแสดงความอาลัยและร่วมส่งดวงวิญญาณให้ไปสู่สุคติ 🕊️
+          </div>
+
+          <div class="hero-actions">
+            <a href="rice-record.html" class="action-btn abtn-green"><i class="fa-solid fa-bowl-rice"></i> ไปหน้าบันทึกรับข้าว</a>
+            <button class="action-btn abtn-blue" id="btnEditFuneral"><i class="fa-solid fa-pen"></i> แก้ไขข้อมูลงาน</button>
+            <button class="action-btn abtn-purple" id="btnPrint"><i class="fa-solid fa-print"></i> พิมพ์ประกาศ</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SUMMARY CARDS -->
+    <section class="summary-grid four-col">
+      <div class="summary-card">
+        <div class="summary-icon green"><i class="fa-solid fa-users"></i></div>
+        <span class="summary-number" id="sumTotal">0</span>
+        <span class="summary-label">ครัวเรือนทั้งหมด</span>
+      </div>
+      <div class="summary-card">
+        <div class="summary-icon blue"><i class="fa-solid fa-check"></i></div>
+        <span class="summary-number" id="sumReceived">0</span>
+        <span class="summary-label">รับข้าวแล้ว</span>
+      </div>
+      <div class="summary-card">
+        <div class="summary-icon orange"><i class="fa-regular fa-clock"></i></div>
+        <span class="summary-number" id="sumPending">0</span>
+        <span class="summary-label">ยังไม่ส่ง</span>
+      </div>
+      <div class="summary-card">
+        <div class="summary-icon purple"><i class="fa-solid fa-percent"></i></div>
+        <span class="summary-number" id="sumPercent">0</span>
+        <span class="summary-label">% ความคืบหน้า</span>
+      </div>
+    </section>
+
+    <div class="two-col-grid">
+
+      <!-- TIMELINE -->
+      <section class="card">
+        <div class="section-title"><h3>กำหนดการงานฌาปนกิจ</h3></div>
+        <div class="timeline">
+          <div class="timeline-item done">
+            <div class="tl-dot"><i class="fa-solid fa-check"></i></div>
+            <div class="tl-content"><strong>20 ก.ค. 2569</strong><span>เสียชีวิต / แจ้งข่าวแก่สมาชิกในหมู่บ้าน</span></div>
+          </div>
+          <div class="timeline-item done">
+            <div class="tl-dot"><i class="fa-solid fa-check"></i></div>
+            <div class="tl-content"><strong>21–24 ก.ค. 2569</strong><span>สวดพระอภิธรรม ณ บ้านเลขที่ 88</span></div>
+          </div>
+          <div class="timeline-item active">
+            <div class="tl-dot pulse"><i class="fa-solid fa-fire-flame-curved"></i></div>
+            <div class="tl-content"><strong>25 ก.ค. 2569 เวลา 14.00 น.</strong><span>ฌาปนกิจ ณ วัดร่องเข็ม</span></div>
+          </div>
+          <div class="timeline-item">
+            <div class="tl-dot"><i class="fa-regular fa-circle"></i></div>
+            <div class="tl-content"><strong>26 ก.ค. 2569</strong><span>เก็บอัฐิ / ปิดยอดรับข้าวสาร</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RECENT ACTIVITY -->
+      <section class="card">
+        <div class="section-title"><h3>กิจกรรมล่าสุด</h3></div>
+        <div class="activity-list" id="activityList">
+          <!-- Generated by JS -->
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+</div>
+
+<div id="toastContainer" class="toast-container"></div>
+
+<script src="script.js"></script>
+<script src="current-funeral.js"></script>
+</body>
+</html>
