@@ -20,12 +20,13 @@ import {
 // ======================================================
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyCme8E32QPySbSetpZP9_yAyiHpSGmlxlc",
+  authDomain: "rongkhem-rice-group.firebaseapp.com",
+  projectId: "rongkhem-rice-group",
+  storageBucket: "rongkhem-rice-group.firebasestorage.app",
+  messagingSenderId: "114954787725",
+  appId: "1:114954787725:web:d18bb54ac53bc00db17bc4",
+  measurementId: "G-70Z00XXB8Y"
 };
 
 
