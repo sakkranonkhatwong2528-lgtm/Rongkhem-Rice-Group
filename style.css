@@ -267,3 +267,56 @@ body { background:#f3f5f2; color:#1f2937; }
   .funeral-stats { justify-content:center; }
   .summary-grid { grid-template-columns:1fr 1fr; }
 }
+/* ===== HAMBURGER BUTTON (ซ่อนบนจอใหญ่) ===== */
+.hamburger-btn {
+  display:none;
+  width:40px; height:40px; border-radius:10px; border:none; background:#fff;
+  box-shadow:0 2px 8px rgba(0,0,0,.08); color:#2d6a4f; font-size:18px;
+  align-items:center; justify-content:center; cursor:pointer; flex-shrink:0;
+}
+
+/* ===== SIDEBAR OVERLAY (พื้นหลังมืดเมื่อเปิดเมนูบนมือถือ) ===== */
+.sidebar-overlay {
+  display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:998;
+  opacity:0; transition:opacity .25s ease;
+}
+.sidebar-overlay.show { display:block; opacity:1; }
+
+/* ===== RESPONSIVE BREAKPOINTS ===== */
+@media (max-width:1024px) {
+  .sidebar {
+    position:fixed; top:0; left:0; height:100vh; z-index:999;
+    transform:translateX(-100%); transition:transform .3s ease;
+    box-shadow:8px 0 30px rgba(0,0,0,.15);
+  }
+  .sidebar.open { transform:translateX(0); }
+
+  .hamburger-btn { display:flex; }
+
+  .topbar { gap:14px; }
+  .topbar-title { gap:12px; }
+}
+
+@media (max-width:640px) {
+  .main-content { padding:14px; }
+  .topbar { flex-direction:column; align-items:flex-start; gap:12px; }
+  .topbar-title { width:100%; }
+  .topbar-right { width:100%; justify-content:space-between; }
+  .clock-box { flex:1; }
+
+  .logo-text strong { font-size:14px; }
+  .logo-text span { font-size:11px; }
+
+  /* การ์ดสรุป/สถิติ เรียงเป็นคอลัมน์เดียว */
+  .stat-grid, .summary-grid, .kpi-grid { grid-template-columns:1fr !important; }
+
+  /* ตารางที่กว้างเกิน ให้ scroll แนวนอนได้ */
+  .table-wrapper, .members-table, .rice-table { overflow-x:auto; }
+
+  .modal-box { width:92%; margin:0 auto; }
+}
+
+@media (max-width:400px) {
+  .sidebar-logo { padding:16px 12px; }
+  .card { padding:16px; }
+}
