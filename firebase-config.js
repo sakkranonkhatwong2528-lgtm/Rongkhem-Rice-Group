@@ -1,9 +1,7 @@
-// ⚠️ แทนที่ค่าด้านล่างด้วยค่าจากโปรเจกต์ Firebase ของคุณ
-// วิธีหา: Firebase Console > Project Settings > General > Your apps > SDK setup and configuration
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+import { getStorage } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-storage.js"; // ⭐ เพิ่มบรรทัดนี้
 
 const firebaseConfig = {
   apiKey: "YOUR_API_KEY",
@@ -17,3 +15,4 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+export const storage = getStorage(app); // ⭐ เพิ่มบรรทัดนี้
