@@ -1,115 +1,467 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ระบบกลุ่มข้าวสาร • บ้านร่องเข็ม หมู่ที่ 6</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-<style>
-*{box-sizing:border-box}body{margin:0;font-family:Sarabun,sans-serif;color:#193329;background:#f4f8f5}
-:root{--g:#075b35;--g2:#0d8750;--mint:#e8f7ee;--gold:#d4a843;--ink:#173329;--muted:#71817a;--red:#dc3545;--blue:#2879d6}
-.top{background:linear-gradient(135deg,#063d25,#087342);color:#fff;position:relative;overflow:hidden}
-.top:after{content:"";position:absolute;right:-80px;top:-100px;width:300px;height:300px;border:45px solid rgba(255,255,255,.06);border-radius:50%}
-.header{max-width:1180px;margin:auto;padding:22px 22px 26px;display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1}
-.logo{display:flex;align-items:center;gap:14px}.logoIcon{width:58px;height:58px;border-radius:18px;background:#fff;color:var(--g);display:grid;place-items:center;font-size:29px;box-shadow:0 10px 25px #0003}.logo h1{font-size:25px;margin:0;font-weight:800}.logo p{margin:2px 0 0;color:#d7f4e3;font-size:13px}
-.clock{text-align:right}.clock strong{display:block;font:700 31px ui-monospace,monospace;letter-spacing:1px}.clock span{font-size:12px;color:#d8f3e3}
-.container{max-width:1180px;margin:-10px auto 0;padding:0 22px 35px;position:relative;z-index:2}
-.hero{background:#fff;border-radius:25px;box-shadow:0 16px 45px #174d3215;border:1px solid #e4eee8;overflow:hidden}
-.heroTitle{background:linear-gradient(90deg,#075b35,#0d8750);color:#fff;padding:15px 21px;display:flex;justify-content:space-between;align-items:center}.heroTitle h2{font-size:18px;margin:0}.badge{font-size:12px;background:#ffffff1c;border:1px solid #ffffff3b;padding:5px 10px;border-radius:30px}
-.heroBody{display:grid;grid-template-columns:340px 1fr;gap:30px;padding:28px}.portraitWrap{text-align:center}.portrait{width:255px;height:315px;margin:auto;border-radius:18px;border:9px solid #d7b55e;box-shadow:0 12px 28px #0001;background:#faf7ed;overflow:hidden;display:grid;place-items:center}.portrait img{width:100%;height:100%;object-fit:cover}.placeholder{color:#aa9460;font-size:16px}.placeholder i{font-size:55px;display:block;margin-bottom:10px}.heroInfo{padding:10px 0}.eyebrow{color:#a27824;font-size:13px;font-weight:700}.heroInfo h3{font-size:34px;margin:3px 0 4px;color:#16372a}.age{color:#6f7d76;margin:0 0 20px}.facts{display:grid;grid-template-columns:1fr 1fr;gap:12px}.fact{background:#f7faf8;border:1px solid #e7eee9;border-radius:14px;padding:12px}.fact small{display:block;color:#829089;font-size:11px}.fact b{font-size:16px}.memorial{margin-top:18px;padding:16px;border-left:4px solid var(--gold);background:#fffbf1;border-radius:0 13px 13px 0;color:#6c5931;line-height:1.65;font-size:14px}.heroBottom{border-top:1px solid #edf1ee;padding:19px 28px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;text-align:center}.metric small{color:#7a8881}.metric b{display:block;font-size:30px;color:var(--ink)}.ring{width:76px;height:76px;margin:auto;position:relative}.ring svg{transform:rotate(-90deg)}.ring text{font-family:Sarabun}.ringValue{position:absolute;inset:0;display:grid;place-items:center;font-weight:800;font-size:16px}
-.section{margin-top:25px}.sectionHead{display:flex;justify-content:space-between;align-items:end;margin-bottom:12px}.sectionHead h2{margin:0;color:var(--g);font-size:21px}.sectionHead p{margin:0;color:var(--muted);font-size:12px}
-.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.summary{padding:19px;border-radius:18px;background:#fff;border:1px solid #e3ebe6;box-shadow:0 6px 20px #1b48330a}.summaryIcon{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;font-size:19px;margin-bottom:12px}.sGreen{background:#e2f5e9;color:#08733f}.sBlue{background:#e5f0ff;color:#246fca}.sOrange{background:#fff1d7;color:#bc7600}.sPurple{background:#f0e7fb;color:#7540a5}.summary small{color:#75827c}.summary b{display:block;font-size:31px;margin:2px 0}.summary span{font-size:12px;color:#88948e}
-.grid2{display:grid;grid-template-columns:1.3fr .7fr;gap:18px}.panel{background:#fff;border:1px solid #e3ebe6;border-radius:20px;box-shadow:0 6px 20px #1b48330a;overflow:hidden}.panelHead{padding:16px 18px;border-bottom:1px solid #edf1ee;display:flex;justify-content:space-between}.panelHead h3{margin:0;font-size:17px;color:var(--g)}.link{border:0;background:none;color:var(--blue);cursor:pointer;font-weight:600}.history{display:flex;gap:13px;padding:16px;overflow:auto}.historyCard{min-width:170px;border:1px solid #e5ece8;border-radius:16px;padding:10px;background:#fff}.historyImg{height:130px;border-radius:11px;border:3px solid #e0c36e;background:#faf7ed;overflow:hidden;display:grid;place-items:center;color:#a18b5d}.historyImg img{width:100%;height:100%;object-fit:cover}.historyCard b{display:block;margin-top:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.historyCard small{display:block;color:#77847e}.bar{height:7px;background:#e4ece7;border-radius:99px;overflow:hidden;margin-top:9px}.bar i{height:100%;display:block;background:linear-gradient(90deg,#0b8750,#43c878)}
-.news{padding:5px 17px}.newsItem{padding:14px 0;display:flex;gap:11px;border-bottom:1px solid #edf1ee}.newsItem:last-child{border:0}.newsIcon{width:38px;height:38px;border-radius:11px;background:#fff0f1;color:#d93445;display:grid;place-items:center;flex:none}.newsItem b{font-size:14px}.newsItem p{font-size:12px;color:#6f7c76;margin:3px 0}.newsItem small{color:#9aa39e}
-.pending{padding:8px 17px 17px}.pendingItem{padding:12px 0;border-bottom:1px solid #edf1ee;display:flex;justify-content:space-between;gap:10px}.pendingItem:last-child{border:0}.pendingItem span{font-size:13px}.late{color:#d73545;font-weight:700;font-size:12px;white-space:nowrap}
-.quote{margin-top:25px;padding:22px;border-radius:20px;background:linear-gradient(135deg,#063f26,#0a7542);color:#fff;text-align:center;box-shadow:0 12px 30px #0a4c3018}.quote i{color:#f0cf70;font-size:23px}.quote p{max-width:820px;margin:8px auto 0;line-height:1.8;font-size:14px}.quote b{display:block;margin-top:8px;font-size:12px;color:#c9ead7}
-.menu{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}.menu a{text-decoration:none;color:inherit;background:#fff;border:1px solid #e3ebe6;border-radius:17px;padding:18px;text-align:center;box-shadow:0 6px 20px #1b48330a;transition:.2s}.menu a:hover{transform:translateY(-3px);box-shadow:0 10px 25px #1b483318}.menuIcon{width:48px;height:48px;margin:auto;border-radius:14px;display:grid;place-items:center;font-size:21px;background:var(--mint);color:var(--g)}.menu b{display:block;margin-top:9px;font-size:14px}
-footer{background:#043c25;color:#d7eee0;text-align:center;padding:20px;font-size:12px}
-.empty{text-align:center;padding:35px;color:#8a958f}.error{color:#b42332;background:#fff1f2;border:1px solid #ffd1d6;border-radius:12px;padding:14px}
-@media(max-width:850px){.header{padding:16px}.logo h1{font-size:20px}.logoIcon{width:48px;height:48px}.clock strong{font-size:22px}.container{padding:0 14px 28px}.heroBody{grid-template-columns:1fr;padding:20px}.portrait{width:215px;height:270px}.heroInfo h3{font-size:27px;text-align:center}.age{text-align:center}.cards{grid-template-columns:1fr 1fr}.grid2{grid-template-columns:1fr}.menu{grid-template-columns:1fr 1fr}.heroBottom{padding:15px}.metric b{font-size:24px}}
-@media(max-width:480px){.header{align-items:flex-start}.clock{text-align:right}.clock strong{font-size:17px}.clock span{font-size:9px}.heroTitle h2{font-size:15px}.heroBody{padding:15px}.facts{grid-template-columns:1fr}.cards{gap:9px}.summary{padding:13px}.summary b{font-size:25px}.heroBottom{gap:5px}.metric b{font-size:20px}.menu{gap:9px}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌾 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
+
+    <!-- Google Fonts & Tailwind CSS & Chart.js -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Prompt', sans-serif;
+        }
+        body {
+            background: #f4f7f6;
+        }
+        .hero {
+            background: linear-gradient(135deg, #0f5132, #198754, #28a745);
+        }
+        .card {
+            background: #fff;
+            border-radius: 22px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+            transition: .3s;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, .12);
+        }
+        .menu-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: .3s;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .08);
+        }
+        .menu-card:hover {
+            background: #198754;
+            color: #fff;
+            transform: scale(1.03);
+        }
+        .menu-card:hover h3 {
+            color: #fff;
+        }
+        footer {
+            background: #0f5132;
+            color: #fff;
+        }
+        /* Modal Transition Animation */
+        .modal {
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal-active {
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+    </style>
 </head>
-<body>
-<div class="top"><header class="header">
- <div class="logo"><div class="logoIcon">🌾</div><div><h1>ระบบกลุ่มข้าวสาร</h1><p>บ้านร่องเข็ม หมู่ที่ 6 • ตำบลจำป่าหวาย อำเภอเมือง จังหวัดพะเยา</p></div></div>
- <div class="clock"><strong id="clock">00:00:00</strong><span id="date">กำลังโหลด...</span></div>
-</header></div>
 
-<main class="container">
-<section class="hero">
- <div class="heroTitle"><h2>⚰️ งานศพปัจจุบัน / กำลังดำเนินการ</h2><span class="badge" id="status">กำลังตรวจสอบ</span></div>
- <div id="heroBody" class="heroBody"><div class="empty" style="grid-column:1/-1">กำลังโหลดข้อมูล...</div></div>
-</section>
+<body class="relative min-h-screen">
 
-<section class="section"><div class="sectionHead"><div><h2>สรุปภาพรวม</h2><p>ข้อมูลจากระบบกลุ่มข้าวสาร</p></div></div>
- <div class="cards">
-  <div class="summary"><div class="summaryIcon sGreen">👥</div><small>สมาชิกทั้งหมด</small><b id="members">0</b><span>ครัวเรือน</span></div>
-  <div class="summary"><div class="summaryIcon sBlue">✓</div><small>รับแล้ว</small><b id="received">0</b><span>ครัวเรือน</span></div>
-  <div class="summary"><div class="summaryIcon sOrange">◷</div><small>ค้างส่ง</small><b id="pending">0</b><span>ครัวเรือน</span></div>
-  <div class="summary"><div class="summaryIcon sPurple">⚰️</div><small>งานศพทั้งหมด</small><b id="funerals">0</b><span>งาน</span></div>
- </div>
-</section>
+    <!-- HEADER -->
+    <header class="hero shadow-xl">
+        <div class="max-w-7xl mx-auto p-6">
+            <div class="flex flex-col lg:flex-row justify-between items-center">
+                <div class="flex items-center gap-5">
+                    <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-xl text-5xl">
+                        🌾
+                    </div>
+                    <div>
+                        <h1 class="text-4xl font-bold text-white">ระบบกลุ่มข้าวสาร</h1>
+                        <p class="text-green-100 text-lg">บ้านร่องเข็ม หมู่ที่ 6</p>
+                        <p class="text-green-200">ตำบลจำป่าหวาย อำเภอเมือง จังหวัดพะเยา</p>
+                    </div>
+                </div>
+                <div class="mt-5 lg:mt-0">
+                    <div class="bg-white/20 rounded-2xl backdrop-blur-lg p-5 text-white text-center border border-white/20">
+                        <div id="clock" class="text-3xl font-bold">00:00:00</div>
+                        <div id="today">-</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
 
-<section class="section grid2">
- <div class="panel"><div class="panelHead"><h3>⚰️ งานศพล่าสุด</h3><button class="link" onclick="location.href='funeral.html'">ดูทั้งหมด →</button></div><div id="recent" class="history"></div></div>
- <div class="panel"><div class="panelHead"><h3>📢 ประกาศล่าสุด</h3><button class="link" onclick="location.href='news.html'">ดูทั้งหมด →</button></div><div id="news" class="news"></div></div>
-</section>
+    <!-- HERO SECTION -->
+    <section class="max-w-7xl mx-auto px-5 mt-8">
+        <div class="hero rounded-3xl overflow-hidden shadow-2xl">
+            <div class="grid lg:grid-cols-2">
+                <div class="p-8 lg:p-12 flex flex-col justify-center">
+                    <div class="inline-block bg-white/20 text-white px-4 py-1.5 rounded-full w-max text-sm font-medium">
+                        🌾 Rongkhem Rice Group V4.0
+                    </div>
+                    <h2 class="text-4xl lg:text-5xl font-bold text-white mt-4">ระบบบริหารกลุ่มข้าวสาร</h2>
+                    <p class="text-green-100 mt-4 leading-relaxed">
+                        ระบบบริหารจัดการสมาชิก รับข้าวสาร งานศพ คลังข้าวสาร รายงานข้อมูล แบบครบวงจร
+                    </p>
+                    <div class="mt-8 flex flex-wrap gap-4">
+                        <button onclick="openModal('riceModal')" class="bg-white text-green-700 px-6 py-3 rounded-xl font-bold hover:bg-green-50 transition shadow-lg flex items-center gap-2">
+                            📥 รับข้าวสาร
+                        </button>
+                        <button onclick="openModal('funeralModal')" class="bg-yellow-400 text-black px-6 py-3 rounded-xl font-bold hover:bg-yellow-300 transition shadow-lg flex items-center gap-2">
+                            ⚰️ แจ้งงานศพ
+                        </button>
+                    </div>
+                </div>
+                <div class="hidden lg:flex justify-center items-center p-10">
+                    <div class="text-[160px] animate-bounce select-none">🌾</div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<section class="section grid2">
- <div class="panel"><div class="panelHead"><h3>📜 สรุปยอดรับข้าวสารแต่ละงาน</h3><button class="link" onclick="location.href='report.html'">รายงาน →</button></div><div id="historyList" class="pending"></div></div>
- <div class="panel"><div class="panelHead"><h3>⚠️ สมาชิกค้างส่ง</h3><button class="link" onclick="location.href='members.html'">รายชื่อ →</button></div><div id="pendingList" class="pending"></div></div>
-</section>
+    <!-- DASHBOARD STATS -->
+    <section class="max-w-7xl mx-auto px-5 mt-10">
+        <div class="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
+            <div class="card p-6">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p class="text-gray-500 font-medium">สมาชิกทั้งหมด</p>
+                        <h2 id="stat-members" class="text-4xl font-bold text-blue-600 my-1">185</h2>
+                        <p class="text-gray-400 text-sm">ครัวเรือน</p>
+                    </div>
+                    <div class="text-5xl">👥</div>
+                </div>
+            </div>
+            <div class="card p-6">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p class="text-gray-500 font-medium">งานศพที่เปิด</p>
+                        <h2 id="stat-funerals" class="text-4xl font-bold text-red-600 my-1">0</h2>
+                        <p class="text-gray-400 text-sm">งาน</p>
+                    </div>
+                    <div class="text-5xl">⚰️</div>
+                </div>
+            </div>
+            <div class="card p-6">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p class="text-gray-500 font-medium">รับข้าวสารรวม</p>
+                        <h2 id="stat-rice" class="text-4xl font-bold text-green-600 my-1">0</h2>
+                        <p class="text-gray-400 text-sm">ถุง</p>
+                    </div>
+                    <div class="text-5xl">🌾</div>
+                </div>
+            </div>
+            <div class="card p-6">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p class="text-gray-500 font-medium">สมาชิกค้างส่ง</p>
+                        <h2 id="stat-pending" class="text-4xl font-bold text-orange-500 my-1">0</h2>
+                        <p class="text-gray-400 text-sm">ครัวเรือน</p>
+                    </div>
+                    <div class="text-5xl">⚠️</div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<section class="quote"><i class="fa-solid fa-dove"></i><p>“ทีมผู้นำหมู่บ้านร่องเข็ม หมู่ 6 ร่วมกับสมาชิกกลุ่มข้าวสาร ขอแสดงความเสียใจอย่างสุดซึ้งต่อครอบครัวผู้วายชนม์ ขอวิญญาณของท่านจงไปสู่สุขคติในสัมปรายภพด้วยเทอญ”</p><b>ด้วยความอาลัยจากพี่น้องบ้านร่องเข็ม หมู่ที่ 6</b></section>
+    <!-- MAIN MENU -->
+    <section class="max-w-7xl mx-auto px-5 mt-10">
+        <h2 class="text-2xl font-bold mb-5 text-gray-800">⚡ เมนูหลัก</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
+            <div class="menu-card" onclick="location.href='members.html'">
+                <div class="text-5xl">👥</div>
+                <h3 class="text-lg font-bold mt-3 text-gray-700">ทะเบียนสมาชิก</h3>
+            </div>
+            <div class="menu-card" onclick="openModal('funeralModal')">
+                <div class="text-5xl">⚰️</div>
+                <h3 class="text-lg font-bold mt-3 text-gray-700">แจ้งงานศพ</h3>
+            </div>
+            <div class="menu-card" onclick="openModal('riceModal')">
+                <div class="text-5xl">📥</div>
+                <h3 class="text-lg font-bold mt-3 text-gray-700">รับข้าวสาร</h3>
+            </div>
+            <div class="menu-card" onclick="location.href='stock.html'">
+                <div class="text-5xl">🌾</div>
+                <h3 class="text-lg font-bold mt-3 text-gray-700">คลังข้าวสาร</h3>
+            </div>
+        </div>
+    </section>
 
-<section class="section"><div class="sectionHead"><div><h2>เมนูบริการ</h2><p>เข้าถึงข้อมูลที่ต้องการได้ทันที</p></div></div>
- <div class="menu">
-  <a href="receive.html"><div class="menuIcon">🌾</div><b>รับข้าวสาร</b></a>
-  <a href="members.html"><div class="menuIcon">👥</div><b>รายชื่อสมาชิก</b></a>
-  <a href="report.html"><div class="menuIcon">📊</div><b>รายงาน</b></a>
-  <a href="news.html"><div class="menuIcon">📢</div><b>ประกาศ</b></a>
- </div>
-</section>
-</main>
-<footer>© 2569 ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6 ต.จำป่าหวาย อ.เมืองพะเยา จ.พะเยา<br>จัดทำและพัฒนาโดย <b>นายศักรนนทน์ ขัติย์วงศ์</b> ผู้ใหญ่บ้าน</footer>
+    <!-- NEWS & ACTIVE FUNERAL -->
+    <section class="max-w-7xl mx-auto px-5 mt-10">
+        <div class="grid lg:grid-cols-2 gap-6">
+            <div class="card p-6">
+                <h2 class="text-xl font-bold text-red-600 mb-4 flex items-center gap-2">
+                    <span>⚰️</span> งานศพที่กำลังเปิดอยู่
+                </h2>
+                <div id="activeFuneral">
+                    <div class="text-center py-8 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
+                        <div class="text-6xl mb-2">🕊️</div>
+                        <h3 class="text-lg font-bold text-gray-700">ยังไม่มีงานศพในระบบ</h3>
+                        <p class="text-gray-500 text-sm mt-1">เมื่อมีการเปิดแจ้งงานศพ ข้อมูลจะแสดงที่นี่ทันที</p>
+                    </div>
+                </div>
+            </div>
 
-<script type="module">
-import{initializeApp}from"https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import{getFirestore,collection,getDocs}from"https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-const firebaseConfig={apiKey:"AIzaSyCme8E32QPySbSetpZP9_yAyiHpSGmlxlc",authDomain:"rongkhem-rice-group.firebaseapp.com",projectId:"rongkhem-rice-group",storageBucket:"rongkhem-rice-group.firebasestorage.app",messagingSenderId:"114954787725",appId:"1:114954787725:web:d18bb54ac53bc00db17bc4"};
-const db=getFirestore(initializeApp(firebaseConfig));let members=[],funerals=[],deliveries=[],news=[];
-const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
-const dt=v=>{if(!v)return"-";let d=new Date(v);return isNaN(d)?"-":d.toLocaleDateString("th-TH",{day:"numeric",month:"long",year:"numeric"})};
-const short=v=>{if(!v)return"-";let d=new Date(v);return isNaN(d)?"-":d.toLocaleDateString("th-TH",{day:"2-digit",month:"2-digit",year:"numeric"})};
-async function get(c){let s=await getDocs(collection(db,c));return s.docs.map(x=>({id:x.id,...x.data()}))}
-function active(){return funerals.filter(x=>x.status!=="closed"&&x.active!==false).sort((a,b)=>new Date(b.deathDate||b.createdAt)-new Date(a.deathDate||a.createdAt))[0]||null}
-function got(f){return new Set(deliveries.filter(d=>d.funeralId===f?.id).map(d=>String(d.memberId))).size}
-function pct(f){return members.length?Math.round(got(f)/members.length*100):0}
-function imageBox(f,cls){return f?.photoData?`<img src="${esc(f.photoData)}" alt="รูปผู้วายชนม์" class="${cls}">`:`<div class="${cls} placeholder"><div><i class="fa-solid fa-dove"></i><div>ยังไม่มีรูปผู้วายชนม์</div></div></div>`}
-function render(){
- let f=active();document.getElementById("members").textContent=members.length;document.getElementById("funerals").textContent=funerals.length;
- let g=f?got(f):0;document.getElementById("received").textContent=g;document.getElementById("pending").textContent=Math.max(0,members.length-g);
- document.getElementById("status").textContent=f?"กำลังดำเนินการ":"ยังไม่มีงานศพ";
- document.getElementById("heroBody").innerHTML=f?`
- <div class="portraitWrap">${imageBox(f,"portrait")}</div>
- <div class="heroInfo"><div class="eyebrow">🕊️ ขอแสดงความอาลัย</div><h3>${esc(f.name)}</h3><p class="age">อายุ ${esc(f.age||"-")} ปี${f.house?` • บ้านเลขที่ ${esc(f.house)}`:""}</p>
- <div class="facts"><div class="fact"><small>✝️ วันที่เสียชีวิต</small><b>${dt(f.deathDate)}</b></div><div class="fact"><small>🔥 วันที่ฌาปนกิจ</small><b>${dt(f.burnDate)}</b></div></div>
- <div class="memorial">ทีมผู้นำหมู่บ้านร่องเข็ม หมู่ 6 ร่วมกับสมาชิกกลุ่มข้าวสาร ขอแสดงความเสียใจอย่างสุดซึ้งต่อครอบครัวผู้วายชนม์ ขอวิญญาณของท่านจงไปสู่สุขคติในสัมปรายภพด้วยเทอญ 🤍</div></div>
- <div class="heroBottom" style="grid-column:1/-1"><div class="metric"><small>รับจริง</small><b>${g}</b><small>ครัวเรือน</small></div><div class="ring"><svg width="76" height="76" viewBox="0 0 36 36"><path d="M18 2.0845a15.9155 15.9155 0 0 1 0 31.831a15.9155 15.9155 0 0 1 0-31.831" fill="none" stroke="#e5ece8" stroke-width="3"/><path d="M18 2.0845a15.9155 15.9155 0 0 1 0 31.831a15.9155 15.9155 0 0 1 0-31.831" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-dasharray="${pct(f)},100"/></svg><div class="ringValue">${pct(f)}%</div></div><div class="metric"><small>จากทั้งหมด</small><b>${members.length}</b><small>ครัวเรือน</small></div></div>`:
- `<div class="empty" style="grid-column:1/-1"><div style="font-size:48px">🕊️</div><b>ยังไม่มีการแจ้งผู้เสียชีวิตในขณะนี้</b><div>เมื่อมีการแจ้งการเสียชีวิต งานศพจะแสดงที่นี่</div></div>`;
- let rs=funerals.slice().sort((a,b)=>new Date(b.deathDate||0)-new Date(a.deathDate||0)).slice(0,6);
- document.getElementById("recent").innerHTML=rs.length?rs.map(x=>`<div class="historyCard">${imageBox(x,"historyImg")}<b>${esc(x.name)}</b><small>ฌาปนกิจ ${short(x.burnDate)}</small><div class="bar"><i style="width:${pct(x)}%"></i></div><small style="text-align:right">${pct(x)}%</small></div>`).join(""):"<div class='empty'>ยังไม่มีข้อมูล</div>";
- let ns=news.slice().sort((a,b)=>new Date(b.createdAt||0)-new Date(a.createdAt||0)).slice(0,5);
- document.getElementById("news").innerHTML=ns.length?ns.map((n,i)=>`<div class="newsItem"><div class="newsIcon">📢</div><div><b>${esc(n.title)} ${i===0?'<span style="font-size:10px;color:#d33">ใหม่</span>':""}</b><p>${esc(n.body||"")}</p><small>${dt(n.createdAt)}</small></div></div>`).join(""):"<div class='empty'>ยังไม่มีประกาศ</div>";
- document.getElementById("historyList").innerHTML=rs.length?rs.map(x=>`<div class="pendingItem"><span><b>${esc(x.name)}</b><br><small>ฌาปนกิจ ${short(x.burnDate)}</small></span><span class="late" style="color:#08733f">${got(x)}/${members.length} ครัวเรือน</span></div>`).join(""):"<div class='empty'>ยังไม่มีงานศพ</div>";
- let ps=members.filter(m=>Number(m.lateCount??m.pendingCount??0)>=2).slice(0,7);
- document.getElementById("pendingList").innerHTML=ps.length?ps.map(m=>`<div class="pendingItem"><span>🏠 ${esc(m.house||m.houseNo||"-")} • ${esc(m.name||"-")}</span><span class="late">ค้าง ${Number(m.lateCount??m.pendingCount??0)} ครั้ง</span></div>`).join(""):"<div class='empty'>ไม่มีสมาชิกค้างเกิน 2 ครั้ง</div>";
-}
-function clock(){let d=new Date();document.getElementById("clock").textContent=d.toLocaleTimeString("th-TH",{hour12:false});document.getElementById("date").textContent=d.toLocaleDateString("th-TH",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}clock();setInterval(clock,1000);
-(async()=>{try{[members,funerals,deliveries,news]=await Promise.all([get("members"),get("funerals"),get("deliveries"),get("news")]);render()}catch(e){console.error(e);document.getElementById("heroBody").innerHTML=`<div class="error" style="grid-column:1/-1">ไม่สามารถโหลดข้อมูลจากฐานข้อมูลได้<br><small>${esc(e.message)}</small></div>`}})();
-</script>
-</body></html>
+            <div class="card p-6">
+                <h2 class="text-xl font-bold text-green-700 mb-4 flex items-center gap-2">
+                    <span>📢</span> ข่าวประชาสัมพันธ์
+                </h2>
+                <div class="space-y-3">
+                    <div class="border-l-4 border-green-600 bg-green-50/50 p-3 rounded-r-xl">
+                        <h4 class="font-bold text-gray-800">🌾 ระบบกลุ่มข้าวสาร Version 4.0</h4>
+                        <p class="text-gray-600 text-sm">อัปเดตระบบรองรับการบันทึกข้อมูลรับข้าวสารแบบเรียลไทม์แล้ว</p>
+                    </div>
+                    <div class="border-l-4 border-yellow-500 bg-yellow-50/50 p-3 rounded-r-xl">
+                        <h4 class="font-bold text-gray-800">📅 ประชุมคณะกรรมการกลุ่ม</h4>
+                        <p class="text-gray-600 text-sm">ขอเชิญกรรมการร่วมประชุมสรุปยอดประจำเดือน ณ ศาลากลางหมู่บ้าน</p>
+                    </div>
+                    <div class="border-l-4 border-red-500 bg-red-50/50 p-3 rounded-r-xl">
+                        <h4 class="font-bold text-gray-800">⚠️ สมาชิกค้างส่ง</h4>
+                        <p class="text-gray-600 text-sm">ตรวจสอบรายชื่อครัวเรือนค้างส่งข้าวสารประจำงวดได้ที่คณะกรรมการ</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- RECENT ACTIVITIES & CHARTS -->
+    <section class="max-w-7xl mx-auto px-5 mt-10 space-y-10">
+        <div class="card p-6">
+            <h2 class="text-xl font-bold mb-4 text-gray-800">📋 กิจกรรมล่าสุด</h2>
+            <div id="activityList" class="divide-y divide-gray-100">
+                <div class="flex items-center gap-4 py-3 text-gray-500">
+                    <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-xl">📥</div>
+                    <div>
+                        <h4 class="font-medium text-gray-700">ยังไม่มีรายการกิจกรรมวันนี้</h4>
+                        <p class="text-xs text-gray-400">รายการรับส่งข้าวสารและเปิดงานศพจะแสดงขึ้นที่นี่</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card p-6">
+            <h2 class="text-xl font-bold mb-4 text-gray-800">📊 สถิติการรับข้าวสารประจำเดือน</h2>
+            <div class="w-full h-72">
+                <canvas id="myChart"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="mt-16">
+        <div class="max-w-7xl mx-auto p-8 lg:p-12">
+            <div class="grid lg:grid-cols-2 gap-8 items-center">
+                <div>
+                    <h2 class="text-2xl font-bold">🌾 ระบบกลุ่มข้าวสาร</h2>
+                    <p class="mt-2 text-green-100">บ้านร่องเข็ม หมู่ที่ 6</p>
+                    <p class="text-green-200 text-sm">ตำบลจำป่าหวาย อำเภอเมือง จังหวัดพะเยา</p>
+                </div>
+                <div class="lg:text-right border-t lg:border-t-0 pt-6 lg:pt-0 border-green-700">
+                    <h3 class="text-sm font-medium text-green-200">จัดทำและพัฒนาระบบโดย</h3>
+                    <h2 class="text-2xl font-bold mt-1">นายศักรนนทน์ ขัติย์วงศ์</h2>
+                    <p class="text-green-100 text-sm">ผู้ใหญ่บ้าน บ้านร่องเข็ม หมู่ที่ 6</p>
+                    <p class="text-green-300 text-xs mt-2">Rongkhem Rice Group V4.0</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ================= MODAL: ฟอร์มรับข้าวสาร ================= -->
+    <div id="riceModal" class="modal opacity-0 invisible fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl transform transition-all scale-95" id="riceModalCard">
+            <div class="flex justify-between items-center border-b pb-4">
+                <h3 class="text-xl font-bold text-green-700 flex items-center gap-2">
+                    <span>📥</span> บันทึกรับข้าวสาร
+                </h3>
+                <button onclick="closeModal('riceModal')" class="text-gray-400 hover:text-gray-600 text-2xl font-bold">&times;</button>
+            </div>
+            <form id="riceForm" onsubmit="submitRice(event)" class="mt-4 space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">เลือกบ้านเลขที่ / สมาชิก</label>
+                    <select required id="riceMember" class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none">
+                        <option value="">-- เลือกครัวเรือน --</option>
+                        <option value="บ้านเลขที่ 1 (นายสมชาย ดีมาก)">บ้านเลขที่ 1 (นายสมชาย ดีมาก)</option>
+                        <option value="บ้านเลขที่ 12 (นางสมศรี ใจดี)">บ้านเลขที่ 12 (นางสมศรี ใจดี)</option>
+                        <option value="บ้านเลขที่ 25 (นายบุญมี มีสุข)">บ้านเลขที่ 25 (นายบุญมี มีสุข)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">จำนวนข้าวสาร (ถุง/ถัง)</label>
+                    <input type="number" id="riceAmount" min="1" value="1" required class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">หมายเหตุ</label>
+                    <input type="text" id="riceNote" placeholder="ส่งต่องานศพ หรือ คลังประจำเดือน" class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none">
+                </div>
+                <div class="flex gap-3 pt-3">
+                    <button type="button" onclick="closeModal('riceModal')" class="w-1/2 py-3 border border-gray-300 text-gray-700 rounded-xl font-bold hover:bg-gray-50">ยกเลิก</button>
+                    <button type="submit" class="w-1/2 py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700">บันทึกข้อมูล</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ================= MODAL: ฟอร์มแจ้งงานศพ ================= -->
+    <div id="funeralModal" class="modal opacity-0 invisible fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl transform transition-all scale-95" id="funeralModalCard">
+            <div class="flex justify-between items-center border-b pb-4">
+                <h3 class="text-xl font-bold text-red-600 flex items-center gap-2">
+                    <span>⚰️</span> แจ้งเปิดงานศพใหม่
+                </h3>
+                <button onclick="closeModal('funeralModal')" class="text-gray-400 hover:text-gray-600 text-2xl font-bold">&times;</button>
+            </div>
+            <form id="funeralForm" onsubmit="submitFuneral(event)" class="mt-4 space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">ชื่อผู้เสียชีวิต</label>
+                    <input type="text" id="deceasedName" required placeholder="เช่น นายดี ใจงาม" class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-red-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">เจ้าภาพ / บ้านเลขที่</label>
+                    <input type="text" id="hostHouse" required placeholder="เช่น บ้านเลขที่ 45 หมู่ 6" class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-red-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">กำหนดการฌาปนกิจ</label>
+                    <input type="date" id="funeralDate" required class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-red-500 focus:outline-none">
+                </div>
+                <div class="flex gap-3 pt-3">
+                    <button type="button" onclick="closeModal('funeralModal')" class="w-1/2 py-3 border border-gray-300 text-gray-700 rounded-xl font-bold hover:bg-gray-50">ยกเลิก</button>
+                    <button type="submit" class="w-1/2 py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700">เปิดงานศพ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT SYSTEM -->
+    <script>
+        // State Management
+        let totalRiceReceived = 0;
+        let activeFuneralsCount = 0;
+
+        // Clock Update
+        function updateClock() {
+            const now = new Date();
+            document.getElementById("clock").innerHTML = now.toLocaleTimeString("th-TH");
+            document.getElementById("today").innerHTML = now.toLocaleDateString("th-TH", {
+                weekday: "long",
+                day: "numeric",
+                month: "long",
+                year: "numeric"
+            });
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Chart Initialization
+        const ctx = document.getElementById('myChart');
+        const chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.'],
+                datasets: [{
+                    label: 'รับข้าวสาร (ถุง)',
+                    data: [20, 18, 25, 30, 28, 35, 15, 0],
+                    backgroundColor: '#16a34a',
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+
+        // Modal Controls
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.add('modal-active');
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.remove('modal-active');
+        }
+
+        // Add Activity Log
+        function logActivity(icon, title, desc) {
+            const list = document.getElementById('activityList');
+            const now = new Date().toLocaleTimeString("th-TH", { hour: '2-digit', minute: '2-digit' });
+            
+            const itemHTML = `
+                <div class="flex items-center gap-4 py-3 border-b border-gray-100 last:border-0">
+                    <div class="w-10 h-10 rounded-full bg-green-100 text-green-700 flex items-center justify-center text-xl font-bold">${icon}</div>
+                    <div class="flex-1">
+                        <h4 class="font-bold text-gray-800">${title}</h4>
+                        <p class="text-xs text-gray-500">${desc}</p>
+                    </div>
+                    <span class="text-xs text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full">${now} น.</span>
+                </div>
+            `;
+            
+            // Clear default text if exists
+            if (list.innerText.includes("ยังไม่มีรายการกิจกรรมวันนี้")) {
+                list.innerHTML = "";
+            }
+            
+            list.insertAdjacentHTML('afterbegin', itemHTML);
+        }
+
+        // Form Submit: Rice
+        function submitRice(event) {
+            event.preventDefault();
+            const member = document.getElementById('riceMember').value;
+            const amount = parseInt(document.getElementById('riceAmount').value);
+            const note = document.getElementById('riceNote').value || "รับข้าวสารตามปกติ";
+
+            totalRiceReceived += amount;
+            document.getElementById('stat-rice').innerText = totalRiceReceived;
+
+            // Update Chart Current Month (ส.ค.)
+            chart.data.datasets[0].data[7] += amount;
+            chart.update();
+
+            logActivity('📥', `รับข้าวสาร ${amount} ถุง`, `${member} (${note})`);
+
+            document.getElementById('riceForm').reset();
+            closeModal('riceModal');
+            alert(`บันทึกรับข้าวสารจำนวน ${amount} ถุง เรียบร้อยแล้ว`);
+        }
+
+        // Form Submit: Funeral
+        function submitFuneral(event) {
+            event.preventDefault();
+            const name = document.getElementById('deceasedName').value;
+            const house = document.getElementById('hostHouse').value;
+            const date = document.getElementById('funeralDate').value;
+
+            activeFuneralsCount++;
+            document.getElementById('stat-funerals').innerText = activeFuneralsCount;
+
+            const activeFuneralContainer = document.getElementById('activeFuneral');
+            activeFuneralContainer.innerHTML = `
+                <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-2xl">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="bg-red-100 text-red-700 text-xs px-2.5 py-1 rounded-full font-bold">กำลังดำเนินงาน</span>
+                            <h3 class="text-xl font-bold text-gray-800 mt-2">ผู้วายชนม์: ${name}</h3>
+                            <p class="text-gray-600 text-sm mt-1">เจ้าภาพ: ${house}</p>
+                            <p class="text-red-600 text-sm font-medium mt-1">📅 กำหนดการฌาปนกิจ: ${date}</p>
+                        </div>
+                        <span class="text-4xl">🕊️</span>
+                    </div>
+                </div>
+            `;
+
+            logActivity('⚰️', `เปิดแจ้งงานศพใหม่`, `ผู้วายชนม์: ${name} (${house})`);
+
+            document.getElementById('funeralForm').reset();
+            closeModal('funeralModal');
+            alert(`บันทึกข้อมูลการเปิดงานศพของคุณ ${name} เรียบร้อยแล้ว`);
+        }
+    </script>
+</body>
+</html>
