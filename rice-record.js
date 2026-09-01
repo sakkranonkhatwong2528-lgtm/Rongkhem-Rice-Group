@@ -1,122 +1,132 @@
-/* ===== MOCK DATA (แทนที่ด้วย Firebase ทีหลัง) ===== */
-let riceMembers = [
-  {id:1, house:"101", name:"นายสมชาย ใจดี", received:false, time:null},
-  {id:2, house:"102", name:"นางสาววิภาดา คำมา", received:false, time:null},
-  {id:3, house:"103", name:"นายทองสุข ฟ้าใส", received:false, time:null},
-  {id:4, house:"104", name:"นางจันทร์เพ็ญ ดีใจ", received:true, time:"08:15 น."},
-  {id:5, house:"105", name:"นายประเสริฐ มั่งมี", received:true, time:"08:22 น."},
-  {id:6, house:"106", name:"นางสมศรี รักไทย", received:true, time:"08:30 น."},
-  {id:7, house:"107", name:"นายวิรัตน์ ทองคำ", received:true, time:"09:01 น."},
-  {id:8, house:"108", name:"นางสาวปิยะดา แจ่มใส", received:false, time:null},
-];
-let currentFilter = "all";
+import { db, collection, doc, addDoc, deleteDoc, onSnapshot, query, orderBy,
+  writeBatch, serverTimestamp, state,
+  $, esc, thDate, toast, guard, needAdmin, startClock, downloadCSV, logAct }
+  from './common.js';
 
-const riceList = document.getElementById("riceList");
-const emptyState = document.getElementById("emptyState");
+let members = [], funerals = [], records = [], currentId = null, busy = new Set();
 
-function renderRiceList() {
-  const searchTerm = document.getElementById("searchRice").value.toLowerCase().trim();
+guard(() => { startClock(); listen(); });
 
-  let filtered = riceMembers.filter(m => {
-    const matchFilter =
-      currentFilter === "all" ? true :
-      currentFilter === "received" ? m.received :
-      !m.received;
-    const matchSearch = m.name.toLowerCase().includes(searchTerm) || m.house.includes(searchTerm);
-    return matchFilter && matchSearch;
+function listen() {
+  onSnapshot(query(collection(db,'members'), orderBy('houseNo')), s => {
+    members = s.docs.map(d => ({ id:d.id, ...d.data() })).filter(m => m.active !== false);
+    render();
   });
-
-  riceList.innerHTML = "";
-  if (filtered.length === 0) {
-    emptyState.style.display = "block";
-    riceList.style.display = "none";
-  } else {
-    emptyState.style.display = "none";
-    riceList.style.display = "block";
-
-    filtered.forEach((m, index) => {
-      const row = document.createElement("div");
-      row.className = `rice-row ${m.received ? "received" : ""}`;
-      row.style.animationDelay = `${index * 0.03}s`;
-
-      row.innerHTML = `
-        <div class="rice-checkbox ${m.received ? "checked" : ""}" data-id="${m.id}">
-          <i class="fa-solid fa-check"></i>
-        </div>
-        <div class="rice-info">
-          <strong>บ้านเลขที่ ${m.house} — ${m.name}</strong>
-          <span>${m.received ? "รับข้าวเรียบร้อยแล้ว" : "ยังไม่ได้ส่งข้าว"}</span>
-        </div>
-        <span class="rice-time ${m.time ? "" : "empty"}">${m.time || "ยังไม่รับ"}</span>
-        <span class="rice-status-tag ${m.received ? "received" : "pending"}">
-          ${m.received ? "รับแล้ว" : "รอดำเนินการ"}
-        </span>
-      `;
-      riceList.appendChild(row);
-    });
-  }
-
-  attachCheckboxEvents();
-  updateStats();
-  document.getElementById("listCounter").innerText = `${filtered.length} / ${riceMembers.length} ครัวเรือน`;
+  onSnapshot(query(collection(db,'funerals'), orderBy('cremationDate','desc')), s => {
+    funerals = s.docs.map(d => ({ id:d.id, ...d.data() }));
+    const keep = currentId;
+    $('#funeralSelect').innerHTML = funerals.map(f =>
+      `<option value="${f.id}">${esc(f.name)} — ${thDate(f.cremationDate)}${
+        f.status==='active' ? ' (กำลังดำเนินการ)' : ''}</option>`).join('')
+      || '<option value="">— ยังไม่มีงานศพ —</option>';
+    currentId = (keep && funerals.some(f=>f.id===keep)) ? keep
+      : (funerals.find(f=>f.status==='active')?.id || funerals[0]?.id || null);
+    if (currentId) $('#funeralSelect').value = currentId;
+    render();
+  });
+  onSnapshot(collection(db,'riceRecords'), s => {
+    records = s.docs.map(d => ({ id:d.id, ...d.data() }));
+    render();
+  });
 }
 
-function attachCheckboxEvents() {
-  document.querySelectorAll(".rice-checkbox").forEach(box => {
-    box.addEventListener("click", () => {
-      const id = parseInt(box.dataset.id);
-      const member = riceMembers.find(m => m.id === id);
-      member.received = !member.received;
+const recOf  = () => records.filter(r => r.funeralId === currentId);
+const gotSet = () => new Set(recOf().map(r => r.memberId));
 
-      if (member.received) {
-        const now = new Date();
-        member.time = now.toLocaleTimeString("th-TH", {hour:"2-digit", minute:"2-digit"}) + " น.";
-        showToast(`บันทึกรับข้าว: บ้านเลขที่ ${member.house} สำเร็จ`, "success");
-      } else {
-        member.time = null;
-        showToast(`ยกเลิกการรับข้าว: บ้านเลขที่ ${member.house}`, "error");
+function filtered() {
+  const k = ($('#searchInput').value||'').toLowerCase().trim();
+  const f = $('#filterStatus').value, got = gotSet();
+  return members.filter(m => {
+    const hit = !k || `${m.houseNo} ${m.name}`.toLowerCase().includes(k);
+    const st  = f==='all' || (f==='got' ? got.has(m.id) : !got.has(m.id));
+    return hit && st;
+  });
+}
+
+function render() {
+  const got = gotSet(), total = members.length;
+  const n = got.size, pct = total ? Math.round(n/total*100) : 0;
+  $('#rGot').textContent = n;
+  $('#rPending').textContent = Math.max(0, total-n);
+  $('#rPct').textContent = pct + '%';
+  $('#rBar').style.width = pct + '%';
+
+  const list = filtered();
+  $('#riceGrid').innerHTML = list.map(m => {
+    const on = got.has(m.id);
+    return `<div class="rice-card ${on?'on':''} ${busy.has(m.id)?'busy':''}" data-id="${m.id}">
+      <div class="rice-check"><i class="fa-solid ${on?'fa-circle-check':'fa-circle'}"></i></div>
+      <div class="rice-info">
+        <strong>บ้านเลขที่ ${esc(m.houseNo)}</strong>
+        <span>${esc(m.name)}</span>
+      </div>
+      <span class="pill ${on?'on':'off'}">${on?'รับแล้ว':'ค้างส่ง'}</span>
+    </div>`;
+  }).join('') || '<p class="empty-box">ไม่พบรายชื่อสมาชิก</p>';
+  $('#countText').textContent = `แสดง ${list.length} จาก ${total} ครัวเรือน`;
+}
+
+/* ---------- TOGGLE ---------- */
+async function toggle(memberId) {
+  if (!currentId) return toast('กรุณาเลือกงานศพก่อน','err');
+  if (!needAdmin() || busy.has(memberId)) return;
+  const m = members.find(x => x.id === memberId);
+  const exist = recOf().find(r => r.memberId === memberId);
+  busy.add(memberId); render();
+  try {
+    if (exist) {
+      await deleteDoc(doc(db,'riceRecords', exist.id));
+      logAct('ยกเลิกรับข้าว', `${m.houseNo} ${m.name}`);
+    } else {
+      await addDoc(collection(db,'riceRecords'), {
+        funeralId: currentId, memberId: m.id, houseNo: m.houseNo,
+        memberName: m.name, amount: 1,
+        recordedAt: serverTimestamp(),
+        recordedBy: state.user?.email || '-' });
+      logAct('บันทึกรับข้าว', `${m.houseNo} ${m.name}`);
+    }
+  } catch { toast('บันทึกไม่สำเร็จ','err'); }
+  finally { busy.delete(memberId); render(); }
+}
+
+/* ---------- BULK ---------- */
+async function bulk(check) {
+  if (!currentId || !needAdmin()) return;
+  const got = gotSet(), list = filtered();
+  const targets = list.filter(m => check ? !got.has(m.id) : got.has(m.id));
+  if (!targets.length) return toast('ไม่มีรายการต้องเปลี่ยน');
+  for (let i=0; i<targets.length; i+=400) {
+    const b = writeBatch(db);
+    targets.slice(i,i+400).forEach(m => {
+      if (check) b.set(doc(collection(db,'riceRecords')), {
+        funeralId: currentId, memberId: m.id, houseNo: m.houseNo,
+        memberName: m.name, amount: 1, recordedAt: serverTimestamp(),
+        recordedBy: state.user?.email || '-' });
+      else {
+        const r = recOf().find(x => x.memberId === m.id);
+        if (r) b.delete(doc(db,'riceRecords', r.id));
       }
-
-      box.classList.add("pop");
-      setTimeout(() => renderRiceList(), 250);
     });
-  });
+    await b.commit();
+  }
+  logAct(check?'ติ๊กรับข้าวทั้งหมด':'ล้างรับข้าวทั้งหมด', `${targets.length} รายการ`);
+  toast(`${check?'บันทึก':'ล้าง'} ${targets.length} รายการเรียบร้อย`);
 }
 
-/* ===== STATS + PROGRESS RING (real-time update) ===== */
-function updateStats() {
-  const total = riceMembers.length;
-  const received = riceMembers.filter(m => m.received).length;
-  const pending = total - received;
-  const percent = total === 0 ? 0 : Math.round((received / total) * 100);
-
-  animateNumber(document.getElementById("statTotal"), total, 600);
-  animateNumber(document.getElementById("statReceived"), received, 600);
-  animateNumber(document.getElementById("statPending"), pending, 600);
-  document.getElementById("statPercent").innerText = percent + "%";
-
-  const circle = document.getElementById("miniRingFill");
-  const radius = circle.r.baseVal.value;
-  const circumference = 2 * Math.PI * radius;
-  circle.style.strokeDasharray = circumference;
-  circle.style.strokeDashoffset = circumference - (percent / 100) * circumference;
-}
-
-/* ===== SEARCH + FILTER ===== */
-document.getElementById("searchRice").addEventListener("input", renderRiceList);
-document.querySelectorAll(".filter-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    currentFilter = btn.dataset.filter;
-    renderRiceList();
-  });
-});
-
-/* ===== EXPORT BUTTON ===== */
-document.getElementById("btnExport").addEventListener("click", () => {
-  showToast("กำลังสร้างรายงาน PDF...", "success");
-});
-
-/* ===== INIT ===== */
-renderRiceList();
+/* ---------- EVENTS ---------- */
+$('#riceGrid').onclick = e => {
+  const c = e.target.closest('.rice-card'); if (c) toggle(c.dataset.id);
+};
+$('#funeralSelect').onchange = e => { currentId = e.target.value; render(); };
+$('#searchInput').oninput = render;
+$('#filterStatus').onchange = render;
+$('#btnCheckAll').onclick = () => bulk(true);
+$('#btnClearAll').onclick = () => bulk(false);
+$('#btnExport').onclick = () => {
+  const f = funerals.find(x=>x.id===currentId); if (!f) return toast('ไม่มีข้อมูล','err');
+  const got = gotSet();
+  const rows = [['บ้านเลขที่','ชื่อ-สกุล','สถานะ']];
+  members.forEach(m => rows.push([m.houseNo, m.name, got.has(m.id)?'รับแล้ว':'ค้างส่ง']));
+  downloadCSV(`รับข้าว_${f.name}_${f.cremationDate}.csv`, rows);
+  toast('ส่งออกไฟล์แล้ว');
+};
