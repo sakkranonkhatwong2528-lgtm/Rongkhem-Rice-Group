@@ -3,47 +3,39 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>เข้าสู่ระบบ - กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
+<title>เข้าสู่ระบบ — กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
 <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="login.css">
 </head>
-<body>
-
-<div class="login-wrapper">
+<body class="login-page">
   <div class="login-card">
-    <div class="login-logo">
-      <div class="logo-icon"><i class="fa-solid fa-wheat-awn"></i></div>
-      <h2>กลุ่มข้าวสาร</h2>
-      <p>บ้านร่องเข็ม หมู่ที่ 6</p>
-    </div>
+    <div class="login-logo"><i class="fa-solid fa-wheat-awn"></i></div>
+    <h1>กลุ่มข้าวสาร</h1>
+    <p class="login-sub">บ้านร่องเข็ม หมู่ที่ 6 ต.จำป่าหวาย อ.เมืองพะเยา</p>
 
-    <form id="loginForm" class="login-form">
-      <div class="input-group">
-        <i class="fa-solid fa-envelope"></i>
-        <input type="email" id="loginEmail" placeholder="อีเมล" required>
+    <form id="loginForm" autocomplete="on">
+      <div class="form-group">
+        <label>อีเมล</label>
+        <input type="email" id="email" required placeholder="you@example.com">
       </div>
-      <div class="input-group">
-        <i class="fa-solid fa-lock"></i>
-        <input type="password" id="loginPassword" placeholder="รหัสผ่าน" required>
-        <button type="button" class="toggle-pass" id="togglePass"><i class="fa-solid fa-eye"></i></button>
+      <div class="form-group">
+        <label>รหัสผ่าน</label>
+        <div class="pw-wrap">
+          <input type="password" id="password" required placeholder="••••••••">
+          <button type="button" id="togglePw"><i class="fa-regular fa-eye"></i></button>
+        </div>
       </div>
-      <div id="loginError" class="login-error" style="display:none;">
-        <i class="fa-solid fa-circle-exclamation"></i> <span id="loginErrorText"></span>
-      </div>
-      <button type="submit" class="btn-login" id="btnLoginSubmit">
-        <span id="loginBtnText">เข้าสู่ระบบ</span>
-        <i class="fa-solid fa-spinner fa-spin" id="loginSpinner" style="display:none;"></i>
+      <label class="remember"><input type="checkbox" id="remember" checked> จดจำการเข้าสู่ระบบ</label>
+      <div id="loginError" class="login-error"></div>
+      <button type="submit" class="btn-login" id="btnLogin">
+        <i class="fa-solid fa-right-to-bracket"></i> เข้าสู่ระบบ
       </button>
+      <button type="button" class="btn-forgot" id="btnForgot">ลืมรหัสผ่าน?</button>
     </form>
-
-    <p class="login-footer">ระบบสำหรับผู้ดูแลและเจ้าหน้าที่กลุ่มข้าวสารเท่านั้น</p>
   </div>
-</div>
-
-<div id="toastContainer" class="toast-container"></div>
-
-<script type="module" src="firebase-config.js"></script>
-<script type="module" src="login.js"></script>
+  <div id="toastContainer" class="toast-container"></div>
+  <script type="module" src="login.js"></script>
 </body>
 </html>
