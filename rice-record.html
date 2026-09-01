@@ -3,18 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>บันทึกรับข้าว - ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
+<title>บันทึกรับข้าว — กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
 <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="members.css">
-<link rel="stylesheet" href="rice-record.css">
+<link rel="stylesheet" href="rice.css">
 </head>
 <body>
-
 <div class="app-wrapper">
-
-  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-logo">
       <div class="logo-icon"><i class="fa-solid fa-wheat-awn"></i></div>
@@ -33,88 +30,65 @@
     <div class="sidebar-footer">
       <div class="user-box">
         <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
-        <div class="user-info"><strong>ผู้ใหญ่บ้าน</strong><span>ศักรแทน ขัติย์วงศ์</span><span class="badge-role">ผู้ดูแลระบบ</span></div>
+        <div class="user-info"></div>
       </div>
       <button class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> ออกจากระบบ</button>
     </div>
   </aside>
 
   <main class="main-content">
-
     <header class="topbar">
       <div class="topbar-title">
         <div class="logo-icon small"><i class="fa-solid fa-bowl-rice"></i></div>
-        <div><h1>บันทึกรับข้าว</h1><p>งานฌาปนกิจ นายเกษมสุข ใฝ่ใจ — 25 กรกฎาคม 2569</p></div>
+        <div><h1>บันทึกการรับข้าวสาร</h1><p>ติ๊กรายชื่อครัวเรือนที่นำข้าวสารมาร่วม</p></div>
       </div>
       <div class="topbar-right">
-        <div class="clock-box">
-          <i class="fa-regular fa-clock"></i>
-          <div><div id="liveClock" class="clock-time">00:00:00</div><div id="liveDate" class="clock-date">-</div></div>
-        </div>
+        <div class="clock-box"><i class="fa-regular fa-clock"></i>
+          <div><div id="liveClock" class="clock-time">00:00:00</div>
+               <div id="liveDate" class="clock-date">-</div></div></div>
       </div>
     </header>
 
-    <!-- Live Stats Bar -->
-    <div class="stats-bar">
-      <div class="stat-pill total">
-        <i class="fa-solid fa-users"></i>
-        <div><span id="statTotal">0</span><small>ทั้งหมด</small></div>
-      </div>
-      <div class="stat-pill received">
-        <i class="fa-solid fa-check"></i>
-        <div><span id="statReceived">0</span><small>รับแล้ว</small></div>
-      </div>
-      <div class="stat-pill pending">
-        <i class="fa-regular fa-clock"></i>
-        <div><span id="statPending">0</span><small>ยังไม่รับ</small></div>
-      </div>
-      <div class="stat-pill percent">
-        <div class="mini-ring-wrap">
-          <svg width="56" height="56" class="mini-ring">
-            <circle cx="28" cy="28" r="22" class="bg"></circle>
-            <circle cx="28" cy="28" r="22" class="fill" id="miniRingFill" data-percent="0"></circle>
-          </svg>
-          <span id="statPercent">0%</span>
+    <section class="card">
+      <div class="toolbar">
+        <div class="form-group" style="flex:1;min-width:260px;margin:0">
+          <label>เลือกงานศพ</label>
+          <select id="funeralSelect"></select>
         </div>
-        <small>ความคืบหน้า</small>
+        <div class="live-stat">
+          <div><span id="rGot">0</span><small>รับแล้ว</small></div>
+          <div><span id="rPending">0</span><small>ค้างส่ง</small></div>
+          <div><span id="rPct">0%</span><small>ความคืบหน้า</small></div>
+        </div>
       </div>
-    </div>
+      <div class="progress-bar big"><div class="progress-fill" id="rBar" style="width:0%"></div></div>
+    </section>
 
-    <!-- Toolbar -->
-    <div class="toolbar-card">
-      <div class="search-box">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" id="searchRice" placeholder="ค้นหาชื่อ, บ้านเลขที่...">
+    <section class="card">
+      <div class="toolbar">
+        <div class="search-wrap">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input id="searchInput" placeholder="ค้นหาบ้านเลขที่ / ชื่อ">
+        </div>
+        <select id="filterStatus">
+          <option value="all">ทั้งหมด</option>
+          <option value="got">รับแล้ว</option>
+          <option value="pending">ค้างส่ง</option>
+        </select>
+        <div class="toolbar-actions admin-only">
+          <button class="action-btn abtn-green" id="btnCheckAll"><i class="fa-solid fa-check-double"></i> ติ๊กทั้งหมด</button>
+          <button class="action-btn abtn-orange" id="btnClearAll"><i class="fa-solid fa-eraser"></i> ล้างทั้งหมด</button>
+          <button class="action-btn abtn-purple" id="btnExport"><i class="fa-solid fa-file-export"></i> ส่งออก CSV</button>
+        </div>
       </div>
-      <div class="filter-group">
-        <button class="filter-btn active" data-filter="all">ทั้งหมด</button>
-        <button class="filter-btn" data-filter="received">รับแล้ว</button>
-        <button class="filter-btn" data-filter="pending">ยังไม่รับ</button>
-      </div>
-      <button class="action-btn abtn-purple" id="btnExport"><i class="fa-solid fa-file-export"></i> ส่งออกรายงาน</button>
-    </div>
+      <div class="rice-grid" id="riceGrid"></div>
+      <div class="table-foot"><span id="countText">แสดง 0 รายการ</span></div>
+    </section>
 
-    <!-- Rice checklist -->
-    <div class="card">
-      <div class="rice-list-head">
-        <span>รายชื่อครัวเรือนทั้งหมด</span>
-        <span id="listCounter">0 / 0 ครัวเรือน</span>
-      </div>
-      <div class="rice-list" id="riceList">
-        <!-- Generated by JS -->
-      </div>
-      <div id="emptyState" class="empty-state" style="display:none;">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <p>ไม่พบข้อมูลที่ค้นหา</p>
-      </div>
-    </div>
-
+    <footer class="footer">© 2025 กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</footer>
   </main>
 </div>
-
 <div id="toastContainer" class="toast-container"></div>
-
-<script src="script.js"></script>
-<script src="rice-record.js"></script>
+<script type="module" src="rice-record.js"></script>
 </body>
 </html>
