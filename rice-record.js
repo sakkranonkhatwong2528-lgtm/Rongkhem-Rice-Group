@@ -1,25 +1,12 @@
 ```javascript
 /* =========================================================
-   RICE-RECORD.JS
+   RICE RECORD
    ระบบบันทึกรับข้าวสาร
-   กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
-
-   Firebase Firestore จริง
+   บ้านร่องเข็ม หมู่ที่ 6
    ========================================================= */
 
 import {
   db,
-  state,
-  guard,
-  needAdmin,
-  $,
-  esc,
-  thDate,
-  toast,
-  downloadCSV,
-  logAct,
-  startClock,
-
   collection,
   doc,
   addDoc,
@@ -28,7 +15,18 @@ import {
   query,
   orderBy,
   writeBatch,
-  serverTimestamp
+  serverTimestamp,
+
+  state,
+  $,
+  esc,
+  thDate,
+  toast,
+  guard,
+  needAdmin,
+  startClock,
+  downloadCSV,
+  logAct
 } from './common.js';
 
 
@@ -37,98 +35,62 @@ import {
    ========================================================= */
 
 let members = [];
-
 let funerals = [];
-
 let records = [];
 
-let currentFuneralId = null;
+let currentId = null;
 
 let busy = new Set();
 
 let unsubMembers = null;
-
 let unsubFunerals = null;
-
 let unsubRecords = null;
-
-
-/* =========================================================
-   DOM
-   ========================================================= */
-
-const funeralSelect =
-  $('#funeralSelect');
-
-const searchInput =
-  $('#searchInput');
-
-const filterStatus =
-  $('#filterStatus');
-
-const riceGrid =
-  $('#riceGrid');
-
-const rGot =
-  $('#rGot');
-
-const rPending =
-  $('#rPending');
-
-const rPct =
-  $('#rPct');
-
-const rBar =
-  $('#rBar');
-
-const countText =
-  $('#countText');
-
-const btnCheckAll =
-  $('#btnCheckAll');
-
-const btnClearAll =
-  $('#btnClearAll');
-
-const btnExport =
-  $('#btnExport');
 
 
 /* =========================================================
    START
    ========================================================= */
 
-guard(async () => {
+guard(() => {
 
   startClock();
+
+  bindEvents();
 
   listenMembers();
 
   listenFunerals();
 
-  listenRiceRecords();
+  listenRecords();
 
 });
 
 
 /* =========================================================
-   MEMBERS
+   LISTEN MEMBERS
    ========================================================= */
 
 function listenMembers() {
 
-  if (unsubMembers) {
-    unsubMembers();
-  }
+  unsubMembers?.();
+
+
+  const q =
+    query(
+      collection(
+        db,
+        'members'
+      ),
+      orderBy(
+        'houseNo'
+      )
+    );
 
 
   unsubMembers =
     onSnapshot(
 
-      collection(
-        db,
-        'members'
-      ),
+      q,
 
       snapshot => {
 
@@ -143,41 +105,10 @@ function listenMembers() {
             )
 
             .filter(
-              member => {
-
-                /*
-                  รองรับข้อมูลเก่า
-                  ที่ใช้ active
-                  และข้อมูลใหม่
-                  ที่ใช้ status
-                */
-
-                const active =
-                  member.active !== false;
-
-
-                const status =
-                  String(
-                    member.status ?? ''
-                  ).toLowerCase();
-
-
-                const inactive =
-                  status === 'inactive' ||
-                  status === 'พักสมาชิก' ||
-                  status === 'พัก';
-
-
-                return (
-                  active &&
-                  !inactive
-                );
-
-              }
+              member =>
+                member.active !== false
             );
 
-
-        sortMembers();
 
         render();
 
@@ -186,7 +117,7 @@ function listenMembers() {
       error => {
 
         console.error(
-          'Members snapshot error:',
+          'members:',
           error
         );
 
@@ -204,29 +135,31 @@ function listenMembers() {
 
 
 /* =========================================================
-   FUNERALS
+   LISTEN FUNERALS
    ========================================================= */
 
 function listenFunerals() {
 
-  if (unsubFunerals) {
-    unsubFunerals();
-  }
+  unsubFunerals?.();
 
 
-  /*
-    ไม่ใช้ orderBy จาก Firestore
-    เพื่อให้รองรับข้อมูลเก่าที่ field
-    อาจไม่ครบ
-  */
-
-  unsubFunerals =
-    onSnapshot(
-
+  const q =
+    query(
       collection(
         db,
         'funerals'
       ),
+      orderBy(
+        'cremationDate',
+        'desc'
+      )
+    );
+
+
+  unsubFunerals =
+    onSnapshot(
+
+      q,
 
       snapshot => {
 
@@ -239,20 +172,41 @@ function listenFunerals() {
           );
 
 
-        funerals.sort(
-          (a, b) =>
-            dateValue(
-              b.cremationDate
-            ) -
-            dateValue(
-              a.cremationDate
-            )
-        );
+        const previous =
+          currentId;
+
+
+        currentId =
+
+          previous &&
+          funerals.some(
+            funeral =>
+              funeral.id ===
+              previous
+          )
+
+            ? previous
+
+            : (
+
+                funerals.find(
+                  funeral =>
+                    funeral.status ===
+                    'active'
+                )?.id
+
+                ||
+
+                funerals[0]?.id
+
+                ||
+
+                null
+
+              );
 
 
         renderFuneralSelect();
-
-        chooseFuneral();
 
         render();
 
@@ -261,7 +215,7 @@ function listenFunerals() {
       error => {
 
         console.error(
-          'Funerals snapshot error:',
+          'funerals:',
           error
         );
 
@@ -279,14 +233,12 @@ function listenFunerals() {
 
 
 /* =========================================================
-   RICE RECORDS
+   LISTEN RECORDS
    ========================================================= */
 
-function listenRiceRecords() {
+function listenRecords() {
 
-  if (unsubRecords) {
-    unsubRecords();
-  }
+  unsubRecords?.();
 
 
   unsubRecords =
@@ -315,13 +267,13 @@ function listenRiceRecords() {
       error => {
 
         console.error(
-          'Rice records snapshot error:',
+          'riceRecords:',
           error
         );
 
 
         toast(
-          'โหลดข้อมูลการรับข้าวไม่สำเร็จ',
+          'โหลดประวัติรับข้าวไม่สำเร็จ',
           'err'
         );
 
@@ -333,234 +285,72 @@ function listenRiceRecords() {
 
 
 /* =========================================================
-   SORT MEMBERS
-   ========================================================= */
-
-function sortMembers() {
-
-  members.sort(
-    (a, b) => {
-
-      const ah =
-        String(
-          a.houseNo ??
-          a.house ??
-          a.houseNumber ??
-          ''
-        );
-
-
-      const bh =
-        String(
-          b.houseNo ??
-          b.house ??
-          b.houseNumber ??
-          ''
-        );
-
-
-      const result =
-        ah.localeCompare(
-          bh,
-          'th',
-          {
-            numeric: true
-          }
-        );
-
-
-      if (result !== 0) {
-        return result;
-      }
-
-
-      return String(
-        a.name || ''
-      ).localeCompare(
-        String(
-          b.name || ''
-        ),
-        'th'
-      );
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   GET HOUSE NUMBER
-   ========================================================= */
-
-function houseOf(member) {
-
-  return String(
-
-    member.houseNo ??
-    member.house ??
-    member.houseNumber ??
-    ''
-
-  );
-
-}
-
-
-/* =========================================================
-   GET NAME
-   ========================================================= */
-
-function nameOf(member) {
-
-  return String(
-
-    member.name ??
-    member.fullName ??
-    member.memberName ??
-    ''
-
-  );
-
-}
-
-
-/* =========================================================
-   SELECT FUNERAL
+   FUNERAL SELECT
    ========================================================= */
 
 function renderFuneralSelect() {
 
-  if (!funeralSelect) {
+  const select =
+    $('#funeralSelect');
+
+
+  if (!select) {
     return;
   }
-
-
-  const oldValue =
-    currentFuneralId;
-
-
-  funeralSelect.innerHTML = '';
 
 
   if (!funerals.length) {
 
-    funeralSelect.innerHTML = `
-
-      <option value="">
-        — ยังไม่มีงานศพ —
-      </option>
-
-    `;
-
-
-    currentFuneralId = null;
+    select.innerHTML =
+      '<option value="">— ยังไม่มีงานศพ —</option>';
 
     return;
 
   }
 
 
-  funerals.forEach(
-    funeral => {
+  select.innerHTML =
+    funerals
+      .map(
+        funeral => `
 
-      const option =
-        document.createElement(
-          'option'
-        );
+          <option
+            value="${esc(
+              funeral.id
+            )}"
+          >
 
+            ${esc(
+              funeral.name ||
+              '-'
+            )}
 
-      option.value =
-        funeral.id;
+            —
 
+            ${esc(
+              thDate(
+                funeral.cremationDate
+              )
+            )}
 
-      const status =
-        funeral.status === 'active'
-          ? ' — กำลังดำเนินการ'
-          : '';
+            ${
+              funeral.status ===
+              'active'
 
+                ? ' (กำลังดำเนินการ)'
 
-      option.textContent =
-        `${funeral.name || '-'} — ${
-          thDate(
-            funeral.cremationDate
-          )
-        }${status}`;
+                : ''
+            }
 
+          </option>
 
-      funeralSelect.appendChild(
-        option
-      );
-
-    }
-  );
-
-
-  if (
-    oldValue &&
-    funerals.some(
-      f => f.id === oldValue
-    )
-  ) {
-
-    funeralSelect.value =
-      oldValue;
-
-  }
-
-}
+        `
+      )
+      .join('');
 
 
-/* =========================================================
-   CHOOSE FUNERAL
-   ========================================================= */
-
-function chooseFuneral() {
-
-  if (!funerals.length) {
-
-    currentFuneralId = null;
-
-    return;
-
-  }
-
-
-  if (
-    currentFuneralId &&
-    funerals.some(
-      f =>
-        f.id === currentFuneralId
-    )
-  ) {
-
-    funeralSelect.value =
-      currentFuneralId;
-
-    return;
-
-  }
-
-
-  const active =
-    funerals.find(
-      f =>
-        f.status === 'active'
-    );
-
-
-  currentFuneralId =
-    active?.id ||
-    funerals[0]?.id ||
-    null;
-
-
-  if (funeralSelect) {
-
-    funeralSelect.value =
-      currentFuneralId || '';
-
-  }
+  select.value =
+    currentId || '';
 
 }
 
@@ -569,9 +359,9 @@ function chooseFuneral() {
    CURRENT RECORDS
    ========================================================= */
 
-function currentRecords() {
+function recordsForCurrentFuneral() {
 
-  if (!currentFuneralId) {
+  if (!currentId) {
     return [];
   }
 
@@ -579,7 +369,7 @@ function currentRecords() {
   return records.filter(
     record =>
       record.funeralId ===
-      currentFuneralId
+      currentId
   );
 
 }
@@ -593,13 +383,11 @@ function receivedSet() {
 
   return new Set(
 
-    currentRecords()
-
+    recordsForCurrentFuneral()
       .map(
         record =>
           record.memberId
       )
-
       .filter(Boolean)
 
   );
@@ -615,14 +403,15 @@ function filteredMembers() {
 
   const keyword =
     String(
-      searchInput?.value || ''
+      $('#searchInput')?.value ||
+      ''
     )
       .toLowerCase()
       .trim();
 
 
-  const status =
-    filterStatus?.value ||
+  const filter =
+    $('#filterStatus')?.value ||
     'all';
 
 
@@ -633,44 +422,58 @@ function filteredMembers() {
   return members.filter(
     member => {
 
-      const house =
-        houseOf(member);
+      const text = `
+
+        ${member.houseNo || ''}
+
+        ${member.name || ''}
+
+        ${member.phone || ''}
+
+      `
+        .toLowerCase();
 
 
-      const name =
-        nameOf(member);
-
-
-      const searchHit =
+      const searchMatch =
         !keyword ||
-
-        `${house} ${name}`
-          .toLowerCase()
-          .includes(keyword);
-
-
-      let statusHit = true;
+        text.includes(
+          keyword
+        );
 
 
-      if (status === 'got') {
+      let statusMatch =
+        true;
 
-        statusHit =
-          got.has(member.id);
+
+      if (
+        filter ===
+        'got'
+      ) {
+
+        statusMatch =
+          got.has(
+            member.id
+          );
 
       }
 
 
-      if (status === 'pending') {
+      if (
+        filter ===
+        'pending'
+      ) {
 
-        statusHit =
-          !got.has(member.id);
+        statusMatch =
+          !got.has(
+            member.id
+          );
 
       }
 
 
       return (
-        searchHit &&
-        statusHit
+        searchMatch &&
+        statusMatch
       );
 
     }
@@ -685,18 +488,18 @@ function filteredMembers() {
 
 function render() {
 
-  renderSummary();
+  renderStats();
 
-  renderGrid();
+  renderMembers();
 
 }
 
 
 /* =========================================================
-   SUMMARY
+   STATS
    ========================================================= */
 
-function renderSummary() {
+function renderStats() {
 
   const total =
     members.length;
@@ -725,9 +528,11 @@ function renderSummary() {
       : 0;
 
 
-  if (rGot) {
+  if (
+    $('#rGot')
+  ) {
 
-    rGot.textContent =
+    $('#rGot').textContent =
       got.toLocaleString(
         'th-TH'
       );
@@ -735,9 +540,11 @@ function renderSummary() {
   }
 
 
-  if (rPending) {
+  if (
+    $('#rPending')
+  ) {
 
-    rPending.textContent =
+    $('#rPending').textContent =
       pending.toLocaleString(
         'th-TH'
       );
@@ -745,17 +552,21 @@ function renderSummary() {
   }
 
 
-  if (rPct) {
+  if (
+    $('#rPct')
+  ) {
 
-    rPct.textContent =
+    $('#rPct').textContent =
       `${percent}%`;
 
   }
 
 
-  if (rBar) {
+  if (
+    $('#rBar')
+  ) {
 
-    rBar.style.width =
+    $('#rBar').style.width =
       `${percent}%`;
 
   }
@@ -764,78 +575,31 @@ function renderSummary() {
 
 
 /* =========================================================
-   RENDER GRID
+   MEMBERS
    ========================================================= */
 
-function renderGrid() {
+function renderMembers() {
 
-  if (!riceGrid) {
+  const grid =
+    $('#riceGrid');
+
+
+  if (!grid) {
     return;
   }
-
-
-  if (!currentFuneralId) {
-
-    riceGrid.innerHTML = `
-
-      <div
-        class="empty-box"
-        style="
-          grid-column:1/-1;
-          text-align:center;
-          padding:50px 20px;
-        "
-      >
-
-        <i
-          class="fa-solid fa-bowl-rice"
-          style="
-            font-size:42px;
-            color:#aaa;
-            margin-bottom:12px;
-          "
-        ></i>
-
-        <h3>
-          ยังไม่มีงานศพ
-        </h3>
-
-        <p style="
-          color:#888;
-          margin-top:7px;
-        ">
-          กรุณาแจ้งงานศพก่อน
-        </p>
-
-      </div>
-
-    `;
-
-
-    if (countText) {
-
-      countText.textContent =
-        'แสดง 0 รายการ';
-
-    }
-
-
-    return;
-
-  }
-
-
-  const got =
-    receivedSet();
 
 
   const list =
     filteredMembers();
 
 
+  const got =
+    receivedSet();
+
+
   if (!list.length) {
 
-    riceGrid.innerHTML = `
+    grid.innerHTML = `
 
       <div
         class="empty-box"
@@ -843,12 +607,11 @@ function renderGrid() {
           grid-column:1/-1;
           text-align:center;
           padding:40px;
-          color:#777;
         "
       >
 
         <i
-          class="fa-solid fa-user-slash"
+          class="fa-solid fa-users-slash"
           style="
             font-size:35px;
             margin-bottom:10px;
@@ -865,13 +628,13 @@ function renderGrid() {
 
   } else {
 
-    riceGrid.innerHTML =
+    grid.innerHTML =
       list
         .map(
           member =>
-            memberCard(
+            renderMemberCard(
               member,
-              got.has(member.id)
+              got
             )
         )
         .join('');
@@ -879,10 +642,12 @@ function renderGrid() {
   }
 
 
-  if (countText) {
+  if (
+    $('#countText')
+  ) {
 
-    countText.textContent =
-      `แสดง ${list.length} จาก ${members.length} ครัวเรือน`;
+    $('#countText').textContent =
+      `แสดง ${list.length.toLocaleString('th-TH')} จาก ${members.length.toLocaleString('th-TH')} ครัวเรือน`;
 
   }
 
@@ -893,55 +658,41 @@ function renderGrid() {
    MEMBER CARD
    ========================================================= */
 
-function memberCard(
+function renderMemberCard(
   member,
-  received
+  got
 ) {
 
-  const house =
-    houseOf(member);
-
-
-  const name =
-    nameOf(member);
+  const received =
+    got.has(
+      member.id
+    );
 
 
   const isBusy =
-    busy.has(member.id);
+    busy.has(
+      member.id
+    );
 
 
   return `
 
-    <button
-      type="button"
-      class="rice-card ${
-        received
-          ? 'on'
-          : ''
-      } ${
-        isBusy
-          ? 'busy'
-          : ''
-      }"
-      data-member-id="${esc(member.id)}"
-      ${
-        !state.isAdmin
-          ? 'disabled'
-          : ''
-      }
-      style="
-        border:0;
-        text-align:left;
-        width:100%;
-        cursor:${
-          state.isAdmin
-            ? 'pointer'
-            : 'default'
-        };
+    <div
+      class="
+        rice-card
+        ${received ? 'on' : ''}
+        ${isBusy ? 'busy' : ''}
       "
+      data-id="${esc(
+        member.id
+      )}"
+      role="button"
+      tabindex="0"
     >
 
-      <div class="rice-check">
+      <div
+        class="rice-check"
+      >
 
         <i
           class="fa-solid ${
@@ -954,40 +705,49 @@ function memberCard(
       </div>
 
 
-      <div class="rice-info">
+      <div
+        class="rice-info"
+      >
 
         <strong>
-          บ้านเลขที่ ${esc(house || '-')}
+
+          บ้านเลขที่
+          ${esc(
+            member.houseNo ||
+            '-'
+          )}
+
         </strong>
 
+
         <span>
-          ${esc(name || '-')}
+
+          ${esc(
+            member.name ||
+            '-'
+          )}
+
         </span>
 
       </div>
 
 
       <span
-        class="pill ${
-          received
-            ? 'on'
-            : 'off'
-        }"
+        class="
+          pill
+          ${received ? 'on' : 'off'}
+        "
       >
 
         ${
-          isBusy
-            ? 'กำลังบันทึก...'
-            : (
-              received
-                ? 'รับแล้ว'
-                : 'ค้างส่ง'
-            )
+          received
+            ? 'รับแล้ว'
+            : 'ค้างส่ง'
         }
 
       </span>
 
-    </button>
+    </div>
 
   `;
 
@@ -998,11 +758,11 @@ function memberCard(
    TOGGLE
    ========================================================= */
 
-async function toggleMember(
+async function toggle(
   memberId
 ) {
 
-  if (!currentFuneralId) {
+  if (!currentId) {
 
     toast(
       'กรุณาเลือกงานศพก่อน',
@@ -1014,20 +774,31 @@ async function toggleMember(
   }
 
 
-  if (!needAdmin()) {
+  if (
+    !needAdmin()
+  ) {
+
     return;
+
   }
 
 
-  if (busy.has(memberId)) {
+  if (
+    busy.has(
+      memberId
+    )
+  ) {
+
     return;
+
   }
 
 
   const member =
     members.find(
-      m =>
-        m.id === memberId
+      item =>
+        item.id ===
+        memberId
     );
 
 
@@ -1044,14 +815,18 @@ async function toggleMember(
 
 
   const existing =
-    currentRecords().find(
-      record =>
-        record.memberId ===
-        memberId
-    );
+    recordsForCurrentFuneral()
+      .find(
+        record =>
+          record.memberId ===
+          memberId
+      );
 
 
-  busy.add(memberId);
+  busy.add(
+    memberId
+  );
+
 
   render();
 
@@ -1061,7 +836,7 @@ async function toggleMember(
     if (existing) {
 
       /*
-        ยกเลิกสถานะรับแล้ว
+        ยกเลิกการรับข้าว
       */
 
       await deleteDoc(
@@ -1079,44 +854,21 @@ async function toggleMember(
 
         'ยกเลิกรับข้าว',
 
-        `บ้านเลขที่ ${
-          houseOf(member)
-        } ${nameOf(member)}`
+        `งานศพ ${currentFuneralName()} | บ้านเลขที่ ${member.houseNo} ${member.name}`
 
       );
 
 
       toast(
-        `ยกเลิกรับข้าว บ้านเลขที่ ${houseOf(member)}`,
+        `ยกเลิกรับข้าว บ้านเลขที่ ${member.houseNo}`,
         'ok'
       );
 
     } else {
 
       /*
-        ป้องกันการกดซ้ำ
-        ก่อนเพิ่มตรวจอีกครั้ง
+        บันทึกรับข้าว
       */
-
-      const duplicate =
-        currentRecords().find(
-          record =>
-            record.memberId ===
-            memberId
-        );
-
-
-      if (duplicate) {
-
-        toast(
-          'รายการนี้ถูกบันทึกไปแล้ว',
-          'err'
-        );
-
-        return;
-
-      }
-
 
       await addDoc(
 
@@ -1128,24 +880,23 @@ async function toggleMember(
         {
 
           funeralId:
-            currentFuneralId,
+            currentId,
 
           memberId:
             member.id,
 
           houseNo:
-            houseOf(member),
+            member.houseNo ||
+            '',
 
           memberName:
-            nameOf(member),
+            member.name ||
+            '',
 
           amount:
             1,
 
           recordedAt:
-            serverTimestamp(),
-
-          receivedAt:
             serverTimestamp(),
 
           recordedBy:
@@ -1165,15 +916,13 @@ async function toggleMember(
 
         'บันทึกรับข้าว',
 
-        `บ้านเลขที่ ${
-          houseOf(member)
-        } ${nameOf(member)}`
+        `งานศพ ${currentFuneralName()} | บ้านเลขที่ ${member.houseNo} ${member.name}`
 
       );
 
 
       toast(
-        `บันทึกรับข้าว บ้านเลขที่ ${houseOf(member)} แล้ว`,
+        `บันทึกรับข้าว บ้านเลขที่ ${member.houseNo}`,
         'ok'
       );
 
@@ -1182,20 +931,23 @@ async function toggleMember(
   } catch (error) {
 
     console.error(
-      'Toggle rice error:',
+      'toggle rice record:',
       error
     );
 
 
     toast(
       error?.message ||
-      'บันทึกข้อมูลไม่สำเร็จ',
+      'บันทึกไม่สำเร็จ',
       'err'
     );
 
   } finally {
 
-    busy.delete(memberId);
+    busy.delete(
+      memberId
+    );
+
 
     render();
 
@@ -1205,145 +957,14 @@ async function toggleMember(
 
 
 /* =========================================================
-   CLICK GRID
+   BULK
    ========================================================= */
 
-if (riceGrid) {
-
-  riceGrid.addEventListener(
-    'click',
-    event => {
-
-      const card =
-        event.target.closest(
-          '.rice-card'
-        );
-
-
-      if (!card) {
-        return;
-      }
-
-
-      const memberId =
-        card.dataset.memberId;
-
-
-      if (!memberId) {
-        return;
-      }
-
-
-      toggleMember(
-        memberId
-      );
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   FUNERAL CHANGE
-   ========================================================= */
-
-if (funeralSelect) {
-
-  funeralSelect.addEventListener(
-    'change',
-    event => {
-
-      currentFuneralId =
-        event.target.value ||
-        null;
-
-
-      render();
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   SEARCH
-   ========================================================= */
-
-if (searchInput) {
-
-  searchInput.addEventListener(
-    'input',
-    renderGrid
-  );
-
-}
-
-
-/* =========================================================
-   FILTER
-   ========================================================= */
-
-if (filterStatus) {
-
-  filterStatus.addEventListener(
-    'change',
-    renderGrid
-  );
-
-}
-
-
-/* =========================================================
-   CHECK ALL
-   ========================================================= */
-
-if (btnCheckAll) {
-
-  btnCheckAll.addEventListener(
-    'click',
-    () => {
-
-      bulkChange(
-        true
-      );
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   CLEAR ALL
-   ========================================================= */
-
-if (btnClearAll) {
-
-  btnClearAll.addEventListener(
-    'click',
-    () => {
-
-      bulkChange(
-        false
-      );
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   BULK CHANGE
-   ========================================================= */
-
-async function bulkChange(
+async function bulk(
   check
 ) {
 
-  if (!currentFuneralId) {
+  if (!currentId) {
 
     toast(
       'กรุณาเลือกงานศพก่อน',
@@ -1355,17 +976,21 @@ async function bulkChange(
   }
 
 
-  if (!needAdmin()) {
+  if (
+    !needAdmin()
+  ) {
+
     return;
+
   }
-
-
-  const list =
-    filteredMembers();
 
 
   const got =
     receivedSet();
+
+
+  const list =
+    filteredMembers();
 
 
   const targets =
@@ -1381,9 +1006,9 @@ async function bulkChange(
 
     toast(
       check
-        ? 'ไม่มีสมาชิกที่ต้องติ๊กเพิ่ม'
-        : 'ไม่มีรายการที่ต้องล้าง',
-      'ok'
+        ? 'สมาชิกที่แสดงรับข้าวครบแล้ว'
+        : 'ไม่มีรายการรับข้าวให้ล้าง',
+      'info'
     );
 
     return;
@@ -1391,12 +1016,31 @@ async function bulkChange(
   }
 
 
-  /*
-    แบ่ง batch ไม่เกิน 400
-    เพื่อเผื่อพื้นที่สำหรับ operation อื่น
-  */
+  const actionText =
+    check
+      ? 'บันทึกรับข้าว'
+      : 'ล้างการรับข้าว';
+
+
+  const ok =
+    window.confirm(
+
+      `${actionText} ${targets.length} ครัวเรือนหรือไม่?`
+
+    );
+
+
+  if (!ok) {
+    return;
+  }
+
 
   try {
+
+    /*
+      Firestore Batch จำกัด 500 operations
+      ใช้ 400 เพื่อเผื่อความปลอดภัย
+    */
 
     for (
       let i = 0;
@@ -1405,7 +1049,9 @@ async function bulkChange(
     ) {
 
       const batch =
-        writeBatch(db);
+        writeBatch(
+          db
+        );
 
 
       const chunk =
@@ -1420,7 +1066,7 @@ async function bulkChange(
 
           if (check) {
 
-            const recordRef =
+            const ref =
               doc(
                 collection(
                   db,
@@ -1430,28 +1076,27 @@ async function bulkChange(
 
 
             batch.set(
-              recordRef,
+              ref,
               {
 
                 funeralId:
-                  currentFuneralId,
+                  currentId,
 
                 memberId:
                   member.id,
 
                 houseNo:
-                  houseOf(member),
+                  member.houseNo ||
+                  '',
 
                 memberName:
-                  nameOf(member),
+                  member.name ||
+                  '',
 
                 amount:
                   1,
 
                 recordedAt:
-                  serverTimestamp(),
-
-                receivedAt:
                   serverTimestamp(),
 
                 recordedBy:
@@ -1467,24 +1112,23 @@ async function bulkChange(
 
           } else {
 
-            const existing =
-              currentRecords().find(
-                record =>
-                  record.memberId ===
-                  member.id
-              );
+            const record =
+              recordsForCurrentFuneral()
+                .find(
+                  item =>
+                    item.memberId ===
+                    member.id
+                );
 
 
-            if (existing) {
+            if (record) {
 
               batch.delete(
-
                 doc(
                   db,
                   'riceRecords',
-                  existing.id
+                  record.id
                 )
-
               );
 
             }
@@ -1503,30 +1147,23 @@ async function bulkChange(
     await logAct(
 
       check
-        ? 'ติ๊กรับข้าวหลายรายการ'
-        : 'ล้างรับข้าวหลายรายการ',
+        ? 'ติ๊กรับข้าวทั้งหมด'
+        : 'ล้างรับข้าวทั้งหมด',
 
-      `${check ? 'บันทึก' : 'ล้าง'} ${
-        targets.length
-      } รายการ`
+      `งานศพ ${currentFuneralName()} | ${targets.length} รายการ`
 
     );
 
 
     toast(
-
-      check
-        ? `บันทึกรับข้าว ${targets.length} ครัวเรือนแล้ว`
-        : `ล้างรายการ ${targets.length} ครัวเรือนแล้ว`,
-
+      `${actionText} ${targets.length} รายการเรียบร้อย`,
       'ok'
-
     );
 
   } catch (error) {
 
     console.error(
-      'Bulk rice error:',
+      'bulk:',
       error
     );
 
@@ -1546,149 +1183,294 @@ async function bulkChange(
    EXPORT CSV
    ========================================================= */
 
-if (btnExport) {
+function exportCSV() {
 
-  btnExport.addEventListener(
-    'click',
-    () => {
+  if (!currentId) {
 
-      if (!currentFuneralId) {
+    toast(
+      'กรุณาเลือกงานศพก่อน',
+      'err'
+    );
 
-        toast(
-          'กรุณาเลือกงานศพก่อน',
-          'err'
-        );
+    return;
 
-        return;
-
-      }
+  }
 
 
-      const funeral =
-        funerals.find(
-          f =>
-            f.id ===
-            currentFuneralId
-        );
+  const funeral =
+    funerals.find(
+      item =>
+        item.id ===
+        currentId
+    );
 
 
-      if (!funeral) {
+  if (!funeral) {
 
-        toast(
-          'ไม่พบข้อมูลงานศพ',
-          'err'
-        );
+    toast(
+      'ไม่พบข้อมูลงานศพ',
+      'err'
+    );
 
-        return;
+    return;
 
-      }
-
-
-      const got =
-        receivedSet();
+  }
 
 
-      const rows = [
-
-        [
-          'บ้านเลขที่',
-          'ชื่อ-สกุล',
-          'สถานะ',
-          'งานศพ',
-          'วันฌาปนกิจ'
-        ]
-
-      ];
+  const got =
+    receivedSet();
 
 
-      members.forEach(
-        member => {
+  const rows = [
 
-          rows.push([
+    [
+      'ลำดับ',
+      'บ้านเลขที่',
+      'ชื่อ-สกุล',
+      'สถานะ',
+      'วันที่รับข้าว',
+      'ผู้บันทึก'
+    ]
 
-            houseOf(member),
-
-            nameOf(member),
-
-            got.has(member.id)
-              ? 'รับแล้ว'
-              : 'ค้างส่ง',
-
-            funeral.name ||
-              '',
-
-            funeral.cremationDate ||
-              ''
-
-          ]);
-
-        }
-      );
+  ];
 
 
-      const safeName =
-        String(
-          funeral.name ||
-          'งานศพ'
-        )
-          .replace(
-            /[\\/:*?"<>|]/g,
-            '_'
+  members.forEach(
+    (
+      member,
+      index
+    ) => {
+
+      const record =
+        recordsForCurrentFuneral()
+          .find(
+            item =>
+              item.memberId ===
+              member.id
           );
 
 
-      downloadCSV(
-
-        `รับข้าว_${safeName}.csv`,
-
-        rows
-
-      );
+      let date =
+        '';
 
 
-      toast(
-        'ส่งออกข้อมูล CSV สำเร็จ',
-        'ok'
-      );
+      if (
+        record?.recordedAt
+      ) {
+
+        const d =
+          record.recordedAt
+            ?.toDate
+              ? record.recordedAt.toDate()
+              : new Date(
+                  record.recordedAt
+                );
+
+
+        if (
+          !Number.isNaN(
+            d.getTime()
+          )
+        ) {
+
+          date =
+            d.toLocaleString(
+              'th-TH'
+            );
+
+        }
+
+      }
+
+
+      rows.push([
+
+        index + 1,
+
+        member.houseNo ||
+          '',
+
+        member.name ||
+          '',
+
+        got.has(member.id)
+          ? 'รับแล้ว'
+          : 'ค้างส่ง',
+
+        date,
+
+        record?.recordedBy ||
+          ''
+
+      ]);
 
     }
+  );
+
+
+  const safeName =
+    String(
+      funeral.name ||
+      'งานศพ'
+    )
+      .replace(
+        /[\\/:*?"<>|]/g,
+        '_'
+      );
+
+
+  downloadCSV(
+
+    `รับข้าว_${safeName}_${funeral.cremationDate || ''}.csv`,
+
+    rows
+
+  );
+
+
+  toast(
+    'ส่งออกข้อมูล CSV เรียบร้อย',
+    'ok'
   );
 
 }
 
 
 /* =========================================================
-   DATE VALUE
+   EVENTS
    ========================================================= */
 
-function dateValue(
-  value
-) {
+function bindEvents() {
 
-  if (!value) {
-    return 0;
-  }
+  $('#riceGrid')?.addEventListener(
+    'click',
+    event => {
 
-
-  if (
-    typeof value === 'object' &&
-    typeof value.toDate === 'function'
-  ) {
-
-    return value
-      .toDate()
-      .getTime();
-
-  }
+      const card =
+        event.target.closest(
+          '.rice-card'
+        );
 
 
-  const time =
-    new Date(value).getTime();
+      if (!card) {
+        return;
+      }
 
 
-  return Number.isNaN(time)
-    ? 0
-    : time;
+      toggle(
+        card.dataset.id
+      );
+
+    }
+  );
+
+
+  $('#riceGrid')?.addEventListener(
+    'keydown',
+    event => {
+
+      if (
+        event.key !==
+          'Enter' &&
+        event.key !==
+          ' '
+      ) {
+
+        return;
+
+      }
+
+
+      const card =
+        event.target.closest(
+          '.rice-card'
+        );
+
+
+      if (!card) {
+        return;
+      }
+
+
+      event.preventDefault();
+
+
+      toggle(
+        card.dataset.id
+      );
+
+    }
+  );
+
+
+  $('#funeralSelect')?.addEventListener(
+    'change',
+    event => {
+
+      currentId =
+        event.target.value ||
+        null;
+
+
+      render();
+
+    }
+  );
+
+
+  $('#searchInput')?.addEventListener(
+    'input',
+    render
+  );
+
+
+  $('#filterStatus')?.addEventListener(
+    'change',
+    render
+  );
+
+
+  $('#btnCheckAll')?.addEventListener(
+    'click',
+    () =>
+      bulk(true)
+  );
+
+
+  $('#btnClearAll')?.addEventListener(
+    'click',
+    () =>
+      bulk(false)
+  );
+
+
+  $('#btnExport')?.addEventListener(
+    'click',
+    exportCSV
+  );
+
+}
+
+
+/* =========================================================
+   CURRENT FUNERAL NAME
+   ========================================================= */
+
+function currentFuneralName() {
+
+  return (
+
+    funerals.find(
+      funeral =>
+        funeral.id ===
+        currentId
+    )?.name
+
+    ||
+
+    '-'
+
+  );
 
 }
 
