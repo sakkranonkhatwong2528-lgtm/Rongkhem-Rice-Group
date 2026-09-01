@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ตั้งค่า - ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
+<title>ตั้งค่า — กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</title>
 <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="style.css">
@@ -11,10 +11,7 @@
 <link rel="stylesheet" href="settings.css">
 </head>
 <body>
-
 <div class="app-wrapper">
-
-  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-logo">
       <div class="logo-icon"><i class="fa-solid fa-wheat-awn"></i></div>
@@ -33,206 +30,112 @@
     <div class="sidebar-footer">
       <div class="user-box">
         <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
-        <div class="user-info"><strong>ผู้ใหญ่บ้าน</strong><span>ศักรแทน ขัติย์วงศ์</span><span class="badge-role">ผู้ดูแลระบบ</span></div>
+        <div class="user-info"></div>
       </div>
       <button class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> ออกจากระบบ</button>
     </div>
   </aside>
 
   <main class="main-content">
-
     <header class="topbar">
       <div class="topbar-title">
         <div class="logo-icon small"><i class="fa-solid fa-gear"></i></div>
-        <div><h1>ตั้งค่า</h1><p>จัดการข้อมูลระบบ ผู้ใช้งาน และการแจ้งเตือน</p></div>
+        <div><h1>ตั้งค่าระบบ</h1><p>ข้อมูลกลุ่ม ผู้ใช้งาน และการสำรองข้อมูล</p></div>
       </div>
       <div class="topbar-right">
-        <div class="clock-box">
-          <i class="fa-regular fa-clock"></i>
-          <div><div id="liveClock" class="clock-time">00:00:00</div><div id="liveDate" class="clock-date">-</div></div>
-        </div>
+        <div class="clock-box"><i class="fa-regular fa-clock"></i>
+          <div><div id="liveClock" class="clock-time">00:00:00</div>
+               <div id="liveDate" class="clock-date">-</div></div></div>
       </div>
     </header>
 
-    <div class="settings-layout">
-
-      <!-- Tabs -->
-      <nav class="settings-tabs">
-        <button class="tab-btn active" data-tab="general"><i class="fa-solid fa-sliders"></i> ทั่วไป</button>
-        <button class="tab-btn" data-tab="users"><i class="fa-solid fa-user-shield"></i> ผู้ใช้งาน</button>
-        <button class="tab-btn" data-tab="notify"><i class="fa-solid fa-bell"></i> การแจ้งเตือน</button>
-        <button class="tab-btn" data-tab="backup"><i class="fa-solid fa-database"></i> สำรองข้อมูล</button>
-      </nav>
-
-      <div class="settings-content">
-
-        <!-- TAB: ทั่วไป -->
-        <section class="tab-panel active" id="tab-general">
-          <div class="card settings-card">
-            <div class="section-title"><h3>ข้อมูลกลุ่ม</h3></div>
-            <div class="settings-form">
-              <div class="form-row">
-                <label>ชื่อกลุ่ม</label>
-                <input type="text" id="groupName" value="กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6">
-              </div>
-              <div class="form-row two-col">
-                <div><label>หมู่บ้าน</label><input type="text" value="บ้านร่องเข็ม หมู่ที่ 6"></div>
-                <div><label>ตำบล/อำเภอ/จังหวัด</label><input type="text" placeholder="ระบุตำบล อำเภอ จังหวัด"></div>
-              </div>
-              <div class="form-row two-col">
-                <div><label>ราคาข้าวสารต่อถัง (บาท)</label><input type="number" id="ricePrice" value="150"></div>
-                <div><label>จำนวนข้าวสารต่อครัวเรือน (ถัง)</label><input type="number" id="riceQuota" value="1"></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="card settings-card">
-            <div class="section-title"><h3>รูปแบบวันที่และเวลา</h3></div>
-            <div class="settings-form">
-              <div class="form-row two-col">
-                <div><label>ปีปฏิทิน</label>
-                  <select id="calendarType"><option value="th" selected>พุทธศักราช (พ.ศ.)</option><option value="en">คริสต์ศักราช (ค.ศ.)</option></select>
-                </div>
-                <div><label>เขตเวลา</label>
-                  <select><option selected>Asia/Bangkok (GMT+7)</option></select>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="settings-save-bar">
-            <button class="action-btn abtn-green" id="saveGeneral"><i class="fa-solid fa-floppy-disk"></i> บันทึกการตั้งค่า</button>
-          </div>
-        </section>
-
-        <!-- TAB: ผู้ใช้งาน -->
-        <section class="tab-panel" id="tab-users">
-          <div class="card settings-card">
-            <div class="section-title">
-              <h3>รายชื่อผู้ใช้งานระบบ</h3>
-              <button class="action-btn abtn-orange small" id="btnAddUser"><i class="fa-solid fa-user-plus"></i> เพิ่มผู้ใช้งาน</button>
-            </div>
-            <div class="user-table" id="userTable">
-              <!-- Generated by JS -->
-            </div>
-          </div>
-        </section>
-
-        <!-- TAB: การแจ้งเตือน -->
-        <section class="tab-panel" id="tab-notify">
-          <div class="card settings-card">
-            <div class="section-title"><h3>ช่องทางการแจ้งเตือน</h3></div>
-            <div class="toggle-list">
-              <div class="toggle-row">
-                <div class="toggle-info"><i class="fa-brands fa-line"></i><div><strong>แจ้งเตือนผ่าน LINE Notify</strong><span>ส่งประกาศงานศพและแจ้งเตือนใหม่เข้ากลุ่ม LINE อัตโนมัติ</span></div></div>
-                <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
-              </div>
-              <div class="toggle-row">
-                <div class="toggle-info"><i class="fa-solid fa-comment-sms"></i><div><strong>แจ้งเตือนผ่าน SMS</strong><span>ส่ง SMS แจ้งครัวเรือนที่ยังไม่ส่งข้าวสารก่อนวันฌาปนกิจ</span></div></div>
-                <label class="switch"><input type="checkbox"><span class="slider"></span></label>
-              </div>
-              <div class="toggle-row">
-                <div class="toggle-info"><i class="fa-solid fa-bell"></i><div><strong>แจ้งเตือนในระบบ</strong><span>แสดง Pop-up แจ้งเตือนเมื่อมีประกาศหรือกิจกรรมใหม่</span></div></div>
-                <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
-              </div>
-              <div class="toggle-row">
-                <div class="toggle-info"><i class="fa-solid fa-triangle-exclamation"></i><div><strong>เตือนครัวเรือนค้างส่งข้าวสาร</strong><span>แจ้งเตือนอัตโนมัติเมื่อครัวเรือนค้างส่งเกิน 3 ครั้งติดต่อกัน</span></div></div>
-                <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
-              </div>
-            </div>
-          </div>
-          <div class="settings-save-bar">
-            <button class="action-btn abtn-green" id="saveNotify"><i class="fa-solid fa-floppy-disk"></i> บันทึกการตั้งค่า</button>
-          </div>
-        </section>
-
-        <!-- TAB: สำรองข้อมูล -->
-        <section class="tab-panel" id="tab-backup">
-          <div class="card settings-card">
-            <div class="section-title"><h3>สำรอง / กู้คืนข้อมูล</h3></div>
-            <div class="backup-grid">
-              <div class="backup-box">
-                <i class="fa-solid fa-cloud-arrow-down"></i>
-                <h4>สำรองข้อมูลทั้งหมด</h4>
-                <p>ดาวน์โหลดข้อมูลสมาชิก งานศพ และประวัติทั้งหมดเป็นไฟล์ .json</p>
-                <button class="action-btn abtn-blue" id="btnBackup"><i class="fa-solid fa-download"></i> สำรองข้อมูลตอนนี้</button>
-              </div>
-              <div class="backup-box">
-                <i class="fa-solid fa-cloud-arrow-up"></i>
-                <h4>กู้คืนข้อมูล</h4>
-                <p>อัปโหลดไฟล์สำรองข้อมูลเพื่อกู้คืนระบบกลับสู่สถานะก่อนหน้า</p>
-                <button class="action-btn abtn-purple" id="btnRestore"><i class="fa-solid fa-upload"></i> เลือกไฟล์กู้คืน</button>
-              </div>
-            </div>
-            <div class="backup-log">
-              <h4>ประวัติการสำรองข้อมูลล่าสุด</h4>
-              <ul>
-                <li><i class="fa-solid fa-circle-check"></i> สำรองข้อมูลสำเร็จ — 28 ส.ค. 2569 เวลา 09.15 น.</li>
-                <li><i class="fa-solid fa-circle-check"></i> สำรองข้อมูลสำเร็จ — 21 ส.ค. 2569 เวลา 08.40 น.</li>
-                <li><i class="fa-solid fa-circle-check"></i> สำรองข้อมูลสำเร็จ — 14 ส.ค. 2569 เวลา 10.02 น.</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="card settings-card danger-zone">
-            <div class="section-title"><h3><i class="fa-solid fa-triangle-exclamation"></i> โซนอันตราย</h3></div>
-            <div class="danger-row">
-              <div><strong>ล้างข้อมูลทั้งหมดในระบบ</strong><span>การกระทำนี้ไม่สามารถย้อนกลับได้ กรุณาสำรองข้อมูลก่อนดำเนินการ</span></div>
-              <button class="btn-danger" id="btnResetAll"><i class="fa-solid fa-trash"></i> ล้างข้อมูลทั้งหมด</button>
-            </div>
-          </div>
-        </section>
-
-      </div>
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="profile"><i class="fa-solid fa-id-card"></i> โปรไฟล์</button>
+      <button class="tab-btn admin-only" data-tab="group"><i class="fa-solid fa-people-roof"></i> ข้อมูลกลุ่ม</button>
+      <button class="tab-btn admin-only" data-tab="users"><i class="fa-solid fa-user-shield"></i> ผู้ใช้งาน</button>
+      <button class="tab-btn admin-only" data-tab="data"><i class="fa-solid fa-database"></i> ข้อมูล / สำรอง</button>
+      <button class="tab-btn admin-only" data-tab="log"><i class="fa-solid fa-clock-rotate-left"></i> ประวัติการใช้งาน</button>
     </div>
 
+    <!-- โปรไฟล์ -->
+    <section class="card tab-pane active" id="tab-profile">
+      <div class="card-header green">โปรไฟล์ของฉัน</div>
+      <div class="pane-body">
+        <div class="form-group"><label>ชื่อ-สกุล</label><input id="pName"></div>
+        <div class="form-group"><label>ตำแหน่ง</label><input id="pPosition" placeholder="เช่น ประธานกลุ่ม"></div>
+        <div class="form-group"><label>เบอร์โทร</label><input id="pPhone"></div>
+        <div class="form-group"><label>อีเมล (แก้ไขไม่ได้)</label><input id="pEmail" disabled></div>
+        <div class="btn-row">
+          <button class="btn-save" id="btnSaveProfile">บันทึกโปรไฟล์</button>
+          <button class="btn-cancel" id="btnResetPw">ส่งลิงก์เปลี่ยนรหัสผ่าน</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ข้อมูลกลุ่ม -->
+    <section class="card tab-pane" id="tab-group">
+      <div class="card-header green">ข้อมูลกลุ่ม</div>
+      <div class="pane-body">
+        <div class="form-group"><label>ชื่อกลุ่ม</label><input id="gName"></div>
+        <div class="form-group"><label>ที่อยู่</label><input id="gAddress"></div>
+        <div class="form-group"><label>สถานที่จัดงานเริ่มต้น</label><input id="gPlace"></div>
+        <div class="form-group"><label>จำนวนข้าวสารต่อครัวเรือน (กิโลกรัม)</label>
+          <input id="gRiceKg" type="number" step="0.5"></div>
+        <div class="form-group"><label>เกณฑ์แจ้งเตือนค้างส่ง (ครั้ง)</label>
+          <input id="gOverdue" type="number" min="1"></div>
+        <div class="btn-row"><button class="btn-save" id="btnSaveGroup">บันทึกข้อมูลกลุ่ม</button></div>
+      </div>
+    </section>
+
+    <!-- ผู้ใช้งาน -->
+    <section class="card tab-pane" id="tab-users">
+      <div class="card-header green">ผู้ใช้งานระบบ</div>
+      <div class="pane-body">
+        <p class="note"><i class="fa-solid fa-circle-info"></i>
+          สร้างบัญชีใหม่ได้ที่ Firebase Console → Authentication แล้วนำ UID มาเพิ่มที่นี่</p>
+        <div class="btn-row"><button class="action-btn abtn-green" id="btnAddUser">
+          <i class="fa-solid fa-user-plus"></i> เพิ่มสิทธิ์ผู้ใช้</button></div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>ชื่อ</th><th>อีเมล</th><th>บทบาท</th><th>สถานะ</th><th>จัดการ</th></tr></thead>
+            <tbody id="userTbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ข้อมูล -->
+    <section class="card tab-pane" id="tab-data">
+      <div class="card-header green">สำรองและกู้คืนข้อมูล</div>
+      <div class="pane-body">
+        <div class="data-grid">
+          <div class="data-box"><i class="fa-solid fa-download"></i>
+            <h4>สำรองข้อมูลทั้งหมด</h4><p>ดาวน์โหลดไฟล์ JSON ทุก collection</p>
+            <button class="btn-save" id="btnBackup">ดาวน์โหลด</button></div>
+          <div class="data-box"><i class="fa-solid fa-upload"></i>
+            <h4>กู้คืนข้อมูล</h4><p>นำเข้าไฟล์ JSON ที่สำรองไว้</p>
+            <button class="btn-cancel" id="btnRestore">เลือกไฟล์</button></div>
+          <div class="data-box danger"><i class="fa-solid fa-broom"></i>
+            <h4>ล้างข้อมูลการรับข้าว</h4><p>ลบเฉพาะ riceRecords ทั้งหมด</p>
+            <button class="btn-danger" id="btnClearRice">ล้างข้อมูล</button></div>
+        </div>
+        <div class="stat-line" id="dbStat"></div>
+      </div>
+    </section>
+
+    <!-- ประวัติ -->
+    <section class="card tab-pane" id="tab-log">
+      <div class="card-header green">ประวัติการใช้งานล่าสุด</div>
+      <div class="pane-body">
+        <div class="log-list" id="logList"></div>
+      </div>
+    </section>
+
+    <footer class="footer">© 2025 กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6</footer>
   </main>
 </div>
-
-<!-- Modal: เพิ่ม/แก้ไขผู้ใช้งาน -->
-<div class="modal-overlay" id="userModal">
-  <div class="modal-box">
-    <div class="modal-header">
-      <h3 id="userModalTitle">เพิ่มผู้ใช้งานใหม่</h3>
-      <button class="modal-close" id="closeUserModal"><i class="fa-solid fa-xmark"></i></button>
-    </div>
-    <div class="modal-body">
-      <label>ชื่อ-นามสกุล</label>
-      <input type="text" id="inputUserName" placeholder="กรอกชื่อ-นามสกุล">
-      <label>เบอร์โทรศัพท์</label>
-      <input type="text" id="inputUserPhone" placeholder="0812345678">
-      <label>สิทธิ์การใช้งาน</label>
-      <select id="inputUserRole">
-        <option value="admin">ผู้ดูแลระบบ (Admin)</option>
-        <option value="staff">เจ้าหน้าที่ (Staff)</option>
-        <option value="viewer">ดูข้อมูลอย่างเดียว (Viewer)</option>
-      </select>
-    </div>
-    <div class="modal-footer">
-      <button class="btn-cancel" id="cancelUserModal">ยกเลิก</button>
-      <button class="btn-confirm" id="saveUser"><i class="fa-solid fa-check"></i> บันทึก</button>
-    </div>
-  </div>
-</div>
-
-<!-- Modal: ยืนยันล้างข้อมูล -->
-<div class="modal-overlay" id="resetModal">
-  <div class="modal-box small">
-    <div class="modal-body center">
-      <div class="warning-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
-      <h3>ยืนยันการล้างข้อมูลทั้งหมด?</h3>
-      <p>ข้อมูลสมาชิก งานศพ และประวัติทั้งหมดจะถูกลบถาวร ไม่สามารถกู้คืนได้</p>
-    </div>
-    <div class="modal-footer">
-      <button class="btn-cancel" id="cancelReset">ยกเลิก</button>
-      <button class="btn-danger" id="confirmReset"><i class="fa-solid fa-trash"></i> ยืนยันล้างข้อมูล</button>
-    </div>
-  </div>
-</div>
-
+<input type="file" id="jsonFile" accept=".json" hidden>
 <div id="toastContainer" class="toast-container"></div>
-
-<script src="script.js"></script>
-<script src="settings.js"></script>
+<script type="module" src="settings.js"></script>
 </body>
 </html>
