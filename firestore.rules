@@ -1,23 +1,213 @@
+```text
 rules_version = '2';
+
 service cloud.firestore {
+
   match /databases/{database}/documents {
 
-    function signedIn() { return request.auth != null; }
-    function isAdmin() {
-      return signedIn() &&
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+
+    /* =====================================================
+       FUNCTIONS
+       ===================================================== */
+
+    function signedIn() {
+      return request.auth != null;
     }
 
-    match /members/{id}       { allow read: if signedIn(); allow write: if isAdmin(); }
-    match /funerals/{id}      { allow read: if signedIn(); allow write: if isAdmin(); }
-    match /riceRecords/{id}   { allow read: if signedIn(); allow write: if isAdmin(); }
-    match /announcements/{id} { allow read: if signedIn(); allow write: if isAdmin(); }
-    match /config/{id}        { allow read: if signedIn(); allow write: if isAdmin(); }
-    match /activityLog/{id}   { allow read: if isAdmin(); allow create: if signedIn(); }
+
+    function currentUser() {
+      return get(
+        /databases/$(database)/documents/users/$(request.auth.uid)
+      );
+    }
+
+
+    function isAdmin() {
+      return signedIn()
+        && exists(
+          /databases/$(database)/documents/users/$(request.auth.uid)
+        )
+        && currentUser().data.role == 'admin'
+        && currentUser().data.active != false;
+    }
+
+
+    function isOwner(uid) {
+      return signedIn()
+        && request.auth.uid == uid;
+    }
+
+
+    /* =====================================================
+       MEMBERS
+       สมาชิกกลุ่มข้าวสาร
+       ===================================================== */
+
+    match /members/{memberId} {
+
+      /* สมาชิกที่ล็อกอินแล้วอ่านได้ */
+      allow read:
+        if signedIn();
+
+
+      /* เฉพาะผู้ดูแลระบบเพิ่ม/แก้ไข/ลบ */
+      allow create, update, delete:
+        if isAdmin();
+
+    }
+
+
+    /* =====================================================
+       FUNERALS
+       งานศพ
+       ===================================================== */
+
+    match /funerals/{funeralId} {
+
+      allow read:
+        if signedIn();
+
+
+      allow create, update, delete:
+        if isAdmin();
+
+    }
+
+
+    /* =====================================================
+       RICE RECORDS
+       บันทึกรับข้าว
+       ===================================================== */
+
+    match /riceRecords/{recordId} {
+
+      allow read:
+        if signedIn();
+
+
+      allow create, update, delete:
+        if isAdmin();
+
+    }
+
+
+    /* =====================================================
+       ANNOUNCEMENTS
+       ประกาศ
+       ===================================================== */
+
+    match /announcements/{announcementId} {
+
+      allow read:
+        if signedIn();
+
+
+      allow create, update, delete:
+        if isAdmin();
+
+    }
+
+
+    /* =====================================================
+       CONFIG
+       ตั้งค่าระบบ
+       ===================================================== */
+
+    match /config/{configId} {
+
+      allow read:
+        if signedIn();
+
+
+      allow create, update, delete:
+        if isAdmin();
+
+    }
+
+
+    /* =====================================================
+       ACTIVITY LOG
+       ประวัติการใช้งานระบบ
+       ===================================================== */
+
+    match /activityLog/{logId} {
+
+      /*
+        แอดมินอ่านประวัติได้
+      */
+
+      allow read:
+        if isAdmin();
+
+
+      /*
+        ผู้ใช้ที่ล็อกอินแล้ว
+        สามารถสร้าง log ได้
+
+        แต่ไม่สามารถแก้ไขหรือลบย้อนหลัง
+      */
+
+      allow create:
+        if signedIn();
+
+
+      allow update, delete:
+        if false;
+
+    }
+
+
+    /* =====================================================
+       USERS
+       ผู้ใช้งานระบบ
+       ===================================================== */
 
     match /users/{uid} {
-      allow read: if signedIn();
-      allow write: if isAdmin() || request.auth.uid == uid;
+
+      /*
+        ผู้ใช้ที่ล็อกอินแล้ว
+        อ่านข้อมูลผู้ใช้ได้
+      */
+
+      allow read:
+        if signedIn();
+
+
+      /*
+        ผู้ดูแลระบบจัดการผู้ใช้ได้
+      */
+
+      allow create:
+        if isAdmin();
+
+
+      allow update:
+        if isAdmin()
+        || isOwner(uid);
+
+
+      /*
+        ป้องกันสมาชิกทั่วไปลบบัญชี
+      */
+
+      allow delete:
+        if isAdmin();
+
     }
+
+
+    /* =====================================================
+       DEFAULT DENY
+       ===================================================== */
+
+    match /{document=**} {
+
+      allow read, write:
+        if false;
+
+    }
+
   }
+
 }
+```
