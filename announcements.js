@@ -1,134 +1,1172 @@
-import { db, collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot,
-  query, orderBy, serverTimestamp,
-  $, esc, thDate, toast, openModal, confirmDel, guard, needAdmin, startClock,
-  uploadPhoto, removePhoto, logAct } from './common.js';
+```javascript
+/* =========================================================
+   ANNOUNCEMENTS.JS
+   ระบบจัดการประกาศ
+   กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
+   ========================================================= */
 
-const TYPES = {
-  general: { label:'ทั่วไป',    icon:'fa-circle-info',            color:'blue'   },
-  meeting: { label:'ประชุม',    icon:'fa-people-group',           color:'green'  },
-  fee:     { label:'เงินสมทบ',  icon:'fa-hand-holding-dollar',    color:'orange' },
-  urgent:  { label:'ด่วน',      icon:'fa-triangle-exclamation',   color:'red'    }
-};
+import {
+  db,
+  state,
+  guard,
+  needAdmin,
+  $,
+  esc,
+  toast,
+  logAct,
+  startClock,
 
-let items = [];
-guard(() => { startClock(); listen(); });
+  collection,
+  doc,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  onSnapshot,
+  serverTimestamp
+} from './common.js';
 
-function listen() {
-  onSnapshot(query(collection(db,'announcements'), orderBy('date','desc')), s => {
-    items = s.docs.map(d => ({ id:d.id, ...d.data() }));
-    render();
-  });
+
+/* =========================================================
+   DATA
+   ========================================================= */
+
+let announcements = [];
+
+let unsubscribe = null;
+
+
+/* =========================================================
+   DOM
+   ========================================================= */
+
+const list =
+  document.getElementById(
+    'announcementList'
+  );
+
+const btnAdd =
+  document.getElementById(
+    'btnAddAnnouncement'
+  );
+
+const search =
+  document.getElementById(
+    'searchAnnouncement'
+  );
+
+
+/* =========================================================
+   START
+   ========================================================= */
+
+guard(() => {
+
+  startClock();
+
+  listenAnnouncements();
+
+  bindEvents();
+
+});
+
+
+/* =========================================================
+   FIRESTORE
+   ========================================================= */
+
+function listenAnnouncements() {
+
+  unsubscribe?.();
+
+
+  unsubscribe =
+    onSnapshot(
+
+      collection(
+        db,
+        'announcements'
+      ),
+
+      snapshot => {
+
+        announcements =
+          snapshot.docs.map(
+            item => ({
+              id: item.id,
+              ...item.data()
+            })
+          );
+
+
+        announcements.sort(
+          (a, b) =>
+            dateValue(
+              b.createdAt ||
+              b.date
+            ) -
+            dateValue(
+              a.createdAt ||
+              a.date
+            )
+        );
+
+
+        render();
+
+      },
+
+      error => {
+
+        console.error(
+          'Announcements error:',
+          error
+        );
+
+
+        render();
+
+
+        toast(
+          'โหลดประกาศไม่สำเร็จ',
+          'err'
+        );
+
+      }
+
+    );
+
 }
 
-function isNew(a) {
-  if (!a.date) return false;
-  return (Date.now() - new Date(a.date).getTime()) / 86400000 <= 7;
+
+/* =========================================================
+   EVENTS
+   ========================================================= */
+
+function bindEvents() {
+
+  btnAdd?.addEventListener(
+    'click',
+    () => {
+
+      if (!needAdmin()) {
+        return;
+      }
+
+
+      openAnnouncementForm();
+
+    }
+  );
+
+
+  search?.addEventListener(
+    'input',
+    render
+  );
+
 }
+
+
+/* =========================================================
+   RENDER
+   ========================================================= */
 
 function render() {
-  const k = ($('#searchInput').value||'').toLowerCase().trim();
-  const t = $('#filterType').value, p = $('#filterPin').value;
 
-  const list = items.filter(a => {
-    const okK = !k || `${a.title} ${a.detail}`.toLowerCase().includes(k);
-    const okT = t==='all' || (a.type||'general') === t;
-    const okP = p==='all' || a.pinned === true;
-    return okK && okT && okP;
-  }).sort((a,b) => (b.pinned?1:0) - (a.pinned?1:0));
+  if (!list) {
+    return;
+  }
 
-  $('#annList').innerHTML = list.map(a => {
-    const ty = TYPES[a.type || 'general'];
-    return `<article class="ann-card ${a.pinned?'pinned':''}">
-      <div class="ann-icon ${ty.color}"><i class="fa-solid ${ty.icon}"></i></div>
-      <div class="ann-body">
-        <div class="ann-head">
-          <h3>${esc(a.title)}</h3>
-          ${a.pinned ? '<span class="pill pin"><i class="fa-solid fa-thumbtack"></i> ปักหมุด</span>' : ''}
-          ${isNew(a) ? '<span class="tag-new">ใหม่</span>' : ''}
-          <span class="pill ${ty.color}">${ty.label}</span>
-        </div>
-        <p class="ann-detail">${esc(a.detail).replace(/\n/g,'<br>')}</p>
-        ${a.imageURL ? `<img class="ann-img" src="${a.imageURL}" alt="">` : ''}
-        <div class="ann-foot">
-          <span><i class="fa-regular fa-calendar"></i> ${thDate(a.date)}</span>
-          ${a.by ? `<span><i class="fa-regular fa-user"></i> ${esc(a.by)}</span>` : ''}
-        </div>
+
+  const keyword =
+    String(
+      search?.value || ''
+    )
+      .toLowerCase()
+      .trim();
+
+
+  const filtered =
+    announcements.filter(
+      announcement => {
+
+        if (!keyword) {
+          return true;
+        }
+
+
+        const text = [
+
+          announcement.title,
+
+          announcement.message,
+
+          announcement.content,
+
+          announcement.detail,
+
+          announcement.type
+
+        ]
+          .filter(Boolean)
+          .join(' ')
+          .toLowerCase();
+
+
+        return text.includes(
+          keyword
+        );
+
+      }
+    );
+
+
+  if (!filtered.length) {
+
+    list.innerHTML = `
+
+      <div
+        class="empty-state"
+        style="
+          padding:45px 20px;
+          text-align:center;
+          color:#888;
+        "
+      >
+
+        <i
+          class="fa-solid fa-bullhorn"
+          style="
+            font-size:40px;
+            margin-bottom:12px;
+          "
+        ></i>
+
+        <h3>
+          ยังไม่มีประกาศ
+        </h3>
+
+        ${
+          state.isAdmin
+            ? `
+              <p>
+                กด “เพิ่มประกาศ”
+                เพื่อสร้างประกาศใหม่
+              </p>
+            `
+            : ''
+        }
+
       </div>
-      <div class="ann-actions admin-only">
-        <button class="icon-btn" data-pin="${a.id}" title="ปักหมุด">
-          <i class="fa-solid fa-thumbtack" style="color:${a.pinned?'#ef6c00':'#999'}"></i></button>
-        <button class="icon-btn edit" data-edit="${a.id}"><i class="fa-solid fa-pen"></i></button>
-        <button class="icon-btn del"  data-del="${a.id}"><i class="fa-solid fa-trash"></i></button>
-      </div>
-    </article>`;
-  }).join('') || '<p class="empty-box">ยังไม่มีประกาศ</p>';
 
-  $('#countText').textContent = `แสดง ${list.length} รายการ`;
+    `;
+
+
+    return;
+
+  }
+
+
+  list.innerHTML =
+    filtered
+      .map(
+        announcement =>
+          announcementCard(
+            announcement
+          )
+      )
+      .join('');
+
 }
 
-/* ---------- FORM ---------- */
-const form = (a={}) => `
-  <div class="form-group"><label>หัวข้อประกาศ *</label>
-    <input id="aTitle" value="${esc(a.title)}" placeholder="เช่น ประชุมสมาชิกประจำเดือน"></div>
-  <div class="form-group"><label>รายละเอียด</label>
-    <textarea id="aDetail" rows="4">${esc(a.detail)}</textarea></div>
-  <div class="form-group"><label>ประเภท</label>
-    <select id="aType">${Object.entries(TYPES).map(([k,v]) =>
-      `<option value="${k}" ${(a.type||'general')===k?'selected':''}>${v.label}</option>`).join('')}
-    </select></div>
-  <div class="form-group"><label>วันที่ประกาศ *</label>
-    <input id="aDate" type="date" value="${a.date || new Date().toISOString().slice(0,10)}"></div>
-  <div class="form-group">
-    <label><input type="checkbox" id="aPin" ${a.pinned?'checked':''}> ปักหมุดไว้ด้านบน</label></div>
-  <div class="form-group"><label>รูปประกอบ (ถ้ามี)</label>
-    <input id="aImg" type="file" accept="image/*">
-    ${a.imageURL ? `<img class="img-preview" src="${a.imageURL}">` : ''}</div>`;
 
-async function save(id, old={}) {
-  const title = $('#aTitle').value.trim();
-  const date  = $('#aDate').value;
-  if (!title || !date) throw new Error('กรุณากรอกหัวข้อและวันที่');
+/* =========================================================
+   ANNOUNCEMENT CARD
+   ========================================================= */
+
+function announcementCard(
+  announcement
+) {
+
+  const title =
+    announcement.title ||
+    announcement.name ||
+    'ประกาศ';
+
+
+  const message =
+    announcement.message ||
+    announcement.content ||
+    announcement.detail ||
+    '';
+
+
+  const type =
+    announcement.type ||
+    'ทั่วไป';
+
+
+  const date =
+    formatDate(
+      announcement.createdAt ||
+      announcement.date
+    );
+
+
+  return `
+
+    <article
+      class="announcement-card"
+      data-id="${esc(
+        announcement.id
+      )}"
+    >
+
+      <div
+        class="announcement-icon"
+      >
+
+        <i
+          class="fa-solid fa-bullhorn"
+        ></i>
+
+      </div>
+
+
+      <div
+        class="announcement-content"
+      >
+
+        <div
+          style="
+            display:flex;
+            gap:8px;
+            align-items:center;
+            flex-wrap:wrap;
+          "
+        >
+
+          <h3>
+            ${esc(title)}
+          </h3>
+
+
+          <span
+            class="announcement-type"
+          >
+            ${esc(type)}
+          </span>
+
+        </div>
+
+
+        <p>
+          ${esc(message)}
+        </p>
+
+
+        <div
+          class="announcement-meta"
+        >
+
+          <span>
+
+            <i
+              class="fa-regular fa-calendar"
+            ></i>
+
+            ${esc(date)}
+
+          </span>
+
+
+          ${
+            announcement.createdBy
+              ? `
+                <span>
+
+                  <i
+                    class="fa-solid fa-user"
+                  ></i>
+
+                  ${esc(
+                    announcement.createdBy
+                  )}
+
+                </span>
+              `
+              : ''
+          }
+
+        </div>
+
+      </div>
+
+
+      ${
+        state.isAdmin
+          ? `
+
+            <div
+              class="announcement-actions"
+            >
+
+              <button
+                type="button"
+                class="btn-edit-announcement"
+                data-id="${esc(
+                  announcement.id
+                )}"
+                title="แก้ไข"
+              >
+
+                <i
+                  class="fa-solid fa-pen"
+                ></i>
+
+              </button>
+
+
+              <button
+                type="button"
+                class="btn-delete-announcement"
+                data-id="${esc(
+                  announcement.id
+                )}"
+                title="ลบ"
+              >
+
+                <i
+                  class="fa-solid fa-trash"
+                ></i>
+
+              </button>
+
+            </div>
+
+          `
+          : ''
+      }
+
+    </article>
+
+  `;
+
+}
+
+
+/* =========================================================
+   CARD EVENTS
+   ========================================================= */
+
+list?.addEventListener(
+  'click',
+  event => {
+
+    const edit =
+      event.target.closest(
+        '.btn-edit-announcement'
+      );
+
+
+    if (edit) {
+
+      if (!needAdmin()) {
+        return;
+      }
+
+
+      const item =
+        announcements.find(
+          announcement =>
+            announcement.id ===
+            edit.dataset.id
+        );
+
+
+      if (item) {
+
+        openAnnouncementForm(
+          item
+        );
+
+      }
+
+
+      return;
+
+    }
+
+
+    const remove =
+      event.target.closest(
+        '.btn-delete-announcement'
+      );
+
+
+    if (remove) {
+
+      if (!needAdmin()) {
+        return;
+      }
+
+
+      const item =
+        announcements.find(
+          announcement =>
+            announcement.id ===
+            remove.dataset.id
+        );
+
+
+      if (item) {
+
+        deleteAnnouncement(
+          item
+        );
+
+      }
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+function openAnnouncementForm(
+  announcement = {}
+) {
+
+  const editing =
+    Boolean(
+      announcement.id
+    );
+
+
+  const html = `
+
+    <div class="form-group">
+
+      <label>
+        หัวข้อประกาศ *
+      </label>
+
+      <input
+        id="announcementTitle"
+        type="text"
+        maxlength="200"
+        value="${esc(
+          announcement.title ||
+          ''
+        )}"
+        placeholder="เช่น ประชุมประจำเดือน"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>
+        ประเภทประกาศ
+      </label>
+
+      <select
+        id="announcementType"
+      >
+
+        <option
+          value="ทั่วไป"
+          ${
+            (
+              announcement.type ||
+              'ทั่วไป'
+            ) === 'ทั่วไป'
+              ? 'selected'
+              : ''
+          }
+        >
+          ทั่วไป
+        </option>
+
+
+        <option
+          value="สำคัญ"
+          ${
+            announcement.type === 'สำคัญ'
+              ? 'selected'
+              : ''
+          }
+        >
+          สำคัญ
+        </option>
+
+
+        <option
+          value="ประชุม"
+          ${
+            announcement.type === 'ประชุม'
+              ? 'selected'
+              : ''
+          }
+        >
+          ประชุม
+        </option>
+
+
+        <option
+          value="กิจกรรม"
+          ${
+            announcement.type === 'กิจกรรม'
+              ? 'selected'
+              : ''
+          }
+        >
+          กิจกรรม
+        </option>
+
+
+        <option
+          value="แจ้งเตือน"
+          ${
+            announcement.type === 'แจ้งเตือน'
+              ? 'selected'
+              : ''
+          }
+        >
+          แจ้งเตือน
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>
+        รายละเอียด *
+      </label>
+
+      <textarea
+        id="announcementMessage"
+        rows="6"
+        maxlength="5000"
+        placeholder="รายละเอียดประกาศ"
+      >${esc(
+        announcement.message ||
+        announcement.content ||
+        ''
+      )}</textarea>
+
+    </div>
+
+  `;
+
+
+  /*
+    ใช้ openModal จาก common.js
+    ถ้ามีใน common
+  */
+
+  if (
+    typeof window.openModal ===
+    'function'
+  ) {
+
+    window.openModal(
+
+      editing
+        ? 'แก้ไขประกาศ'
+        : 'เพิ่มประกาศ',
+
+      html,
+
+      async () => {
+
+        await saveAnnouncement(
+          announcement.id ||
+          null
+        );
+
+      },
+
+      editing
+        ? 'บันทึกการแก้ไข'
+        : 'เพิ่มประกาศ'
+
+    );
+
+
+    return;
+
+  }
+
+
+  /*
+    Fallback
+    กรณี common.js ไม่ได้ผูก openModal
+  */
+
+  const title =
+    editing
+      ? 'แก้ไขประกาศ'
+      : 'เพิ่มประกาศ';
+
+
+  const modal =
+    document.createElement(
+      'div'
+    );
+
+
+  modal.className =
+    'modal-overlay';
+
+
+  modal.innerHTML = `
+
+    <div class="modal-box">
+
+      <div class="modal-header">
+
+        <h3>
+          ${title}
+        </h3>
+
+        <button
+          type="button"
+          class="modal-close"
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <div class="modal-body">
+
+        ${html}
+
+      </div>
+
+
+      <div class="modal-footer">
+
+        <button
+          type="button"
+          class="btn-cancel"
+        >
+          ยกเลิก
+        </button>
+
+
+        <button
+          type="button"
+          class="btn-save"
+        >
+          ${
+            editing
+              ? 'บันทึกการแก้ไข'
+              : 'เพิ่มประกาศ'
+          }
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  document.body.appendChild(
+    modal
+  );
+
+
+  modal
+    .querySelector(
+      '.modal-close'
+    )
+    ?.addEventListener(
+      'click',
+      () => modal.remove()
+    );
+
+
+  modal
+    .querySelector(
+      '.btn-cancel'
+    )
+    ?.addEventListener(
+      'click',
+      () => modal.remove()
+    );
+
+
+  modal
+    .querySelector(
+      '.btn-save'
+    )
+    ?.addEventListener(
+      'click',
+      async () => {
+
+        try {
+
+          await saveAnnouncement(
+            announcement.id ||
+            null
+          );
+
+
+          modal.remove();
+
+        } catch (error) {
+
+          console.error(
+            error
+          );
+
+        }
+
+      }
+    );
+
+}
+
+
+/* =========================================================
+   SAVE
+   ========================================================= */
+
+async function saveAnnouncement(
+  id
+) {
+
+  if (!needAdmin()) {
+
+    throw new Error(
+      'ไม่มีสิทธิ์จัดการประกาศ'
+    );
+
+  }
+
+
+  const title =
+    document
+      .getElementById(
+        'announcementTitle'
+      )
+      ?.value
+      .trim();
+
+
+  const type =
+    document
+      .getElementById(
+        'announcementType'
+      )
+      ?.value ||
+    'ทั่วไป';
+
+
+  const message =
+    document
+      .getElementById(
+        'announcementMessage'
+      )
+      ?.value
+      .trim();
+
+
+  if (!title) {
+
+    throw new Error(
+      'กรุณากรอกหัวข้อประกาศ'
+    );
+
+  }
+
+
+  if (!message) {
+
+    throw new Error(
+      'กรุณากรอกรายละเอียดประกาศ'
+    );
+
+  }
+
+
   const data = {
-    title, detail: $('#aDetail').value.trim(), type: $('#aType').value,
-    date, pinned: $('#aPin').checked, updatedAt: serverTimestamp()
+
+    title,
+
+    message,
+
+    /*
+      เก็บ content ด้วย
+      เพื่อรองรับโค้ดเก่าของระบบ
+    */
+
+    content:
+      message,
+
+    type,
+
+    updatedAt:
+      serverTimestamp(),
+
+    updatedBy:
+      state.user?.email ||
+      '-',
+
+    updatedByUid:
+      state.user?.uid ||
+      null
+
   };
-  const file = $('#aImg').files[0];
-  if (file) {
-    const up = await uploadPhoto(file, 'announcements');
-    data.imageURL = up.url; data.imagePath = up.path;
-    await removePhoto(old.imagePath);
+
+
+  if (id) {
+
+    await updateDoc(
+
+      doc(
+        db,
+        'announcements',
+        id
+      ),
+
+      data
+
+    );
+
+
+    await logAct(
+
+      'แก้ไขประกาศ',
+
+      title
+
+    );
+
+
+    toast(
+      'แก้ไขประกาศสำเร็จ',
+      'ok'
+    );
+
+  } else {
+
+    await addDoc(
+
+      collection(
+        db,
+        'announcements'
+      ),
+
+      {
+
+        ...data,
+
+        createdAt:
+          serverTimestamp(),
+
+        createdBy:
+          state.user?.email ||
+          '-',
+
+        createdByUid:
+          state.user?.uid ||
+          null
+
+      }
+
+    );
+
+
+    await logAct(
+
+      'เพิ่มประกาศ',
+
+      title
+
+    );
+
+
+    toast(
+      'เพิ่มประกาศสำเร็จ',
+      'ok'
+    );
+
   }
-  if (id) { await updateDoc(doc(db,'announcements',id), data); logAct('แก้ไขประกาศ', title); }
-  else {
-    await addDoc(collection(db,'announcements'),
-      { ...data, by: (await import('./common.js')).state.profile?.name || '', createdAt: serverTimestamp() });
-    logAct('เพิ่มประกาศ', title);
-  }
-  toast('บันทึกประกาศเรียบร้อย');
+
 }
 
-/* ---------- EVENTS ---------- */
-$('#searchInput').oninput = render;
-$('#filterType').onchange = render;
-$('#filterPin').onchange  = render;
-$('#btnNew').onclick = () => needAdmin() && openModal('เพิ่มประกาศใหม่', form(), () => save(null));
 
-document.addEventListener('click', async e => {
-  const b = e.target.closest('[data-edit],[data-del],[data-pin]'); if (!b) return;
-  if (!needAdmin()) return;
-  if (b.dataset.pin) {
-    const a = items.find(x=>x.id===b.dataset.pin);
-    await updateDoc(doc(db,'announcements',a.id), { pinned: !a.pinned });
-    toast(a.pinned ? 'ยกเลิกปักหมุดแล้ว' : 'ปักหมุดแล้ว');
-  } else if (b.dataset.edit) {
-    const a = items.find(x=>x.id===b.dataset.edit);
-    openModal('แก้ไขประกาศ', form(a), () => save(a.id, a));
-  } else {
-    const a = items.find(x=>x.id===b.dataset.del);
-    confirmDel(`ลบประกาศ <strong>${esc(a.title)}</strong>?`, async () => {
-      await deleteDoc(doc(db,'announcements',a.id));
-      await removePhoto(a.imagePath);
-      logAct('ลบประกาศ', a.title);
-    });
+/* =========================================================
+   DELETE
+   ========================================================= */
+
+async function deleteAnnouncement(
+  announcement
+) {
+
+  const title =
+    announcement.title ||
+    'ประกาศนี้';
+
+
+  const confirmed =
+    window.confirm(
+      `ต้องการลบ "${title}" หรือไม่?\n\nการลบจะไม่สามารถกู้คืนได้`
+    );
+
+
+  if (!confirmed) {
+    return;
   }
-});
+
+
+  try {
+
+    await deleteDoc(
+
+      doc(
+        db,
+        'announcements',
+        announcement.id
+      )
+
+    );
+
+
+    await logAct(
+
+      'ลบประกาศ',
+
+      title
+
+    );
+
+
+    toast(
+      'ลบประกาศสำเร็จ',
+      'ok'
+    );
+
+  } catch (error) {
+
+    console.error(
+      'Delete announcement:',
+      error
+    );
+
+
+    toast(
+      error?.message ||
+      'ลบประกาศไม่สำเร็จ',
+      'err'
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   DATE
+   ========================================================= */
+
+function dateValue(
+  value
+) {
+
+  if (!value) {
+    return 0;
+  }
+
+
+  if (
+    typeof value === 'object' &&
+    typeof value.toDate === 'function'
+  ) {
+
+    return value
+      .toDate()
+      .getTime();
+
+  }
+
+
+  const time =
+    new Date(value).getTime();
+
+
+  return Number.isNaN(time)
+    ? 0
+    : time;
+
+}
+
+
+function formatDate(
+  value
+) {
+
+  if (!value) {
+    return '-';
+  }
+
+
+  const date =
+    value &&
+    typeof value.toDate ===
+      'function'
+
+      ? value.toDate()
+
+      : new Date(value);
+
+
+  if (
+    Number.isNaN(
+      date.getTime()
+    )
+  ) {
+
+    return '-';
+
+  }
+
+
+  return date.toLocaleDateString(
+    'th-TH',
+    {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
+    }
+  );
+
+}
+
+
+/* =========================================================
+   CLEANUP
+   ========================================================= */
+
+window.addEventListener(
+  'beforeunload',
+  () => {
+
+    unsubscribe?.();
+
+  }
+);
+```
