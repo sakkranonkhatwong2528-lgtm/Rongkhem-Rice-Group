@@ -1,42 +1,25 @@
-* { margin:0; padding:0; box-sizing:border-box; font-family:'Kanit', sans-serif; }
-body { background:linear-gradient(135deg,#e6f4ea 0%,#f0f4f0 100%); min-height:100vh; }
-
-.login-wrapper { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; }
-.login-card {
-  background:#fff; border-radius:24px; padding:44px 38px; width:100%; max-width:400px;
-  box-shadow:0 20px 60px rgba(45,106,79,.15); animation:cardIn .5s ease;
-}
-@keyframes cardIn { from{opacity:0; transform:translateY(20px)} to{opacity:1; transform:translateY(0)} }
-
-.login-logo { text-align:center; margin-bottom:30px; }
-.login-logo .logo-icon {
-  width:64px; height:64px; border-radius:18px; background:linear-gradient(135deg,#2d6a4f,#40916c);
-  color:#fff; display:flex; align-items:center; justify-content:center; font-size:28px; margin:0 auto 14px;
-}
-.login-logo h2 { color:#1f2937; font-size:20px; margin-bottom:2px; }
-.login-logo p { color:#9ca3af; font-size:13px; }
-
-.login-form { display:flex; flex-direction:column; gap:16px; }
-.input-group { position:relative; display:flex; align-items:center; }
-.input-group i:first-child { position:absolute; left:16px; color:#9ca3af; font-size:14px; }
-.input-group input {
-  width:100%; padding:14px 16px 14px 42px; border:1.5px solid #e5e7eb; border-radius:12px;
-  font-family:inherit; font-size:14px; outline:none; transition:.2s;
-}
-.input-group input:focus { border-color:#2d6a4f; box-shadow:0 0 0 3px rgba(45,106,79,.1); }
-.toggle-pass { position:absolute; right:14px; background:none; border:none; color:#9ca3af; cursor:pointer; }
-
-.login-error {
-  background:#fde2e2; color:#dc2626; padding:10px 14px; border-radius:10px; font-size:12.5px;
-  display:flex; align-items:center; gap:8px;
-}
-
-.btn-login {
-  background:linear-gradient(135deg,#2d6a4f,#40916c); color:#fff; border:none; padding:14px; border-radius:12px;
-  font-family:inherit; font-size:15px; font-weight:600; cursor:pointer; transition:.2s;
-  display:flex; align-items:center; justify-content:center; gap:8px;
-}
-.btn-login:hover { transform:translateY(-2px); box-shadow:0 10px 24px rgba(45,106,79,.3); }
-.btn-login:disabled { opacity:.7; cursor:not-allowed; transform:none; }
-
-.login-footer { text-align:center; font-size:12px; color:#9ca3af; margin-top:22px; line-height:1.6; }
+.login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#2e7d32,#66bb6a);font-family:'Kanit',sans-serif;padding:20px}
+.login-card{background:#fff;border-radius:22px;padding:36px 30px;width:100%;max-width:400px;
+  box-shadow:0 20px 50px rgba(0,0,0,.25);text-align:center}
+.login-logo{width:70px;height:70px;margin:0 auto 14px;border-radius:20px;
+  background:linear-gradient(135deg,#2e7d32,#81c784);color:#fff;font-size:30px;
+  display:flex;align-items:center;justify-content:center}
+.login-card h1{margin:0;font-size:24px;color:#2e7d32}
+.login-sub{margin:4px 0 22px;font-size:13px;color:#888}
+.login-card .form-group{text-align:left;margin-bottom:14px}
+.login-card label{display:block;font-size:14px;margin-bottom:6px;font-weight:500}
+.login-card input[type=email],.login-card input[type=password],.login-card input[type=text]{
+  width:100%;padding:12px 14px;border:1px solid #ddd;border-radius:12px;
+  font-family:'Kanit',sans-serif;font-size:15px}
+.pw-wrap{position:relative}
+.pw-wrap button{position:absolute;right:8px;top:50%;transform:translateY(-50%);
+  border:0;background:none;color:#888;cursor:pointer;font-size:16px;padding:6px}
+.remember{display:flex;align-items:center;gap:8px;font-size:14px;color:#666;margin-bottom:14px}
+.remember input{width:16px;height:16px}
+.login-error{color:#c62828;font-size:14px;min-height:20px;margin-bottom:8px}
+.btn-login{width:100%;padding:13px;border:0;border-radius:12px;background:#2e7d32;color:#fff;
+  font-family:'Kanit',sans-serif;font-size:16px;font-weight:500;cursor:pointer}
+.btn-login:disabled{opacity:.7;cursor:not-allowed}
+.btn-forgot{width:100%;margin-top:10px;border:0;background:none;color:#2e7d32;
+  font-family:'Kanit',sans-serif;font-size:14px;cursor:pointer}
