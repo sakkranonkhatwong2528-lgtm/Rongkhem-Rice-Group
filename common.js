@@ -1,196 +1,296 @@
 ```javascript
 /* =========================================================
    COMMON.JS
-   ระบบกลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
-   Firebase + Auth + Firestore + Storage
+   ศูนย์กลางระบบ กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
+   Firebase / Auth / Firestore / UI
    ========================================================= */
 
-import { db, storage, auth } from './firebase-config.js';
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 
 import {
-  collection,
-  doc,
-  getDoc,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  onSnapshot,
-  query,
-  orderBy,
-  where,
-  getDocs,
-  writeBatch,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-import {
-  ref,
-  uploadBytes,
-  getDownloadURL,
-  deleteObject
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
-
-import {
+  getAuth,
   onAuthStateChanged,
   signOut
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-
-/* =========================================================
-   EXPORT FIREBASE
-   ========================================================= */
-
-export {
-  db,
-  storage,
-  auth,
-
+import {
+  getFirestore,
   collection,
   doc,
-  getDoc,
   addDoc,
   updateDoc,
   deleteDoc,
+  getDoc,
+  getDocs,
   onSnapshot,
   query,
   orderBy,
   where,
-  getDocs,
-  writeBatch,
-  serverTimestamp,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+import {
+  getStorage,
   ref,
   uploadBytes,
-  getDownloadURL,
-  deleteObject,
+  getDownloadURL
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
-  signOut
+
+/* =========================================================
+   FIREBASE CONFIG
+   ========================================================= */
+
+const firebaseConfig = {
+
+  apiKey:
+    "AIzaSyCme8E32QPySbSetpZP9_yAyiHpSGmlxlc",
+
+  authDomain:
+    "rongkhem-rice-group.firebaseapp.com",
+
+  projectId:
+    "rongkhem-rice-group",
+
+  storageBucket:
+    "rongkhem-rice-group.firebasestorage.app",
+
+  messagingSenderId:
+    "114954787725",
+
+  appId:
+    "1:114954787725:web:d18bb54ac53bc00db17bc4",
+
+  measurementId:
+    "G-70Z00XXB8Y"
+
 };
 
 
 /* =========================================================
-   DOM HELPERS
+   INITIALIZE
    ========================================================= */
 
-/* เลือก element ตัวแรก */
-export const $ = (selector, parent = document) => {
-  return parent.querySelector(selector);
+const app =
+  initializeApp(
+    firebaseConfig
+  );
+
+
+const auth =
+  getAuth(app);
+
+
+const db =
+  getFirestore(app);
+
+
+const storage =
+  getStorage(app);
+
+
+/* =========================================================
+   GLOBAL STATE
+   ========================================================= */
+
+const state = {
+
+  user:
+    null,
+
+  profile:
+    null,
+
+  isAdmin:
+    false,
+
+  ready:
+    false,
+
+  loading:
+    true
+
 };
 
 
-/* เลือกหลาย element */
-export const $$ = (selector, parent = document) => {
-  return [...parent.querySelectorAll(selector)];
-};
+/* =========================================================
+   AUTH READY
+   ========================================================= */
+
+let resolveAuthReady;
+
+const authReady =
+  new Promise(
+    resolve => {
+
+      resolveAuthReady =
+        resolve;
+
+    }
+  );
 
 
 /* =========================================================
-   SECURITY / HTML ESCAPE
+   AUTH LISTENER
    ========================================================= */
 
-export function esc(value) {
-  return String(value ?? '').replace(/[&<>"']/g, char => {
-    const map = {
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#039;'
-    };
+onAuthStateChanged(
+  auth,
+  async user => {
 
-    return map[char];
-  });
-}
+    state.user =
+      user || null;
 
 
-/* =========================================================
-   NUMBER
-   ========================================================= */
-
-export function num(value) {
-  const n = Number(value);
-
-  return Number.isFinite(n) ? n : 0;
-}
+    state.profile =
+      null;
 
 
-export function formatNumber(value) {
-  return num(value).toLocaleString('th-TH');
-}
+    state.isAdmin =
+      false;
 
 
-/* =========================================================
-   THAI DATE
-   ========================================================= */
+    if (!user) {
 
-export function thDate(value) {
+      state.ready =
+        true;
 
-  if (!value) return '-';
+      state.loading =
+        false;
 
-  try {
+      resolveAuthReady(
+        null
+      );
 
-    let date;
+      return;
 
-    if (
-      typeof value === 'object' &&
-      value !== null &&
-      typeof value.toDate === 'function'
-    ) {
-      date = value.toDate();
-    } else {
-      date = new Date(value);
     }
 
-    if (Number.isNaN(date.getTime())) {
-      return '-';
+
+    /*
+      โหลดข้อมูลผู้ใช้จาก Firestore
+    */
+
+    try {
+
+      const userRef =
+        doc(
+          db,
+          "users",
+          user.uid
+        );
+
+
+      const snap =
+        await getDoc(
+          userRef
+        );
+
+
+      if (
+        snap.exists()
+      ) {
+
+        state.profile =
+          {
+            id:
+              snap.id,
+
+            ...snap.data()
+          };
+
+
+        state.isAdmin =
+          state.profile.role ===
+            "admin" &&
+
+          state.profile.active !==
+            false;
+
+      }
+
+    } catch (error) {
+
+      console.error(
+        "โหลดข้อมูลผู้ใช้ไม่สำเร็จ:",
+        error
+      );
+
     }
 
-    return date.toLocaleDateString('th-TH', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric'
-    });
 
-  } catch {
-    return '-';
+    state.ready =
+      true;
+
+    state.loading =
+      false;
+
+
+    resolveAuthReady(
+      user
+    );
+
+
+    /*
+      แจ้งหน้าเว็บว่าระบบ Auth พร้อม
+    */
+
+    window.dispatchEvent(
+      new CustomEvent(
+        "rk-auth-ready",
+        {
+          detail:
+            state
+        }
+      )
+    );
+
   }
-}
+);
 
 
 /* =========================================================
-   THAI DATE TIME
+   BASIC HELPERS
    ========================================================= */
 
-export function thDateTime(value) {
+function $(id) {
 
-  if (!value) return '-';
+  return document.getElementById(
+    id
+  );
 
-  try {
+}
 
-    let date;
 
-    if (
-      typeof value === 'object' &&
-      value !== null &&
-      typeof value.toDate === 'function'
-    ) {
-      date = value.toDate();
-    } else {
-      date = new Date(value);
-    }
+function esc(value) {
 
-    if (Number.isNaN(date.getTime())) {
-      return '-';
-    }
+  return String(
+    value ?? ""
+  )
+    .replace(
+      /[&<>"']/g,
+      char => ({
 
-    return date.toLocaleString('th-TH', {
-      dateStyle: 'medium',
-      timeStyle: 'short'
-    });
+        "&":
+          "&amp;",
 
-  } catch {
-    return '-';
-  }
+        "<":
+          "&lt;",
+
+        ">":
+          "&gt;",
+
+        '"':
+          "&quot;",
+
+        "'":
+          "&#039;"
+
+      }[char])
+    );
+
 }
 
 
@@ -198,424 +298,485 @@ export function thDateTime(value) {
    TOAST
    ========================================================= */
 
-export function toast(message, type = 'ok') {
-
-  let container = $('#toastContainer');
-
-  if (!container) {
-
-    container = document.createElement('div');
-
-    container.id = 'toastContainer';
-
-    container.className = 'toast-container';
-
-    document.body.appendChild(container);
-  }
-
-  const item = document.createElement('div');
-
-  item.className = `toast ${type}`;
-
-  item.textContent = message;
-
-  container.appendChild(item);
-
-  setTimeout(() => {
-
-    item.style.opacity = '0';
-    item.style.transform = 'translateY(10px)';
-
-    setTimeout(() => item.remove(), 250);
-
-  }, 3000);
-}
-
-
-/* =========================================================
-   ERROR MESSAGE
-   ========================================================= */
-
-export function firebaseErrorMessage(error) {
-
-  const code = error?.code || '';
-
-  const messages = {
-
-    'permission-denied':
-      'ไม่มีสิทธิ์ดำเนินการ กรุณาตรวจสอบสิทธิ์ผู้ดูแลระบบ',
-
-    'unauthenticated':
-      'กรุณาเข้าสู่ระบบก่อนดำเนินการ',
-
-    'not-found':
-      'ไม่พบข้อมูลที่ต้องการ',
-
-    'already-exists':
-      'มีข้อมูลนี้อยู่แล้ว',
-
-    'failed-precondition':
-      'ไม่สามารถดำเนินการได้ เนื่องจากข้อมูลยังไม่พร้อม',
-
-    'network-request-failed':
-      'ไม่สามารถเชื่อมต่ออินเทอร์เน็ตได้',
-
-    'storage/unauthorized':
-      'ไม่มีสิทธิ์อัปโหลดไฟล์',
-
-    'storage/canceled':
-      'ยกเลิกการอัปโหลด',
-
-    'storage/quota-exceeded':
-      'พื้นที่จัดเก็บไฟล์เต็ม',
-
-    'storage/unknown':
-      'เกิดข้อผิดพลาดในการจัดเก็บไฟล์',
-
-    'auth/network-request-failed':
-      'ไม่สามารถเชื่อมต่ออินเทอร์เน็ตได้'
-
-  };
-
-  return messages[code] ||
-    error?.message ||
-    'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง';
-}
-
-
-/* =========================================================
-   MODAL
-   ========================================================= */
-
-let saveHandler = null;
-
-
-export function ensureModal() {
-
-  if ($('#modalBackdrop')) return;
-
-
-  document.body.insertAdjacentHTML('beforeend', `
-
-    <div class="modal-backdrop" id="modalBackdrop">
-
-      <div class="modal-box">
-
-        <div class="modal-head">
-
-          <h3 id="modalTitle"></h3>
-
-          <button
-            type="button"
-            class="modal-close"
-            id="modalClose"
-            aria-label="ปิด">
-            &times;
-          </button>
-
-        </div>
-
-        <div
-          class="modal-body"
-          id="modalBody">
-        </div>
-
-        <div class="modal-foot">
-
-          <button
-            type="button"
-            class="btn-cancel"
-            id="modalCancel">
-            ยกเลิก
-          </button>
-
-          <button
-            type="button"
-            class="btn-save"
-            id="modalSave">
-            บันทึก
-          </button>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  `);
-
-
-  $('#modalClose').addEventListener(
-    'click',
-    closeModal
-  );
-
-
-  $('#modalCancel').addEventListener(
-    'click',
-    closeModal
-  );
-
-
-  $('#modalBackdrop').addEventListener(
-    'click',
-    event => {
-
-      if (event.target.id === 'modalBackdrop') {
-        closeModal();
-      }
-
-    }
-  );
-
-
-  $('#modalSave').addEventListener(
-    'click',
-    async () => {
-
-      if (!saveHandler) return;
-
-      const button = $('#modalSave');
-
-      const oldText = button.textContent;
-
-      button.disabled = true;
-
-      button.textContent = 'กำลังบันทึก...';
-
-
-      try {
-
-        await saveHandler();
-
-        closeModal();
-
-      } catch (error) {
-
-        console.error(error);
-
-        toast(
-          firebaseErrorMessage(error),
-          'err'
-        );
-
-      } finally {
-
-        button.disabled = false;
-
-        button.textContent = oldText;
-
-      }
-
-    }
-  );
-
-}
-
-
-export function openModal(
-  title,
-  html,
-  onSave = null,
-  saveText = 'บันทึก'
+function toast(
+  message,
+  type = "info"
 ) {
 
-  ensureModal();
-
-  $('#modalTitle').textContent = title;
-
-  $('#modalBody').innerHTML = html;
-
-  $('#modalSave').textContent = saveText;
-
-  $('#modalSave').style.display =
-    typeof onSave === 'function'
-      ? ''
-      : 'none';
-
-  saveHandler = onSave;
-
-  $('#modalBackdrop').classList.add('show');
-
-}
+  let element =
+    document.getElementById(
+      "toast"
+    );
 
 
-export function closeModal() {
+  if (!element) {
 
-  const modal = $('#modalBackdrop');
+    element =
+      document.createElement(
+        "div"
+      );
 
-  if (modal) {
-    modal.classList.remove('show');
+    element.id =
+      "toast";
+
+    element.className =
+      "toast";
+
+    document.body.appendChild(
+      element
+    );
+
   }
 
-  saveHandler = null;
+
+  element.textContent =
+    message;
+
+
+  element.classList.remove(
+    "show",
+    "success",
+    "error",
+    "warning",
+    "info",
+    "ok",
+    "err"
+  );
+
+
+  if (
+    type === "ok" ||
+    type === "success"
+  ) {
+
+    element.classList.add(
+      "success"
+    );
+
+  } else if (
+    type === "err" ||
+    type === "error"
+  ) {
+
+    element.classList.add(
+      "error"
+    );
+
+  } else if (
+    type === "warning"
+  ) {
+
+    element.classList.add(
+      "warning"
+    );
+
+  } else {
+
+    element.classList.add(
+      "info"
+    );
+
+  }
+
+
+  requestAnimationFrame(
+    () => {
+
+      element.classList.add(
+        "show"
+      );
+
+    }
+  );
+
+
+  clearTimeout(
+    element._toastTimer
+  );
+
+
+  element._toastTimer =
+    setTimeout(
+      () => {
+
+        element.classList.remove(
+          "show"
+        );
+
+      },
+      3500
+    );
 
 }
 
 
 /* =========================================================
-   CONFIRM DELETE
+   AUTH GUARD
    ========================================================= */
 
-export function confirmDel(
-  text,
+async function guard(
   callback
 ) {
 
-  openModal(
+  await authReady;
 
-    'ยืนยันการลบ',
 
-    `
-      <div class="confirm-delete">
+  if (
+    !state.user
+  ) {
 
-        <p>
-          ${esc(text)}
-        </p>
+    const current =
+      location.pathname
+        .split("/")
+        .pop();
 
-        <p style="
-          margin-top:10px;
-          color:#b42318;
-          font-weight:600;
-        ">
-          ⚠️ การลบข้อมูลไม่สามารถย้อนกลับได้
-        </p>
 
-      </div>
-    `,
+    /*
+      login.html ไม่ต้อง redirect ซ้ำ
+    */
 
-    async () => {
+    if (
+      current !==
+      "login.html"
+    ) {
 
-      await callback();
+      location.href =
+        "login.html";
 
-      toast(
-        'ลบข้อมูลเรียบร้อยแล้ว',
-        'ok'
-      );
+    }
 
-    },
 
-    'ยืนยันการลบ'
+    return;
 
+  }
+
+
+  try {
+
+    await callback(
+      state
+    );
+
+  } catch (error) {
+
+    console.error(
+      "Page error:",
+      error
+    );
+
+
+    toast(
+      error?.message ||
+      "เกิดข้อผิดพลาด",
+      "err"
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   ADMIN GUARD
+   ========================================================= */
+
+function needAdmin() {
+
+  if (
+    !state.user
+  ) {
+
+    toast(
+      "กรุณาเข้าสู่ระบบก่อน",
+      "warning"
+    );
+
+
+    setTimeout(
+      () => {
+
+        location.href =
+          "login.html";
+
+      },
+      700
+    );
+
+
+    return false;
+
+  }
+
+
+  if (
+    !state.isAdmin
+  ) {
+
+    toast(
+      "คุณไม่มีสิทธิ์ผู้ดูแลระบบ",
+      "err"
+    );
+
+
+    return false;
+
+  }
+
+
+  return true;
+
+}
+
+
+/* =========================================================
+   LOG ACTIVITY
+   ========================================================= */
+
+async function logAct(
+  action,
+  detail = ""
+) {
+
+  if (
+    !state.user
+  ) {
+
+    return;
+
+  }
+
+
+  try {
+
+    await addDoc(
+
+      collection(
+        db,
+        "activityLog"
+      ),
+
+      {
+
+        action:
+          action,
+
+        detail:
+          detail,
+
+        uid:
+          state.user.uid,
+
+        email:
+          state.user.email ||
+          "",
+
+        userName:
+          state.profile?.name ||
+          state.user.displayName ||
+          state.user.email ||
+          "",
+
+        createdAt:
+          serverTimestamp()
+
+      }
+
+    );
+
+  } catch (error) {
+
+    /*
+      Log ห้ามทำให้คำสั่งหลักล้ม
+    */
+
+    console.warn(
+      "บันทึก Activity Log ไม่สำเร็จ:",
+      error
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   CLOCK
+   ========================================================= */
+
+function startClock() {
+
+  const update =
+    () => {
+
+      const now =
+        new Date();
+
+
+      const time =
+        now.toLocaleTimeString(
+          "th-TH",
+          {
+            hour:
+              "2-digit",
+
+            minute:
+              "2-digit",
+
+            second:
+              "2-digit"
+          }
+        );
+
+
+      const date =
+        now.toLocaleDateString(
+          "th-TH",
+          {
+            weekday:
+              "long",
+
+            day:
+              "numeric",
+
+            month:
+              "long",
+
+            year:
+              "numeric"
+          }
+        );
+
+
+      document
+        .querySelectorAll(
+          "[data-clock]"
+        )
+        .forEach(
+          element => {
+
+            element.textContent =
+              time;
+
+          }
+        );
+
+
+      document
+        .querySelectorAll(
+          "[data-date]"
+        )
+        .forEach(
+          element => {
+
+            element.textContent =
+              date;
+
+          }
+        );
+
+
+      const clock =
+        document.getElementById(
+          "clock"
+        );
+
+
+      if (clock) {
+
+        clock.textContent =
+          time;
+
+      }
+
+
+      const dateElement =
+        document.getElementById(
+          "currentDate"
+        );
+
+
+      if (dateElement) {
+
+        dateElement.textContent =
+          date;
+
+      }
+
+    };
+
+
+  update();
+
+
+  return setInterval(
+    update,
+    1000
   );
 
 }
 
 
 /* =========================================================
-   IMAGE COMPRESS
+   THAI DATE
    ========================================================= */
 
-export function compress(
-  file,
-  max = 1000,
-  quality = 0.78
+function thDate(
+  value
 ) {
 
-  return new Promise(
-    (resolve, reject) => {
+  if (!value) {
 
-      if (!file) {
-        reject(new Error('ไม่พบไฟล์'));
-        return;
-      }
+    return "-";
+
+  }
 
 
-      const image = new Image();
-
-      image.onload = () => {
-
-        try {
-
-          const scale = Math.min(
-            1,
-            max /
-              Math.max(
-                image.width,
-                image.height
-              )
-          );
+  let date;
 
 
-          const canvas =
-            document.createElement('canvas');
+  if (
+    typeof value ===
+      "object" &&
+
+    typeof value.toDate ===
+      "function"
+  ) {
+
+    date =
+      value.toDate();
+
+  } else {
+
+    date =
+      new Date(
+        value
+      );
+
+  }
 
 
-          canvas.width =
-            Math.round(image.width * scale);
+  if (
+    Number.isNaN(
+      date.getTime()
+    )
+  ) {
 
-          canvas.height =
-            Math.round(image.height * scale);
+    return "-";
 
-
-          const context =
-            canvas.getContext('2d');
-
-
-          context.drawImage(
-            image,
-            0,
-            0,
-            canvas.width,
-            canvas.height
-          );
+  }
 
 
-          canvas.toBlob(
-            blob => {
+  return date.toLocaleDateString(
+    "th-TH",
+    {
+      day:
+        "numeric",
 
-              URL.revokeObjectURL(
-                image.src
-              );
+      month:
+        "short",
 
-              if (!blob) {
-                reject(
-                  new Error(
-                    'ไม่สามารถบีบอัดรูปภาพได้'
-                  )
-                );
-
-                return;
-              }
-
-              resolve(blob);
-
-            },
-            'image/jpeg',
-            quality
-          );
-
-        } catch (error) {
-
-          URL.revokeObjectURL(
-            image.src
-          );
-
-          reject(error);
-
-        }
-
-      };
-
-
-      image.onerror = () => {
-
-        URL.revokeObjectURL(
-          image.src
-        );
-
-        reject(
-          new Error(
-            'ไม่สามารถอ่านรูปภาพได้'
-          )
-        );
-
-      };
-
-
-      image.src =
-        URL.createObjectURL(file);
-
+      year:
+        "numeric"
     }
   );
 
@@ -623,45 +784,136 @@ export function compress(
 
 
 /* =========================================================
-   UPLOAD PHOTO
+   THAI DATE TIME
    ========================================================= */
 
-export async function uploadPhoto(
-  file,
-  folder = 'uploads'
+function thDateTime(
+  value
 ) {
 
-  if (!file) {
-    throw new Error(
-      'กรุณาเลือกรูปภาพ'
-    );
+  if (!value) {
+
+    return "-";
+
   }
 
 
-  const blob =
-    await compress(file);
+  let date;
 
 
-  const filename =
-    `${Date.now()}_${Math.random()
-      .toString(36)
-      .slice(2)}.jpg`;
+  if (
+    typeof value ===
+      "object" &&
+
+    typeof value.toDate ===
+      "function"
+  ) {
+
+    date =
+      value.toDate();
+
+  } else {
+
+    date =
+      new Date(
+        value
+      );
+
+  }
 
 
-  const path =
-    `${folder}/${filename}`;
+  if (
+    Number.isNaN(
+      date.getTime()
+    )
+  ) {
+
+    return "-";
+
+  }
+
+
+  return date.toLocaleString(
+    "th-TH",
+    {
+      dateStyle:
+        "medium",
+
+      timeStyle:
+        "short"
+    }
+  );
+
+}
+
+
+/* =========================================================
+   FIREBASE IMAGE UPLOAD
+   ========================================================= */
+
+async function uploadPhoto(
+  file,
+  folder = "uploads"
+) {
+
+  if (!file) {
+
+    return null;
+
+  }
+
+
+  if (
+    !file.type.startsWith(
+      "image/"
+    )
+  ) {
+
+    throw new Error(
+      "ไฟล์ที่เลือกต้องเป็นรูปภาพ"
+    );
+
+  }
+
+
+  /*
+    จำกัดขนาด 8 MB
+  */
+
+  if (
+    file.size >
+    8 * 1024 * 1024
+  ) {
+
+    throw new Error(
+      "รูปภาพต้องมีขนาดไม่เกิน 8 MB"
+    );
+
+  }
+
+
+  const safeName =
+    file.name
+      .replace(
+        /[^a-zA-Z0-9ก-๙._-]/g,
+        "_"
+      );
+
+
+  const fileName =
+    `${Date.now()}_${safeName}`;
 
 
   const storageRef =
-    ref(storage, path);
+    ref(
+      storage,
+      `${folder}/${fileName}`
+    );
 
 
   await uploadBytes(
     storageRef,
-    blob,
-    {
-      contentType: 'image/jpeg'
-    }
+    file
   );
 
 
@@ -672,364 +924,149 @@ export async function uploadPhoto(
 
 
   return {
+
     url,
-    path
+
+    path:
+      `${folder}/${fileName}`
+
   };
 
 }
 
 
 /* =========================================================
-   DELETE PHOTO
+   COLLECTION HELPERS
    ========================================================= */
 
-export async function removePhoto(path) {
-
-  if (!path) return;
-
-  try {
-
-    await deleteObject(
-      ref(storage, path)
-    );
-
-  } catch (error) {
-
-    /*
-      ถ้ารูปถูกลบไปแล้ว
-      ไม่ให้ระบบหลักพัง
-    */
-
-    console.warn(
-      'ลบรูปไม่สำเร็จ:',
-      error
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   ACTIVITY LOG
-   ========================================================= */
-
-export async function logAct(
-  action,
-  detail
+async function loadCollection(
+  collectionName
 ) {
 
-  try {
+  await authReady;
 
-    await addDoc(
+
+  const snapshot =
+    await getDocs(
       collection(
         db,
-        'activityLog'
-      ),
-      {
-
-        action:
-          String(action || ''),
-
-        detail:
-          String(detail || ''),
-
-        by:
-          auth.currentUser?.email || '-',
-
-        uid:
-          auth.currentUser?.uid || null,
-
-        at:
-          serverTimestamp()
-
-      }
+        collectionName
+      )
     );
 
-  } catch (error) {
 
-    /*
-      Log ล้มเหลวไม่ควรทำให้
-      การบันทึกข้อมูลหลักล้มเหลว
-    */
+  return snapshot.docs.map(
+    item => ({
 
-    console.warn(
-      'Activity log error:',
-      error
-    );
+      id:
+        item.id,
 
-  }
+      firestoreId:
+        item.id,
 
-}
+      ...item.data()
 
-
-/* =========================================================
-   AUTH STATE
-   ========================================================= */
-
-export const state = {
-
-  user: null,
-
-  profile: null,
-
-  isAdmin: false,
-
-  ready: false
-
-};
-
-
-/* =========================================================
-   AUTH GUARD
-   ========================================================= */
-
-export function guard(
-  onReady
-) {
-
-  let handled = false;
-
-
-  return onAuthStateChanged(
-    auth,
-    async user => {
-
-      if (!user) {
-
-        if (!handled) {
-
-          handled = true;
-
-          location.replace(
-            'login.html'
-          );
-
-        }
-
-        return;
-
-      }
-
-
-      try {
-
-        state.user = user;
-
-
-        const userRef =
-          doc(
-            db,
-            'users',
-            user.uid
-          );
-
-
-        const snapshot =
-          await getDoc(userRef);
-
-
-        if (snapshot.exists()) {
-
-          state.profile =
-            snapshot.data();
-
-        } else {
-
-          state.profile = {
-
-            role: 'member',
-
-            name:
-              user.displayName ||
-              user.email ||
-              'สมาชิก',
-
-            email:
-              user.email || '',
-
-            active: true
-
-          };
-
-        }
-
-
-        /* บัญชีถูกปิด */
-        if (
-          state.profile.active === false
-        ) {
-
-          await signOut(auth);
-
-          location.replace(
-            'login.html'
-          );
-
-          return;
-
-        }
-
-
-        state.isAdmin =
-          state.profile.role === 'admin';
-
-
-        state.ready = true;
-
-
-        paintUser();
-
-
-        if (!state.isAdmin) {
-
-          document.body.classList.add(
-            'is-member'
-          );
-
-        }
-
-
-        if (
-          typeof onReady === 'function'
-        ) {
-
-          await onReady(state);
-
-        }
-
-      } catch (error) {
-
-        console.error(
-          'Auth guard error:',
-          error
-        );
-
-        toast(
-          'ไม่สามารถตรวจสอบสิทธิ์ได้',
-          'err'
-        );
-
-      }
-
-    }
+    })
   );
 
 }
 
 
 /* =========================================================
-   PAINT USER
+   SAVE
    ========================================================= */
 
-export function paintUser() {
+async function saveCollection(
+  collectionName,
+  data
+) {
 
-  const userInfo =
-    $('.user-info');
-
-
-  if (userInfo) {
-
-    const position =
-      state.profile?.position ||
-      (
-        state.isAdmin
-          ? 'ผู้ดูแลระบบ'
-          : 'สมาชิกกลุ่มข้าวสาร'
-      );
+  await authReady;
 
 
-    const name =
-      state.profile?.name ||
-      state.user?.displayName ||
-      state.user?.email ||
-      'ผู้ใช้งาน';
-
-
-    userInfo.innerHTML = `
-
-      <strong>
-        ${esc(position)}
-      </strong>
-
-      <span>
-        ${esc(name)}
-      </span>
-
-      <span class="badge-role">
-        ${
-          state.isAdmin
-            ? 'ผู้ดูแลระบบ'
-            : 'สมาชิก'
-        }
-      </span>
-
-    `;
-
-  }
-
-
-  const logoutButton =
-    $('.btn-logout');
-
-
-  if (
-    logoutButton &&
-    !logoutButton.dataset.bound
-  ) {
-
-    logoutButton.dataset.bound = '1';
-
-
-    logoutButton.addEventListener(
-      'click',
-      async () => {
-
-        try {
-
-          logoutButton.disabled = true;
-
-          await signOut(auth);
-
-          location.replace(
-            'login.html'
-          );
-
-        } catch (error) {
-
-          logoutButton.disabled = false;
-
-          toast(
-            'ออกจากระบบไม่สำเร็จ',
-            'err'
-          );
-
-        }
-
-      }
+  const cleaned =
+    cleanData(
+      data
     );
 
-  }
+
+  const reference =
+    await addDoc(
+
+      collection(
+        db,
+        collectionName
+      ),
+
+      {
+
+        ...cleaned,
+
+        createdAt:
+          cleaned.createdAt ||
+          serverTimestamp()
+
+      }
+
+    );
+
+
+  return reference.id;
 
 }
 
 
 /* =========================================================
-   ADMIN CHECK
+   UPDATE
    ========================================================= */
 
-export function needAdmin() {
+async function updateCollection(
+  collectionName,
+  id,
+  data
+) {
 
-  if (!state.isAdmin) {
+  await authReady;
 
-    toast(
-      'เฉพาะผู้ดูแลระบบเท่านั้น',
-      'err'
+
+  if (!id) {
+
+    throw new Error(
+      "ไม่พบ Document ID"
     );
 
-    return false;
-
   }
+
+
+  const cleaned =
+    cleanData(
+      data
+    );
+
+
+  delete cleaned.id;
+  delete cleaned.firestoreId;
+
+
+  await updateDoc(
+
+    doc(
+      db,
+      collectionName,
+      id
+    ),
+
+    {
+
+      ...cleaned,
+
+      updatedAt:
+        serverTimestamp()
+
+    }
+
+  );
+
 
   return true;
 
@@ -1037,330 +1074,286 @@ export function needAdmin() {
 
 
 /* =========================================================
-   CLOCK
+   DELETE
    ========================================================= */
 
-export function startClock() {
+async function deleteCollection(
+  collectionName,
+  id
+) {
 
-  const tick = () => {
-
-    const now =
-      new Date();
-
-
-    const clock =
-      $('#liveClock');
+  await authReady;
 
 
-    if (clock) {
+  if (!id) {
 
-      clock.textContent =
-        now.toLocaleTimeString(
-          'th-TH',
-          {
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
-          }
-        );
-
-    }
-
-
-    const date =
-      $('#liveDate');
-
-
-    if (date) {
-
-      date.textContent =
-        now.toLocaleDateString(
-          'th-TH',
-          {
-            weekday: 'long',
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric'
-          }
-        );
-
-    }
-
-  };
-
-
-  tick();
-
-
-  if (!window.__rongkhemClockStarted) {
-
-    window.__rongkhemClockStarted = true;
-
-    setInterval(
-      tick,
-      1000
+    throw new Error(
+      "ไม่พบ Document ID"
     );
 
   }
 
 
-  const bell =
-    $('#bellIcon');
+  await deleteDoc(
+
+    doc(
+      db,
+      collectionName,
+      id
+    )
+
+  );
 
 
-  if (
-    bell &&
-    !bell.dataset.bound
-  ) {
-
-    bell.dataset.bound = '1';
-
-
-    bell.addEventListener(
-      'click',
-      event => {
-
-        event.stopPropagation();
-
-        $('#notifDropdown')
-          ?.classList
-          .toggle('show');
-
-      }
-    );
-
-
-    document.addEventListener(
-      'click',
-      () => {
-
-        $('#notifDropdown')
-          ?.classList
-          .remove('show');
-
-      }
-    );
-
-  }
+  return true;
 
 }
 
 
 /* =========================================================
-   CSV EXPORT
+   CLEAN DATA
    ========================================================= */
 
-function csvCell(value) {
-
-  return `"${String(
-    value ?? ''
-  )
-    .replace(/"/g, '""')}"`;
-
-}
-
-
-export function downloadCSV(
-  filename,
-  rows
+function cleanData(
+  data
 ) {
 
-  const csv =
-    '\uFEFF' +
-    rows
-      .map(row =>
-        row
-          .map(csvCell)
-          .join(',')
-      )
-      .join('\r\n');
+  return Object.fromEntries(
 
+    Object.entries(
+      data || {}
+    ).filter(
+      ([, value]) =>
+        value !==
+        undefined
+    )
 
-  const blob =
-    new Blob(
-      [csv],
-      {
-        type:
-          'text/csv;charset=utf-8'
-      }
-    );
-
-
-  const url =
-    URL.createObjectURL(blob);
-
-
-  const link =
-    document.createElement('a');
-
-
-  link.href = url;
-
-  link.download =
-    filename;
-
-
-  document.body.appendChild(link);
-
-  link.click();
-
-  link.remove();
-
-
-  setTimeout(
-    () => URL.revokeObjectURL(url),
-    1000
   );
 
 }
 
 
 /* =========================================================
-   CSV PARSER
+   REALTIME
    ========================================================= */
 
-export function parseCSV(text) {
+function subscribeData(
+  collectionName,
+  callback
+) {
 
-  const rows = [];
-
-  let row = [];
-
-  let cell = '';
-
-  let insideQuotes = false;
+  let unsubscribe =
+    () => {};
 
 
-  for (
-    let i = 0;
-    i < text.length;
-    i++
-  ) {
+  authReady
+    .then(
+      () => {
 
-    const char =
-      text[i];
+        unsubscribe =
+          onSnapshot(
 
-    const next =
-      text[i + 1];
+            collection(
+              db,
+              collectionName
+            ),
+
+            snapshot => {
+
+              const list =
+                snapshot.docs.map(
+                  item => ({
+
+                    id:
+                      item.id,
+
+                    firestoreId:
+                      item.id,
+
+                    ...item.data()
+
+                  })
+                );
 
 
-    if (char === '"') {
+              callback(
+                list
+              );
 
-      if (
-        insideQuotes &&
-        next === '"'
-      ) {
+            },
 
-        cell += '"';
+            error => {
 
-        i++;
+              console.error(
+                `Realtime ${collectionName}:`,
+                error
+              );
 
-      } else {
+            }
 
-        insideQuotes =
-          !insideQuotes;
+          );
 
       }
+    )
+    .catch(
+      console.error
+    );
 
-    } else if (
-      char === ',' &&
-      !insideQuotes
-    ) {
 
-      row.push(cell);
+  return () => {
 
-      cell = '';
+    unsubscribe();
 
-    } else if (
-      (
-        char === '\n' ||
-        char === '\r'
-      ) &&
-      !insideQuotes
-    ) {
+  };
 
-      if (
-        char === '\r' &&
-        next === '\n'
-      ) {
-        i++;
-      }
+}
 
-      row.push(cell);
 
-      rows.push(row);
+/* =========================================================
+   LOGOUT
+   ========================================================= */
 
-      row = [];
+async function logout() {
 
-      cell = '';
+  try {
 
-    } else {
+    await signOut(
+      auth
+    );
 
-      cell += char;
+
+    location.href =
+      "login.html";
+
+  } catch (error) {
+
+    console.error(
+      error
+    );
+
+
+    toast(
+      "ออกจากระบบไม่สำเร็จ",
+      "err"
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   GLOBAL LOGOUT BUTTONS
+   ========================================================= */
+
+document.addEventListener(
+  "click",
+  event => {
+
+    const button =
+      event.target.closest(
+        "[data-logout]"
+      );
+
+
+    if (button) {
+
+      logout();
 
     }
 
   }
-
-
-  if (
-    cell !== '' ||
-    row.length
-  ) {
-
-    row.push(cell);
-
-    rows.push(row);
-
-  }
-
-
-  return rows;
-
-}
+);
 
 
 /* =========================================================
-   FIREBASE TIMESTAMP → DATE
+   EXPORT
    ========================================================= */
 
-export function toDate(value) {
+export {
 
-  if (!value) return null;
+  app,
 
+  auth,
 
-  if (
-    typeof value === 'object' &&
-    typeof value.toDate === 'function'
-  ) {
+  db,
 
-    return value.toDate();
+  storage,
 
-  }
+  state,
 
+  authReady,
 
-  const date =
-    new Date(value);
+  $,
 
+  esc,
 
-  return Number.isNaN(
-    date.getTime()
-  )
-    ? null
-    : date;
+  toast,
 
-}
+  guard,
+
+  needAdmin,
+
+  logAct,
+
+  startClock,
+
+  thDate,
+
+  thDateTime,
+
+  uploadPhoto,
+
+  loadCollection,
+
+  saveCollection,
+
+  updateCollection,
+
+  deleteCollection,
+
+  subscribeData,
+
+  logout,
+
+  collection,
+
+  doc,
+
+  addDoc,
+
+  updateDoc,
+
+  deleteDoc,
+
+  getDoc,
+
+  getDocs,
+
+  onSnapshot,
+
+  query,
+
+  orderBy,
+
+  where,
+
+  serverTimestamp,
+
+  ref,
+
+  uploadBytes,
+
+  getDownloadURL
+
+};
 
 
 /* =========================================================
-   INITIALIZE COMMON FEATURES
+   READY
    ========================================================= */
 
-document.addEventListener(
-  'DOMContentLoaded',
-  () => {
-
-    startClock();
-
-  }
+console.log(
+  "🌾 Rongkhem Rice Group Common Ready"
 );
 ```
