@@ -1,20 +1,9 @@
 // firebase-config.js
-// Firebase Configuration for GitHub Pages Deployment
-// Last updated: September 1, 2026
+// ใช้งานกับ GitHub Pages ได้ทันที
 
-// ======================================================
-// IMPORTANT: For GitHub Pages to work correctly,
-// we must use classic script loading instead of ES6 modules
-// ======================================================
-
-// ======================================================
-// FIREBASE CONFIGURATION
-// WARNING: Replace with your actual Firebase project credentials
-// Get these from: Firebase Console > Project Settings > General > Your apps
-// ======================================================
-
+// ค่าคอนฟิก Firebase จริงจากโครงการของคุณ
 const firebaseConfig = {
-  apiKey: "AIzaSyC_9K6OnkCwGkF9UuCJ4N2i2qN8dXtYvBg", // <-- REPLACE WITH YOUR REAL API KEY
+  apiKey: "*************************_*************",  // อย่าเปลี่ยน API Key
   authDomain: "rongkhem-rice-group.firebaseapp.com",
   projectId: "rongkhem-rice-group",
   storageBucket: "rongkhem-rice-group.firebasestorage.app",
@@ -23,93 +12,77 @@ const firebaseConfig = {
   measurementId: "G-70Z00XXB8Y"
 };
 
-// ======================================================
-// INITIALIZE FIREBASE
-// ======================================================
-
-// Initialize Firebase only if it hasn't been initialized
+// ตรวจสอบว่า Firebase SDK โหลดแล้วหรือยัง
 let app, auth, db, storage;
 
-try {
-  // Check if Firebase is already loaded
-  if (typeof firebase === 'undefined') {
-    console.error("Firebase SDK not loaded! Make sure firebase-app.js is loaded first.");
-  } else {
-    // Initialize Firebase App
+if (typeof firebase === 'undefined') {
+  console.error("❌ ERROR: Firebase SDK ยังไม่ได้โหลด!");
+  console.error("ตรวจสอบว่าไฟล์ firebase-app.js โหลดก่อนไฟล์นี้");
+} else {
+  try {
+    // เริ่มต้นใช้งาน Firebase
     app = firebase.initializeApp(firebaseConfig);
-    console.log("Firebase initialized successfully!");
     
-    // Initialize Authentication
+    // เริ่มระบบ Authentication
     auth = firebase.auth();
     
-    // Initialize Firestore Database
+    // เริ่มระบบฐานข้อมูล Firestore
     db = firebase.firestore();
     
-    // Initialize Cloud Storage
+    // เริ่มระบบเก็บไฟล์ Storage
     storage = firebase.storage();
     
-    // Optional: Enable Firestore persistence (works offline)
-    db.enablePersistence()
-      .catch((err) => {
-        console.warn("Firestore persistence not enabled:", err.code);
-      });
-      
-    // Optional: Set Firestore settings for better performance
-    db.settings({
-      cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED
-    });
-  }
-} catch (error) {
-  console.error("Firebase initialization error:", error);
-  
-  // Check specific errors
-  if (error.code === 'app/duplicate-app') {
-    console.warn("Firebase app already initialized, using existing app.");
-    app = firebase.app();
-    auth = firebase.auth();
-    db = firebase.firestore();
-    storage = firebase.storage();
+    console.log("✅ Firebase เริ่มทำงานเรียบร้อยแล้ว");
+    
+  } catch (error) {
+    console.error("🔥 Firebase เริ่มทำงานผิดพลาด:", error.message);
+    
+    // ถ้า Firebase เริ่มต้นแล้ว ให้ใช้ตัวเดิม
+    if (error.code === 'app/duplicate-app') {
+      app = firebase.app();
+      auth = firebase.auth();
+      db = firebase.firestore();
+      storage = firebase.storage();
+      console.log("ℹ️ ใช้ Firebase ที่เริ่มต้นไว้แล้ว");
+    }
   }
 }
 
-// ======================================================
-// FIREBASE UTILITY FUNCTIONS
-// ======================================================
+// ทำให้ตัวแปรใช้งานได้ทั่วทั้งหน้าเว็บ
+window.firebaseApp = app;
+window.firebaseAuth = auth;
+window.firebaseDb = db;
+window.firebaseStorage = storage;
+window.auth = auth;
+window.db = db;
+window.storage = storage;
 
-/**
- * Check if user is logged in
- * @returns {boolean} True if user is authenticated
- */
-function isUserLoggedIn() {
+// ฟังก์ชันตรวจสอบการล็อกอิน
+window.isUserLoggedIn = function() {
   return auth && auth.currentUser !== null;
-}
+};
 
-/**
- * Get current user ID
- * @returns {string|null} User ID or null if not logged in
- */
-function getCurrentUserId() {
+// ฟังก์ชันดึงข้อมูลผู้ใช้ปัจจุบัน
+window.getCurrentUser = function() {
+  return auth && auth.currentUser;
+};
+
+// ฟังก์ชันดึง UID
+window.getCurrentUserId = function() {
   return auth && auth.currentUser ? auth.currentUser.uid : null;
-}
+};
 
-/**
- * Get current user email
- * @returns {string|null} User email or null if not logged in
- */
-function getCurrentUserEmail() {
+// ฟังก์ชันดึงอีเมล
+window.getCurrentUserEmail = function() {
   return auth && auth.currentUser ? auth.currentUser.email : null;
-}
+};
 
-/**
- * Check if user is admin
- * Note: You need to implement your own admin check logic
- * This is just a template - modify based on your user database
- */
-async function isUserAdmin() {
-  if (!isUserLoggedIn()) return false;
+// ฟังก์ชันเช็คสถานะแอดมิน (ต้องสร้างระบบ Role ของคุณเอง)
+window.isUserAdmin = async function() {
+  if (!window.isUserLoggedIn()) return false;
   
   try {
-    const userId = getCurrentUserId();
+    const userId = window.getCurrentUserId();
     const userDoc = await db.collection('users').doc(userId).get();
     
     if (userDoc.exists) {
@@ -118,135 +91,35 @@ async function isUserAdmin() {
     }
     return false;
   } catch (error) {
-    console.error("Error checking admin status:", error);
+    console.error("Error checking admin:", error);
     return false;
   }
-}
+};
 
-// ======================================================
-// ERROR HANDLING
-// ======================================================
+// ฟังก์ชันล็อกเอ้า
+window.logoutUser = async function() {
+  try {
+    await auth.signOut();
+    console.log("✅ ออกจากระบบสำเร็จ");
+    return true;
+  } catch (error) {
+    console.error("❌ ออกจากระบบผิดพลาด:", error);
+    return false;
+  }
+};
 
-// Listen for auth state changes
-if (auth) {
-  auth.onAuthStateChanged((user) => {
-    if (user) {
-      console.log("User logged in:", user.email);
-      
-      // You can add additional actions here when user logs in
-      // Example: Update UI, redirect, etc.
-    } else {
-      console.log("User logged out");
-      
-      // You can add additional actions here when user logs out
-      // Example: Redirect to login page
+// แสดงสถานะ Firebase ใน Console (ตอนพัฒนา)
+if (window.location.hostname.includes('localhost')) {
+  setTimeout(() => {
+    console.group("🔥 Firebase Status");
+    console.log("App:", !!app ? "✅ ใช้งานได้" : "❌ ไม่พบ");
+    console.log("Auth:", !!auth ? "✅ ใช้งานได้" : "❌ ไม่พบ");
+    console.log("Firestore:", !!db ? "✅ ใช้งานได้" : "❌ ไม่พบ");
+    console.log("Storage:", !!storage ? "✅ ใช้งานได้" : "❌ ไม่พบ");
+    console.log("User:", window.isUserLoggedIn() ? "✅ ล็อกอินแล้ว" : "❌ ยังไม่ได้ล็อกอิน");
+    if (window.isUserLoggedIn()) {
+      console.log("Email:", window.getCurrentUserEmail());
     }
-  }, (error) => {
-    console.error("Auth state change error:", error);
-  });
-}
-
-// ======================================================
-// MAKE VARIABLES AVAILABLE GLOBALLY
-// WARNING: Be careful with global variables in production
-// ======================================================
-
-// For GitHub Pages compatibility, we need global variables
-window.firebaseApp = app;
-window.firebaseAuth = auth;
-window.firebaseDb = db;
-window.firebaseStorage = storage;
-
-// Convenience variables (shorter names)
-window.auth = auth;
-window.db = db;
-window.storage = storage;
-
-// Utility functions
-window.isUserLoggedIn = isUserLoggedIn;
-window.getCurrentUserId = getCurrentUserId;
-window.getCurrentUserEmail = getCurrentUserEmail;
-window.isUserAdmin = isUserAdmin;
-
-// ======================================================
-// DEBUG HELPER
-// ======================================================
-
-/**
- * Display Firebase status in console
- */
-function showFirebaseStatus() {
-  console.group("🔥 Firebase Status");
-  console.log("App initialized:", !!app);
-  console.log("Auth available:", !!auth);
-  console.log("Firestore available:", !!db);
-  console.log("Storage available:", !!storage);
-  console.log("User logged in:", isUserLoggedIn());
-  if (isUserLoggedIn()) {
-    console.log("User email:", getCurrentUserEmail());
-  }
-  console.groupEnd();
-}
-
-// Show status when page loads (in development)
-if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-  window.addEventListener('load', () => {
-    setTimeout(showFirebaseStatus, 1000);
-  });
-}
-
-// ======================================================
-// INITIALIZATION CHECK
-// ======================================================
-
-// Check if Firebase initialized properly after 2 seconds
-setTimeout(() => {
-  if (!app) {
-    console.error("❌ Firebase failed to initialize!");
-    console.error("Possible reasons:");
-    console.error("1. Firebase SDK not loaded before this file");
-    console.error("2. Invalid Firebase configuration");
-    console.error("3. Network issues loading Firebase SDK");
-    
-    // You might want to show a user-friendly message
-    if (typeof document !== 'undefined') {
-      const errorDiv = document.createElement('div');
-      errorDiv.style.cssText = `
-        position: fixed;
-        top: 10px;
-        right: 10px;
-        background: #ff6b6b;
-        color: white;
-        padding: 10px;
-        border-radius: 5px;
-        z-index: 9999;
-      `;
-      errorDiv.textContent = "⚠️ ระบบฐานข้อมูลไม่สามารถเชื่อมต่อได้ กรุณารีเฟรชหน้าเว็บ";
-      document.body.appendChild(errorDiv);
-    }
-  }
-}, 2000);
-
-// ======================================================
-// EXPORT FOR MODULE USERS (Optional)
-// Only works if loaded as module - not for GitHub Pages
-// ======================================================
-
-try {
-  // Try to export for ES6 modules (won't work in GitHub Pages)
-  if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {
-      app,
-      auth,
-      db,
-      storage,
-      isUserLoggedIn,
-      getCurrentUserId,
-      getCurrentUserEmail,
-      isUserAdmin,
-      firebaseConfig
-    };
-  }
-} catch (e) {
-  // Ignore module export errors for GitHub Pages
+    console.groupEnd();
+  }, 1000);
 }
