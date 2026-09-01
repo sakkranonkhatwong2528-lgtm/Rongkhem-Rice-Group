@@ -1,10 +1,8 @@
 ```javascript
 /* =========================================================
    CURRENT-FUNERAL.JS
-   งานศพปัจจุบัน / กำลังดำเนินการ
+   งานศพปัจจุบัน / จัดการงานศพ
    กลุ่มข้าวสาร บ้านร่องเข็ม หมู่ที่ 6
-
-   ใช้ Firebase Firestore จริง
    ========================================================= */
 
 import {
@@ -12,15 +10,11 @@ import {
   state,
   guard,
   needAdmin,
-  toast,
+  $,
   esc,
+  toast,
   thDate,
-  downloadCSV,
   logAct,
-  uploadPhoto,
-  removePhoto,
-  openModal,
-  confirmDel,
   startClock,
 
   collection,
@@ -29,30 +23,23 @@ import {
   updateDoc,
   deleteDoc,
   onSnapshot,
-  query,
-  orderBy,
-  writeBatch,
   serverTimestamp
 } from './common.js';
 
 
 /* =========================================================
-   DATA
+   STATE
    ========================================================= */
-
-let members = [];
 
 let funerals = [];
 
+let members = [];
+
 let records = [];
 
-let currentFuneral = null;
-
-let unsubMembers = null;
-
-let unsubFunerals = null;
-
-let unsubRecords = null;
+let unsubscribeFunerals = null;
+let unsubscribeMembers = null;
+let unsubscribeRecords = null;
 
 
 /* =========================================================
@@ -60,120 +47,78 @@ let unsubRecords = null;
    ========================================================= */
 
 const funeralBody =
-  document.getElementById('funeralBody');
+  document.getElementById(
+    'funeralBody'
+  );
 
 const funeralStats =
-  document.getElementById('funeralStats');
+  document.getElementById(
+    'funeralStats'
+  );
 
 const pendingGrid =
-  document.getElementById('pendingGrid');
-
-const pendingCard =
-  document.getElementById('pendingCard');
+  document.getElementById(
+    'pendingGrid'
+  );
 
 const btnNew =
-  document.getElementById('btnNew');
+  document.getElementById(
+    'btnNew'
+  );
 
 
 /* =========================================================
    START
    ========================================================= */
 
-guard(async () => {
+guard(() => {
 
   startClock();
 
-  listenMembers();
+  loadFunerals();
 
-  listenFunerals();
+  loadMembers();
 
-  listenRiceRecords();
+  loadRecords();
+
+  bindEvents();
 
 });
 
 
 /* =========================================================
-   MEMBERS
+   EVENTS
    ========================================================= */
 
-function listenMembers() {
+function bindEvents() {
 
-  if (unsubMembers) {
-    unsubMembers();
-  }
+  btnNew?.addEventListener(
+    'click',
+    () => {
 
-
-  /*
-    ไม่ใช้ orderBy เพื่อป้องกัน
-    ข้อมูลเก่าที่ไม่มี houseNo
-    ทำให้ query ล้มเหลว
-  */
-
-  unsubMembers =
-    onSnapshot(
-
-      collection(
-        db,
-        'members'
-      ),
-
-      snapshot => {
-
-        members =
-          snapshot.docs
-            .map(
-              d => ({
-                id: d.id,
-                ...d.data()
-              })
-            )
-            .filter(
-              member =>
-                member.active !== false &&
-                member.status !== 'inactive'
-            );
-
-
-        sortMembers();
-
-        chooseCurrentFuneral();
-
-        render();
-
-      },
-
-      error => {
-
-        console.error(
-          'Members error:',
-          error
-        );
-
-
-        toast(
-          'โหลดข้อมูลสมาชิกไม่สำเร็จ',
-          'err'
-        );
-
+      if (!needAdmin()) {
+        return;
       }
 
-    );
+
+      openFuneralForm();
+
+    }
+  );
 
 }
 
 
 /* =========================================================
-   FUNERALS
+   LOAD FUNERALS
    ========================================================= */
 
-function listenFunerals() {
+function loadFunerals() {
 
-  if (unsubFunerals) {
-    unsubFunerals();
-  }
+  unsubscribeFunerals?.();
 
 
-  unsubFunerals =
+  unsubscribeFunerals =
     onSnapshot(
 
       collection(
@@ -185,9 +130,9 @@ function listenFunerals() {
 
         funerals =
           snapshot.docs.map(
-            d => ({
-              id: d.id,
-              ...d.data()
+            item => ({
+              id: item.id,
+              ...item.data()
             })
           );
 
@@ -203,8 +148,6 @@ function listenFunerals() {
         );
 
 
-        chooseCurrentFuneral();
-
         render();
 
       },
@@ -212,13 +155,12 @@ function listenFunerals() {
       error => {
 
         console.error(
-          'Funerals error:',
           error
         );
 
 
         toast(
-          'โหลดข้อมูลงานศพไม่สำเร็จ',
+          'ไม่สามารถโหลดข้อมูลงานศพได้',
           'err'
         );
 
@@ -230,17 +172,72 @@ function listenFunerals() {
 
 
 /* =========================================================
-   RICE RECORDS
+   LOAD MEMBERS
    ========================================================= */
 
-function listenRiceRecords() {
+function loadMembers() {
 
-  if (unsubRecords) {
-    unsubRecords();
-  }
+  unsubscribeMembers?.();
 
 
-  unsubRecords =
+  unsubscribeMembers =
+    onSnapshot(
+
+      collection(
+        db,
+        'members'
+      ),
+
+      snapshot => {
+
+        members =
+          snapshot.docs
+
+            .map(
+              item => ({
+                id: item.id,
+                ...item.data()
+              })
+            )
+
+            .filter(
+              member =>
+                member.active !== false
+            );
+
+
+        render();
+
+      },
+
+      error => {
+
+        console.error(
+          error
+        );
+
+        toast(
+          'ไม่สามารถโหลดสมาชิกได้',
+          'err'
+        );
+
+      }
+
+    );
+
+}
+
+
+/* =========================================================
+   LOAD RICE RECORDS
+   ========================================================= */
+
+function loadRecords() {
+
+  unsubscribeRecords?.();
+
+
+  unsubscribeRecords =
     onSnapshot(
 
       collection(
@@ -252,9 +249,9 @@ function listenRiceRecords() {
 
         records =
           snapshot.docs.map(
-            d => ({
-              id: d.id,
-              ...d.data()
+            item => ({
+              id: item.id,
+              ...item.data()
             })
           );
 
@@ -266,13 +263,11 @@ function listenRiceRecords() {
       error => {
 
         console.error(
-          'Rice records error:',
           error
         );
 
-
         toast(
-          'โหลดข้อมูลการรับข้าวไม่สำเร็จ',
+          'ไม่สามารถโหลดข้อมูลรับข้าวได้',
           'err'
         );
 
@@ -284,107 +279,39 @@ function listenRiceRecords() {
 
 
 /* =========================================================
-   SORT MEMBERS
+   CURRENT FUNERAL
    ========================================================= */
 
-function sortMembers() {
+function getCurrentFuneral() {
 
-  members.sort(
-    (a, b) => {
+  return (
 
-      const ah =
-        String(
-          a.houseNo ??
-          a.house ??
-          ''
-        );
+    funerals.find(
+      funeral =>
+        funeral.status ===
+        'active'
+    )
 
+    ||
 
-      const bh =
-        String(
-          b.houseNo ??
-          b.house ??
-          ''
-        );
+    funerals[0]
 
+    ||
 
-      const compare =
-        ah.localeCompare(
-          bh,
-          'th',
-          {
-            numeric: true
-          }
-        );
+    null
 
-
-      if (compare !== 0) {
-        return compare;
-      }
-
-
-      return String(
-        a.name || ''
-      ).localeCompare(
-        String(
-          b.name || ''
-        ),
-        'th'
-      );
-
-    }
   );
 
 }
 
 
 /* =========================================================
-   CHOOSE CURRENT FUNERAL
-   ========================================================= */
-
-function chooseCurrentFuneral() {
-
-  /*
-    ลำดับความสำคัญ
-
-    1. งานที่ status = active
-    2. ถ้าไม่มี ให้ใช้งานล่าสุด
-  */
-
-  currentFuneral =
-    funerals.find(
-      f =>
-        f.status === 'active'
-    ) || null;
-
-
-  if (!currentFuneral) {
-
-    currentFuneral =
-      funerals
-        .slice()
-        .sort(
-          (a, b) =>
-            dateValue(
-              b.cremationDate
-            ) -
-            dateValue(
-              a.cremationDate
-            )
-        )[0] || null;
-
-  }
-
-}
-
-
-/* =========================================================
-   RENDER ALL
+   RENDER
    ========================================================= */
 
 function render() {
 
-  renderFuneral();
+  renderCurrent();
 
   renderStats();
 
@@ -394,47 +321,57 @@ function render() {
 
 
 /* =========================================================
-   RENDER CURRENT FUNERAL
+   CURRENT FUNERAL
    ========================================================= */
 
-function renderFuneral() {
+function renderCurrent() {
 
   if (!funeralBody) {
     return;
   }
 
 
-  if (!currentFuneral) {
+  const funeral =
+    getCurrentFuneral();
+
+
+  if (!funeral) {
 
     funeralBody.innerHTML = `
 
-      <div class="empty-box"
-           style="
-             padding:50px 20px;
-             text-align:center;
-           ">
+      <div
+        style="
+          width:100%;
+          text-align:center;
+          padding:60px 20px;
+        "
+      >
 
         <i
           class="fa-solid fa-dove"
           style="
-            font-size:42px;
+            font-size:45px;
             color:#aaa;
             margin-bottom:15px;
           "
         ></i>
 
-        <h3>
-          ขณะนี้ไม่มีงานศพที่กำลังดำเนินการ
-        </h3>
 
-        <p style="
-          color:#888;
-          margin-top:8px;
-        ">
+        <h2>
+          ยังไม่มีงานศพ
+        </h2>
+
+
+        <p
+          style="
+            color:#888;
+            margin-top:8px;
+          "
+        >
           ${
             state.isAdmin
               ? 'กด “แจ้งงานศพใหม่” เพื่อเพิ่มข้อมูล'
-              : 'เมื่อมีการแจ้งงานศพ ข้อมูลจะแสดงที่หน้านี้'
+              : 'ยังไม่มีงานศพที่กำลังดำเนินการ'
           }
         </p>
 
@@ -448,35 +385,26 @@ function renderFuneral() {
   }
 
 
-  const f =
-    currentFuneral;
-
-
-  const got =
-    getReceivedMemberIds(
-      f.id
-    );
+  const received =
+    receivedSet(
+      funeral.id
+    ).size;
 
 
   const total =
     members.length;
 
 
-  const received =
-    countReceived(
-      f.id
-    );
-
-
   const pending =
     Math.max(
       0,
-      total - received
+      total -
+      received
     );
 
 
   const percent =
-    total > 0
+    total
       ? Math.round(
           received /
           total *
@@ -486,24 +414,22 @@ function renderFuneral() {
 
 
   const photo =
-    f.photoURL ||
+    funeral.photoURL ||
     'https://placehold.co/220x260/e8e0d0/555?text=รูปผู้เสียชีวิต';
 
 
   funeralBody.innerHTML = `
 
     <div
-      class="funeral-current-content"
       style="
         display:flex;
-        gap:24px;
-        padding:24px;
+        gap:25px;
         flex-wrap:wrap;
+        padding:25px;
       "
     >
 
       <div
-        class="funeral-photo"
         style="
           flex:0 0 220px;
         "
@@ -511,13 +437,16 @@ function renderFuneral() {
 
         <img
           src="${esc(photo)}"
-          alt="${esc(f.name || 'ผู้เสียชีวิต')}"
+          alt="${esc(
+            funeral.name ||
+            ''
+          )}"
           style="
             width:220px;
             height:260px;
             object-fit:cover;
             border-radius:14px;
-            box-shadow:0 8px 20px rgba(0,0,0,.10);
+            box-shadow:0 6px 18px rgba(0,0,0,.12);
           "
           onerror="
             this.src='https://placehold.co/220x260/e8e0d0/555?text=ไม่มีรูป'
@@ -528,7 +457,6 @@ function renderFuneral() {
 
 
       <div
-        class="funeral-info"
         style="
           flex:1;
           min-width:280px;
@@ -539,7 +467,6 @@ function renderFuneral() {
           style="
             display:flex;
             justify-content:space-between;
-            align-items:flex-start;
             gap:10px;
             flex-wrap:wrap;
           "
@@ -549,22 +476,29 @@ function renderFuneral() {
 
             <h2
               style="
-                margin:0 0 6px;
-                font-size:26px;
+                margin:0;
+                font-size:27px;
               "
             >
-              ${esc(f.name || '-')}
+              ${esc(
+                funeral.name ||
+                '-'
+              )}
             </h2>
 
 
             ${
-              f.age
+              funeral.age
                 ? `
-                  <p style="
-                    color:#777;
-                    margin:0 0 15px;
-                  ">
-                    อายุ ${esc(f.age)} ปี
+                  <p
+                    style="
+                      margin:6px 0 0;
+                      color:#777;
+                    "
+                  >
+                    อายุ ${esc(
+                      funeral.age
+                    )} ปี
                   </p>
                 `
                 : ''
@@ -575,29 +509,21 @@ function renderFuneral() {
 
           <span
             style="
-              background:${
-                f.status === 'active'
-                  ? '#dc2626'
-                  : '#777'
-              };
-              color:white;
-              padding:6px 14px;
+              height:max-content;
+              padding:7px 14px;
               border-radius:20px;
+              color:white;
+              background:${
+                funeral.status === 'active'
+                  ? '#dc2626'
+                  : '#6b7280'
+              };
               font-size:12px;
-              font-weight:600;
             "
           >
 
-            <i
-              class="fa-solid fa-circle"
-              style="
-                font-size:7px;
-                margin-right:5px;
-              "
-            ></i>
-
             ${
-              f.status === 'active'
+              funeral.status === 'active'
                 ? 'กำลังดำเนินการ'
                 : 'เสร็จสิ้น'
             }
@@ -609,76 +535,76 @@ function renderFuneral() {
 
         <div
           style="
-            display:grid;
-            grid-template-columns:
-              repeat(auto-fit,minmax(220px,1fr));
-            gap:14px;
-            margin:15px 0;
+            margin-top:18px;
+            line-height:2;
           "
         >
 
-          <div class="info-item">
+          <div>
 
-            <i class="fa-solid fa-calendar"></i>
+            <i
+              class="fa-solid fa-calendar"
+            ></i>
 
-            <div>
+            <strong>
+              วันฌาปนกิจ:
+            </strong>
 
-              <small>
-                วันฌาปนกิจ
-              </small>
-
-              <strong>
-                ${thDate(f.cremationDate)}
-              </strong>
-
-            </div>
-
-          </div>
-
-
-          <div class="info-item">
-
-            <i class="fa-solid fa-location-dot"></i>
-
-            <div>
-
-              <small>
-                สถานที่
-              </small>
-
-              <strong>
-                ${esc(f.place || '-')}
-              </strong>
-
-            </div>
+            ${esc(
+              thaiDateLong(
+                funeral.cremationDate
+              )
+            )}
 
           </div>
 
 
-          <div class="info-item">
+          <div>
 
-            <i class="fa-solid fa-bowl-rice"></i>
+            <i
+              class="fa-solid fa-location-dot"
+            ></i>
 
-            <div>
+            <strong>
+              สถานที่:
+            </strong>
 
-              <small>
-                การรับข้าว
-              </small>
-
-              <strong>
-                ${received} / ${total} ครัวเรือน
-              </strong>
-
-            </div>
+            ${esc(
+              funeral.place ||
+              '-'
+            )}
 
           </div>
+
+
+          ${
+            funeral.note
+              ? `
+                <div>
+
+                  <i
+                    class="fa-solid fa-note-sticky"
+                  ></i>
+
+                  <strong>
+                    หมายเหตุ:
+                  </strong>
+
+                  ${esc(
+                    funeral.note
+                  )}
+
+                </div>
+              `
+              : ''
+          }
 
         </div>
 
 
         <div
           style="
-            margin:18px 0;
+            margin-top:20px;
           "
         >
 
@@ -686,13 +612,12 @@ function renderFuneral() {
             style="
               display:flex;
               justify-content:space-between;
-              margin-bottom:7px;
-              font-size:13px;
+              margin-bottom:6px;
             "
           >
 
             <strong>
-              ความคืบหน้าการรับข้าว
+              การรับข้าว
             </strong>
 
             <strong>
@@ -716,10 +641,43 @@ function renderFuneral() {
                 width:${percent}%;
                 height:100%;
                 background:#2d6a4f;
-                border-radius:20px;
-                transition:width .4s ease;
+                transition:width .4s;
               "
             ></div>
+
+          </div>
+
+
+          <div
+            style="
+              margin-top:7px;
+              color:#666;
+              font-size:13px;
+            "
+          >
+
+            รับแล้ว
+            <strong>
+              ${received}
+            </strong>
+
+            จาก
+            <strong>
+              ${total}
+            </strong>
+
+            ครัวเรือน
+
+            ${
+              pending
+                ? `
+                  — ค้าง
+                  <strong>
+                    ${pending}
+                  </strong>
+                `
+                : ''
+            }
 
           </div>
 
@@ -727,92 +685,73 @@ function renderFuneral() {
 
 
         ${
-          f.note
+          state.isAdmin
             ? `
+
               <div
                 style="
-                  background:#f8f9fa;
-                  padding:12px 15px;
-                  border-radius:10px;
-                  color:#666;
-                  margin-bottom:15px;
+                  display:flex;
+                  gap:8px;
+                  flex-wrap:wrap;
+                  margin-top:20px;
                 "
               >
 
-                <strong>
-                  หมายเหตุ:
-                </strong>
+                <button
+                  type="button"
+                  class="action-btn"
+                  id="editCurrentFuneral"
+                >
 
-                ${esc(f.note)}
+                  <i
+                    class="fa-solid fa-pen"
+                  ></i>
+
+                  แก้ไข
+
+                </button>
+
+
+                ${
+                  funeral.status === 'active'
+                    ? `
+                      <button
+                        type="button"
+                        class="action-btn"
+                        id="finishCurrentFuneral"
+                      >
+
+                        <i
+                          class="fa-solid fa-check"
+                        ></i>
+
+                        ปิดงานศพ
+
+                      </button>
+                    `
+                    : ''
+                }
+
+
+                <button
+                  type="button"
+                  class="action-btn danger"
+                  id="deleteCurrentFuneral"
+                >
+
+                  <i
+                    class="fa-solid fa-trash"
+                  ></i>
+
+                  ลบ
+
+                </button>
 
               </div>
+
             `
             : ''
         }
-
-
-        <div
-          style="
-            display:flex;
-            gap:10px;
-            flex-wrap:wrap;
-            margin-top:15px;
-          "
-        >
-
-          <a
-            href="rice-record.html"
-            class="action-btn abtn-green"
-            style="
-              text-decoration:none;
-            "
-          >
-
-            <i class="fa-solid fa-bowl-rice"></i>
-
-            บันทึกรับข้าว
-
-          </a>
-
-
-          ${
-            state.isAdmin
-              ? `
-
-                <button
-                  type="button"
-                  class="action-btn"
-                  id="btnEditCurrent"
-                >
-
-                  <i class="fa-solid fa-pen"></i>
-
-                  แก้ไขงานศพ
-
-                </button>
-
-
-                <button
-                  type="button"
-                  class="action-btn"
-                  id="btnFinishCurrent"
-                  style="
-                    background:#6b7280;
-                    color:white;
-                  "
-                >
-
-                  <i class="fa-solid fa-check"></i>
-
-                  ปิดงานศพ
-
-                </button>
-
-              `
-              : ''
-          }
-
-        </div>
 
       </div>
 
@@ -823,7 +762,7 @@ function renderFuneral() {
 
   document
     .getElementById(
-      'btnEditCurrent'
+      'editCurrentFuneral'
     )
     ?.addEventListener(
       'click',
@@ -835,7 +774,7 @@ function renderFuneral() {
 
 
         openFuneralForm(
-          currentFuneral
+          funeral
         );
 
       }
@@ -844,18 +783,31 @@ function renderFuneral() {
 
   document
     .getElementById(
-      'btnFinishCurrent'
+      'finishCurrentFuneral'
     )
     ?.addEventListener(
       'click',
       () => {
 
-        if (!needAdmin()) {
-          return;
-        }
+        finishFuneral(
+          funeral
+        );
+
+      }
+    );
 
 
-        finishFuneral();
+  document
+    .getElementById(
+      'deleteCurrentFuneral'
+    )
+    ?.addEventListener(
+      'click',
+      () => {
+
+        deleteFuneral(
+          funeral
+        );
 
       }
     );
@@ -864,7 +816,7 @@ function renderFuneral() {
 
 
 /* =========================================================
-   RENDER STATS
+   STATS
    ========================================================= */
 
 function renderStats() {
@@ -874,29 +826,35 @@ function renderStats() {
   }
 
 
-  if (!currentFuneral) {
+  const funeral =
+    getCurrentFuneral();
 
-    funeralStats.innerHTML = '';
+
+  if (!funeral) {
+
+    funeralStats.innerHTML =
+      '';
 
     return;
 
   }
 
 
+  const received =
+    receivedSet(
+      funeral.id
+    ).size;
+
+
   const total =
     members.length;
-
-
-  const received =
-    countReceived(
-      currentFuneral.id
-    );
 
 
   const pending =
     Math.max(
       0,
-      total - received
+      total -
+      received
     );
 
 
@@ -913,96 +871,79 @@ function renderStats() {
   funeralStats.innerHTML = `
 
     <div
-      class="summary-grid four-col"
       style="
         display:grid;
         grid-template-columns:
-          repeat(4,1fr);
-        gap:14px;
-        padding:0 20px 20px;
+          repeat(4,minmax(0,1fr));
+        gap:12px;
       "
     >
 
-      <div class="summary-card">
-
-        <div class="summary-icon">
-          <i class="fa-solid fa-users"></i>
-        </div>
-
-        <div>
-
-          <small>
-            ครัวเรือนทั้งหมด
-          </small>
-
-          <strong>
-            ${total.toLocaleString('th-TH')}
-          </strong>
-
-        </div>
-
-      </div>
+      ${statCard(
+        'fa-users',
+        'สมาชิกทั้งหมด',
+        total
+      )}
 
 
-      <div class="summary-card">
-
-        <div class="summary-icon">
-          <i class="fa-solid fa-check"></i>
-        </div>
-
-        <div>
-
-          <small>
-            รับแล้ว
-          </small>
-
-          <strong>
-            ${received.toLocaleString('th-TH')}
-          </strong>
-
-        </div>
-
-      </div>
+      ${statCard(
+        'fa-circle-check',
+        'รับแล้ว',
+        received
+      )}
 
 
-      <div class="summary-card">
-
-        <div class="summary-icon">
-          <i class="fa-solid fa-clock"></i>
-        </div>
-
-        <div>
-
-          <small>
-            ค้างรับ
-          </small>
-
-          <strong>
-            ${pending.toLocaleString('th-TH')}
-          </strong>
-
-        </div>
-
-      </div>
+      ${statCard(
+        'fa-clock',
+        'ค้างส่ง',
+        pending
+      )}
 
 
-      <div class="summary-card">
+      ${statCard(
+        'fa-chart-pie',
+        'ความคืบหน้า',
+        `${percent}%`
+      )}
 
-        <div class="summary-icon">
-          <i class="fa-solid fa-chart-pie"></i>
-        </div>
+    </div>
 
-        <div>
+  `;
 
-          <small>
-            ความคืบหน้า
-          </small>
+}
 
-          <strong>
-            ${percent}%
-          </strong>
 
-        </div>
+function statCard(
+  icon,
+  label,
+  value
+) {
+
+  return `
+
+    <div
+      class="summary-card"
+      style="
+        padding:16px;
+        border-radius:12px;
+      "
+    >
+
+      <i
+        class="fa-solid ${icon}"
+      ></i>
+
+
+      <div>
+
+        <small>
+          ${esc(label)}
+        </small>
+
+
+        <strong>
+          ${esc(value)}
+        </strong>
 
       </div>
 
@@ -1014,7 +955,7 @@ function renderStats() {
 
 
 /* =========================================================
-   RENDER PENDING MEMBERS
+   PENDING
    ========================================================= */
 
 function renderPending() {
@@ -1024,23 +965,14 @@ function renderPending() {
   }
 
 
-  if (!currentFuneral) {
+  const funeral =
+    getCurrentFuneral();
 
-    pendingGrid.innerHTML = `
 
-      <div
-        style="
-          grid-column:1/-1;
-          padding:30px;
-          text-align:center;
-          color:#888;
-        "
-      >
-        ไม่มีงานศพปัจจุบัน
-      </div>
+  if (!funeral) {
 
-    `;
-
+    pendingGrid.innerHTML =
+      '';
 
     return;
 
@@ -1048,15 +980,17 @@ function renderPending() {
 
 
   const got =
-    getReceivedMemberIds(
-      currentFuneral.id
+    receivedSet(
+      funeral.id
     );
 
 
   const pending =
     members.filter(
       member =>
-        !got.has(member.id)
+        !got.has(
+          member.id
+        )
     );
 
 
@@ -1067,8 +1001,8 @@ function renderPending() {
       <div
         style="
           grid-column:1/-1;
-          padding:35px;
           text-align:center;
+          padding:30px;
         "
       >
 
@@ -1077,21 +1011,13 @@ function renderPending() {
           style="
             font-size:40px;
             color:#2d6a4f;
-            margin-bottom:10px;
           "
         ></i>
+
 
         <h3>
           รับข้าวครบทุกครัวเรือนแล้ว
         </h3>
-
-        <p style="
-          color:#777;
-          margin-top:5px;
-        ">
-          ทั้ง ${members.length} ครัวเรือน
-          ได้รับข้าวสารเรียบร้อยแล้ว
-        </p>
 
       </div>
 
@@ -1104,16 +1030,9 @@ function renderPending() {
 
 
   pendingGrid.innerHTML =
-    pending.map(
-      member => {
-
-        const house =
-          member.houseNo ??
-          member.house ??
-          '-';
-
-
-        return `
+    pending
+      .map(
+        member => `
 
           <div
             class="pending-member"
@@ -1122,10 +1041,9 @@ function renderPending() {
               align-items:center;
               gap:12px;
               padding:12px;
-              background:#fff;
+              margin-bottom:8px;
               border:1px solid #eee;
               border-radius:10px;
-              margin-bottom:8px;
             "
           >
 
@@ -1133,17 +1051,18 @@ function renderPending() {
               style="
                 width:38px;
                 height:38px;
-                border-radius:50%;
                 display:flex;
                 align-items:center;
                 justify-content:center;
+                border-radius:50%;
                 background:#fff0f0;
                 color:#dc2626;
-                flex-shrink:0;
               "
             >
 
-              <i class="fa-solid fa-clock"></i>
+              <i
+                class="fa-solid fa-clock"
+              ></i>
 
             </div>
 
@@ -1151,8 +1070,12 @@ function renderPending() {
             <div>
 
               <strong>
-                บ้านเลขที่ ${esc(house)}
+                บ้านเลขที่
+                ${esc(
+                  houseOf(member)
+                )}
               </strong>
+
 
               <div
                 style="
@@ -1160,26 +1083,27 @@ function renderPending() {
                   font-size:13px;
                 "
               >
-                ${esc(member.name || '-')}
+                ${esc(
+                  nameOf(member)
+                )}
               </div>
 
             </div>
 
           </div>
 
-        `;
-
-      }
-    ).join('');
+        `
+      )
+      .join('');
 
 }
 
 
 /* =========================================================
-   RECEIVED RECORDS
+   RECEIVED SET
    ========================================================= */
 
-function getReceivedMemberIds(
+function receivedSet(
   funeralId
 ) {
 
@@ -1189,7 +1113,8 @@ function getReceivedMemberIds(
 
       .filter(
         record =>
-          record.funeralId === funeralId
+          record.funeralId ===
+          funeralId
       )
 
       .map(
@@ -1204,49 +1129,8 @@ function getReceivedMemberIds(
 }
 
 
-function countReceived(
-  funeralId
-) {
-
-  return getReceivedMemberIds(
-    funeralId
-  ).size;
-
-}
-
-
 /* =========================================================
-   NEW FUNERAL
-   ========================================================= */
-
-if (btnNew) {
-
-  btnNew.addEventListener(
-    'click',
-    () => {
-
-      if (!needAdmin()) {
-        return;
-      }
-
-
-      openFuneralForm({
-
-        status: 'active',
-
-        place:
-          'วัดร่องเข็ม ต.จำป่าหวาย อ.เมืองพะเยา จ.พะเยา'
-
-      });
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   FUNERAL FORM
+   FORM
    ========================================================= */
 
 function openFuneralForm(
@@ -1258,8 +1142,10 @@ function openFuneralForm(
   }
 
 
-  const isEdit =
-    Boolean(funeral.id);
+  const editing =
+    Boolean(
+      funeral.id
+    );
 
 
   const html = `
@@ -1271,10 +1157,14 @@ function openFuneralForm(
       </label>
 
       <input
-        id="fName"
+        id="funeralName"
         type="text"
-        value="${esc(funeral.name || '')}"
-        placeholder="กรอกชื่อ-สกุล"
+        maxlength="200"
+        value="${esc(
+          funeral.name ||
+          ''
+        )}"
+        placeholder="ชื่อ-สกุล"
       >
 
     </div>
@@ -1283,15 +1173,18 @@ function openFuneralForm(
     <div class="form-group">
 
       <label>
-        อายุ (ปี)
+        อายุ
       </label>
 
       <input
-        id="fAge"
+        id="funeralAge"
         type="number"
         min="0"
-        value="${esc(funeral.age || '')}"
-        placeholder="อายุ"
+        max="150"
+        value="${esc(
+          funeral.age ||
+          ''
+        )}"
       >
 
     </div>
@@ -1304,10 +1197,11 @@ function openFuneralForm(
       </label>
 
       <input
-        id="fDate"
+        id="funeralDate"
         type="date"
         value="${esc(
-          funeral.cremationDate || ''
+          funeral.cremationDate ||
+          ''
         )}"
       >
 
@@ -1321,7 +1215,7 @@ function openFuneralForm(
       </label>
 
       <input
-        id="fPlace"
+        id="funeralPlace"
         type="text"
         value="${esc(
           funeral.place ||
@@ -1339,10 +1233,13 @@ function openFuneralForm(
       </label>
 
       <textarea
-        id="fNote"
-        rows="3"
-        placeholder="หมายเหตุเพิ่มเติม"
-      >${esc(funeral.note || '')}</textarea>
+        id="funeralNote"
+        rows="4"
+        maxlength="2000"
+      >${esc(
+        funeral.note ||
+        ''
+      )}</textarea>
 
     </div>
 
@@ -1353,12 +1250,17 @@ function openFuneralForm(
         สถานะ
       </label>
 
-      <select id="fStatus">
+      <select
+        id="funeralStatus"
+      >
 
         <option
           value="active"
           ${
-            funeral.status === 'active'
+            (
+              funeral.status ||
+              'active'
+            ) === 'active'
               ? 'selected'
               : ''
           }
@@ -1366,10 +1268,12 @@ function openFuneralForm(
           กำลังดำเนินการ
         </option>
 
+
         <option
           value="done"
           ${
-            funeral.status !== 'active'
+            funeral.status ===
+            'done'
               ? 'selected'
               : ''
           }
@@ -1389,7 +1293,7 @@ function openFuneralForm(
       </label>
 
       <input
-        id="fPhoto"
+        id="funeralPhoto"
         type="file"
         accept="image/*"
       >
@@ -1398,24 +1302,18 @@ function openFuneralForm(
       ${
         funeral.photoURL
           ? `
-
-            <div style="
-              margin-top:10px;
-            ">
-
-              <img
-                src="${esc(funeral.photoURL)}"
-                alt="รูปปัจจุบัน"
-                style="
-                  width:110px;
-                  height:130px;
-                  object-fit:cover;
-                  border-radius:10px;
-                "
-              >
-
-            </div>
-
+            <img
+              src="${esc(
+                funeral.photoURL
+              )}"
+              style="
+                width:100px;
+                height:120px;
+                object-fit:cover;
+                border-radius:10px;
+                margin-top:10px;
+              "
+            >
           `
           : ''
       }
@@ -1425,28 +1323,212 @@ function openFuneralForm(
   `;
 
 
-  openModal(
-
-    isEdit
-      ? 'แก้ไขข้อมูลงานศพ'
+  showModal(
+    editing
+      ? 'แก้ไขงานศพ'
       : 'แจ้งงานศพใหม่',
-
     html,
-
     async () => {
 
       await saveFuneral(
-        funeral.id || null,
+        funeral.id ||
+        null,
         funeral
       );
 
     },
-
-    isEdit
+    editing
       ? 'บันทึกการแก้ไข'
       : 'แจ้งงานศพ'
-
   );
+
+}
+
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+
+function showModal(
+  title,
+  body,
+  onSave,
+  saveText
+) {
+
+  const old =
+    document.querySelector(
+      '.rk-modal'
+    );
+
+
+  old?.remove();
+
+
+  const modal =
+    document.createElement(
+      'div'
+    );
+
+
+  modal.className =
+    'rk-modal';
+
+
+  modal.innerHTML = `
+
+    <div
+      class="rk-modal-overlay"
+    >
+
+      <div
+        class="rk-modal-box"
+      >
+
+        <div
+          class="rk-modal-header"
+        >
+
+          <h3>
+            ${esc(title)}
+          </h3>
+
+
+          <button
+            type="button"
+            class="rk-close"
+          >
+            ×
+          </button>
+
+        </div>
+
+
+        <div
+          class="rk-modal-body"
+        >
+
+          ${body}
+
+        </div>
+
+
+        <div
+          class="rk-modal-footer"
+        >
+
+          <button
+            type="button"
+            class="rk-cancel"
+          >
+            ยกเลิก
+          </button>
+
+
+          <button
+            type="button"
+            class="rk-save"
+          >
+            ${esc(saveText)}
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  document.body.appendChild(
+    modal
+  );
+
+
+  const close = () =>
+    modal.remove();
+
+
+  modal
+    .querySelector(
+      '.rk-close'
+    )
+    ?.addEventListener(
+      'click',
+      close
+    );
+
+
+  modal
+    .querySelector(
+      '.rk-cancel'
+    )
+    ?.addEventListener(
+      'click',
+      close
+    );
+
+
+  modal
+    .querySelector(
+      '.rk-save'
+    )
+    ?.addEventListener(
+      'click',
+      async () => {
+
+        const button =
+          modal.querySelector(
+            '.rk-save'
+          );
+
+
+        if (button) {
+
+          button.disabled =
+            true;
+
+          button.textContent =
+            'กำลังบันทึก...';
+
+        }
+
+
+        try {
+
+          await onSave();
+
+          close();
+
+        } catch (error) {
+
+          console.error(
+            error
+          );
+
+
+          toast(
+            error?.message ||
+            'บันทึกข้อมูลไม่สำเร็จ',
+            'err'
+          );
+
+
+          if (button) {
+
+            button.disabled =
+              false;
+
+            button.textContent =
+              saveText;
+
+          }
+
+        }
+
+      }
+    );
 
 }
 
@@ -1456,8 +1538,8 @@ function openFuneralForm(
    ========================================================= */
 
 async function saveFuneral(
-  id = null,
-  old = {}
+  id,
+  old
 ) {
 
   if (!needAdmin()) {
@@ -1471,42 +1553,52 @@ async function saveFuneral(
 
   const name =
     document
-      .getElementById('fName')
+      .getElementById(
+        'funeralName'
+      )
       ?.value
       .trim();
 
 
   const age =
-    Number(
-      document
-        .getElementById('fAge')
-        ?.value
-    ) || null;
+    document
+      .getElementById(
+        'funeralAge'
+      )
+      ?.value;
 
 
   const cremationDate =
     document
-      .getElementById('fDate')
+      .getElementById(
+        'funeralDate'
+      )
       ?.value;
 
 
   const place =
     document
-      .getElementById('fPlace')
+      .getElementById(
+        'funeralPlace'
+      )
       ?.value
       .trim();
 
 
   const note =
     document
-      .getElementById('fNote')
+      .getElementById(
+        'funeralNote'
+      )
       ?.value
       .trim();
 
 
   const status =
     document
-      .getElementById('fStatus')
+      .getElementById(
+        'funeralStatus'
+      )
       ?.value ||
     'active';
 
@@ -1533,7 +1625,10 @@ async function saveFuneral(
 
     name,
 
-    age,
+    age:
+      age
+        ? Number(age)
+        : null,
 
     cremationDate,
 
@@ -1544,45 +1639,49 @@ async function saveFuneral(
     status,
 
     updatedAt:
-      serverTimestamp()
+      serverTimestamp(),
+
+    updatedBy:
+      state.user?.email ||
+      '-',
+
+    updatedByUid:
+      state.user?.uid ||
+      null
 
   };
 
 
   /*
     อัปโหลดรูป
+    รองรับ uploadPhoto
+    จาก common.js ถ้ามี
   */
 
-  const file =
+  const photoInput =
     document
-      .getElementById('fPhoto')
-      ?.files?.[0];
-
-
-  if (file) {
-
-    const uploaded =
-      await uploadPhoto(
-        file,
-        'funerals'
+      .getElementById(
+        'funeralPhoto'
       );
 
 
-    data.photoURL =
-      uploaded.url;
+  const photoFile =
+    photoInput?.files?.[0];
 
 
-    data.photoPath =
-      uploaded.path;
+  if (photoFile) {
 
-
-    if (
-      old.photoPath
-    ) {
-
-      await removePhoto(
-        old.photoPath
+    const upload =
+      await uploadImage(
+        photoFile,
+        id
       );
+
+
+    if (upload?.url) {
+
+      data.photoURL =
+        upload.url;
 
     }
 
@@ -1590,52 +1689,48 @@ async function saveFuneral(
 
 
   /*
-    ถ้าตั้งงานใหม่เป็น active
-    ปิดงาน active เดิมก่อน
+    ถ้าตั้งเป็นงานปัจจุบัน
+    ปิดงานปัจจุบันเดิมก่อน
   */
 
   if (
     status === 'active'
   ) {
 
-    const batch =
-      writeBatch(db);
-
-
-    funerals
-
-      .filter(
+    const updates =
+      funerals.filter(
         funeral =>
-          funeral.status === 'active' &&
+          funeral.status ===
+            'active' &&
           funeral.id !== id
-      )
-
-      .forEach(
-        funeral => {
-
-          batch.update(
-
-            doc(
-              db,
-              'funerals',
-              funeral.id
-            ),
-
-            {
-              status: 'done',
-
-              updatedAt:
-                serverTimestamp()
-
-            }
-
-          );
-
-        }
       );
 
 
-    await batch.commit();
+    for (
+      const funeral
+      of updates
+    ) {
+
+      await updateDoc(
+
+        doc(
+          db,
+          'funerals',
+          funeral.id
+        ),
+
+        {
+          status:
+            'done',
+
+          updatedAt:
+            serverTimestamp()
+
+        }
+
+      );
+
+    }
 
   }
 
@@ -1656,13 +1751,16 @@ async function saveFuneral(
 
 
     await logAct(
+
       'แก้ไขงานศพ',
-      name
+
+      `${name} (${cremationDate})`
+
     );
 
 
     toast(
-      'แก้ไขข้อมูลงานศพสำเร็จ',
+      'แก้ไขข้อมูลงานศพแล้ว',
       'ok'
     );
 
@@ -1676,10 +1774,19 @@ async function saveFuneral(
       ),
 
       {
+
         ...data,
 
         createdAt:
-          serverTimestamp()
+          serverTimestamp(),
+
+        createdBy:
+          state.user?.email ||
+          '-',
+
+        createdByUid:
+          state.user?.uid ||
+          null
 
       }
 
@@ -1687,13 +1794,16 @@ async function saveFuneral(
 
 
     await logAct(
+
       'แจ้งงานศพใหม่',
-      name
+
+      `${name} (${cremationDate})`
+
     );
 
 
     toast(
-      'แจ้งงานศพใหม่สำเร็จ',
+      'แจ้งงานศพใหม่แล้ว',
       'ok'
     );
 
@@ -1703,116 +1813,258 @@ async function saveFuneral(
 
 
 /* =========================================================
-   FINISH FUNERAL
+   IMAGE
    ========================================================= */
 
-function finishFuneral() {
+async function uploadImage(
+  file,
+  funeralId
+) {
 
-  if (!currentFuneral) {
+  /*
+    ถ้ามี uploadPhoto ใน common
+    ใช้ของระบบเดิม
+  */
 
-    toast(
-      'ไม่มีงานศพปัจจุบัน',
-      'err'
+  try {
+
+    const module =
+      await import(
+        './common.js'
+      );
+
+
+    if (
+      typeof module.uploadPhoto ===
+      'function'
+    ) {
+
+      return await module.uploadPhoto(
+        file,
+        `funerals/${funeralId || 'new'}`
+      );
+
+    }
+
+  } catch (error) {
+
+    console.warn(
+      'uploadPhoto unavailable',
+      error
     );
-
-    return;
 
   }
 
 
-  openModal(
+  /*
+    ถ้าไม่มีระบบ upload
+    ไม่ทำให้การบันทึกข้อมูลพัง
+  */
 
-    'ปิดงานศพ',
+  return null;
 
-    `
-
-      <div
-        style="
-          text-align:center;
-          padding:10px;
-        "
-      >
-
-        <div
-          style="
-            font-size:45px;
-            margin-bottom:12px;
-          "
-        >
-          ⚠️
-        </div>
-
-        <strong>
-          ต้องการปิดงานศพนี้หรือไม่?
-        </strong>
-
-        <p
-          style="
-            margin-top:10px;
-            color:#777;
-          "
-        >
-          ${esc(currentFuneral.name)}
-        </p>
-
-        <p
-          style="
-            margin-top:8px;
-            color:#b42318;
-          "
-        >
-          เมื่อปิดแล้ว งานนี้จะไปอยู่ใน
-          “งานศพย้อนหลัง”
-        </p>
-
-      </div>
-
-    `,
-
-    async () => {
-
-      await updateDoc(
-
-        doc(
-          db,
-          'funerals',
-          currentFuneral.id
-        ),
-
-        {
-          status: 'done',
-
-          updatedAt:
-            serverTimestamp()
-
-        }
-
-      );
+}
 
 
-      await logAct(
-        'ปิดงานศพ',
-        currentFuneral.name
-      );
+/* =========================================================
+   FINISH
+   ========================================================= */
+
+async function finishFuneral(
+  funeral
+) {
+
+  if (!needAdmin()) {
+    return;
+  }
 
 
-      toast(
-        'ปิดงานศพเรียบร้อยแล้ว',
-        'ok'
-      );
+  const ok =
+    window.confirm(
 
-    },
+      `ต้องการปิดงานศพ "${funeral.name}" หรือไม่?\n\n` +
 
-    'ยืนยันปิดงาน'
+      `หลังจากปิด งานนี้จะถือเป็นงานศพย้อนหลัง`
+
+    );
+
+
+  if (!ok) {
+    return;
+  }
+
+
+  try {
+
+    await updateDoc(
+
+      doc(
+        db,
+        'funerals',
+        funeral.id
+      ),
+
+      {
+
+        status:
+          'done',
+
+        updatedAt:
+          serverTimestamp()
+
+      }
+
+    );
+
+
+    await logAct(
+
+      'ปิดงานศพ',
+
+      funeral.name
+
+    );
+
+
+    toast(
+      'ปิดงานศพเรียบร้อยแล้ว',
+      'ok'
+    );
+
+  } catch (error) {
+
+    console.error(
+      error
+    );
+
+
+    toast(
+      error?.message ||
+      'ปิดงานศพไม่สำเร็จ',
+      'err'
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   DELETE
+   ========================================================= */
+
+async function deleteFuneral(
+  funeral
+) {
+
+  if (!needAdmin()) {
+    return;
+  }
+
+
+  const ok =
+    window.confirm(
+
+      `⚠️ ยืนยันการลบงานศพ\n\n` +
+
+      `${funeral.name}\n` +
+
+      `วันที่ฌาปนกิจ ${
+        thaiDateLong(
+          funeral.cremationDate
+        )
+      }\n\n` +
+
+      `ข้อมูลจะถูกลบออกจากระบบ`
+
+    );
+
+
+  if (!ok) {
+    return;
+  }
+
+
+  try {
+
+    await deleteDoc(
+
+      doc(
+        db,
+        'funerals',
+        funeral.id
+      )
+
+    );
+
+
+    await logAct(
+
+      'ลบงานศพ',
+
+      funeral.name
+
+    );
+
+
+    toast(
+      'ลบงานศพแล้ว',
+      'ok'
+    );
+
+  } catch (error) {
+
+    console.error(
+      error
+    );
+
+
+    toast(
+      error?.message ||
+      'ลบงานศพไม่สำเร็จ',
+      'err'
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+
+function houseOf(
+  member
+) {
+
+  return String(
+
+    member.houseNo ??
+    member.house ??
+    member.houseNumber ??
+    ''
 
   );
 
 }
 
 
-/* =========================================================
-   DATE VALUE
-   ========================================================= */
+function nameOf(
+  member
+) {
+
+  return String(
+
+    member.name ??
+    member.fullName ??
+    member.memberName ??
+    ''
+
+  );
+
+}
+
 
 function dateValue(
   value
@@ -1835,13 +2087,66 @@ function dateValue(
   }
 
 
-  const time =
+  const valueTime =
     new Date(value).getTime();
 
 
-  return Number.isNaN(time)
+  return Number.isNaN(
+    valueTime
+  )
     ? 0
-    : time;
+    : valueTime;
+
+}
+
+
+function thaiDateLong(
+  value
+) {
+
+  if (!value) {
+    return '-';
+  }
+
+
+  let date;
+
+
+  if (
+    typeof value === 'object' &&
+    typeof value.toDate === 'function'
+  ) {
+
+    date =
+      value.toDate();
+
+  } else {
+
+    date =
+      new Date(value);
+
+  }
+
+
+  if (
+    Number.isNaN(
+      date.getTime()
+    )
+  ) {
+
+    return '-';
+
+  }
+
+
+  return date.toLocaleDateString(
+    'th-TH',
+    {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    }
+  );
 
 }
 
@@ -1854,11 +2159,11 @@ window.addEventListener(
   'beforeunload',
   () => {
 
-    unsubMembers?.();
+    unsubscribeFunerals?.();
 
-    unsubFunerals?.();
+    unsubscribeMembers?.();
 
-    unsubRecords?.();
+    unsubscribeRecords?.();
 
   }
 );
