@@ -1,165 +1,168 @@
-/* ===== MOCK DATA ===== */
-const funeralHistory = [
-  {
-    id:1, name:"นายบุญมี ทองสุข", age:80, house:"45", year:2569,
-    deathDate:"5 มิถุนายน 2569", funeralDate:"8 มิถุนายน 2569", place:"วัดร่องเข็ม",
-    totalHouseholds:176, received:176, riceTotal:176,
-    photo:"https://placehold.co/120x120/e8e0d0/555?text=รูป"
-  },
-  {
-    id:2, name:"นางสาวสมหญิง แสงจันทร์", age:65, house:"22", year:2569,
-    deathDate:"2 พฤษภาคม 2569", funeralDate:"5 พฤษภาคม 2569", place:"วัดร่องเข็ม",
-    totalHouseholds:174, received:170, riceTotal:170,
-    photo:"https://placehold.co/120x120/e8e0d0/555?text=รูป"
-  },
-  {
-    id:3, name:"นายสุนทร ใจงาม", age:75, house:"12", year:2568,
-    deathDate:"18 ธันวาคม 2568", funeralDate:"21 ธันวาคม 2568", place:"วัดร่องเข็ม",
-    totalHouseholds:170, received:165, riceTotal:165,
-    photo:"https://placehold.co/120x120/e8e0d0/555?text=รูป"
-  },
-  {
-    id:4, name:"นางลำใย ดวงดี", age:88, house:"67", year:2568,
-    deathDate:"3 กันยายน 2568", funeralDate:"6 กันยายน 2568", place:"วัดร่องเข็ม",
-    totalHouseholds:168, received:160, riceTotal:160,
-    photo:"https://placehold.co/120x120/e8e0d0/555?text=รูป"
-  },
-  {
-    id:5, name:"นายเจริญ พูลสวัสดิ์", age:70, house:"90", year:2567,
-    deathDate:"14 กุมภาพันธ์ 2567", funeralDate:"17 กุมภาพันธ์ 2567", place:"วัดร่องเข็ม",
-    totalHouseholds:160, received:150, riceTotal:150,
-    photo:"https://placehold.co/120x120/e8e0d0/555?text=รูป"
-  },
-];
+import { db, collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot,
+  query, orderBy, writeBatch, serverTimestamp,
+  $, esc, thDate, toast, openModal, confirmDel, guard, needAdmin, startClock,
+  uploadPhoto, removePhoto, downloadCSV, logAct } from './common.js';
 
-let currentYearFilter = "all";
+let members = [], funerals = [], records = [];
 
-/* ===== INIT YEAR FILTER BUTTONS ===== */
-function initYearFilters() {
-  const years = [...new Set(funeralHistory.map(f => f.year))].sort((a,b) => b - a);
-  const group = document.getElementById("yearFilterGroup");
-  years.forEach(year => {
-    const btn = document.createElement("button");
-    btn.className = "filter-btn";
-    btn.dataset.year = year;
-    btn.innerText = `ปี ${year}`;
-    btn.addEventListener("click", () => {
-      document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      currentYearFilter = String(year);
-      renderHistory();
-    });
-    group.appendChild(btn);
+guard(() => { startClock(); listen(); });
+
+function listen() {
+  onSnapshot(query(collection(db,'members'), orderBy('houseNo')), s => {
+    members = s.docs.map(d=>({id:d.id,...d.data()})).filter(m=>m.active!==false); render();
   });
-  document.querySelector('[data-year="all"]').addEventListener("click", function() {
-    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
-    this.classList.add("active");
-    currentYearFilter = "all";
-    renderHistory();
+  onSnapshot(query(collection(db,'funerals'), orderBy('cremationDate','desc')), s => {
+    funerals = s.docs.map(d=>({id:d.id,...d.data()}));
+    const years = [...new Set(funerals.map(f => new Date(f.cremationDate).getFullYear()+543))]
+      .sort((a,b)=>b-a);
+    const cur = $('#filterYear').value;
+    $('#filterYear').innerHTML = '<option value="all">ทุกปี</option>' +
+      years.map(y => `<option value="${y}">พ.ศ. ${y}</option>`).join('');
+    if (cur) $('#filterYear').value = cur;
+    render();
+  });
+  onSnapshot(collection(db,'riceRecords'), s => {
+    records = s.docs.map(d=>({id:d.id,...d.data()})); render();
   });
 }
 
-/* ===== RENDER SUMMARY ===== */
-function renderHistorySummary() {
-  const totalFunerals = funeralHistory.length;
-  const totalRice = funeralHistory.reduce((sum, f) => sum + f.riceTotal, 0);
-  const avgPercent = Math.round(
-    funeralHistory.reduce((sum, f) => sum + (f.received / f.totalHouseholds) * 100, 0) / totalFunerals
-  );
-  const currentYear = 2569; // ปี พ.ศ. ปัจจุบันของระบบ
-  const thisYearCount = funeralHistory.filter(f => f.year === currentYear).length;
+const recOf = fid => records.filter(r => r.funeralId === fid);
 
-  animateNumber(document.getElementById("hTotalFunerals"), totalFunerals);
-  animateNumber(document.getElementById("hTotalRice"), totalRice);
-  animateNumber(document.getElementById("hAvgPercent"), avgPercent);
-  animateNumber(document.getElementById("hThisYear"), thisYearCount);
-}
+function render() {
+  const k = ($('#searchInput').value||'').toLowerCase().trim();
+  const y = $('#filterYear').value, st = $('#filterStatus').value;
+  const total = members.length || 1;
 
-/* ===== RENDER LIST ===== */
-function renderHistory() {
-  const searchTerm = document.getElementById("searchHistory").value.toLowerCase().trim();
-  const list = document.getElementById("historyList");
-  const emptyState = document.getElementById("emptyState");
+  const list = funerals.filter(f => {
+    const okK = !k || (f.name||'').toLowerCase().includes(k);
+    const okY = y==='all' || (new Date(f.cremationDate).getFullYear()+543) == y;
+    const okS = st==='all' || (f.status||'done') === st;
+    return okK && okY && okS;
+  });
 
-  let filtered = funeralHistory
-    .filter(f => currentYearFilter === "all" || String(f.year) === currentYearFilter)
-    .filter(f => f.name.toLowerCase().includes(searchTerm))
-    .sort((a,b) => b.id - a.id);
-
-  list.innerHTML = "";
-  if (filtered.length === 0) {
-    emptyState.style.display = "block";
-    list.style.display = "none";
-    return;
-  }
-  emptyState.style.display = "none";
-  list.style.display = "flex";
-
-  filtered.forEach((f, i) => {
-    const percent = Math.round((f.received / f.totalHouseholds) * 100);
-    const card = document.createElement("div");
-    card.className = "history-card";
-    card.style.animationDelay = `${i * 0.06}s`;
-    card.innerHTML = `
-      <div class="history-photo"><img src="${f.photo}" alt=""></div>
-      <div class="history-info">
-        <h4>${f.name}</h4>
-        <div class="h-sub">
-          <span><i class="fa-solid fa-house"></i> บ้านเลขที่ ${f.house}</span>
-          <span><i class="fa-solid fa-calendar"></i> ฌาปนกิจ ${f.funeralDate}</span>
-          <span><i class="fa-solid fa-location-dot"></i> ${f.place}</span>
+  $('#timeline').innerHTML = list.map(f => {
+    const n = recOf(f.id).length, pct = Math.round(n/total*100);
+    return `<div class="tl-item">
+      <div class="tl-dot ${f.status==='active'?'live':''}"></div>
+      <div class="tl-card">
+        <img src="${f.photoURL || 'https://placehold.co/90x110/e8e0d0/555?text=รูป'}" alt="">
+        <div class="tl-info">
+          <div class="tl-head">
+            <strong>${esc(f.name)}</strong>
+            <span class="pill ${f.status==='active'?'on':'off'}">
+              ${f.status==='active'?'กำลังดำเนินการ':'เสร็จสิ้น'}</span>
+          </div>
+          <span class="tl-meta"><i class="fa-solid fa-calendar"></i> ฌาปนกิจ ${thDate(f.cremationDate)}
+            ${f.age ? ` · อายุ ${esc(f.age)} ปี` : ''}</span>
+          <span class="tl-meta"><i class="fa-solid fa-location-dot"></i> ${esc(f.place)||'-'}</span>
+          <span class="tl-meta"><i class="fa-solid fa-bowl-rice"></i>
+            รับแล้ว <strong>${n}</strong> จาก ${total} ครัวเรือน</span>
+          <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+          <span class="progress-percent">${pct}%</span>
+        </div>
+        <div class="tl-actions">
+          <button class="icon-btn" data-view="${f.id}" title="ดูรายชื่อ"><i class="fa-solid fa-eye"></i></button>
+          <button class="icon-btn" data-csv="${f.id}" title="ส่งออก"><i class="fa-solid fa-file-export"></i></button>
+          <button class="icon-btn edit admin-only" data-edit="${f.id}"><i class="fa-solid fa-pen"></i></button>
+          <button class="icon-btn del admin-only"  data-del="${f.id}"><i class="fa-solid fa-trash"></i></button>
         </div>
       </div>
-      <div class="history-progress">
-        <span class="h-percent-text">${percent}% (${f.received}/${f.totalHouseholds})</span>
-        <div class="h-progress-bar"><div class="h-progress-fill" style="width:${percent}%"></div></div>
-      </div>
-      <span class="history-year-tag">พ.ศ. ${f.year}</span>
-    `;
-    card.addEventListener("click", () => openHistoryDetail(f.id));
-    list.appendChild(card);
-  });
+    </div>`;
+  }).join('') || '<p class="empty-box">ไม่พบข้อมูลงานศพ</p>';
 }
 
-/* ===== DETAIL MODAL ===== */
-const historyModal = document.getElementById("historyDetailModal");
-function openHistoryDetail(id) {
-  const f = funeralHistory.find(x => x.id === id);
-  const percent = Math.round((f.received / f.totalHouseholds) * 100);
-  document.getElementById("historyDetailBody").innerHTML = `
-    <div style="display:flex; gap:20px; margin-bottom:18px;">
-      <img src="${f.photo}" style="width:100px; height:100px; border-radius:14px; object-fit:cover;">
-      <div>
-        <h2 style="margin-bottom:4px;">${f.name}</h2>
-        <p style="color:#9ca3af; font-size:14px;">อายุ ${f.age} ปี • บ้านเลขที่ ${f.house}</p>
-      </div>
-    </div>
-    <div class="detail-grid">
-      <div class="detail-item"><i class="fa-solid fa-heart-crack"></i><div><small>วันที่เสียชีวิต</small><strong>${f.deathDate}</strong></div></div>
-      <div class="detail-item"><i class="fa-solid fa-fire-flame-curved"></i><div><small>วันฌาปนกิจ</small><strong>${f.funeralDate}</strong></div></div>
-      <div class="detail-item"><i class="fa-solid fa-location-dot"></i><div><small>สถานที่</small><strong>${f.place}</strong></div></div>
-      <div class="detail-item"><i class="fa-solid fa-calendar"></i><div><small>ปี พ.ศ.</small><strong>${f.year}</strong></div></div>
-    </div>
-    <div class="detail-stats">
-      <div class="detail-stat"><span>${f.totalHouseholds}</span><small>ครัวเรือนทั้งหมด</small></div>
-      <div class="detail-stat"><span>${f.received}</span><small>ส่งข้าวสาร</small></div>
-      <div class="detail-stat"><span>${percent}%</span><small>ความร่วมมือ</small></div>
-    </div>
-  `;
-  historyModal.classList.add("show");
+/* ---------- DETAIL ---------- */
+function viewDetail(fid) {
+  const f = funerals.find(x=>x.id===fid);
+  const got = new Set(recOf(fid).map(r=>r.memberId));
+  const html = `
+    <p style="margin:0 0 10px"><strong>${esc(f.name)}</strong> · ${thDate(f.cremationDate)}</p>
+    <input id="dSearch" placeholder="ค้นหา..." style="width:100%;padding:10px;border:1px solid #ddd;border-radius:10px;margin-bottom:10px">
+    <div id="dList">${members.map(m => `
+      <div class="check-row" data-key="${esc(m.houseNo)} ${esc(m.name)}">
+        <i class="fa-solid ${got.has(m.id)?'fa-circle-check':'fa-circle-xmark'}"
+           style="color:${got.has(m.id)?'#2e7d32':'#e57373'}"></i>
+        <span>บ้านเลขที่ ${esc(m.houseNo)} — ${esc(m.name)}</span>
+      </div>`).join('')}</div>`;
+  openModal('รายชื่อการรับข้าว', html, null);
+  $('#dSearch').oninput = e => {
+    const k = e.target.value.toLowerCase();
+    document.querySelectorAll('#dList .check-row').forEach(r =>
+      r.style.display = r.dataset.key.toLowerCase().includes(k) ? '' : 'none');
+  };
 }
-document.getElementById("closeHistoryModal").addEventListener("click", () => historyModal.classList.remove("show"));
-document.getElementById("closeHistoryModal2").addEventListener("click", () => historyModal.classList.remove("show"));
 
-/* ===== SEARCH ===== */
-document.getElementById("searchHistory").addEventListener("input", renderHistory);
+/* ---------- FORM (ใช้ร่วมกับ current-funeral) ---------- */
+const form = (f={}) => `
+  <div class="form-group"><label>ชื่อ-สกุลผู้เสียชีวิต *</label><input id="fName" value="${esc(f.name)}"></div>
+  <div class="form-group"><label>อายุ (ปี)</label><input id="fAge" type="number" value="${esc(f.age)}"></div>
+  <div class="form-group"><label>วันฌาปนกิจ *</label><input id="fDate" type="date" value="${f.cremationDate||''}"></div>
+  <div class="form-group"><label>สถานที่</label>
+    <input id="fPlace" value="${esc(f.place ?? 'วัดร่องเข็ม ต.จำป่าหวาย อ.เมืองพะเยา จ.พะเยา')}"></div>
+  <div class="form-group"><label>หมายเหตุ</label><textarea id="fNote" rows="2">${esc(f.note)}</textarea></div>
+  <div class="form-group"><label>สถานะ</label><select id="fStatus">
+    <option value="active" ${f.status==='active'?'selected':''}>กำลังดำเนินการ</option>
+    <option value="done"   ${f.status!=='active'?'selected':''}>เสร็จสิ้น</option></select></div>
+  <div class="form-group"><label>รูปผู้เสียชีวิต</label>
+    <input id="fPhoto" type="file" accept="image/*">
+    ${f.photoURL ? `<img class="img-preview" src="${f.photoURL}">` : ''}</div>`;
 
-/* ===== EXPORT ===== */
-document.getElementById("btnExportHistory").addEventListener("click", () => {
-  showToast("กำลังส่งออกประวัติงานศพทั้งหมดเป็น PDF...", "success");
+async function save(id, old={}) {
+  const name = $('#fName').value.trim(), date = $('#fDate').value;
+  if (!name || !date) throw new Error('กรุณากรอกชื่อและวันฌาปนกิจ');
+  const data = { name, age:Number($('#fAge').value)||null, cremationDate:date,
+    place:$('#fPlace').value.trim(), note:$('#fNote').value.trim(),
+    status:$('#fStatus').value, updatedAt: serverTimestamp() };
+  const file = $('#fPhoto').files[0];
+  if (file) {
+    const up = await uploadPhoto(file, 'funerals');
+    data.photoURL = up.url; data.photoPath = up.path;
+    await removePhoto(old.photoPath);
+  }
+  if (data.status === 'active') {
+    const b = writeBatch(db);
+    funerals.filter(x => x.status==='active' && x.id!==id)
+      .forEach(x => b.update(doc(db,'funerals',x.id), { status:'done' }));
+    await b.commit();
+  }
+  if (id) { await updateDoc(doc(db,'funerals',id), data); logAct('แก้ไขงานศพ', name); }
+  else { await addDoc(collection(db,'funerals'), {...data, createdAt:serverTimestamp()});
+         logAct('แจ้งงานศพใหม่', name); }
+  toast('บันทึกเรียบร้อย');
+}
+
+/* ---------- EVENTS ---------- */
+$('#searchInput').oninput = render;
+$('#filterYear').onchange = render;
+$('#filterStatus').onchange = render;
+$('#btnNew').onclick = () => needAdmin() &&
+  openModal('แจ้งงานศพใหม่', form({status:'active'}), () => save(null));
+
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-view],[data-csv],[data-edit],[data-del]');
+  if (!b) return;
+  if (b.dataset.view) return viewDetail(b.dataset.view);
+  if (b.dataset.csv) {
+    const f = funerals.find(x=>x.id===b.dataset.csv);
+    const got = new Set(recOf(f.id).map(r=>r.memberId));
+    const rows = [['บ้านเลขที่','ชื่อ-สกุล','สถานะ']];
+    members.forEach(m => rows.push([m.houseNo, m.name, got.has(m.id)?'รับแล้ว':'ค้างส่ง']));
+    downloadCSV(`${f.name}_${f.cremationDate}.csv`, rows);
+    return toast('ส่งออกไฟล์แล้ว');
+  }
+  if (!needAdmin()) return;
+  if (b.dataset.edit) {
+    const f = funerals.find(x=>x.id===b.dataset.edit);
+    openModal('แก้ไขงานศพ', form(f), () => save(f.id, f));
+  } else {
+    const f = funerals.find(x=>x.id===b.dataset.del);
+    confirmDel(`ลบงานศพ <strong>${esc(f.name)}</strong> และข้อมูลการรับข้าวทั้งหมด?`, async () => {
+      const bt = writeBatch(db);
+      recOf(f.id).forEach(r => bt.delete(doc(db,'riceRecords', r.id)));
+      bt.delete(doc(db,'funerals', f.id));
+      await bt.commit();
+      await removePhoto(f.photoPath);
+      logAct('ลบงานศพ', f.name);
+    });
+  }
 });
-
-/* ===== INIT ===== */
-initYearFilters();
-renderHistorySummary();
-renderHistory();
