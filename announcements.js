@@ -1,44 +1,134 @@
-/* ===== FEED ===== */
-.ann-feed { display:flex; flex-direction:column; gap:16px; }
+import { db, collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot,
+  query, orderBy, serverTimestamp,
+  $, esc, thDate, toast, openModal, confirmDel, guard, needAdmin, startClock,
+  uploadPhoto, removePhoto, logAct } from './common.js';
 
-.ann-card {
-  background:#fff; border-radius:16px; padding:20px 22px; box-shadow:0 2px 10px rgba(0,0,0,.05);
-  border-left:5px solid #2d6a4f; position:relative; opacity:0; animation:fadeInUp .4s ease forwards;
-  transition:transform .2s ease, box-shadow .2s ease;
+const TYPES = {
+  general: { label:'ทั่วไป',    icon:'fa-circle-info',            color:'blue'   },
+  meeting: { label:'ประชุม',    icon:'fa-people-group',           color:'green'  },
+  fee:     { label:'เงินสมทบ',  icon:'fa-hand-holding-dollar',    color:'orange' },
+  urgent:  { label:'ด่วน',      icon:'fa-triangle-exclamation',   color:'red'    }
+};
+
+let items = [];
+guard(() => { startClock(); listen(); });
+
+function listen() {
+  onSnapshot(query(collection(db,'announcements'), orderBy('date','desc')), s => {
+    items = s.docs.map(d => ({ id:d.id, ...d.data() }));
+    render();
+  });
 }
-.ann-card:hover { transform:translateY(-3px); box-shadow:0 10px 24px rgba(0,0,0,.08); }
-.ann-card.type-funeral { border-left-color:#2d6a4f; }
-.ann-card.type-general { border-left-color:#2563eb; }
-.ann-card.type-urgent { border-left-color:#dc2626; }
 
-@keyframes fadeInUp { from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:translateY(0)} }
-
-.ann-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; }
-.ann-tags { display:flex; gap:8px; align-items:center; }
-.ann-type-badge { padding:4px 12px; border-radius:20px; font-size:11px; font-weight:600; }
-.ann-type-badge.funeral { background:#e6f4ea; color:#2d6a4f; }
-.ann-type-badge.general { background:#dbeafe; color:#2563eb; }
-.ann-type-badge.urgent { background:#fde2e2; color:#dc2626; }
-
-.ann-new-badge {
-  background:#f59e0b; color:#fff; padding:3px 10px; border-radius:20px; font-size:10px; font-weight:700;
-  animation:newPulse 1.6s infinite;
+function isNew(a) {
+  if (!a.date) return false;
+  return (Date.now() - new Date(a.date).getTime()) / 86400000 <= 7;
 }
-@keyframes newPulse { 0%,100%{opacity:1} 50%{opacity:.5} }
 
-.ann-actions { display:flex; gap:6px; }
-.ann-title { font-size:17px; font-weight:600; color:#1f2937; margin-bottom:6px; }
-.ann-detail { font-size:14px; color:#4b5563; line-height:1.7; white-space:pre-line; }
-.ann-meta { display:flex; align-items:center; gap:8px; margin-top:14px; font-size:12px; color:#9ca3af; }
-.ann-meta i { font-size:11px; }
+function render() {
+  const k = ($('#searchInput').value||'').toLowerCase().trim();
+  const t = $('#filterType').value, p = $('#filterPin').value;
 
-/* ===== MODAL EXTRA ===== */
-.modal-box.wide { width:520px; }
-.modal-body select, .modal-body textarea {
-  padding:10px 14px; border:1px solid #e5e7eb; border-radius:10px; font-family:inherit; font-size:14px; outline:none;
-  resize:vertical; transition:.2s;
+  const list = items.filter(a => {
+    const okK = !k || `${a.title} ${a.detail}`.toLowerCase().includes(k);
+    const okT = t==='all' || (a.type||'general') === t;
+    const okP = p==='all' || a.pinned === true;
+    return okK && okT && okP;
+  }).sort((a,b) => (b.pinned?1:0) - (a.pinned?1:0));
+
+  $('#annList').innerHTML = list.map(a => {
+    const ty = TYPES[a.type || 'general'];
+    return `<article class="ann-card ${a.pinned?'pinned':''}">
+      <div class="ann-icon ${ty.color}"><i class="fa-solid ${ty.icon}"></i></div>
+      <div class="ann-body">
+        <div class="ann-head">
+          <h3>${esc(a.title)}</h3>
+          ${a.pinned ? '<span class="pill pin"><i class="fa-solid fa-thumbtack"></i> ปักหมุด</span>' : ''}
+          ${isNew(a) ? '<span class="tag-new">ใหม่</span>' : ''}
+          <span class="pill ${ty.color}">${ty.label}</span>
+        </div>
+        <p class="ann-detail">${esc(a.detail).replace(/\n/g,'<br>')}</p>
+        ${a.imageURL ? `<img class="ann-img" src="${a.imageURL}" alt="">` : ''}
+        <div class="ann-foot">
+          <span><i class="fa-regular fa-calendar"></i> ${thDate(a.date)}</span>
+          ${a.by ? `<span><i class="fa-regular fa-user"></i> ${esc(a.by)}</span>` : ''}
+        </div>
+      </div>
+      <div class="ann-actions admin-only">
+        <button class="icon-btn" data-pin="${a.id}" title="ปักหมุด">
+          <i class="fa-solid fa-thumbtack" style="color:${a.pinned?'#ef6c00':'#999'}"></i></button>
+        <button class="icon-btn edit" data-edit="${a.id}"><i class="fa-solid fa-pen"></i></button>
+        <button class="icon-btn del"  data-del="${a.id}"><i class="fa-solid fa-trash"></i></button>
+      </div>
+    </article>`;
+  }).join('') || '<p class="empty-box">ยังไม่มีประกาศ</p>';
+
+  $('#countText').textContent = `แสดง ${list.length} รายการ`;
 }
-.modal-body select:focus, .modal-body textarea:focus { border-color:#2d6a4f; box-shadow:0 0 0 3px rgba(45,106,79,.12); }
 
-.empty-state { text-align:center; padding:60px 20px; color:#9ca3af; background:#fff; border-radius:16px; }
-.empty-state i { font-size:40px; margin-bottom:12px; }
+/* ---------- FORM ---------- */
+const form = (a={}) => `
+  <div class="form-group"><label>หัวข้อประกาศ *</label>
+    <input id="aTitle" value="${esc(a.title)}" placeholder="เช่น ประชุมสมาชิกประจำเดือน"></div>
+  <div class="form-group"><label>รายละเอียด</label>
+    <textarea id="aDetail" rows="4">${esc(a.detail)}</textarea></div>
+  <div class="form-group"><label>ประเภท</label>
+    <select id="aType">${Object.entries(TYPES).map(([k,v]) =>
+      `<option value="${k}" ${(a.type||'general')===k?'selected':''}>${v.label}</option>`).join('')}
+    </select></div>
+  <div class="form-group"><label>วันที่ประกาศ *</label>
+    <input id="aDate" type="date" value="${a.date || new Date().toISOString().slice(0,10)}"></div>
+  <div class="form-group">
+    <label><input type="checkbox" id="aPin" ${a.pinned?'checked':''}> ปักหมุดไว้ด้านบน</label></div>
+  <div class="form-group"><label>รูปประกอบ (ถ้ามี)</label>
+    <input id="aImg" type="file" accept="image/*">
+    ${a.imageURL ? `<img class="img-preview" src="${a.imageURL}">` : ''}</div>`;
+
+async function save(id, old={}) {
+  const title = $('#aTitle').value.trim();
+  const date  = $('#aDate').value;
+  if (!title || !date) throw new Error('กรุณากรอกหัวข้อและวันที่');
+  const data = {
+    title, detail: $('#aDetail').value.trim(), type: $('#aType').value,
+    date, pinned: $('#aPin').checked, updatedAt: serverTimestamp()
+  };
+  const file = $('#aImg').files[0];
+  if (file) {
+    const up = await uploadPhoto(file, 'announcements');
+    data.imageURL = up.url; data.imagePath = up.path;
+    await removePhoto(old.imagePath);
+  }
+  if (id) { await updateDoc(doc(db,'announcements',id), data); logAct('แก้ไขประกาศ', title); }
+  else {
+    await addDoc(collection(db,'announcements'),
+      { ...data, by: (await import('./common.js')).state.profile?.name || '', createdAt: serverTimestamp() });
+    logAct('เพิ่มประกาศ', title);
+  }
+  toast('บันทึกประกาศเรียบร้อย');
+}
+
+/* ---------- EVENTS ---------- */
+$('#searchInput').oninput = render;
+$('#filterType').onchange = render;
+$('#filterPin').onchange  = render;
+$('#btnNew').onclick = () => needAdmin() && openModal('เพิ่มประกาศใหม่', form(), () => save(null));
+
+document.addEventListener('click', async e => {
+  const b = e.target.closest('[data-edit],[data-del],[data-pin]'); if (!b) return;
+  if (!needAdmin()) return;
+  if (b.dataset.pin) {
+    const a = items.find(x=>x.id===b.dataset.pin);
+    await updateDoc(doc(db,'announcements',a.id), { pinned: !a.pinned });
+    toast(a.pinned ? 'ยกเลิกปักหมุดแล้ว' : 'ปักหมุดแล้ว');
+  } else if (b.dataset.edit) {
+    const a = items.find(x=>x.id===b.dataset.edit);
+    openModal('แก้ไขประกาศ', form(a), () => save(a.id, a));
+  } else {
+    const a = items.find(x=>x.id===b.dataset.del);
+    confirmDel(`ลบประกาศ <strong>${esc(a.title)}</strong>?`, async () => {
+      await deleteDoc(doc(db,'announcements',a.id));
+      await removePhoto(a.imagePath);
+      logAct('ลบประกาศ', a.title);
+    });
+  }
+});
